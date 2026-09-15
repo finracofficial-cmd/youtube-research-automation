@@ -13,7 +13,8 @@ from pathlib import Path
 
 import yaml
 
-from .classify import tag_all
+from .classify import tag, tag_all
+from .discover import discover
 from .features import build
 from .fetch import search
 from .score import score_topic
@@ -22,6 +23,10 @@ DEFAULT_SEEDS = Path("seeds/candidates.yaml")
 
 
 def _load_queries(path: Path) -> list[str]:
+    """seeds yaml か、discover が出した candidates.csv を読む。"""
+    if path.suffix.lower() == ".csv":
+        with path.open(encoding="utf-8") as fh:
+            return [r["term"] for r in csv.DictReader(fh) if r.get("term")]
     cfg = yaml.safe_load(path.read_text(encoding="utf-8"))
     qs = [v["query"] for v in cfg.get("validation", [])]
     qs += list(cfg.get("candidates", []))
@@ -71,6 +76,38 @@ def cmd_scout(args) -> int:
     return 0
 
 
+def cmd_discover(args) -> int:
+    """量産系チャンネルを需要センサーとして、題材候補を自動発掘する。"""
+    raw = json.loads(Path(args.search_raw).read_text(encoding="utf-8"))
+    from .fetch import Video
+    seen: dict[str, set[str]] = {}
+    for topic, vids in raw.items():
+        for d in vids:
+            v = Video(**d)
+            if tag(v).is_low_effort:
+                seen.setdefault(v.channel_id, set()).add(topic)
+    channels = [c for c, t in sorted(seen.items(), key=lambda kv: -len(kv[1]))][: args.channels]
+    print(f"需要センサーとして {len(channels)} チャンネルを走査", file=sys.stderr)
+
+    cands = discover(channels, per_channel=args.per_channel,
+                     cache=Path(args.cache) if args.cache else None)
+    kept = [c for c in cands if c.n_channels >= args.min_channels]
+
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with out.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["term", "n_channels", "n_videos", "example"])
+        for c in kept:
+            w.writerow([c.term, c.n_channels, c.n_videos, c.examples[0] if c.examples else ""])
+
+    print(f"{'ch数':>4}{'本数':>5}  題材候補")
+    for c in kept:
+        print(f"{c.n_channels:>4}{c.n_videos:>5}  {c.term}")
+    print(f"\n抽出 {len(cands)} 種 → {args.min_channels}ch以上 {len(kept)} 種 -> {out}", file=sys.stderr)
+    return 0
+
+
 def cmd_explain(args) -> int:
     exclude = set(args.exclude or [])
     vids = search(args.query, limit=args.limit)
@@ -104,11 +141,22 @@ def main(argv: list[str] | None = None) -> int:
     sub = p.add_subparsers(dest="cmd", required=True)
 
     s = sub.add_parser("scout", help="seeds を採点してランキング")
-    s.add_argument("--seeds", default=str(DEFAULT_SEEDS))
+    s.add_argument("--seeds", default=str(DEFAULT_SEEDS),
+                   help="yaml、または discover が出した candidates.csv")
     s.add_argument("--limit", type=int, default=30)
     s.add_argument("--out", default="out/ranking.csv")
     s.add_argument("--exclude", nargs="*", help="競合から外す channel_id（自チャンネル）")
     s.set_defaults(func=cmd_scout)
+
+    d = sub.add_parser("discover", help="量産系チャンネルから題材候補を自動発掘")
+    d.add_argument("--search-raw", default="out/search_raw.json",
+                   help="scout の検索結果。供給側チャンネルの特定に使う")
+    d.add_argument("--channels", type=int, default=28, help="走査するチャンネル数")
+    d.add_argument("--per-channel", type=int, default=60, help="1chあたり何本のタイトルを見るか")
+    d.add_argument("--min-channels", type=int, default=3, help="何ch以上が扱った語を残すか")
+    d.add_argument("--cache", default="out/channel_titles.json")
+    d.add_argument("--out", default="out/candidates.csv")
+    d.set_defaults(func=cmd_discover)
 
     e = sub.add_parser("explain", help="1題材の内訳を表示")
     e.add_argument("query")
