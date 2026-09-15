@@ -35,8 +35,13 @@ def cmd_check(args) -> int:
     print(f"  疑問文        {m.question_ratio:.1%}")
     print(f"  数字          {m.numerics_per_min:.1f}個/分")
     print(f"  短文(10字以下) {m.short_sentence_ratio:.0%}")
+    print(f"\n参照動画への忠実度: {m.fidelity:.0%}")
+    for line in m.fidelity_report():
+        print(f"  {line}")
     if m.ok:
         print("\n合格")
+        if m.fidelity < 0.85:
+            print(f"（ただし忠実度 {m.fidelity:.0%}。レンジは通っているが型としては痩せている）")
         return 0
     print("\n不合格:")
     for v in m.violations:

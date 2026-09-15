@@ -29,6 +29,17 @@ class StyleProfile:
     max_chatty: int = 2                                      # 実測 0〜1
 
 
+# 参照動画（ヴォイニッチ回 52:39）の実測値。レンジの中心ではなく「目標点」。
+# レンジ内に収まっていても、ここから遠い台本は型として痩せている。
+REFERENCE = {
+    "avg_sentence_len": 21.3,
+    "sentences_per_min": 16.6,
+    "chars_per_min": 354.0,
+    "numerics_per_min": 7.9,
+    "short_sentence_ratio": 0.14,
+}
+
+
 @dataclass
 class Metrics:
     n_sentences: int
@@ -46,6 +57,26 @@ class Metrics:
     @property
     def ok(self) -> bool:
         return not self.violations
+
+    @property
+    def fidelity(self) -> float:
+        """参照動画への近さ。1.0 が一致、0 が倍以上ずれている状態。
+
+        レンジ判定(validate)を通っても、値が端に寄っていれば型としては痩せる。
+        実際に初稿は合格しつつ数字密度が参照の72%しかなかった。
+        """
+        scores = []
+        for key, target in REFERENCE.items():
+            got = getattr(self, key)
+            scores.append(max(0.0, 1.0 - abs(got - target) / target))
+        return sum(scores) / len(scores)
+
+    def fidelity_report(self) -> list[str]:
+        out = []
+        for key, target in REFERENCE.items():
+            got = getattr(self, key)
+            out.append(f"{key:<22}{got:>8.2f}  (参照 {target:>6.2f} / {got/target*100:>5.1f}%)")
+        return out
 
 
 def split_sentences(text: str) -> list[str]:

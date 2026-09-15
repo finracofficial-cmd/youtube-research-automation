@@ -51,3 +51,17 @@ def test_long_winded_script_is_rejected():
 def test_zero_duration_is_an_error():
     with pytest.raises(ValueError):
         analyze("事実である。", 0)
+
+
+def test_reference_scores_near_perfect_fidelity():
+    """参照動画自身の忠実度は1.0に近いこと（指標の定義が壊れていないかの確認）。"""
+    m = analyze(_reference_body(), 3159)
+    assert m.fidelity > 0.97
+
+
+def test_fidelity_falls_when_density_drops():
+    """レンジ内でも、数字が薄い台本は忠実度が下がること。"""
+    dense = "1901年に30個の歯車が出た。" * 120
+    thin = "歯車が出たのである。" * 150
+    from script_engine.style import analyze as a
+    assert a(dense, 600).fidelity > a(thin, 600).fidelity
