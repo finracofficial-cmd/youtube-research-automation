@@ -127,7 +127,8 @@ def archive_org(query: str, limit: int = 15) -> list[Source]:
 WEAK = {"ancient", "study", "analysis", "history", "research", "review", "new", "the"}
 
 
-def relevance_filter(sources: list[Source], query: str, *, min_ratio: float = 0.7) -> list[Source]:
+def relevance_filter(sources: list[Source], query: str, *, min_ratio: float = 0.34,
+                     exclude: tuple[str, ...] = ()) -> list[Source]:
     """タイトルにクエリ語が入っているものだけ残す。
 
     学術APIのあいまい検索は「Antikythera mechanism」で70万件返す。
@@ -144,11 +145,18 @@ def relevance_filter(sources: list[Source], query: str, *, min_ratio: float = 0.
     keys = [k for k in keys if k not in WEAK] or keys
     if not keys:
         return sources
+    # 先頭（固有名詞）は必須。残りは「1語以上」で足りる。
+    # 残りにも高い一致率を課すと長いクエリが全滅する。実測で
+    # "Nazca geoglyph construction desert pavement" が0件になった
+    # （先頭+残り4語中3語を要求していたため）。
     head, rest = keys[0], keys[1:]
-    need = max(0, round(len(rest) * min_ratio))
+    need = max(1, round(len(rest) * min_ratio)) if rest else 0
+    bad = tuple(x.lower() for x in exclude)
     out = []
     for s in sources:
         title = (s.title or "").lower()
+        if bad and any(b in title for b in bad):
+            continue  # 同名語の別分野を落とす（Nazca は地上絵とプレートで衝突する）
         if head in title and sum(k in title for k in rest) >= need:
             out.append(s)
     return out

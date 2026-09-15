@@ -17,12 +17,13 @@ from .dossier import build, to_markdown
 def _load(path: Path):
     spec = yaml.safe_load(path.read_text(encoding="utf-8"))
     claims = [(c["ja"], c["en"]) for c in spec.get("claims", [])]
+    spec["_exclude"] = tuple(spec.get("exclude", []))
     return spec["subject"], spec["subject_en"], claims, spec
 
 
 def cmd_dossier(args) -> int:
-    subject, subject_en, claims, _ = _load(Path(args.spec))
-    d = build(subject, subject_en, claims)
+    subject, subject_en, claims, spec = _load(Path(args.spec))
+    d = build(subject, subject_en, claims, exclude=spec["_exclude"])
     out = Path(args.out or f"drafts/dossier_{Path(args.spec).stem}")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.with_suffix(".md").write_text(to_markdown(d), encoding="utf-8")
@@ -40,7 +41,7 @@ def cmd_pipeline(args) -> int:
     from script_engine.render import Topic, build_prompt
 
     subject, subject_en, claims, spec = _load(Path(args.spec))
-    d = build(subject, subject_en, claims)
+    d = build(subject, subject_en, claims, exclude=spec["_exclude"])
     cited = [f"{s.year or '----'} {s.title} {s.url}".strip() for s in d.all_sources[:30]]
     facts = [f for c in d.claims for f in c.numeric_facts]
 

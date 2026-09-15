@@ -1,0 +1,424 @@
+{
+ "subject": "ナスカの地上絵",
+ "subject_en": "Nazca Lines geoglyphs",
+ "background": [
+  {
+   "kind": "book",
+   "title": "The mystery of the Nazca Lines",
+   "year": 2016,
+   "url": "https://archive.org/details/mysteryofnazcali0000hinm",
+   "identifier": "mysteryofnazcali0000hinm",
+   "open_access": true,
+   "cited_by": 162,
+   "abstract": "",
+   "venue": ""
+  },
+  {
+   "kind": "paper",
+   "title": "Lines of Nazca",
+   "year": 1990,
+   "url": "https://doi.org/10.70249/9798893981193",
+   "identifier": "10.70249/9798893981193",
+   "open_access": false,
+   "cited_by": 26,
+   "abstract": "",
+   "venue": ""
+  },
+  {
+   "kind": "paper",
+   "title": "The Correlation Between Geoglyphs and Subterranean Water Resources in the Río Grande de Nazca Drainage",
+   "year": 2002,
+   "url": "https://doi.org/10.1007/978-1-4615-0597-6_12",
+   "identifier": "10.1007/978-1-4615-0597-6_12",
+   "open_access": false,
+   "cited_by": 10,
+   "abstract": "",
+   "venue": "Andean Archaeology II"
+  },
+  {
+   "kind": "paper",
+   "title": "IV. Andean Social Organization and the Maintenance of the Nazca Lines",
+   "year": 1990,
+   "url": "https://doi.org/10.70249/9798893981193-007",
+   "identifier": "10.70249/9798893981193-007",
+   "open_access": false,
+   "cited_by": 7,
+   "abstract": "",
+   "venue": "Lines of Nazca"
+  },
+  {
+   "kind": "paper",
+   "title": "II. Order in the Nazca Lines",
+   "year": 1990,
+   "url": "https://doi.org/10.70249/9798893981193-005",
+   "identifier": "10.70249/9798893981193-005",
+   "open_access": false,
+   "cited_by": 5,
+   "abstract": "",
+   "venue": "Lines of Nazca"
+  },
+  {
+   "kind": "paper",
+   "title": "V. The Early Nasca Pilgrimage Center of Cahuachi and the Nazca Lines: Anthropological and Archaeological Perspectives",
+   "year": 1990,
+   "url": "https://doi.org/10.70249/9798893981193-008",
+   "identifier": "10.70249/9798893981193-008",
+   "open_access": false,
+   "cited_by": 4,
+   "abstract": "",
+   "venue": "Lines of Nazca"
+  },
+  {
+   "kind": "paper",
+   "title": "The Nazca geoglyphs — an astronomical (?) mystery",
+   "year": 1992,
+   "url": "https://doi.org/10.1016/0083-6656(92)90009-u",
+   "identifier": "10.1016/0083-6656(92)90009-u",
+   "open_access": false,
+   "cited_by": 2,
+   "abstract": "",
+   "venue": "Vistas in Astronomy"
+  },
+  {
+   "kind": "paper",
+   "title": "Essay Review: Studies of Nazca: The Lines of Nazca",
+   "year": 1992,
+   "url": "https://doi.org/10.1177/002182869202301709",
+   "identifier": "10.1177/002182869202301709",
+   "open_access": false,
+   "cited_by": 1,
+   "abstract": "",
+   "venue": "Journal for the History of Astronomy"
+  },
+  {
+   "kind": "paper",
+   "title": "I. An Assessment of Previous Studies of the Nazca Geoglyphs",
+   "year": 1990,
+   "url": "https://doi.org/10.70249/9798893981193-004",
+   "identifier": "10.70249/9798893981193-004",
+   "open_access": false,
+   "cited_by": 1,
+   "abstract": "",
+   "venue": "Lines of Nazca"
+  },
+  {
+   "kind": "paper",
+   "title": "VII. Aerial Photography of the Nazca Lines",
+   "year": 1990,
+   "url": "https://doi.org/10.70249/9798893981193-010",
+   "identifier": "10.70249/9798893981193-010",
+   "open_access": false,
+   "cited_by": 1,
+   "abstract": "",
+   "venue": "Lines of Nazca"
+  },
+  {
+   "kind": "paper",
+   "title": "Nazca Lines",
+   "year": 2021,
+   "url": "https://doi.org/10.1007/978-3-030-58292-0_140097",
+   "identifier": "10.1007/978-3-030-58292-0_140097",
+   "open_access": false,
+   "cited_by": 0,
+   "abstract": "",
+   "venue": "Encyclopedic Dictionary of Archaeology"
+  },
+  {
+   "kind": "paper",
+   "title": "What Were the Nazca Lines?",
+   "year": 2005,
+   "url": "https://doi.org/10.5040/9798400688973.0017",
+   "identifier": "10.5040/9798400688973.0017",
+   "open_access": false,
+   "cited_by": 0,
+   "abstract": "",
+   "venue": "Mysteries in History"
+  }
+ ],
+ "claims": [
+  {
+   "ja": "第1幕 地上絵の実体と作り方",
+   "en": "Nazca geoglyph construction desert pavement",
+   "sources": [
+    {
+     "kind": "paper",
+     "title": "Desert labyrinth: lines, landscape and meaning at Nazca, Peru",
+     "year": 2012,
+     "url": "https://doi.org/10.1017/s0003598x00048298",
+     "identifier": "10.1017/s0003598x00048298",
+     "open_access": false,
+     "cited_by": 9,
+     "abstract": "The shapes drawn out by the famous Nazca lines in the Peruvian desert are at their most evident from the air—giving rise to some famously fantastic theories about their origin. The new understanding offered here is the result of a piece of straightforward brilliance on the part of our authors: get down on the ground, where the original users were, and see where your feet lead you. Using stratigraphic and taphonomic reasoning to decide which lines were contemporary, they discover an itinerary so complex they can justify calling it a labyrinth, and see it as serving ceremonial progressions.",
+     "venue": "Antiquity"
+    },
+    {
+     "kind": "paper",
+     "title": "AI identifies hundreds of mysterious Nazca drawings in Peruvian desert",
+     "year": 2024,
+     "url": "https://doi.org/10.1126/science.zxi3bwr",
+     "identifier": "10.1126/science.zxi3bwr",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "AAAS Articles DO Group"
+    },
+    {
+     "kind": "paper",
+     "title": "Hundreds more Nazca drawings discovered in Peruvian desert",
+     "year": 2024,
+     "url": "https://doi.org/10.1016/s0262-4079(24)01763-9",
+     "identifier": "10.1016/s0262-4079(24)01763-9",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "New Scientist"
+    },
+    {
+     "kind": "paper",
+     "title": "Humans: Lines in sand may be labyrinth: Desert drawings perhaps a deliberate path left by Nazca",
+     "year": 2012,
+     "url": "https://doi.org/10.1002/scin.5591830107",
+     "identifier": "10.1002/scin.5591830107",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "Science News"
+    },
+    {
+     "kind": "paper",
+     "title": "Reinterpretation of a Nazca Desert Figure: From \"Las Manos\" to Resting Bat",
+     "year": 1985,
+     "url": "https://doi.org/10.1086/203318",
+     "identifier": "10.1086/203318",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "Current Anthropology"
+    }
+   ],
+   "numeric_facts": [],
+   "evidence_level": "厚い（査読文献が複数）→ 当たっている側に置く候補"
+  },
+  {
+   "ja": "第2幕 天文説とマリア・ライヘの50年",
+   "en": "Nazca Lines astronomical Reiche",
+   "sources": [
+    {
+     "kind": "paper",
+     "title": "Lines of Nazca",
+     "year": 1990,
+     "url": "https://doi.org/10.70249/9798893981193",
+     "identifier": "10.70249/9798893981193",
+     "open_access": false,
+     "cited_by": 26,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "paper",
+     "title": "IV. Andean Social Organization and the Maintenance of the Nazca Lines",
+     "year": 1990,
+     "url": "https://doi.org/10.70249/9798893981193-007",
+     "identifier": "10.70249/9798893981193-007",
+     "open_access": false,
+     "cited_by": 7,
+     "abstract": "",
+     "venue": "Lines of Nazca"
+    },
+    {
+     "kind": "paper",
+     "title": "II. Order in the Nazca Lines",
+     "year": 1990,
+     "url": "https://doi.org/10.70249/9798893981193-005",
+     "identifier": "10.70249/9798893981193-005",
+     "open_access": false,
+     "cited_by": 5,
+     "abstract": "",
+     "venue": "Lines of Nazca"
+    },
+    {
+     "kind": "paper",
+     "title": "V. The Early Nasca Pilgrimage Center of Cahuachi and the Nazca Lines: Anthropological and Archaeological Perspectives",
+     "year": 1990,
+     "url": "https://doi.org/10.70249/9798893981193-008",
+     "identifier": "10.70249/9798893981193-008",
+     "open_access": false,
+     "cited_by": 4,
+     "abstract": "",
+     "venue": "Lines of Nazca"
+    },
+    {
+     "kind": "paper",
+     "title": "The Nazca geoglyphs — an astronomical (?) mystery",
+     "year": 1992,
+     "url": "https://doi.org/10.1016/0083-6656(92)90009-u",
+     "identifier": "10.1016/0083-6656(92)90009-u",
+     "open_access": false,
+     "cited_by": 2,
+     "abstract": "",
+     "venue": "Vistas in Astronomy"
+    },
+    {
+     "kind": "paper",
+     "title": "Essay Review: Studies of Nazca: The Lines of Nazca",
+     "year": 1992,
+     "url": "https://doi.org/10.1177/002182869202301709",
+     "identifier": "10.1177/002182869202301709",
+     "open_access": false,
+     "cited_by": 1,
+     "abstract": "",
+     "venue": "Journal for the History of Astronomy"
+    },
+    {
+     "kind": "paper",
+     "title": "VII. Aerial Photography of the Nazca Lines",
+     "year": 1990,
+     "url": "https://doi.org/10.70249/9798893981193-010",
+     "identifier": "10.70249/9798893981193-010",
+     "open_access": false,
+     "cited_by": 1,
+     "abstract": "",
+     "venue": "Lines of Nazca"
+    },
+    {
+     "kind": "paper",
+     "title": "Nazca Lines",
+     "year": 2021,
+     "url": "https://doi.org/10.1007/978-3-030-58292-0_140097",
+     "identifier": "10.1007/978-3-030-58292-0_140097",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "Encyclopedic Dictionary of Archaeology"
+    },
+    {
+     "kind": "paper",
+     "title": "Daily briefing: A giant cat was hiding among the Nazca lines",
+     "year": 2020,
+     "url": "https://doi.org/10.1038/d41586-020-02961-7",
+     "identifier": "10.1038/d41586-020-02961-7",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "Nature"
+    },
+    {
+     "kind": "paper",
+     "title": "What Were the Nazca Lines?",
+     "year": 2005,
+     "url": "https://doi.org/10.5040/9798400688973.0017",
+     "identifier": "10.5040/9798400688973.0017",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "Mysteries in History"
+    }
+   ],
+   "numeric_facts": [],
+   "evidence_level": "厚い（査読文献が複数）→ 当たっている側に置く候補"
+  },
+  {
+   "ja": "第3幕 考古学が測り始めた時代",
+   "en": "Nazca geoglyph archaeological survey Peru",
+   "sources": [
+    {
+     "kind": "paper",
+     "title": "Paracas in Nazca: New Data on the Early Horizon Occupation of the Rio Grande de Nazca Drainage, Peru",
+     "year": 1994,
+     "url": "https://doi.org/10.2307/971822",
+     "identifier": "10.2307/971822",
+     "open_access": false,
+     "cited_by": 32,
+     "abstract": "Nasca culture and, particularly, Nasca ceramic iconography are held to evolve directly and smoothly out of antecedent Paracas. Yet the data reviewed in this article indicate that Paracas remains in the Río Grande de Nazca drainage, the heartland of Nasca culture on the south coast of Peru, are limited in nature, a fact that makes it difficult to derive Nasca from Paracas in Nazca. In contrast, there are rich and abundant Paracas remains in the Ica, Pisco, and Chincha valleys, at the Paracas type site itself, and along the Bahía de la Independencia. I look to the Ica Valley for the origins of the Nasca style.",
+     "venue": "Latin American Antiquity"
+    },
+    {
+     "kind": "paper",
+     "title": "Desert labyrinth: lines, landscape and meaning at Nazca, Peru",
+     "year": 2012,
+     "url": "https://doi.org/10.1017/s0003598x00048298",
+     "identifier": "10.1017/s0003598x00048298",
+     "open_access": false,
+     "cited_by": 9,
+     "abstract": "The shapes drawn out by the famous Nazca lines in the Peruvian desert are at their most evident from the air—giving rise to some famously fantastic theories about their origin. The new understanding offered here is the result of a piece of straightforward brilliance on the part of our authors: get down on the ground, where the original users were, and see where your feet lead you. Using stratigraphic and taphonomic reasoning to decide which lines were contemporary, they discover an itinerary so complex they can justify calling it a labyrinth, and see it as serving ceremonial progressions.",
+     "venue": "Antiquity"
+    },
+    {
+     "kind": "paper",
+     "title": "V. The Early Nasca Pilgrimage Center of Cahuachi and the Nazca Lines: Anthropological and Archaeological Perspectives",
+     "year": 1990,
+     "url": "https://doi.org/10.70249/9798893981193-008",
+     "identifier": "10.70249/9798893981193-008",
+     "open_access": false,
+     "cited_by": 4,
+     "abstract": "",
+     "venue": "Lines of Nazca"
+    },
+    {
+     "kind": "paper",
+     "title": "Archaeological explorations in Peru. Part III, Textiles of the early Nazca period",
+     "year": 1937,
+     "url": "https://doi.org/10.5962/bhl.title.3352",
+     "identifier": "10.5962/bhl.title.3352",
+     "open_access": false,
+     "cited_by": 4,
+     "abstract": "",
+     "venue": "Anthropology, memoirs. Field Museum of Natural History"
+    },
+    {
+     "kind": "paper",
+     "title": "PALAEOENVIRONMENTAL CHANGES IN THE NAZCA–PALPA REGION, SOUTHERN PERU—ALTERNATIVE INTERPRETATIONS OF GEOARCHAEOLOGICAL EVIDENCE* A COMMENT ON B. EITEL <i>ET AL</i>., GEOARCHAEOLOGICAL EVIDENCE FROM DESERT LOESS IN THE NAZCA–PALPA REGION, SOUTHERN PERU: PALAEOENVIRONMENTAL CHANGES AND THEIR IMPACT ON PRE‐COLUMBIAN CULTURES, <i>ARCHAEOMETRY</i>, 47(1), 137–58, 2005",
+     "year": 2007,
+     "url": "https://doi.org/10.1111/j.1475-4754.2007.00322.x",
+     "identifier": "10.1111/j.1475-4754.2007.00322.x",
+     "open_access": false,
+     "cited_by": 3,
+     "abstract": "",
+     "venue": "Archaeometry"
+    },
+    {
+     "kind": "paper",
+     "title": "Fluvial Dynamics and Cultural Landscape Evolution in the Rio Grande de Nazca Drainage Basin, Southern Peru",
+     "year": 2008,
+     "url": "https://doi.org/10.30861/9781407302751",
+     "identifier": "10.30861/9781407302751",
+     "open_access": false,
+     "cited_by": 2,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "paper",
+     "title": "First Record of Breeding by the Nazca Booby Sula Granti on Lobos De Afuera Islands, Peru",
+     "year": 2004,
+     "url": "https://doi.org/10.5038/2074-1235.32.1.608",
+     "identifier": "10.5038/2074-1235.32.1.608",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "Marine Ornithology"
+    },
+    {
+     "kind": "paper",
+     "title": "The Nazca geoglyphs, Peru: Proto-architectural expressions",
+     "year": 1999,
+     "url": "https://doi.org/10.1515/semi.1999.123.3-4.283",
+     "identifier": "10.1515/semi.1999.123.3-4.283",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "semi"
+    }
+   ],
+   "numeric_facts": [],
+   "evidence_level": "厚い（査読文献が複数）→ 当たっている側に置く候補"
+  },
+  {
+   "ja": "第4幕 AIによる新発見",
+   "en": "Nazca geoglyph deep learning detection",
+   "sources": [],
+   "numeric_facts": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  }
+ ]
+}

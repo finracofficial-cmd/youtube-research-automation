@@ -85,3 +85,26 @@ def test_head_keyword_is_mandatory():
 
 def test_single_keyword_query_still_matches():
     assert len(relevance_filter([src("Stonehenge revisited")], "Stonehenge")) == 1
+
+
+def test_long_query_is_not_over_constrained():
+    """先頭語に加えて残りにも高い一致率を課すと長いクエリが全滅する。
+    実測で Nazca の4主張すべてが0件になった回帰。"""
+    items = [src("Nazca geoglyphs: new insights from aerial survey")]
+    kept = relevance_filter(items, "Nazca geoglyph construction desert pavement")
+    assert len(kept) == 1
+
+
+def test_head_alone_is_not_enough_when_other_terms_exist():
+    items = [src("Delhi metro expansion plan")]
+    assert relevance_filter(items, "Delhi iron pillar corrosion") == []
+
+
+def test_exclude_drops_homonym_fields():
+    """Nazca は地上絵とナスカプレート（地質学）で衝突する。"""
+    items = [src("Subduction of the Nazca plate beneath central Peru"),
+             src("Nazca geoglyphs and their construction")]
+    kept = relevance_filter(items, "Nazca geoglyph construction",
+                            exclude=("plate", "subduction"))
+    assert len(kept) == 1
+    assert "geoglyph" in kept[0].title

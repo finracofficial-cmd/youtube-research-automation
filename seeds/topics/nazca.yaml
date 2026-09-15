@@ -1,0 +1,14 @@
+subject: ナスカの地上絵
+subject_en: Nazca Lines geoglyphs
+genre: 未解決の謎
+claims:
+  - ja: 第1幕 地上絵の実体と作り方
+    en: Nazca geoglyph construction desert pavement
+  - ja: 第2幕 天文説とマリア・ライヘの50年
+    en: Nazca Lines astronomical Reiche
+  - ja: 第3幕 考古学が測り始めた時代
+    en: Nazca geoglyph archaeological survey Peru
+  - ja: 第4幕 AIによる新発見
+    en: Nazca geoglyph deep learning detection
+# 「Nazca」はナスカプレート（地質学）とも一致するため落とす
+exclude: [plate, subduction, tectonic, seismic, ridge, crustal, drilling, margin]

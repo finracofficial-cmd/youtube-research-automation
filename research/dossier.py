@@ -96,22 +96,26 @@ def extract_numeric_facts(sources: list[Source], limit: int = 8) -> list[str]:
     return out
 
 
-def gather(query_en: str, *, papers: int = 30, books: int = 10) -> list[Source]:
+def gather(query_en: str, *, papers: int = 30, books: int = 10,
+           exclude: tuple[str, ...] = ()) -> list[Source]:
     """論文と原典を引いて、タイトル一致で絞り、被引用順に並べる。"""
     found = openalex(query_en, limit=papers) or crossref(query_en, limit=papers)
-    found = relevance_filter(found, query_en)
+    found = relevance_filter(found, query_en, exclude=exclude)
     # archive.org は全文検索なので、絞り込みも同じクエリで行う。
     # 先頭1語だけで絞ると "Delhi" が裁判所文書を拾うなど無関係な結果が混ざる。
-    found += relevance_filter(archive_org(query_en, limit=books), query_en)
+    found += relevance_filter(archive_org(query_en, limit=books), query_en, exclude=exclude)
     found.sort(key=lambda s: (-(s.open_access), -s.cited_by, -(s.year or 0)))
     return found
 
 
-def build(subject: str, subject_en: str, claims: list[tuple[str, str]]) -> Dossier:
+def build(subject: str, subject_en: str, claims: list[tuple[str, str]],
+          exclude: tuple[str, ...] = ()) -> Dossier:
+    """exclude には同名語の別分野を落とす語を渡す。
+    実測で "Nazca" が地上絵とナスカプレート（地質学）で衝突した。"""
     d = Dossier(subject=subject, subject_en=subject_en)
-    d.background = gather(subject_en)[:12]
+    d.background = gather(subject_en, exclude=exclude)[:12]
     for ja, en in claims:
-        found = gather(en)[:10]
+        found = gather(en, exclude=exclude)[:10]
         d.claims.append(Claim(ja=ja, en=en, sources=found,
                               numeric_facts=extract_numeric_facts(found)))
     return d
