@@ -1,0 +1,15 @@
+# 題材1本ぶんの仕様。en は学術DBに投げる英語クエリ（日本語では引けないため）。
+subject: オーパーツ
+subject_en: out-of-place artifact archaeology
+genre: 古代の謎
+claims:
+  - ja: アンティキティラ島の機械は古代のコンピュータである
+    en: Antikythera mechanism
+  - ja: デリーの鉄柱は1600年錆びていない
+    en: Delhi iron pillar corrosion
+  - ja: バグダッド電池は古代の電池である
+    en: Baghdad battery Parthian
+  - ja: ピリ・レイスの地図は南極の氷の下を描いている
+    en: Piri Reis map Antarctica
+  - ja: コソ加工物は50万年前の地層から出た点火プラグである
+    en: Coso artifact spark plug

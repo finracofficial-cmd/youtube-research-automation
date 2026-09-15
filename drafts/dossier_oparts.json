@@ -1,0 +1,382 @@
+{
+ "subject": "オーパーツ",
+ "subject_en": "out-of-place artifact archaeology",
+ "background": [
+  {
+   "kind": "paper",
+   "title": "Science in place and time: archaeology, ecology and environmental history",
+   "year": 2007,
+   "url": "https://doi.org/10.7882/fs.2007.049",
+   "identifier": "10.7882/fs.2007.049",
+   "open_access": false,
+   "cited_by": 1,
+   "abstract": "Science in place is part of a wider interdisciplinary project, Strata: deserts past, present and future. It examines the spatial construction of knowledge around the archaeologically significant site, Puritjarra, in Australia's Western Desert. It uses a ‘history of ideas’ approach to consider the literature of two different situated sciences, ecology and archaeology. Traditionally, ecological science has been spatially extensive, while archaeology is temporally deep. One emphasising space and process, the other time and sequence. This paper argues that the nature of the desert itself makes ecology attentive to both spatial detail and history, while archaeology in the desert demands a spatial and environmental or ecological context. Both have moved towards not just a ‘sense of place’ but a ‘sense of place in time’. The place itself shapes scientific understandings by creating a need for multiple scales, and both temporal and spatial disciplines in making sense of the biota and human artefacts. A different sort of place can make a different sort of knowledge, as Ernest Giles's account of his 1872 travels indirectly suggested.",
+   "venue": "Animals of Arid Australia"
+  },
+  {
+   "kind": "paper",
+   "title": "PLACE OUT OF TIME – LANDSCAPE ARCHAEOLOGY AS EXISTENTIAL LEARNING",
+   "year": 2026,
+   "url": "https://doi.org/10.21125/edulearn.2026.1021",
+   "identifier": "10.21125/edulearn.2026.1021",
+   "open_access": false,
+   "cited_by": 0,
+   "abstract": "",
+   "venue": "EDULEARN Proceedings EDULEARN26 Proceedings"
+  },
+  {
+   "kind": "paper",
+   "title": "Archaeology of Place",
+   "year": 2014,
+   "url": "https://doi.org/10.4324/9781315739106-8",
+   "identifier": "10.4324/9781315739106-8",
+   "open_access": false,
+   "cited_by": 0,
+   "abstract": "",
+   "venue": "Place, Memory, and Healing"
+  },
+  {
+   "kind": "paper",
+   "title": "An \"out-of-the-way little place\": Historical archaeology and globalisation at St Lawrence, Queensland, Australia",
+   "year": null,
+   "url": "https://doi.org/10.14264/uql.2017.1057",
+   "identifier": "10.14264/uql.2017.1057",
+   "open_access": false,
+   "cited_by": 0,
+   "abstract": "",
+   "venue": ""
+  }
+ ],
+ "claims": [
+  {
+   "ja": "アンティキティラ島の機械は古代のコンピュータである",
+   "en": "Antikythera mechanism",
+   "sources": [
+    {
+     "kind": "book",
+     "title": "antikythera mechanism reconsidered hoax",
+     "year": null,
+     "url": "https://archive.org/details/antikytheramechanism_reconsidered",
+     "identifier": "antikytheramechanism_reconsidered",
+     "open_access": true,
+     "cited_by": 910,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "book",
+     "title": "Antikythera Mechanism",
+     "year": 2009,
+     "url": "https://archive.org/details/imslp-mechanism-rojahn-rudolf",
+     "identifier": "imslp-mechanism-rojahn-rudolf",
+     "open_access": true,
+     "cited_by": 364,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "book",
+     "title": "Eclipse Prediction on the Ancient Greek Astronomical Calculating Machine Known as the Antikythera Mechanism.",
+     "year": 2014,
+     "url": "https://archive.org/details/pubmed-PMC4116162",
+     "identifier": "pubmed-PMC4116162",
+     "open_access": true,
+     "cited_by": 330,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "book",
+     "title": "Still A Mystery Of Greek Astronomy; The Antikythera Mechanism",
+     "year": null,
+     "url": "https://archive.org/details/still-a-mystery-of-greek-astronomy-the-antikythera-mechanism",
+     "identifier": "still-a-mystery-of-greek-astronomy-the-antikythera-mechanism",
+     "open_access": true,
+     "cited_by": 260,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "book",
+     "title": "Antikythera mechanism (analog computer) identified by Archaeologist Valerios Stais - May 17, 1902",
+     "year": 2015,
+     "url": "https://archive.org/details/httpsdiscoveryjournals.orgdiscoverycurrent_issuev31n136-140a1.pdfzoom125",
+     "identifier": "httpsdiscoveryjournals.orgdiscoverycurrent_issuev31n136-140a1.pdfzoom125",
+     "open_access": true,
+     "cited_by": 69,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "book",
+     "title": "Antikythera Mechanism",
+     "year": null,
+     "url": "https://archive.org/details/antikythera-mechanism",
+     "identifier": "antikythera-mechanism",
+     "open_access": true,
+     "cited_by": 60,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "book",
+     "title": "AFTER 147: The Antikythera Shift",
+     "year": 2026,
+     "url": "https://archive.org/details/after-147-sum-bunny-2026",
+     "identifier": "after-147-sum-bunny-2026",
+     "open_access": true,
+     "cited_by": 31,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "book",
+     "title": "Scientific Report The Antikythera Mechanism",
+     "year": 2025,
+     "url": "https://archive.org/details/scientific-report-the-antikythera-mechanism",
+     "identifier": "scientific-report-the-antikythera-mechanism",
+     "open_access": true,
+     "cited_by": 15,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "paper",
+     "title": "Building the Cosmos in the Antikythera Mechanism",
+     "year": 2013,
+     "url": "https://doi.org/10.22323/1.170.0018",
+     "identifier": "10.22323/1.170.0018",
+     "open_access": false,
+     "cited_by": 11,
+     "abstract": "",
+     "venue": "Proceedings of From Antikythera to the Square Kilometre Array: Lessons from the Ancients — PoS(Antikythera &amp; SKA)"
+    },
+    {
+     "kind": "paper",
+     "title": "Antikythera Mechanism",
+     "year": 2017,
+     "url": "https://doi.org/10.1093/acrefore/9780199381135.013.8157",
+     "identifier": "10.1093/acrefore/9780199381135.013.8157",
+     "open_access": false,
+     "cited_by": 3,
+     "abstract": "",
+     "venue": "Oxford Classical Dictionary"
+    }
+   ],
+   "numeric_facts": []
+  },
+  {
+   "ja": "デリーの鉄柱は1600年錆びていない",
+   "en": "Delhi iron pillar corrosion",
+   "sources": [
+    {
+     "kind": "paper",
+     "title": "Characterization of Delhi iron pillar rust by X-ray diffraction, Fourier transform infrared spectroscopy and Mössbauer spectroscopy",
+     "year": 2000,
+     "url": "https://doi.org/10.1016/s0010-938x(00)00045-7",
+     "identifier": "10.1016/s0010-938x(00)00045-7",
+     "open_access": false,
+     "cited_by": 125,
+     "abstract": "",
+     "venue": "Corrosion Science"
+    },
+    {
+     "kind": "paper",
+     "title": "On the corrosion resistance of the Delhi iron pillar",
+     "year": 2000,
+     "url": "https://doi.org/10.1016/s0010-938x(00)00046-9",
+     "identifier": "10.1016/s0010-938x(00)00046-9",
+     "open_access": false,
+     "cited_by": 93,
+     "abstract": "",
+     "venue": "Corrosion Science"
+    },
+    {
+     "kind": "paper",
+     "title": "The “rustless” iron pillar at Delhi",
+     "year": 1970,
+     "url": "https://doi.org/10.1016/s0010-938x(70)80046-4",
+     "identifier": "10.1016/s0010-938x(70)80046-4",
+     "open_access": false,
+     "cited_by": 37,
+     "abstract": "",
+     "venue": "Corrosion Science"
+    },
+    {
+     "kind": "paper",
+     "title": "Corrosion resistance of the Dhar iron pillar",
+     "year": 2003,
+     "url": "https://doi.org/10.1016/s0010-938x(03)00074-x",
+     "identifier": "10.1016/s0010-938x(03)00074-x",
+     "open_access": false,
+     "cited_by": 30,
+     "abstract": "",
+     "venue": "Corrosion Science"
+    },
+    {
+     "kind": "paper",
+     "title": "Story of the Delhi Iron Pillar",
+     "year": 2005,
+     "url": "https://doi.org/10.1017/upo9788175968219",
+     "identifier": "10.1017/upo9788175968219",
+     "open_access": false,
+     "cited_by": 5,
+     "abstract": "Story of the Delhi Iron Pillar traces the history of the pillar located in the Qutub Complex and describes its structure in detail. It unravels the mystery behind the resistance of the pillar to corrosion for more than sixteen centuries. It also discusses the amazing process by which the pillar was manufactured using the technical know-how available at the time. The book is primarily aimed at general readers and tourists, with a view to igniting their interest in this metallurgical wonder of ancient India. Written in simple language and a lucid style, it carries numerous photographs and elaborate figures to enhance the discussion.",
+     "venue": ""
+    },
+    {
+     "kind": "paper",
+     "title": "Insitu corrosion investigations on Delhi iron pillar",
+     "year": 2009,
+     "url": "https://doi.org/10.1007/s12666-009-0004-2",
+     "identifier": "10.1007/s12666-009-0004-2",
+     "open_access": false,
+     "cited_by": 3,
+     "abstract": "",
+     "venue": "Transactions of the Indian Institute of Metals"
+    },
+    {
+     "kind": "paper",
+     "title": "The decorative bell capital of the Delhi iron pillar",
+     "year": 1998,
+     "url": "https://doi.org/10.1007/s11837-998-0378-3",
+     "identifier": "10.1007/s11837-998-0378-3",
+     "open_access": false,
+     "cited_by": 3,
+     "abstract": "",
+     "venue": "JOM"
+    },
+    {
+     "kind": "paper",
+     "title": "Art. I.—The Iron Pillar of Delhi (Mihraulī) and the Emperor Candra (Chandra)",
+     "year": 1897,
+     "url": "https://doi.org/10.1017/s0035869x00024205",
+     "identifier": "10.1017/s0035869x00024205",
+     "open_access": false,
+     "cited_by": 2,
+     "abstract": "The project of writing the “Ancient History of Northern India from the Monuments” has long occupied my thoughts, but the duties of my office do not permit me, so long as I remain in active service, to devote the time and attention necessary for the execution and completion of so arduous an undertaking. There is, indeed, little prospect that my project will ever be fully carried into effect by me. Be that as it may, I have made some small progress in the collection of materials, and have been compelled from time to time to make detailed preparatory studies of special subjects. I propose to publish these studies occasionally under the general title of “Prolegomena to Ancient Indian History.” The essay now presented as No. I of the series is that which happens to be the first ready. It grew out of a footnote to the draft of a chapter on the history of Candra Gupta II.",
+     "venue": "Journal of the Royal Asiatic Society of Great Britain &amp; Ireland"
+    },
+    {
+     "kind": "paper",
+     "title": "Corrosion Resistance of the Delhi Iron Pillar — Scale Characterisation and Passive Film Growth",
+     "year": 2024,
+     "url": "https://doi.org/10.1201/9781003580232-21",
+     "identifier": "10.1201/9781003580232-21",
+     "open_access": false,
+     "cited_by": 1,
+     "abstract": "",
+     "venue": "Prediction of Long Term Corrosion Behaviour in Nuclear Waste Systems EFC 36"
+    },
+    {
+     "kind": "paper",
+     "title": "The Delhi Iron Pillar デリーのアイアンピラー",
+     "year": 2022,
+     "url": "https://doi.org/10.3323/jcorr.71.346",
+     "identifier": "10.3323/jcorr.71.346",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "Zairyo-to-Kankyo"
+    }
+   ],
+   "numeric_facts": []
+  },
+  {
+   "ja": "バグダッド電池は古代の電池である",
+   "en": "Baghdad battery Parthian",
+   "sources": [],
+   "numeric_facts": []
+  },
+  {
+   "ja": "ピリ・レイスの地図は南極の氷の下を描いている",
+   "en": "Piri Reis map Antarctica",
+   "sources": [
+    {
+     "kind": "book",
+     "title": "The Piri Reis Map of 1513",
+     "year": 2000,
+     "url": "https://archive.org/details/gregory-c.-mc-intosh-the-piri-reis-map-of-1513",
+     "identifier": "gregory-c.-mc-intosh-the-piri-reis-map-of-1513",
+     "open_access": true,
+     "cited_by": 25838,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "paper",
+     "title": "The Piri Reis Map of 1513",
+     "year": 2000,
+     "url": "https://doi.org/10.1353/book21157",
+     "identifier": "10.1353/book21157",
+     "open_access": false,
+     "cited_by": 53,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "paper",
+     "title": "The accuracy of the First World Map drawn by Piri Reis",
+     "year": 1989,
+     "url": "https://doi.org/10.1179/000870489787247252",
+     "identifier": "10.1179/000870489787247252",
+     "open_access": false,
+     "cited_by": 1,
+     "abstract": "",
+     "venue": "Cartographic Journal, The"
+    },
+    {
+     "kind": "paper",
+     "title": "Piri Reis Haritasi (Piri Reis' Map)",
+     "year": 1937,
+     "url": "https://doi.org/10.2307/1788274",
+     "identifier": "10.2307/1788274",
+     "open_access": false,
+     "cited_by": 1,
+     "abstract": "",
+     "venue": "The Geographical Journal"
+    },
+    {
+     "kind": "paper",
+     "title": "The Riddle of Piri Reis’ 1513 Map",
+     "year": 2024,
+     "url": "https://doi.org/10.26650/b/ah03ah08.2024.039.010",
+     "identifier": "10.26650/b/ah03ah08.2024.039.010",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "Osmanlı İmparatorluğunda Coğrafya ve Kartografya"
+    },
+    {
+     "kind": "paper",
+     "title": "The Piri Reis Map of 1513",
+     "year": 2012,
+     "url": "https://doi.org/10.1515/9780820343594",
+     "identifier": "10.1515/9780820343594",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": ""
+    },
+    {
+     "kind": "paper",
+     "title": ":<i>The Piri Reis Map of 1513</i>",
+     "year": 2001,
+     "url": "https://doi.org/10.2307/3649069",
+     "identifier": "10.2307/3649069",
+     "open_access": false,
+     "cited_by": 0,
+     "abstract": "",
+     "venue": "The Sixteenth Century Journal"
+    }
+   ],
+   "numeric_facts": []
+  },
+  {
+   "ja": "コソ加工物は50万年前の地層から出た点火プラグである",
+   "en": "Coso artifact spark plug",
+   "sources": [],
+   "numeric_facts": []
+  }
+ ]
+}
