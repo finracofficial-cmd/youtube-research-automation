@@ -1,0 +1,148 @@
+あなたは、都市伝説として語られている話を一次資料まで戻って確かめる
+ドキュメンタリーのナレーション台本を書く。
+
+# 題材: 巨石遺跡
+# 形式: 束ね型（5主張の検証）
+# 尺: 15分00秒（総文字数 約5475字）
+
+## 文体（すべて必須。実測値なので守ること）
+- 常体（だ・である）で書く。敬体はCTAの区間だけ
+- 1文の平均を17〜26字に収める。1文=1事実
+- 話速 320〜410字/分。1分あたり13〜20文
+- 数字を1分あたり4個以上出す。年・件数・寸法・割合を具体で書く
+- 4〜6字の短文や体言止めを混ぜて緩急をつける
+- 「皆さんどう思いますか」のような視聴者への馴れ合いは書かない
+- 「ついに解読」「衝撃の真実」は使わない。確かめられていないことは確かめられていないと書く
+- 断定できない箇所は「ただし」で留保を付ける
+- 専門語は必ず日常の比喩に着地させる（例: エントロピー→スマホの予測変換）
+
+## 使う一次資料（これ以外を出典として書かない）
+- 2015 The Megalithic Quarry of Baalbek: Sector III the Megaliths of Ḥajjar al-Ḥibla https://doi.org/10.5325/jeasmedarcherstu.3.4.0313
+- 2023 Quarrying Megaliths in Heliopolis (Baalbek, Lebanon): https://doi.org/10.2307/jj.5329294.13
+- 2006 PRESELI DOLERITE BLUESTONES: AXE‐HEADS, STONEHENGE MONOLITHS, AND OUTCROP SOURCES https://doi.org/10.1111/j.1468-0092.2006.00247.x
+- 2014 Beyond Stonehenge: Carn Menyn Quarry and the origin and date of bluestone extraction in the Preseli Hills of south-west Wales https://doi.org/10.1017/s0003598x00115340
+- 2023 Lithological description and provenancing of a collection of bluestones from excavations at Stonehenge by William Hawley in 1924 with implications for the human versus ice transport debate of the monument's bluestone megaliths https://doi.org/10.1002/gea.21971
+- 2024 A bluestone boulder at Stonehenge: implications for the glacial transport theory https://doi.org/10.5194/egqsj-73-117-2024
+- 2022 Reconstructing extraction techniques at Stonehenge’s bluestone megalith quarries in the Preseli hills of west Wales https://doi.org/10.1016/j.jasrep.2022.103697
+- 2009 Brian John. The bluestone enigma: Stonehenge, Preseli and the Ice Age. 160 pages, 57 b&amp;w &amp; colour illustrations. 2008. Newport: Greencroft Books; 978-0-905559-89-6 paperback £9.95. https://doi.org/10.1017/s0003598x00098756
+- 2013 The ‘walking’ megalithic statues (moai) of Easter Island https://doi.org/10.1016/j.jas.2012.09.029
+- 2026 Triumfetta Fiber Rope Performance and Application to Rapa Nui (Easter Island) Moai Transport: An Assessment of Load Capacity and Dimensional Constraints https://doi.org/10.2139/ssrn.6187163
+- 2025 The Walking Moai Hypothesis (Easter Island): Archaeological Evidence, Experimental Validation, and Response to Critics https://doi.org/10.2139/ssrn.5370027
+- 2018 The Re-evaluation of Kerman Neolithic Chronology Based on the Excavation of Tepe Gav Koshi Esfandagheh- Jiroft https://doi.org/10.29252/jra.4.2.61
+- 2023 Early Neolithic Chronology and Lithic Industry of Tepe Abdul Hosein, Central Zagros, Iran https://doi.org/10.4000/paleorient.1858
+- 2008 Quarried Away. Thinking about Landscapes of Megalithic Construction on Rapa Nui. In Handbook of Landscape Archaeology https://archive.org/details/LOCHamiltonetalQuarriedAway2008
+- 2018 Roll Me a Great Stone: A Brief Historiography of Megalithic Construction and the Genesis of the Roller Hypothesis https://doi.org/10.1111/ojoa.12142
+- 1984 Archaeology: Kin-groups in Megalithic burials https://doi.org/10.1038/311512b0
+- 2021 The scale of social labor investments and social practices behind the construction of megalithic stele monuments in south Ethiopia https://doi.org/10.1016/j.jaa.2021.101372
+- 1990 VAULTED CONSTRUCTION IN FRENCH MEGALITHIC TOMBS https://doi.org/10.1111/j.1468-0092.1990.tb00220.x
+- 2002 ‘Once Upon a Megalithic Time…’: the Representation of Archaeology in Irish Tourism Literature https://doi.org/10.5334/pia.182
+- 2015 The megalithic construction process and the building of passage graves in Denmark https://doi.org/10.2307/j.ctvh1dpw8.10
+- 2025 A Unified Civil–Structural Analysis of Megalithic Construction: Foundation Engineering, Load Path Behavior, and Seismic Stability in Monumental Stone Architecture https://doi.org/10.31224/5809
+- 2024 Online presentation of the digital reconstruction process of a megalithic tomb : “3Duewelsteene” https://doi.org/10.24072/pci.archaeo.100331
+- 2016 Quarried Away: Thinking about Landscapes of Megalithic Construction on Rapa Nui (Easter Island) https://doi.org/10.4324/9781315427737-28
+
+## 検証する主張（語られている順。信頼度順に並べ替えて使う）
+1. バールベックの巨石は現代のクレーンでも運べない
+2. ストーンヘンジの石は250キロ運ばれた
+3. インカの石組みは剃刀の刃も通らない
+4. モアイは歩いて運ばれた
+5. ギョベクリ・テペは文明より古い
+
+## 構成（各ビートの尺と字数を守る）
+
+### 体言止めの一撃（4秒 / 約24字）
+- 役割: 1秒目から本題。挨拶も自己紹介もしない
+- 題材名を単独で言い切る（例:「ピラミッド。」）
+- 次の1文で、その題材の規模か年数を数字で出す
+
+### 異様さの具体3つ（9秒 / 約54字）
+- 役割: 抽象的な「謎」ではなく、映像で見せられる具体を3つ並べる
+- 3つとも、画で示せる具体物にする
+- 形容詞ではなく事実で書く（「すごい」ではなく「誰も入っていない」）
+
+### チャンネル宣言（4秒 / 約24字）
+- 役割: 競合との違いをここで宣言する。ほぼ固定文
+- 量産系の語彙（ついに解読・衝撃の真実）を否定する形で名乗る
+- ほぼ固定文。これを題材に合わせて最小限だけ変えて使う:
+    「当チャンネルでは、こうした古代の謎を、都市伝説として語るのではなく、論文と一次資料からひも解いていく。」
+
+### 謎の核（6秒 / 約36字）
+- 役割: 何が決着していないのかを1文で言い切り、安易な理由を先に潰す
+- 「単に難しいからではない」型で、凡庸な説明を先に否定する
+
+### 検証順の宣言（11秒 / 約66字）
+- 役割: 主張を信頼度順に並べることを先に宣言する
+- 「当たっていたもの→理由が違うもの→跡形もなくなるもの」の順にする
+- 先に視聴者の信念を肯定してから反転させる。最初から否定しない
+
+### 出発の合図（3秒 / 約18字）
+- 役割: 視聴者を連れて行く宣言。ほぼ固定文
+- ほぼ固定文。これを題材に合わせて最小限だけ変えて使う:
+    「それでは私と共に、巨石遺跡へと迫っていこう。」
+
+### 第1主張（152秒 / 約924字）
+- 役割: 語られている主張を1つ取り、最初に言い出した人まで戻って確かめる
+- 誰が・何年に言い出したかを特定する
+- 一次資料に当たった結果、当たり／半分当たり／跡形なしのどれかを明示する
+- 章の最後の1文が、次の章の問いになるようにする
+
+### 第2主張（152秒 / 約924字）
+- 役割: 語られている主張を1つ取り、最初に言い出した人まで戻って確かめる
+- 誰が・何年に言い出したかを特定する
+- 一次資料に当たった結果、当たり／半分当たり／跡形なしのどれかを明示する
+- 章の最後の1文が、次の章の問いになるようにする
+
+### 第3主張（152秒 / 約924字）
+- 役割: 語られている主張を1つ取り、最初に言い出した人まで戻って確かめる
+- 誰が・何年に言い出したかを特定する
+- 一次資料に当たった結果、当たり／半分当たり／跡形なしのどれかを明示する
+- 章の最後の1文が、次の章の問いになるようにする
+
+### 第4主張（152秒 / 約924字）
+- 役割: 語られている主張を1つ取り、最初に言い出した人まで戻って確かめる
+- 誰が・何年に言い出したかを特定する
+- 一次資料に当たった結果、当たり／半分当たり／跡形なしのどれかを明示する
+- 章の最後の1文が、次の章の問いになるようにする
+
+### 第5主張（152秒 / 約924字）
+- 役割: 語られている主張を1つ取り、最初に言い出した人まで戻って確かめる
+- 誰が・何年に言い出したかを特定する
+- 一次資料に当たった結果、当たり／半分当たり／跡形なしのどれかを明示する
+- 章の最後の1文が、次の章の問いになるようにする
+
+### 一般化（50秒 / 約304字）
+- 役割: 題材を離れた普遍的な洞察に着地させる。ここが拡散の動力
+- この動画の結論が、この題材より大きくなるようにする
+- 「なぜそうなるのか」を、題材を知らない人にも効く形で答える
+
+### 回収（22秒 / 約133字）
+- 役割: 序盤に開いたループを閉じ、分かったこと／分からないことを並べる
+- 「〜と分かった」を反復し、最後に「だが〜は分かっていない」で落とす
+
+### 条件の提示（18秒 / 約109字）
+- 役割: いつ解決するのかを、願望ではなく条件で答える
+- 「もっと優れた技術が出れば」ではなく、具体的に何が見つかれば良いかを言う
+
+### CTA（13秒 / 約79字）
+- 役割: ここだけ敬体に切り替える。語り手から人間に戻る
+- 敬体（です・ます）を使う唯一の区間
+- 一次資料への導線を出す（誰でも見られることを伝える）
+- 調べてほしい題材の募集をする
+
+## 出力形式
+各ビートの見出しを `## ビート名` として、その下にナレーション本文だけを書く。
+ト書き・カメラ指示・話者名は書かない。読み上げればそのまま音声になる形にする。
+
+## 一次資料から拾った数字（可能な限りこれを使う）
+- ABSTRACT
+               First excavated in 1898–1903 by a German expedition, the site of Baalbek has been under study ever since except for a forced interruption during the Lebanese civil war (1975–1990).  [10.5325/jeasmedarcherstu.3.4.0313]
+- Chemical compositions and magnetic susceptibility data were compared for 12 dolerite bluestone implements including axes, axe‐hammers and battle‐axes, 11 Stonehenge monoliths (chemical data only), and potential source outcrops in Preseli, South Wales.  [10.1111/j.1468-0092.2006.00247.x]
+- A small bullet-shaped boulder of welded tuff was found in a Stonehenge excavation in 1924, and apart from a brief examination by geologists from the Institute of Geological Sciences (IGS) around 1970, it has been stored out of sight and out of mind.  [10.5194/egqsj-73-117-2024]
+- cordifolia exhibits tensile strengths of 916-950 MPa and Young&amp;apos;s moduli of 53.  [10.2139/ssrn.6187163]
+- 8 GPa after water retting, comparable to those of commercial hemp and jute.  [10.2139/ssrn.6187163]
+- Processing emerges as critical: water retting increases fiber stiffness by 327% through selective removal of pectin and hemicellulose, concentrating structural cellulose.  [10.2139/ssrn.6187163]
+- Engineering calculations indicate that a 10 mm-diameter Triumfetta rope would provide breaking loads of 32-36 kN, yielding safety factors of 8-12 for transporting 4-ton moai that require working loads of 3-4 kN.  [10.2139/ssrn.6187163]
+- Larger statues (75-86 tons) would demand rope diameters of 40-50 mm, approaching practical handling limits but remaining technically feasible.  [10.2139/ssrn.6187163]
+
+## 厳守
+上の出典リストに無いものを出典として書かない。裏が取れていない数字を出さない。

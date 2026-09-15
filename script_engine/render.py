@@ -11,6 +11,12 @@ from dataclasses import dataclass
 from .beats import Beat, BeatSheet, get
 from .style import StyleProfile
 
+# 初稿は必ず薄くなる。実測で、目標365字/分に対して
+# オーパーツ回が262字/分、巨石遺跡回が253字/分。どちらも約0.70倍だった。
+# ビート構成に沿って書くと骨だけ書いて肉を置き忘れる、という系統的な偏りなので、
+# 要求字数のほうを割り増しして相殺する。
+DRAFT_INFLATION = 1.4
+
 
 @dataclass(frozen=True)
 class Topic:
@@ -21,7 +27,7 @@ class Topic:
 
 
 def _beat_block(beat: Beat, sec: int, topic: Topic, chars_per_min: float) -> str:
-    target_chars = int(sec / 60 * chars_per_min)
+    target_chars = int(sec / 60 * chars_per_min * DRAFT_INFLATION)
     lines = [f"### {beat.name}（{sec}秒 / 約{target_chars}字）",
              f"- 役割: {beat.purpose}"]
     for r in beat.rules:
@@ -46,7 +52,10 @@ def build_prompt(topic: Topic, *, kind: str = "flagship",
         "",
         f"# 題材: {topic.subject}",
         f"# 形式: {sheet.name}",
-        f"# 尺: {total//60}分{total%60:02d}秒（総文字数 約{int(total/60*cpm)}字）",
+        f"# 尺: {total//60}分{total%60:02d}秒",
+        f"# 目安の総文字数: {int(total/60*cpm*DRAFT_INFLATION)}字",
+        f"  （読み上げ {cpm:.0f}字/分ぶんより多めに要求している。"
+        f"実測で初稿は目標の約0.7倍にしかならないため）",
         "",
         "## 文体（すべて必須。実測値なので守ること）",
         f"- 常体（だ・である）で書く。敬体はCTAの区間だけ",

@@ -72,3 +72,16 @@ def test_all_sources_dedupes_by_identifier():
     d = Dossier(subject="s", subject_en="s", background=[dup],
                 claims=[Claim(ja="j", en="e", sources=[dup])])
     assert len(d.all_sources) == 1
+
+
+def test_head_keyword_is_mandatory():
+    """先頭の固有名詞を落とした一致は題材違い。実測でイランの論文を拾っていた。"""
+    items = [src("The Re-evaluation of Kerman Neolithic Chronology"),
+             src("Gobekli Tepe and the Neolithic chronology of Anatolia")]
+    kept = relevance_filter(items, "Gobekli Tepe Neolithic chronology")
+    assert len(kept) == 1
+    assert kept[0].title.startswith("Gobekli")
+
+
+def test_single_keyword_query_still_matches():
+    assert len(relevance_filter([src("Stonehenge revisited")], "Stonehenge")) == 1

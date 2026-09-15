@@ -32,3 +32,14 @@ def test_sources_restrict_citations():
 def test_prompt_bans_the_competitor_vocabulary():
     p = build_prompt(Topic("巨石遺跡"))
     assert "「ついに解読」「衝撃の真実」は使わない" in p
+
+
+def test_char_budget_is_inflated_against_measured_shortfall():
+    """初稿は実測で目標の約0.7倍にしかならないので、要求側を割り増しする。"""
+    from script_engine.render import DRAFT_INFLATION
+    assert DRAFT_INFLATION > 1.0
+    p = build_prompt(Topic("巨石遺跡"), duration_sec=900)
+    # 900秒 × 365字/分 = 5475字。割り増し後はそれより多いこと
+    import re
+    total = int(re.search(r"目安の総文字数: (\d+)字", p).group(1))
+    assert total > 5475

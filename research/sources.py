@@ -135,15 +135,20 @@ def relevance_filter(sources: list[Source], query: str, *, min_ratio: float = 0.
 
     ただし全語一致を求めると、"Delhi iron pillar corrosion" のような
     4語クエリがほぼ全滅する。識別力のある語の7割が入っていれば通す。
+
+    そのかわり**先頭の語は必須**にする。クエリは固有名詞から書く決まりなので、
+    先頭を落とした一致は題材違いになる。実測で "Gobekli Tepe Neolithic chronology" が
+    Gobekli を含まないイランの新石器年代論を拾っていた。
     """
     keys = [w.lower() for w in re.findall(r"[A-Za-z]{4,}", query)]
     keys = [k for k in keys if k not in WEAK] or keys
     if not keys:
         return sources
-    need = max(1, round(len(keys) * min_ratio))
+    head, rest = keys[0], keys[1:]
+    need = max(0, round(len(rest) * min_ratio))
     out = []
     for s in sources:
         title = (s.title or "").lower()
-        if sum(k in title for k in keys) >= need:
+        if head in title and sum(k in title for k in rest) >= need:
             out.append(s)
     return out

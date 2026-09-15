@@ -49,6 +49,47 @@ def cmd_check(args) -> int:
     return 1
 
 
+def cmd_compare(args) -> int:
+    """複数の台本を、参照動画に対して横並びで比べる。
+
+    「別テーマでも同じ構成になっているか」は1本では答えられない。
+    テーマを変えて書いたものを並べ、ばらつきを見るための道具。
+    """
+    from .style import REFERENCE, analyze
+
+    rows = []
+    for item in args.drafts:
+        path, _, dur = item.partition(":")
+        if not dur:
+            raise SystemExit(f"'{item}' は path:duration の形で渡す")
+        m = analyze(Path(path).read_text(encoding="utf-8"), int(dur))
+        rows.append((Path(path).stem, m))
+
+    keys = list(REFERENCE)
+    print(f"{'指標':<22}{'参照':>9}" + "".join(f"{n[:13]:>15}" for n, _ in rows))
+    print("-" * (31 + 15 * len(rows)))
+    for k in keys:
+        line = f"{k:<22}{REFERENCE[k]:>9.2f}"
+        for _, m in rows:
+            got = getattr(m, k)
+            line += f"{got:>9.2f}({got/REFERENCE[k]*100:>3.0f}%)"
+        print(line)
+    print(f"\n{'忠実度':<22}{'100%':>9}" + "".join(f"{m.fidelity*100:>14.0f}%" for _, m in rows))
+
+    if len(rows) >= 2:
+        print("\n--- テーマ間のばらつき ---")
+        worst = 0.0
+        for k in keys:
+            vals = [getattr(m, k) for _, m in rows]
+            spread = (max(vals) - min(vals)) / REFERENCE[k]
+            worst = max(worst, spread)
+            print(f"  {k:<22}幅 {spread*100:>5.1f}%")
+        verdict = "安定" if worst < 0.20 else "不安定"
+        print(f"\n最大ぶれ {worst*100:.1f}% → {verdict}"
+              f"（20%未満を安定とみなす）")
+    return 0
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="script_engine")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -67,6 +108,10 @@ def main(argv=None) -> int:
     c.add_argument("file")
     c.add_argument("--duration", type=int, required=True, help="尺（秒）")
     c.set_defaults(func=cmd_check)
+
+    m = sub.add_parser("compare", help="複数の台本を参照動画と横並びで比べる")
+    m.add_argument("drafts", nargs="+", help="path:duration の形で複数指定")
+    m.set_defaults(func=cmd_compare)
 
     args = p.parse_args(argv)
     return args.func(args)
