@@ -122,3 +122,14 @@ def test_no_credit_invented_for_unknown_image():
     manifest = [{"file": "a.jpg", "author": "Alice", "license": "CC BY 4.0"}]
     shots = [{"src": "shots/zz.jpg", "startSec": 0.0, "durationSec": 5.0}]
     assert build_props.source_labels(manifest, shots) == []
+
+
+def test_junk_drops_dispute_and_navigation_icons():
+    """記事の注意書きに貼られる図。題材の画ではない。
+
+    実測で Baghdad Battery の記事から NPOV の天秤（Unbalanced scales.svg）が
+    素材として通っていた。
+    """
+    for name in ["Unbalanced scales.svg", "Globe icon.svg",
+                 "Split-arrows.svg", "Imbox scales.svg"]:
+        assert _JUNK.search(name), name

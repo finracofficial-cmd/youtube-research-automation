@@ -34,7 +34,8 @@ _JUNK = re.compile(
     r"|increase|decrease|steady|red.?pog|green.?pog|locator|^flag.of"
     r"|translation.?to|sound-icon|gnome-|oojs|mediawiki|searchtool"
     r"|cscr-|semi-protection|shackle|^p vip|featured|good.?article"
-    r"|star\.svg|emblem-|information.?icon|stub|spoken.?wikipedia",
+    r"|star\.svg|emblem-|information.?icon|stub|spoken.?wikipedia"
+    r"|unbalanced|scales\.svg|globe|split-arrows|imbox|mbox",
     re.I)
 
 # P31 の指す型がこれらの語を含むなら、個体ではなく抽象。
@@ -73,6 +74,22 @@ def _claim_ids(claims: dict, prop: str) -> list[str]:
     return out
 
 
+def _qid(en_title: str) -> str | None:
+    """英語版の見出しから Wikidata の項目IDを引く。
+
+    Wikidata に見出しで直接問い合わせるとリダイレクトや大文字小文字の
+    違いで外れる（実測で "Nazca Lines" が引けなかった）。Wikipedia 側から
+    引けば、リダイレクトを辿ったうえで正規の項目IDが返る。
+    """
+    d = _get(EN_API, {"action": "query", "titles": en_title, "redirects": 1,
+                      "prop": "pageprops", "ppprop": "wikibase_item"})
+    for page in ((((d or {}).get("query") or {}).get("pages")) or {}).values():
+        qid = (page.get("pageprops") or {}).get("wikibase_item")
+        if qid:
+            return qid
+    return None
+
+
 def is_entity(en_title: str) -> bool:
     """個体（人・物・場所・出来事）か、それとも一般概念か。
 
@@ -80,22 +97,22 @@ def is_entity(en_title: str) -> bool:
     を持つ。Washer (hardware) や Volcanic rock は P279 しか持たない。
     単位や記法は P31 を持ってしまうので、型のラベルで追加で落とす。
     """
-    d = _get(WD_API, {"action": "wbgetentities", "sites": "enwiki",
-                      "titles": en_title, "props": "claims"})
-    if not d:
+    qid = _qid(en_title)
+    if not qid:
         return False
-    ents = [e for e in (d.get("entities") or {}).values() if "claims" in e]
-    if not ents:
+    d = _get(WD_API, {"action": "wbgetentities", "ids": qid, "props": "claims"})
+    ent = ((d or {}).get("entities") or {}).get(qid) or {}
+    claims = ent.get("claims")
+    if not claims:
         return False
-    claims = ents[0]["claims"]
     p31 = _claim_ids(claims, "P31")
     if not p31 or _claim_ids(claims, "P279"):
         return False
     lab = _get(WD_API, {"action": "wbgetentities", "ids": "|".join(p31[:6]),
                         "props": "labels", "languages": "en"})
     names = []
-    for ent in ((lab or {}).get("entities") or {}).values():
-        v = (ent.get("labels", {}).get("en") or {}).get("value")
+    for e in ((lab or {}).get("entities") or {}).values():
+        v = (e.get("labels", {}).get("en") or {}).get("value")
         if v:
             names.append(v.lower())
     if not names:

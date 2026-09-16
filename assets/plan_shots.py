@@ -43,8 +43,13 @@ def main() -> int:
     print(f"{len(segs)}区間に分割。Wikipediaで英訳中…")
     per = queries_for_segments(segs, per_segment=2)
 
-    shots, last, n_found = [], list(a.fallback), 0
-    for i, qs in enumerate(per):
+    # 冒頭の区間は題材の一般名（「オーパーツ」）しか含まないことが多く、
+    # 一般名は個体ではないので語が取れない。前の語を引き継ぐ規則は先頭では
+    # 効かないので、最初に取れた語を遡って当てる。総論より各論の画がよい。
+    first = next((qs for qs in per if qs), list(a.fallback))
+
+    shots, last, n_found = [], first, 0
+    for qs in per:
         if qs:
             last = qs; n_found += 1
         # 語が取れない区間は直前の語を引き継ぐ。話題が続いている可能性が高い

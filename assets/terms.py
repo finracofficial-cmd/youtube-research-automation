@@ -98,8 +98,14 @@ def candidates(text: str) -> list[str]:
     return uniq
 
 
+# 1区間で試す候補語の上限。固有性の高い順に並べてあるので、上位で当たらない
+# 区間は当たらない。上限が無いと、語が取れない区間ほどAPIを大量に叩く。
+MAX_TRIES_PER_SEGMENT = 8
+
+
 def queries_for_segments(segments: list[str], *, per_segment: int = 1,
-                         pause: float = 0.3) -> list[list[str]]:
+                         pause: float = 0.3,
+                         max_tries: int = MAX_TRIES_PER_SEGMENT) -> list[list[str]]:
     """区間ごとに、英語の検索語を作る。
 
     長い語から試すだけでは、どの区間にも出る背景語が各区間を占めてしまう
@@ -120,7 +126,7 @@ def queries_for_segments(segments: list[str], *, per_segment: int = 1,
         ranked = sorted({t for t in terms if df.get(t, 0) <= max(1, n // 2)},
                         key=lambda t: (df.get(t, n), -len(t)))
         picked: list[str] = []
-        for term in ranked:
+        for term in ranked[:max_tries]:
             if len(picked) >= per_segment:
                 break
             if term not in cache:
@@ -131,4 +137,6 @@ def queries_for_segments(segments: list[str], *, per_segment: int = 1,
             if en and en not in picked:
                 picked.append(en)
         out.append(picked)
+        print(f"  区間{len(out):3d}/{len(segments)}  {' / '.join(picked) or '（語なし）'}",
+              flush=True)
     return out
