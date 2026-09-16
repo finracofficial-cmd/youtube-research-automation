@@ -154,7 +154,8 @@ def is_meta(types: list[str]) -> bool:
     cromlech / monument / archaeological site / henge を押しのけて
     器と判定されていた。型が全部器のときだけ器とみなす。
     """
-    return bool(types) and all(any(w in t for w in _META_TYPE) for t in types)
+    return bool(types) and all(
+        any(re.search(rf"\b{re.escape(w)}\b", t) for w in _META_TYPE) for t in types)
 
 
 def are_entities(en_titles: list[str]) -> dict[str, bool]:

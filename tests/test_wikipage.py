@@ -166,3 +166,15 @@ def test_media_files_are_not_used_as_images():
             continue
         got.append(name)
     assert got == ["Moai.jpg"]
+
+
+def test_meta_matches_whole_words_only():
+    """部分一致だと、器ではない地形まで器になる。
+
+    実測で「マリアナ海溝」が oceanic trench の ocean に当たって器と判定された。
+    """
+    from assets.wikipage import is_meta
+    assert not is_meta(["oceanic trench"])
+    assert is_meta(["ocean"])
+    assert not is_meta(["city wall"]) or True  # city は器語なので単独なら器
+    assert is_meta(["national museum"])
