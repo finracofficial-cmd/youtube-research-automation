@@ -101,7 +101,7 @@
   {
    "startSec": 48.214,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/003.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -229,8 +229,8 @@
   {
    "startSec": 112.5,
    "durationSec": 8.036,
-   "src": "shots_nazca/007.jpg",
-   "inset": 0.275,
+   "src": "shots_nazca/008.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -277,7 +277,7 @@
   {
    "startSec": 136.607,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/011.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -293,7 +293,7 @@
   {
    "startSec": 144.643,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/011.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -309,7 +309,7 @@
   {
    "startSec": 152.679,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/012.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -389,7 +389,7 @@
   {
    "startSec": 192.857,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/015.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -453,7 +453,7 @@
   {
    "startSec": 225.0,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/018.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -469,7 +469,7 @@
   {
    "startSec": 233.036,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/018.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -517,7 +517,7 @@
   {
    "startSec": 257.143,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/019.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -534,7 +534,7 @@
    "startSec": 265.179,
    "durationSec": 8.036,
    "src": "shots_nazca/021.jpg",
-   "inset": 0.232,
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -550,7 +550,7 @@
    "startSec": 273.214,
    "durationSec": 8.036,
    "src": "shots_nazca/021.jpg",
-   "inset": 0.232,
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -613,8 +613,8 @@
   {
    "startSec": 305.357,
    "durationSec": 8.036,
-   "src": "shots_nazca/023.jpg",
-   "inset": 0.0,
+   "src": "shots_nazca/024.jpg",
+   "inset": 0.31,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -629,8 +629,8 @@
   {
    "startSec": 313.393,
    "durationSec": 8.036,
-   "src": "shots_nazca/023.jpg",
-   "inset": 0.0,
+   "src": "shots_nazca/024.jpg",
+   "inset": 0.31,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -645,7 +645,7 @@
   {
    "startSec": 321.429,
    "durationSec": 8.036,
-   "src": "shots_nazca/025.png",
+   "src": "shots_nazca/025.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -662,7 +662,7 @@
    "startSec": 329.464,
    "durationSec": 8.036,
    "src": "shots_nazca/026.jpg",
-   "inset": 0.0,
+   "inset": 0.27,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -678,7 +678,7 @@
    "startSec": 337.5,
    "durationSec": 8.036,
    "src": "shots_nazca/026.jpg",
-   "inset": 0.0,
+   "inset": 0.27,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -693,7 +693,7 @@
   {
    "startSec": 345.536,
    "durationSec": 8.036,
-   "src": "shots_nazca/026.jpg",
+   "src": "shots_nazca/027.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -709,7 +709,7 @@
   {
    "startSec": 353.571,
    "durationSec": 8.036,
-   "src": "shots_nazca/026.jpg",
+   "src": "shots_nazca/027.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -725,8 +725,8 @@
   {
    "startSec": 361.607,
    "durationSec": 8.036,
-   "src": "shots_nazca/028.jpg",
-   "inset": 0.207,
+   "src": "shots_nazca/027.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -805,7 +805,7 @@
   {
    "startSec": 401.786,
    "durationSec": 8.036,
-   "src": "shots_nazca/013.jpg",
+   "src": "shots_nazca/031.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -821,7 +821,7 @@
   {
    "startSec": 409.821,
    "durationSec": 8.036,
-   "src": "shots_nazca/014.jpg",
+   "src": "shots_nazca/031.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -837,7 +837,7 @@
   {
    "startSec": 417.857,
    "durationSec": 8.036,
-   "src": "shots_nazca/014.jpg",
+   "src": "shots_nazca/031.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -853,7 +853,7 @@
   {
    "startSec": 425.893,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/033.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -869,7 +869,7 @@
   {
    "startSec": 433.929,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/033.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -885,7 +885,7 @@
   {
    "startSec": 441.964,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/033.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -901,7 +901,7 @@
   {
    "startSec": 450.0,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/035.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -917,7 +917,7 @@
   {
    "startSec": 458.036,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/035.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -933,8 +933,8 @@
   {
    "startSec": 466.071,
    "durationSec": 8.036,
-   "src": "shots_nazca/013.jpg",
-   "inset": 0.0,
+   "src": "shots_nazca/036.jpg",
+   "inset": 0.299,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -949,7 +949,7 @@
   {
    "startSec": 474.107,
    "durationSec": 8.036,
-   "src": "shots_nazca/014.jpg",
+   "src": "shots_nazca/037.png",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -965,7 +965,7 @@
   {
    "startSec": 482.143,
    "durationSec": 8.036,
-   "src": "shots_nazca/014.jpg",
+   "src": "shots_nazca/037.png",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -981,7 +981,7 @@
   {
    "startSec": 490.179,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/029.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -997,7 +997,7 @@
   {
    "startSec": 498.214,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/029.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1013,7 +1013,7 @@
   {
    "startSec": 506.25,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/029.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1029,7 +1029,7 @@
   {
    "startSec": 514.286,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/040.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1045,7 +1045,7 @@
   {
    "startSec": 522.321,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/040.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1061,7 +1061,7 @@
   {
    "startSec": 530.357,
    "durationSec": 8.036,
-   "src": "shots_nazca/041.jpg",
+   "src": "shots_nazca/018.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1077,7 +1077,7 @@
   {
    "startSec": 538.393,
    "durationSec": 8.036,
-   "src": "shots_nazca/041.jpg",
+   "src": "shots_nazca/018.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1093,7 +1093,7 @@
   {
    "startSec": 546.429,
    "durationSec": 8.036,
-   "src": "shots_nazca/041.jpg",
+   "src": "shots_nazca/018.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1109,7 +1109,7 @@
   {
    "startSec": 554.464,
    "durationSec": 8.036,
-   "src": "shots_nazca/041.jpg",
+   "src": "shots_nazca/018.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1125,7 +1125,7 @@
   {
    "startSec": 562.5,
    "durationSec": 8.036,
-   "src": "shots_nazca/041.jpg",
+   "src": "shots_nazca/018.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1237,8 +1237,8 @@
   {
    "startSec": 618.75,
    "durationSec": 8.036,
-   "src": "shots_nazca/048.png",
-   "inset": 0.254,
+   "src": "shots_nazca/048.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1253,8 +1253,8 @@
   {
    "startSec": 626.786,
    "durationSec": 8.036,
-   "src": "shots_nazca/048.png",
-   "inset": 0.254,
+   "src": "shots_nazca/048.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1269,7 +1269,7 @@
   {
    "startSec": 634.821,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1285,7 +1285,7 @@
   {
    "startSec": 642.857,
    "durationSec": 8.036,
-   "src": "shots_nazca/013.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1301,7 +1301,7 @@
   {
    "startSec": 650.893,
    "durationSec": 8.036,
-   "src": "shots_nazca/013.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1317,7 +1317,7 @@
   {
    "startSec": 658.929,
    "durationSec": 8.036,
-   "src": "shots_nazca/014.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1333,7 +1333,7 @@
   {
    "startSec": 666.964,
    "durationSec": 8.036,
-   "src": "shots_nazca/014.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1349,7 +1349,7 @@
   {
    "startSec": 675.0,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1365,7 +1365,7 @@
   {
    "startSec": 683.036,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1381,7 +1381,7 @@
   {
    "startSec": 691.071,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1397,7 +1397,7 @@
   {
    "startSec": 699.107,
    "durationSec": 8.036,
-   "src": "shots_nazca/054.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1413,7 +1413,7 @@
   {
    "startSec": 707.143,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1429,7 +1429,7 @@
   {
    "startSec": 715.179,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1445,7 +1445,7 @@
   {
    "startSec": 723.214,
    "durationSec": 8.036,
-   "src": "shots_nazca/013.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1461,7 +1461,7 @@
   {
    "startSec": 731.25,
    "durationSec": 8.036,
-   "src": "shots_nazca/013.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1477,7 +1477,7 @@
   {
    "startSec": 739.286,
    "durationSec": 8.036,
-   "src": "shots_nazca/014.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1493,7 +1493,7 @@
   {
    "startSec": 747.321,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1509,7 +1509,7 @@
   {
    "startSec": 755.357,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1525,7 +1525,7 @@
   {
    "startSec": 763.393,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1541,7 +1541,7 @@
   {
    "startSec": 771.429,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1557,7 +1557,7 @@
   {
    "startSec": 779.464,
    "durationSec": 8.036,
-   "src": "shots_nazca/060.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1573,7 +1573,7 @@
   {
    "startSec": 787.5,
    "durationSec": 8.036,
-   "src": "shots_nazca/060.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1589,7 +1589,7 @@
   {
    "startSec": 795.536,
    "durationSec": 8.036,
-   "src": "shots_nazca/060.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1605,7 +1605,7 @@
   {
    "startSec": 803.571,
    "durationSec": 8.036,
-   "src": "shots_nazca/060.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1621,7 +1621,7 @@
   {
    "startSec": 811.607,
    "durationSec": 8.036,
-   "src": "shots_nazca/060.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1637,7 +1637,7 @@
   {
    "startSec": 819.643,
    "durationSec": 8.036,
-   "src": "shots_nazca/060.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1653,7 +1653,7 @@
   {
    "startSec": 827.679,
    "durationSec": 8.036,
-   "src": "shots_nazca/060.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1669,7 +1669,7 @@
   {
    "startSec": 835.714,
    "durationSec": 8.036,
-   "src": "shots_nazca/060.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1685,7 +1685,7 @@
   {
    "startSec": 843.75,
    "durationSec": 8.036,
-   "src": "shots_nazca/060.jpg",
+   "src": "shots_nazca/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1733,7 +1733,7 @@
   {
    "startSec": 867.857,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/001.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1749,7 +1749,7 @@
   {
    "startSec": 875.893,
    "durationSec": 8.036,
-   "src": "shots_nazca/004.jpg",
+   "src": "shots_nazca/001.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1765,7 +1765,7 @@
   {
    "startSec": 883.929,
    "durationSec": 8.036,
-   "src": "shots_nazca/013.jpg",
+   "src": "shots_nazca/002.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1781,7 +1781,7 @@
   {
    "startSec": 891.964,
    "durationSec": 8.036,
-   "src": "shots_nazca/013.jpg",
+   "src": "shots_nazca/002.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -3868,13 +3868,8 @@
   },
   {
    "startSec": 32.143,
-   "durationSec": 16.072,
+   "durationSec": 24.108,
    "text": "Erik Pitti / CC BY 2.0"
-  },
-  {
-   "startSec": 48.214,
-   "durationSec": 8.036,
-   "text": "Vidor at English Wikipedia / Public domain"
   },
   {
    "startSec": 56.25,
@@ -3893,38 +3888,38 @@
   },
   {
    "startSec": 96.429,
-   "durationSec": 16.072,
+   "durationSec": 24.108,
    "text": "Rui Ornelas from Lisboa, Portugal / CC BY 2.0"
-  },
-  {
-   "startSec": 112.5,
-   "durationSec": 8.036,
-   "text": "Greg Hume / CC BY-SA 3.0"
   },
   {
    "startSec": 120.536,
    "durationSec": 16.072,
-   "text": "Hugo Pedel / CC BY-SA 3.0"
+   "text": "Sifat Sharker / CC BY-SA 4.0"
   },
   {
    "startSec": 136.607,
-   "durationSec": 24.108,
-   "text": "Vidor at English Wikipedia / Public domain"
+   "durationSec": 16.072,
+   "text": "Sebastian Ritter / CC BY-SA 2.5"
+  },
+  {
+   "startSec": 152.679,
+   "durationSec": 8.036,
+   "text": "pelican / CC BY-SA 2.0"
   },
   {
    "startSec": 160.714,
    "durationSec": 16.072,
-   "text": "Poliphilo / CC0"
+   "text": "Mike Baird from Morro Bay, USA / CC BY 2.0"
   },
   {
    "startSec": 176.786,
    "durationSec": 16.072,
-   "text": "Schildiecom / CC BY-SA 4.0"
+   "text": "Ianaré Sévi / CC BY-SA 3.0"
   },
   {
    "startSec": 192.857,
    "durationSec": 8.036,
-   "text": "Vidor at English Wikipedia / Public domain"
+   "text": "Soerfm / CC BY-SA 3.0"
   },
   {
    "startSec": 200.893,
@@ -3934,47 +3929,47 @@
   {
    "startSec": 225.0,
    "durationSec": 16.072,
-   "text": "Vidor at English Wikipedia / Public domain"
+   "text": "David Jackson / CC BY-SA 2.0 uk"
   },
   {
    "startSec": 241.071,
-   "durationSec": 16.072,
+   "durationSec": 24.108,
    "text": "Unknown author / Public domain"
-  },
-  {
-   "startSec": 257.143,
-   "durationSec": 8.036,
-   "text": "Vidor at English Wikipedia / Public domain"
   },
   {
    "startSec": 265.179,
    "durationSec": 16.072,
-   "text": "Albrecht Dürer / CC0"
+   "text": "Jorge Royan / CC BY-SA 3.0"
   },
   {
    "startSec": 281.25,
    "durationSec": 16.072,
-   "text": "Unukorno / CC BY 3.0"
+   "text": "User:Kolossos / CC BY-SA 3.0"
   },
   {
    "startSec": 297.321,
-   "durationSec": 24.108,
-   "text": "Seanavigatorsson Olaf Arndt / CC BY-SA 4.0"
+   "durationSec": 8.036,
+   "text": "User:Kolossos / CC BY 3.0"
+  },
+  {
+   "startSec": 305.357,
+   "durationSec": 16.072,
+   "text": "Netopyr / CC BY-SA 3.0"
   },
   {
    "startSec": 321.429,
    "durationSec": 8.036,
-   "text": "Cesare Maccari / Public domain"
+   "text": "CEphoto, Uwe Aranas / CC BY-SA 3.0"
   },
   {
    "startSec": 329.464,
-   "durationSec": 32.144,
-   "text": "Stewart Tomlinson, Florida / Public domain"
+   "durationSec": 16.072,
+   "text": "Henri Fantin-Latour / Public domain"
   },
   {
-   "startSec": 361.607,
-   "durationSec": 8.036,
-   "text": "NASA / Public domain"
+   "startSec": 345.536,
+   "durationSec": 24.108,
+   "text": "JPL / Public domain (NASA)"
   },
   {
    "startSec": 369.643,
@@ -3988,33 +3983,38 @@
   },
   {
    "startSec": 401.786,
-   "durationSec": 8.036,
-   "text": "Poliphilo / CC0"
-  },
-  {
-   "startSec": 409.821,
-   "durationSec": 16.072,
-   "text": "Schildiecom / CC BY-SA 4.0"
+   "durationSec": 24.108,
+   "text": "Author: North, S. N. D. (Simon Newton Dexter), 1849-1924 / Public domain"
   },
   {
    "startSec": 425.893,
-   "durationSec": 40.18,
-   "text": "Vidor at English Wikipedia / Public domain"
+   "durationSec": 24.108,
+   "text": "APK / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 450.0,
+   "durationSec": 16.072,
+   "text": "Mary Mark Ockerbloom / CC BY-SA 4.0"
   },
   {
    "startSec": 466.071,
    "durationSec": 8.036,
-   "text": "Poliphilo / CC0"
+   "text": "Fuzheado / CC BY 4.0"
   },
   {
    "startSec": 474.107,
    "durationSec": 16.072,
-   "text": "Schildiecom / CC BY-SA 4.0"
+   "text": "Germenfer / CC0"
   },
   {
    "startSec": 490.179,
-   "durationSec": 40.18,
-   "text": "Vidor at English Wikipedia / Public domain"
+   "durationSec": 24.108,
+   "text": "garethwiscombe / CC BY 2.0"
+  },
+  {
+   "startSec": 514.286,
+   "durationSec": 16.072,
+   "text": "Lucas de Heere / Public domain"
   },
   {
    "startSec": 530.357,
@@ -4043,73 +4043,13 @@
   },
   {
    "startSec": 618.75,
-   "durationSec": 16.072,
-   "text": "Mikael Häggström, M.D. Author info - Reusing images- Conflicts of interest: None Mikael Häggström, M.D. / CC0"
-  },
-  {
-   "startSec": 634.821,
-   "durationSec": 8.036,
-   "text": "Vidor at English Wikipedia / Public domain"
-  },
-  {
-   "startSec": 642.857,
-   "durationSec": 16.072,
-   "text": "Poliphilo / CC0"
-  },
-  {
-   "startSec": 658.929,
-   "durationSec": 16.072,
-   "text": "Schildiecom / CC BY-SA 4.0"
-  },
-  {
-   "startSec": 675.0,
-   "durationSec": 24.108,
-   "text": "Vidor at English Wikipedia / Public domain"
-  },
-  {
-   "startSec": 699.107,
-   "durationSec": 8.036,
-   "text": "Nedih Limani / CC BY-SA 3.0"
-  },
-  {
-   "startSec": 707.143,
-   "durationSec": 16.072,
-   "text": "Vidor at English Wikipedia / Public domain"
-  },
-  {
-   "startSec": 723.214,
-   "durationSec": 16.072,
-   "text": "Poliphilo / CC0"
-  },
-  {
-   "startSec": 739.286,
-   "durationSec": 8.036,
-   "text": "Schildiecom / CC BY-SA 4.0"
-  },
-  {
-   "startSec": 747.321,
-   "durationSec": 32.144,
-   "text": "Vidor at English Wikipedia / Public domain"
-  },
-  {
-   "startSec": 779.464,
-   "durationSec": 72.324,
-   "text": "Unknown artist / CC BY 3.0"
+   "durationSec": 233.044,
+   "text": "FrogsLegs71 / CC BY-SA 3.0"
   },
   {
    "startSec": 851.786,
-   "durationSec": 16.072,
+   "durationSec": 48.216,
    "text": "Diego Delso / CC BY-SA 4.0"
-  },
-  {
-   "startSec": 867.857,
-   "durationSec": 16.072,
-   "text": "Vidor at English Wikipedia / Public domain"
-  },
-  {
-   "startSec": 883.929,
-   "durationSec": 16.072,
-   "text": "Poliphilo / CC0"
   }
  ],
  "quoteCards": [
@@ -4254,7 +4194,7 @@
    "durationSec": 14.467,
    "zone": "right",
    "value": "およそ450平方キロ",
-   "label": "およそ450平方キロ"
+   "label": ""
   },
   {
    "startSec": 65.077,
@@ -4380,14 +4320,14 @@
    "durationSec": 16.0,
    "zone": "left",
    "value": "186本",
-   "label": "186本"
+   "label": ""
   },
   {
    "startSec": 510.94,
    "durationSec": 16.0,
    "zone": "right",
    "value": "10本以上",
-   "label": "10本以上"
+   "label": ""
   },
   {
    "startSec": 576.297,
@@ -4408,35 +4348,35 @@
    "durationSec": 16.0,
    "zone": "right",
    "value": "100点",
-   "label": "100点"
+   "label": ""
   },
   {
    "startSec": 584.011,
    "durationSec": 16.0,
    "zone": "corner",
    "value": "100点",
-   "label": "100点"
+   "label": ""
   },
   {
    "startSec": 641.795,
    "durationSec": 16.0,
    "zone": "corner",
    "value": "100点",
-   "label": "100点"
+   "label": ""
   },
   {
    "startSec": 667.882,
    "durationSec": 16.0,
    "zone": "left",
    "value": "450平方キロ",
-   "label": "450平方キロ"
+   "label": ""
   },
   {
    "startSec": 679.663,
    "durationSec": 6.473,
    "zone": "right",
    "value": "303点",
-   "label": "303点"
+   "label": ""
   },
   {
    "startSec": 682.609,
@@ -4485,7 +4425,7 @@
    "durationSec": 16.0,
    "zone": "corner",
    "value": "10倍",
-   "label": "10倍"
+   "label": ""
   },
   {
    "startSec": 827.069,
@@ -4499,14 +4439,14 @@
    "durationSec": 16.0,
    "zone": "corner",
    "value": "100年前",
-   "label": "100年前"
+   "label": ""
   },
   {
    "startSec": 875.877,
    "durationSec": 16.0,
    "zone": "left",
    "value": "303点",
-   "label": "303点"
+   "label": ""
   }
  ],
  "portraits": [

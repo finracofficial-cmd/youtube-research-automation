@@ -27,7 +27,7 @@ import yaml
 from .credits import build as build_credits
 from .credits import unlicensed
 from .sources import UA, Asset, search_all
-from .wikipage import page_images
+from .wikipage import entity_types, page_images
 
 
 def mean_luma(path: Path) -> int | None:
@@ -110,8 +110,12 @@ def _candidates(queries: list[str], limit: int) -> tuple[list[Asset], str, bool]
     from_articles: list[Asset] = []
     from_search: list[Asset] = []
     first = ""
+    # 人物の顔写真は、その人物を指す語のときだけ使う。題材が人物でないのに
+    # 顔写真を全画面に出すと、その人が題材に関係しているように見える。
+    types = entity_types(queries)
     for q in queries:
-        got = page_images(q, limit=limit)
+        human = "human" in (types.get(q) or {}).get("t", [])
+        got = page_images(q, limit=limit, people_ok=human)
         if got:
             from_articles += got
             first = first or q

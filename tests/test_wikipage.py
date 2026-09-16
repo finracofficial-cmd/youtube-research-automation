@@ -211,3 +211,34 @@ def test_type_of_labels_count_as_classes():
                   "class of vehicle", "form of art"]:
         assert label.startswith(("type of", "class of", "form of", "genre of",
                                  "kind of", "category of")), label
+
+
+def test_person_photos_are_blocked_unless_the_subject_is_that_person():
+    """題材が人物でないのに顔写真を全画面に出すと、その人が題材に
+    関係しているように見える。ライセンスが許しても出してよい絵にならない。
+
+    実測でナスカの回に、National Geographic Society の記事から
+    特定個人の肖像が全画面で出た。
+    """
+    from assets.wikipage import _looks_like_a_person
+    for name in ["Jen Guyton, photographer and scientist.jpg",
+                 "Dubai Future Forum 2024 - Suaad Al Harthi.jpg",
+                 "Portrait of a Man.jpg", "Dr. Smith at the Annual Awards.jpg",
+                 "John Doe speaking at a rally.jpg"]:
+        assert _looks_like_a_person(name), name
+
+
+def test_landscape_and_artifact_photos_are_not_blocked_as_people():
+    from assets.wikipage import _looks_like_a_person
+    for name in ["Stonehenge2007 07 30.jpg", "Maria Reiche Nazca.jpg",
+                 "AhuTongariki.JPG", "Antikythera Fragment A (Front).webp"]:
+        assert not _looks_like_a_person(name), name
+
+
+def test_organizations_are_containers_not_subjects():
+    """掲載元・出資団体は題材が言及される器で、題材ではない。"""
+    from assets.wikipage import is_meta
+    assert is_meta(["scientific society", "film production company",
+                    "publishing house"])
+    assert is_meta(["national museum"])
+    assert not is_meta(["geoglyph", "archaeological site"])

@@ -5,8 +5,8 @@
   {
    "startSec": 0.0,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/000.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -21,8 +21,8 @@
   {
    "startSec": 8.036,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/001.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -37,8 +37,8 @@
   {
    "startSec": 16.071,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/001.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -53,8 +53,8 @@
   {
    "startSec": 24.107,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/002.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -69,8 +69,8 @@
   {
    "startSec": 32.143,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/003.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -85,8 +85,8 @@
   {
    "startSec": 40.179,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/003.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -101,7 +101,7 @@
   {
    "startSec": 48.214,
    "durationSec": 8.036,
-   "src": "shots/004.jpg",
+   "src": "shots/003.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -117,7 +117,7 @@
   {
    "startSec": 56.25,
    "durationSec": 8.036,
-   "src": "shots/004.jpg",
+   "src": "shots/003.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -133,7 +133,7 @@
   {
    "startSec": 64.286,
    "durationSec": 8.036,
-   "src": "shots/004.jpg",
+   "src": "shots/003.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -149,8 +149,8 @@
   {
    "startSec": 72.321,
    "durationSec": 8.036,
-   "src": "shots/006.jpg",
-   "inset": 0.289,
+   "src": "shots/000.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -165,8 +165,8 @@
   {
    "startSec": 80.357,
    "durationSec": 8.036,
-   "src": "shots/006.jpg",
-   "inset": 0.289,
+   "src": "shots/000.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -181,8 +181,8 @@
   {
    "startSec": 88.393,
    "durationSec": 8.036,
-   "src": "shots/006.jpg",
-   "inset": 0.289,
+   "src": "shots/001.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -197,8 +197,8 @@
   {
    "startSec": 96.429,
    "durationSec": 8.036,
-   "src": "shots/006.jpg",
-   "inset": 0.289,
+   "src": "shots/001.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -213,8 +213,8 @@
   {
    "startSec": 104.464,
    "durationSec": 8.036,
-   "src": "shots/008.jpg",
-   "inset": 0.241,
+   "src": "shots/002.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -229,7 +229,7 @@
   {
    "startSec": 112.5,
    "durationSec": 8.036,
-   "src": "shots/009.jpg",
+   "src": "shots/003.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -245,7 +245,7 @@
   {
    "startSec": 120.536,
    "durationSec": 8.036,
-   "src": "shots/009.jpg",
+   "src": "shots/003.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -261,7 +261,7 @@
   {
    "startSec": 128.571,
    "durationSec": 8.036,
-   "src": "shots/010.jpg",
+   "src": "shots/003.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -277,7 +277,7 @@
   {
    "startSec": 136.607,
    "durationSec": 8.036,
-   "src": "shots/010.jpg",
+   "src": "shots/003.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -293,7 +293,7 @@
   {
    "startSec": 144.643,
    "durationSec": 8.036,
-   "src": "shots/010.jpg",
+   "src": "shots/000.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -309,7 +309,7 @@
   {
    "startSec": 152.679,
    "durationSec": 8.036,
-   "src": "shots/012.jpg",
+   "src": "shots/001.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -325,7 +325,7 @@
   {
    "startSec": 160.714,
    "durationSec": 8.036,
-   "src": "shots/012.jpg",
+   "src": "shots/001.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -341,8 +341,8 @@
   {
    "startSec": 168.75,
    "durationSec": 8.036,
-   "src": "shots/013.jpg",
-   "inset": 0.22,
+   "src": "shots/002.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -357,8 +357,8 @@
   {
    "startSec": 176.786,
    "durationSec": 8.036,
-   "src": "shots/013.jpg",
-   "inset": 0.22,
+   "src": "shots/002.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -373,8 +373,8 @@
   {
    "startSec": 184.821,
    "durationSec": 8.036,
-   "src": "shots/013.jpg",
-   "inset": 0.22,
+   "src": "shots/003.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -389,8 +389,8 @@
   {
    "startSec": 192.857,
    "durationSec": 8.036,
-   "src": "shots/015.jpg",
-   "inset": 0.192,
+   "src": "shots/003.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -405,8 +405,8 @@
   {
    "startSec": 200.893,
    "durationSec": 8.036,
-   "src": "shots/015.jpg",
-   "inset": 0.192,
+   "src": "shots/003.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -421,8 +421,8 @@
   {
    "startSec": 208.929,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/000.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -437,8 +437,8 @@
   {
    "startSec": 216.964,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/000.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -453,8 +453,8 @@
   {
    "startSec": 225.0,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/001.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -533,7 +533,7 @@
   {
    "startSec": 265.179,
    "durationSec": 8.036,
-   "src": "shots/020.png",
+   "src": "shots/018.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -661,7 +661,7 @@
   {
    "startSec": 329.464,
    "durationSec": 8.036,
-   "src": "shots/024.jpg",
+   "src": "shots/025.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -677,7 +677,7 @@
   {
    "startSec": 337.5,
    "durationSec": 8.036,
-   "src": "shots/024.jpg",
+   "src": "shots/025.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -693,7 +693,7 @@
   {
    "startSec": 345.536,
    "durationSec": 8.036,
-   "src": "shots/026.jpg",
+   "src": "shots/025.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -709,7 +709,7 @@
   {
    "startSec": 353.571,
    "durationSec": 8.036,
-   "src": "shots/026.jpg",
+   "src": "shots/027.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -725,7 +725,7 @@
   {
    "startSec": 361.607,
    "durationSec": 8.036,
-   "src": "shots/026.jpg",
+   "src": "shots/027.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -821,7 +821,7 @@
   {
    "startSec": 409.821,
    "durationSec": 8.036,
-   "src": "shots/031.jpg",
+   "src": "shots/023.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -837,7 +837,7 @@
   {
    "startSec": 417.857,
    "durationSec": 8.036,
-   "src": "shots/031.jpg",
+   "src": "shots/023.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -853,7 +853,7 @@
   {
    "startSec": 425.893,
    "durationSec": 8.036,
-   "src": "shots/032.jpg",
+   "src": "shots/023.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -869,7 +869,7 @@
   {
    "startSec": 433.929,
    "durationSec": 8.036,
-   "src": "shots/032.jpg",
+   "src": "shots/023.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -885,7 +885,7 @@
   {
    "startSec": 441.964,
    "durationSec": 8.036,
-   "src": "shots/032.jpg",
+   "src": "shots/023.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -901,7 +901,7 @@
   {
    "startSec": 450.0,
    "durationSec": 8.036,
-   "src": "shots/032.jpg",
+   "src": "shots/023.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -917,7 +917,7 @@
   {
    "startSec": 458.036,
    "durationSec": 8.036,
-   "src": "shots/032.jpg",
+   "src": "shots/023.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -933,7 +933,7 @@
   {
    "startSec": 466.071,
    "durationSec": 8.036,
-   "src": "shots/035.jpg",
+   "src": "shots/023.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -949,8 +949,8 @@
   {
    "startSec": 474.107,
    "durationSec": 8.036,
-   "src": "shots/036.png",
-   "inset": 0.301,
+   "src": "shots/036.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -965,8 +965,8 @@
   {
    "startSec": 482.143,
    "durationSec": 8.036,
-   "src": "shots/036.png",
-   "inset": 0.301,
+   "src": "shots/036.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -981,7 +981,7 @@
   {
    "startSec": 490.179,
    "durationSec": 8.036,
-   "src": "shots/035.jpg",
+   "src": "shots/037.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -997,7 +997,7 @@
   {
    "startSec": 498.214,
    "durationSec": 8.036,
-   "src": "shots/035.jpg",
+   "src": "shots/037.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1013,8 +1013,8 @@
   {
    "startSec": 506.25,
    "durationSec": 8.036,
-   "src": "shots/035.jpg",
-   "inset": 0.0,
+   "src": "shots/038.jpg",
+   "inset": 0.2,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1061,8 +1061,8 @@
   {
    "startSec": 530.357,
    "durationSec": 8.036,
-   "src": "shots/040.png",
-   "inset": 0.265,
+   "src": "shots/040.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1077,8 +1077,8 @@
   {
    "startSec": 538.393,
    "durationSec": 8.036,
-   "src": "shots/040.png",
-   "inset": 0.265,
+   "src": "shots/040.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1093,8 +1093,8 @@
   {
    "startSec": 546.429,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/041.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1109,8 +1109,8 @@
   {
    "startSec": 554.464,
    "durationSec": 8.036,
-   "src": "shots/042.png",
-   "inset": 0.219,
+   "src": "shots/042.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1125,8 +1125,8 @@
   {
    "startSec": 562.5,
    "durationSec": 8.036,
-   "src": "shots/042.png",
-   "inset": 0.219,
+   "src": "shots/042.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1221,8 +1221,8 @@
   {
    "startSec": 610.714,
    "durationSec": 8.036,
-   "src": "shots/046.jpg",
-   "inset": 0.309,
+   "src": "shots/044.jpg",
+   "inset": 0.289,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1237,8 +1237,8 @@
   {
    "startSec": 618.75,
    "durationSec": 8.036,
-   "src": "shots/046.jpg",
-   "inset": 0.309,
+   "src": "shots/044.jpg",
+   "inset": 0.289,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1253,8 +1253,8 @@
   {
    "startSec": 626.786,
    "durationSec": 8.036,
-   "src": "shots/046.jpg",
-   "inset": 0.309,
+   "src": "shots/047.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1269,7 +1269,7 @@
   {
    "startSec": 634.821,
    "durationSec": 8.036,
-   "src": "shots/048.png",
+   "src": "shots/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1285,7 +1285,7 @@
   {
    "startSec": 642.857,
    "durationSec": 8.036,
-   "src": "shots/048.png",
+   "src": "shots/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1301,7 +1301,7 @@
   {
    "startSec": 650.893,
    "durationSec": 8.036,
-   "src": "shots/048.png",
+   "src": "shots/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1317,7 +1317,7 @@
   {
    "startSec": 658.929,
    "durationSec": 8.036,
-   "src": "shots/048.png",
+   "src": "shots/048.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1334,7 +1334,7 @@
    "startSec": 666.964,
    "durationSec": 8.036,
    "src": "shots/050.jpg",
-   "inset": 0.227,
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1350,7 +1350,7 @@
    "startSec": 675.0,
    "durationSec": 8.036,
    "src": "shots/051.jpg",
-   "inset": 0.0,
+   "inset": 0.173,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1366,7 +1366,7 @@
    "startSec": 683.036,
    "durationSec": 8.036,
    "src": "shots/051.jpg",
-   "inset": 0.0,
+   "inset": 0.173,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1382,7 +1382,7 @@
    "startSec": 691.071,
    "durationSec": 8.036,
    "src": "shots/052.jpg",
-   "inset": 0.274,
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1398,7 +1398,7 @@
    "startSec": 699.107,
    "durationSec": 8.036,
    "src": "shots/052.jpg",
-   "inset": 0.274,
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1413,8 +1413,8 @@
   {
    "startSec": 707.143,
    "durationSec": 8.036,
-   "src": "shots/052.jpg",
-   "inset": 0.274,
+   "src": "shots/053.jpg",
+   "inset": 0.17,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1429,8 +1429,8 @@
   {
    "startSec": 715.179,
    "durationSec": 8.036,
-   "src": "shots/052.jpg",
-   "inset": 0.274,
+   "src": "shots/054.jpg",
+   "inset": 0.289,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1445,8 +1445,8 @@
   {
    "startSec": 723.214,
    "durationSec": 8.036,
-   "src": "shots/052.jpg",
-   "inset": 0.274,
+   "src": "shots/054.jpg",
+   "inset": 0.289,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1461,8 +1461,8 @@
   {
    "startSec": 731.25,
    "durationSec": 8.036,
-   "src": "shots/055.png",
-   "inset": 0.0,
+   "src": "shots/054.jpg",
+   "inset": 0.289,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1477,8 +1477,8 @@
   {
    "startSec": 739.286,
    "durationSec": 8.036,
-   "src": "shots/055.png",
-   "inset": 0.0,
+   "src": "shots/054.jpg",
+   "inset": 0.289,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1493,8 +1493,8 @@
   {
    "startSec": 747.321,
    "durationSec": 8.036,
-   "src": "shots/055.png",
-   "inset": 0.0,
+   "src": "shots/054.jpg",
+   "inset": 0.289,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1573,8 +1573,8 @@
   {
    "startSec": 787.5,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/058.jpg",
+   "inset": 0.289,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1589,7 +1589,7 @@
   {
    "startSec": 795.536,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
+   "src": "shots/060.webp",
    "inset": 0.219,
    "from": {
     "scale": 1.18,
@@ -1605,7 +1605,7 @@
   {
    "startSec": 803.571,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
+   "src": "shots/060.webp",
    "inset": 0.219,
    "from": {
     "scale": 1.0,
@@ -1653,8 +1653,8 @@
   {
    "startSec": 827.679,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/058.jpg",
+   "inset": 0.289,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1669,8 +1669,8 @@
   {
    "startSec": 835.714,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/058.jpg",
+   "inset": 0.289,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1685,8 +1685,8 @@
   {
    "startSec": 843.75,
    "durationSec": 8.036,
-   "src": "shots/000.webp",
-   "inset": 0.219,
+   "src": "shots/058.jpg",
+   "inset": 0.289,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -3665,58 +3665,78 @@
  "sourceLabels": [
   {
    "startSec": 0.0,
-   "durationSec": 48.216,
-   "text": "Logg Tandy / CC BY 4.0"
-  },
-  {
-   "startSec": 48.214,
-   "durationSec": 24.108,
+   "durationSec": 8.036,
    "text": "Willy Stöwer / Public domain"
   },
   {
+   "startSec": 8.036,
+   "durationSec": 16.072,
+   "text": "Accident Investigation Board Finland. / Public domain"
+  },
+  {
+   "startSec": 24.107,
+   "durationSec": 8.036,
+   "text": "Hovhannes Aivazovsky (1817 - 1900) – painter (Russian) Born in Rossiiskaya imperiya, Feodosia. Died in Rossiiskaya imperiya, Feodosia. Details on Google Art Project / Public domain"
+  },
+  {
+   "startSec": 32.143,
+   "durationSec": 40.18,
+   "text": "Los Angeles Times / CC BY 4.0"
+  },
+  {
    "startSec": 72.321,
-   "durationSec": 32.144,
-   "text": "Lyokoï88 / CC BY-SA 4.0"
+   "durationSec": 16.072,
+   "text": "Willy Stöwer / Public domain"
+  },
+  {
+   "startSec": 88.393,
+   "durationSec": 16.072,
+   "text": "Accident Investigation Board Finland. / Public domain"
   },
   {
    "startSec": 104.464,
    "durationSec": 8.036,
-   "text": "Wilfredor / CC0"
+   "text": "Hovhannes Aivazovsky (1817 - 1900) – painter (Russian) Born in Rossiiskaya imperiya, Feodosia. Died in Rossiiskaya imperiya, Feodosia. Details on Google Art Project / Public domain"
   },
   {
    "startSec": 112.5,
-   "durationSec": 16.072,
-   "text": "Moonik / CC BY-SA 3.0"
+   "durationSec": 32.144,
+   "text": "Los Angeles Times / CC BY 4.0"
   },
   {
-   "startSec": 128.571,
-   "durationSec": 24.108,
-   "text": "Postdlf / CC BY-SA 3.0"
+   "startSec": 144.643,
+   "durationSec": 8.036,
+   "text": "Willy Stöwer / Public domain"
   },
   {
    "startSec": 152.679,
    "durationSec": 16.072,
-   "text": "Saidmann / CC BY-SA 4.0"
+   "text": "Accident Investigation Board Finland. / Public domain"
   },
   {
    "startSec": 168.75,
-   "durationSec": 40.18,
-   "text": "AnotherGypsy / CC BY-SA 4.0"
+   "durationSec": 16.072,
+   "text": "Hovhannes Aivazovsky (1817 - 1900) – painter (Russian) Born in Rossiiskaya imperiya, Feodosia. Died in Rossiiskaya imperiya, Feodosia. Details on Google Art Project / Public domain"
+  },
+  {
+   "startSec": 184.821,
+   "durationSec": 24.108,
+   "text": "Los Angeles Times / CC BY 4.0"
   },
   {
    "startSec": 208.929,
-   "durationSec": 24.108,
-   "text": "Logg Tandy / CC BY 4.0"
+   "durationSec": 16.072,
+   "text": "Willy Stöwer / Public domain"
+  },
+  {
+   "startSec": 225.0,
+   "durationSec": 8.036,
+   "text": "Accident Investigation Board Finland. / Public domain"
   },
   {
    "startSec": 233.036,
-   "durationSec": 32.144,
+   "durationSec": 40.18,
    "text": "Benjamin West / Public domain"
-  },
-  {
-   "startSec": 265.179,
-   "durationSec": 8.036,
-   "text": "MikeRun / CC BY-SA 4.0"
   },
   {
    "startSec": 273.214,
@@ -3730,43 +3750,33 @@
   },
   {
    "startSec": 313.393,
-   "durationSec": 32.144,
+   "durationSec": 16.072,
    "text": "Deepak Singhanwal / CC BY-SA 4.0"
   },
   {
-   "startSec": 345.536,
+   "startSec": 329.464,
    "durationSec": 24.108,
    "text": "Tushraa / CC BY-SA 4.0"
   },
   {
-   "startSec": 369.643,
-   "durationSec": 40.18,
+   "startSec": 353.571,
+   "durationSec": 16.072,
    "text": "Arne Hückelheim / CC BY-SA 3.0"
   },
   {
-   "startSec": 409.821,
-   "durationSec": 16.072,
-   "text": "Daniel Tzvi / Public domain"
-  },
-  {
-   "startSec": 425.893,
+   "startSec": 369.643,
    "durationSec": 40.18,
-   "text": "Burger / Public domain"
+   "text": "ADARSHluck / CC BY-SA 4.0"
   },
   {
-   "startSec": 466.071,
-   "durationSec": 8.036,
-   "text": "Stealth Communications / CC BY-SA 4.0"
+   "startSec": 409.821,
+   "durationSec": 64.288,
+   "text": "Vis M / CC BY-SA 4.0"
   },
   {
    "startSec": 474.107,
-   "durationSec": 16.072,
-   "text": "Renato de carvalho ferreira / CC BY-SA 3.0"
-  },
-  {
-   "startSec": 490.179,
-   "durationSec": 24.108,
-   "text": "Stealth Communications / CC BY-SA 4.0"
+   "durationSec": 40.18,
+   "text": "Osama Shukir Muhammed Amin FRCP(Glasg) / CC BY-SA 4.0"
   },
   {
    "startSec": 514.286,
@@ -3776,57 +3786,62 @@
   {
    "startSec": 530.357,
    "durationSec": 16.072,
-   "text": "Juris Tiltins / Public domain"
+   "text": "Contemporary model attributed to the model workshop of Toulon arsenal. / Public domain"
   },
   {
    "startSec": 546.429,
    "durationSec": 8.036,
-   "text": "Logg Tandy / CC BY 4.0"
+   "text": "Braun, Georg. Engravings by Frans Hogenberg. Scan by: Domfernando. / Public domain"
   },
   {
    "startSec": 554.464,
    "durationSec": 16.072,
-   "text": "Derivative work: Carnby / CC BY-SA 4.0"
+   "text": "Wilfried Bauer / CC BY-SA 3.0"
   },
   {
    "startSec": 570.536,
    "durationSec": 16.072,
-   "text": "Wilfried Bauer / CC BY-SA 3.0"
+   "text": "Islarsh / CC BY-SA 3.0"
   },
   {
    "startSec": 586.607,
-   "durationSec": 24.108,
+   "durationSec": 40.18,
    "text": "Marie-Lan Nguyen / Public domain"
   },
   {
-   "startSec": 610.714,
-   "durationSec": 24.108,
-   "text": "Mushki Brichta / CC BY-SA 4.0"
+   "startSec": 626.786,
+   "durationSec": 8.036,
+   "text": "Joyofmuseums / CC BY-SA 4.0"
   },
   {
    "startSec": 634.821,
    "durationSec": 32.144,
-   "text": "William Henry Powell / Public domain"
+   "text": "chensiyuan (talk · contribs) / CC BY-SA 4.0"
   },
   {
    "startSec": 666.964,
    "durationSec": 8.036,
-   "text": "Dorothea Lange / Public domain"
+   "text": "Tuxyso / CC BY-SA 3.0"
   },
   {
    "startSec": 675.0,
    "durationSec": 16.072,
-   "text": "HQ / Public domain (NASA)"
+   "text": "Niranjan Arminius / CC BY-SA 4.0"
   },
   {
    "startSec": 691.071,
-   "durationSec": 40.18,
-   "text": "Susan Wright / Public domain"
+   "durationSec": 16.072,
+   "text": "Thermos / CC BY-SA 3.0"
   },
   {
-   "startSec": 731.25,
-   "durationSec": 24.108,
-   "text": "Woudloper / CC BY-SA 3.0"
+   "startSec": 707.143,
+   "durationSec": 8.036,
+   "text": "Jarek Tuszyński / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 715.179,
+   "durationSec": 40.18,
+   "text": "Hiuppo / CC BY-SA 2.5"
   },
   {
    "startSec": 755.357,
@@ -3835,23 +3850,18 @@
   },
   {
    "startSec": 771.429,
-   "durationSec": 16.072,
+   "durationSec": 24.108,
    "text": "Piri Reis / Public domain"
   },
   {
-   "startSec": 787.5,
-   "durationSec": 24.108,
+   "startSec": 795.536,
+   "durationSec": 16.072,
    "text": "Logg Tandy / CC BY 4.0"
   },
   {
    "startSec": 811.607,
-   "durationSec": 16.072,
+   "durationSec": 40.18,
    "text": "Piri Reis / Public domain"
-  },
-  {
-   "startSec": 827.679,
-   "durationSec": 24.108,
-   "text": "Logg Tandy / CC BY 4.0"
   },
   {
    "startSec": 851.786,
@@ -3973,7 +3983,7 @@
    "durationSec": 16.0,
    "zone": "right",
    "value": "50万年前",
-   "label": "50万年前"
+   "label": ""
   },
   {
    "startSec": 81.978,
@@ -4029,7 +4039,7 @@
    "durationSec": 16.0,
    "zone": "left",
    "value": "紀元前3世紀",
-   "label": "紀元前3世紀"
+   "label": ""
   },
   {
    "startSec": 264.406,
@@ -4064,7 +4074,7 @@
    "durationSec": 16.0,
    "zone": "corner",
    "value": "2000年前",
-   "label": "2000年前"
+   "label": ""
   },
   {
    "startSec": 331.255,
@@ -4106,14 +4116,14 @@
    "durationSec": 16.0,
    "zone": "right",
    "value": "50万年前",
-   "label": "50万年前"
+   "label": ""
   },
   {
    "startSec": 768.765,
    "durationSec": 16.0,
    "zone": "corner",
    "value": "紀元前1世紀",
-   "label": "紀元前1世紀"
+   "label": ""
   }
  ],
  "portraits": [],

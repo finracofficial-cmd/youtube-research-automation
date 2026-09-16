@@ -133,6 +133,11 @@ _META_TYPE = (
     "journal", "newspaper", "magazine", "publisher", "periodical",
     "university", "institute", "college", "school", "academy",
     "museum", "library", "archive",
+    "organization", "organisation", "society", "association", "foundation",
+    "nonprofit", "non-profit", "company", "enterprise", "agency",
+    "institution", "publisher", "publishing", "broadcaster", "network",
+    "press", "media", "studio", "trust", "charity", "council", "committee",
+    "union", "federation", "club", "business", "corporation",
     "country", "sovereign state", "state of", "province", "prefecture",
     "ocean", "sea", "continent", "region", "city", "capital",
 )
@@ -233,7 +238,10 @@ def _file_names(en_title: str, limit: int = 40) -> list[str]:
                       "prop": "images", "redirects": 1})
     names = ((d or {}).get("parse") or {}).get("images") or []
     out = []
-    for n in names:
+    for raw in names:
+        # parse はアンダースコア、Commons は空白で返す。先に揃えないと
+        # 空白を含む除外規則（"p vip" など）に当たらない。
+        n = raw.replace("_", " ")
         if _JUNK.search(n):
             continue
         # 読み上げ音声や動画が記事画像として並ぶ。実測で Moai の記事から
@@ -242,9 +250,7 @@ def _file_names(en_title: str, limit: int = 40) -> list[str]:
                                ".mp4", ".webm", ".mid", ".wav", ".pdf", ".djvu",
                                ".stl", ".xcf")):
             continue
-        # parse はアンダースコア、Commons は空白で返す。ここで揃えないと
-        # 後段の突き合わせが複数語の名前で全部外れ、UI画像だけが残る。
-        out.append(n.replace("_", " "))
+        out.append(n)
         if len(out) >= limit:
             break
     return out
@@ -269,6 +275,23 @@ _DIAGRAM = re.compile(
     r"|locator|location|relief|topograph|\.svg$", re.I)
 
 
+# 実在の個人が写っている可能性が高いファイル名。題材が人物でないのに
+# 顔写真を全画面に出すと、その人が題材に関係しているように見える。
+# 実測で「National Geographic Society」の記事から、無関係な回に
+# 特定個人の肖像が出た。ライセンスの問題ではなく、出してはいけない絵になる。
+_PERSON = re.compile(
+    r",\s*(a\s+)?(photographer|scientist|author|director|president|founder"
+    r"|researcher|professor|journalist|explorer|artist|curator|archaeologist)"
+    r"|portrait of|headshot|\bspeaking\b|\binterview\b|\bCEO\b|\bDr\.?\s"
+    r"|\b(at the )?.{0,30}(awards|festival|conference|summit|gala|ceremony"
+    r"|forum|expo|convention|symposium|meetup)\s*\d{0,4}\s*[-–—]\s*\w"
+    r"|press conference|photo ?call|red carpet", re.I)
+
+
+def _looks_like_a_person(title: str) -> bool:
+    return bool(_PERSON.search(title))
+
+
 def _is_diagram(title: str) -> bool:
     """図解らしさ。名前に出ない図解もあるので拡張子も見る。
 
@@ -282,8 +305,14 @@ def _is_diagram(title: str) -> bool:
     return not title.lower().endswith((".jpg", ".jpeg", ".webp"))
 
 
-def page_images(en_title: str, *, limit: int = 6, width: int = 1920) -> list[Asset]:
-    """記事に使われている画像を、ライセンスを確かめたうえで返す。"""
+def page_images(en_title: str, *, limit: int = 6, width: int = 1920,
+                people_ok: bool = False) -> list[Asset]:
+    """記事に使われている画像を、ライセンスを確かめたうえで返す。
+
+    people_ok が偽のとき、実在の個人が写っていそうな画は外す。題材が
+    人物でないのに顔写真を全画面に出すと、その人が題材に関係している
+    ように見える。ライセンスが許しても出してよい絵にはならない。
+    """
     names = _file_names(en_title)
     if not names:
         return []
@@ -306,6 +335,8 @@ def page_images(en_title: str, *, limit: int = 6, width: int = 1920) -> list[Ass
         h = int(info.get("height") or 0)
         if w and h and (w < 400 or h < 300):
             continue  # アイコン相当。全画面に引き伸ばすと破綻する
+        if not people_ok and _looks_like_a_person(filename):
+            continue
         by_name[filename] = Asset(
             source="commons", title=filename,
             url=info.get("thumburl") or _filepath_url(filename, width),
