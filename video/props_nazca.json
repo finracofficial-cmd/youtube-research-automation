@@ -1,0 +1,4440 @@
+{
+ "bgmVolume": 0.12,
+ "backgroundDim": 0.5,
+ "shots": [
+  {
+   "startSec": 0.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 8.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 16.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 24.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 32.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 40.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 48.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 56.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 64.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 72.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 80.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 88.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 96.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 104.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 112.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 120.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 128.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 136.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 144.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 152.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 160.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 168.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 176.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 184.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 192.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 200.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 208.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 216.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 224.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 232.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 240.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 248.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 256.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 264.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 272.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 280.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 288.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 296.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 304.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 312.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 320.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 328.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 336.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 344.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 352.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 360.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 368.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 376.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 384.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 392.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 400.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 408.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 416.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 424.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 432.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 440.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 448.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 456.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 464.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 472.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 480.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 488.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 496.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 504.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 512.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 520.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 528.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 536.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 544.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 552.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 560.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 568.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 576.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 584.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 592.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 600.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 608.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 616.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 624.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 632.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 640.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 648.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 656.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 664.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 672.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 680.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 688.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 696.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 704.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 712.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 720.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 728.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 736.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 744.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 752.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 760.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 768.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 776.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 784.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 792.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 800.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 808.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 816.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 824.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 832.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 840.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 848.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 856.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 864.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 872.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 880.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 888.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 896.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 904.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 912.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 920.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 928.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 936.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 944.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 952.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 960.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 968.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 976.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 984.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 992.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1000.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1008.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1016.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1024.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1032.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1040.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1048.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1056.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1064.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1072.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1080.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1088.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1096.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1104.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1112.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1120.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1128.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1136.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1144.0,
+   "durationSec": 8.0,
+   "src": "shots/003.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1152.0,
+   "durationSec": 8.0,
+   "src": "shots/005.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1160.0,
+   "durationSec": 8.0,
+   "src": "shots/006.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1168.0,
+   "durationSec": 8.0,
+   "src": "shots/007.jpg",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1176.0,
+   "durationSec": 8.0,
+   "src": "shots/000.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1184.0,
+   "durationSec": 8.0,
+   "src": "shots/001.webp",
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 1192.0,
+   "durationSec": 8.0,
+   "src": "shots/002.jpg",
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  }
+ ],
+ "telops": [],
+ "subtitles": [
+  {
+   "startSec": 0.0,
+   "durationSec": 1.496,
+   "text": "ナスカの地上絵。"
+  },
+  {
+   "startSec": 1.496,
+   "durationSec": 2.805,
+   "text": "全長96メートルのハチドリが、"
+  },
+  {
+   "startSec": 4.301,
+   "durationSec": 2.431,
+   "text": "砂漠の地面に描かれている。"
+  },
+  {
+   "startSec": 6.732,
+   "durationSec": 2.805,
+   "text": "上空からしか全体が見えない絵。"
+  },
+  {
+   "startSec": 9.537,
+   "durationSec": 3.366,
+   "text": "長さ20キロを超える、まっすぐな線。"
+  },
+  {
+   "startSec": 12.903,
+   "durationSec": 4.301,
+   "text": "そして2000年経っても、消えずに残っている。"
+  },
+  {
+   "startSec": 17.204,
+   "durationSec": 3.74,
+   "text": "当チャンネルでは、こうした未解決の謎を、"
+  },
+  {
+   "startSec": 20.944,
+   "durationSec": 2.805,
+   "text": "都市伝説として語るのではなく、"
+  },
+  {
+   "startSec": 23.749,
+   "durationSec": 3.179,
+   "text": "論文と一次資料からひも解いていく。"
+  },
+  {
+   "startSec": 26.928,
+   "durationSec": 2.992,
+   "text": "誰が描いたのかは、分かっている。"
+  },
+  {
+   "startSec": 29.921,
+   "durationSec": 2.992,
+   "text": "いつ描いたのかも、分かっている。"
+  },
+  {
+   "startSec": 32.913,
+   "durationSec": 3.366,
+   "text": "どうやって描いたのかも分かっている。"
+  },
+  {
+   "startSec": 36.279,
+   "durationSec": 4.862,
+   "text": "分かっていないのは、何のために描いたのかだけである。"
+  },
+  {
+   "startSec": 41.141,
+   "durationSec": 3.927,
+   "text": "そして、それだけが100年間動いていない。"
+  },
+  {
+   "startSec": 45.068,
+   "durationSec": 1.87,
+   "text": "話は4つに分かれる。"
+  },
+  {
+   "startSec": 46.938,
+   "durationSec": 0.748,
+   "text": "第1幕。"
+  },
+  {
+   "startSec": 47.686,
+   "durationSec": 1.87,
+   "text": "これは一体何なのか。"
+  },
+  {
+   "startSec": 49.556,
+   "durationSec": 0.748,
+   "text": "第2幕。"
+  },
+  {
+   "startSec": 50.304,
+   "durationSec": 3.553,
+   "text": "世界最大の天文書だと信じられた50年。"
+  },
+  {
+   "startSec": 53.857,
+   "durationSec": 0.748,
+   "text": "第3幕。"
+  },
+  {
+   "startSec": 54.605,
+   "durationSec": 3.553,
+   "text": "1台のコンピュータが、それを崩した日。"
+  },
+  {
+   "startSec": 58.158,
+   "durationSec": 1.309,
+   "text": "そして第4幕。"
+  },
+  {
+   "startSec": 59.467,
+   "durationSec": 2.244,
+   "text": "AIが来てからの10年。"
+  },
+  {
+   "startSec": 61.711,
+   "durationSec": 4.675,
+   "text": "それでは私と共に、ナスカの地上絵へと迫っていこう。"
+  },
+  {
+   "startSec": 66.386,
+   "durationSec": 1.122,
+   "text": "ペルー南部。"
+  },
+  {
+   "startSec": 67.508,
+   "durationSec": 2.805,
+   "text": "首都リマから南へ約400キロ。"
+  },
+  {
+   "startSec": 70.313,
+   "durationSec": 4.114,
+   "text": "海岸沿いの砂漠に、平らな台地が広がっている。"
+  },
+  {
+   "startSec": 74.427,
+   "durationSec": 1.683,
+   "text": "ナスカ台地である。"
+  },
+  {
+   "startSec": 76.11,
+   "durationSec": 4.301,
+   "text": "地上絵が分布する範囲は、およそ450平方キロ。"
+  },
+  {
+   "startSec": 80.411,
+   "durationSec": 2.805,
+   "text": "東京23区の7割ほどの広さだ。"
+  },
+  {
+   "startSec": 83.216,
+   "durationSec": 3.553,
+   "text": "1994年に世界遺産に登録されている。"
+  },
+  {
+   "startSec": 86.77,
+   "durationSec": 2.244,
+   "text": "標高は約500メートル。"
+  },
+  {
+   "startSec": 89.014,
+   "durationSec": 3.179,
+   "text": "年間の降水量は4ミリ前後しかない。"
+  },
+  {
+   "startSec": 92.193,
+   "durationSec": 3.74,
+   "text": "地球上でもっとも乾いた場所の1つである。"
+  },
+  {
+   "startSec": 95.933,
+   "durationSec": 2.805,
+   "text": "日中の地表温度は40度を超え、"
+  },
+  {
+   "startSec": 98.738,
+   "durationSec": 2.431,
+   "text": "夜は10度近くまで下がる。"
+  },
+  {
+   "startSec": 101.169,
+   "durationSec": 4.114,
+   "text": "描かれているものは、大きく3種類に分かれる。"
+  },
+  {
+   "startSec": 105.283,
+   "durationSec": 1.309,
+   "text": "1つ目は直線。"
+  },
+  {
+   "startSec": 106.592,
+   "durationSec": 1.122,
+   "text": "数百本ある。"
+  },
+  {
+   "startSec": 107.714,
+   "durationSec": 2.992,
+   "text": "最も長いものは20キロを超える。"
+  },
+  {
+   "startSec": 110.706,
+   "durationSec": 4.114,
+   "text": "台地を横切り、丘を登り、その向こうまで続く。"
+  },
+  {
+   "startSec": 114.82,
+   "durationSec": 1.87,
+   "text": "2つ目は幾何学図形。"
+  },
+  {
+   "startSec": 116.69,
+   "durationSec": 2.057,
+   "text": "三角形、台形、渦巻き。"
+  },
+  {
+   "startSec": 118.747,
+   "durationSec": 1.122,
+   "text": "数百点ある。"
+  },
+  {
+   "startSec": 119.869,
+   "durationSec": 4.114,
+   "text": "最大の台形は、長さ1キロを超えるものもある。"
+  },
+  {
+   "startSec": 123.983,
+   "durationSec": 2.805,
+   "text": "3つ目が、有名な具象画である。"
+  },
+  {
+   "startSec": 126.788,
+   "durationSec": 1.683,
+   "text": "動物や植物の絵だ。"
+  },
+  {
+   "startSec": 128.471,
+   "durationSec": 2.618,
+   "text": "ハチドリは全長96メートル。"
+  },
+  {
+   "startSec": 131.089,
+   "durationSec": 2.618,
+   "text": "コンドルは約130メートル。"
+  },
+  {
+   "startSec": 133.707,
+   "durationSec": 2.057,
+   "text": "サルが約55メートル。"
+  },
+  {
+   "startSec": 135.764,
+   "durationSec": 2.057,
+   "text": "クモが約46メートル。"
+  },
+  {
+   "startSec": 137.821,
+   "durationSec": 4.862,
+   "text": "長いあいだ、この具象画はおよそ100点とされてきた。"
+  },
+  {
+   "startSec": 142.683,
+   "durationSec": 2.992,
+   "text": "もっとも大きいものはペリカンで、"
+  },
+  {
+   "startSec": 145.676,
+   "durationSec": 2.244,
+   "text": "全長285メートルある。"
+  },
+  {
+   "startSec": 147.92,
+   "durationSec": 4.301,
+   "text": "描かれているものを数えると、鳥類がとくに多い。"
+  },
+  {
+   "startSec": 152.221,
+   "durationSec": 4.114,
+   "text": "ハチドリ、コンドル、ペリカン、サギ、オウム。"
+  },
+  {
+   "startSec": 156.335,
+   "durationSec": 2.805,
+   "text": "18種類ほどが識別されている。"
+  },
+  {
+   "startSec": 159.14,
+   "durationSec": 1.496,
+   "text": "海の生物もいる。"
+  },
+  {
+   "startSec": 160.636,
+   "durationSec": 1.496,
+   "text": "クジラ、シャチ。"
+  },
+  {
+   "startSec": 162.132,
+   "durationSec": 3.366,
+   "text": "砂漠から50キロ離れた海の生き物が、"
+  },
+  {
+   "startSec": 165.498,
+   "durationSec": 3.553,
+   "text": "なぜ描かれているのかは分かっていない。"
+  },
+  {
+   "startSec": 169.051,
+   "durationSec": 2.618,
+   "text": "次に、どうやって描いたのか。"
+  },
+  {
+   "startSec": 171.669,
+   "durationSec": 1.87,
+   "text": "ここは決着している。"
+  },
+  {
+   "startSec": 173.539,
+   "durationSec": 4.488,
+   "text": "ナスカ台地の地表は、赤褐色の小石で覆われている。"
+  },
+  {
+   "startSec": 178.027,
+   "durationSec": 4.301,
+   "text": "長いあいだ日にさらされて、表面が酸化した石だ。"
+  },
+  {
+   "startSec": 182.328,
+   "durationSec": 1.683,
+   "text": "その石をどけると、"
+  },
+  {
+   "startSec": 184.011,
+   "durationSec": 3.366,
+   "text": "下から明るい黄白色の地面が出てくる。"
+  },
+  {
+   "startSec": 187.377,
+   "durationSec": 2.431,
+   "text": "色の差がはっきりしている。"
+  },
+  {
+   "startSec": 189.808,
+   "durationSec": 3.366,
+   "text": "つまり地上絵は、掘ったものではない。"
+  },
+  {
+   "startSec": 193.174,
+   "durationSec": 2.057,
+   "text": "石をどけただけである。"
+  },
+  {
+   "startSec": 195.231,
+   "durationSec": 4.114,
+   "text": "深さは10センチから30センチ程度しかない。"
+  },
+  {
+   "startSec": 199.345,
+   "durationSec": 2.431,
+   "text": "作業そのものは難しくない。"
+  },
+  {
+   "startSec": 201.777,
+   "durationSec": 2.618,
+   "text": "石を拾って、線の両脇に積む。"
+  },
+  {
+   "startSec": 204.395,
+   "durationSec": 4.675,
+   "text": "実際、線の縁には、どけられた石が今も積まれている。"
+  },
+  {
+   "startSec": 209.07,
+   "durationSec": 2.992,
+   "text": "表面の石は、大きいもので拳ほど、"
+  },
+  {
+   "startSec": 212.062,
+   "durationSec": 2.805,
+   "text": "小さいものは数センチしかない。"
+  },
+  {
+   "startSec": 214.867,
+   "durationSec": 2.057,
+   "text": "厚みは20センチ前後。"
+  },
+  {
+   "startSec": 216.924,
+   "durationSec": 2.805,
+   "text": "この層をどけるだけでよかった。"
+  },
+  {
+   "startSec": 219.729,
+   "durationSec": 2.244,
+   "text": "再現実験も行われている。"
+  },
+  {
+   "startSec": 221.973,
+   "durationSec": 3.927,
+   "text": "数人で数日あれば、大きな図形が1つ描ける。"
+  },
+  {
+   "startSec": 225.9,
+   "durationSec": 3.74,
+   "text": "特別な技術も、上空からの指示も要らない。"
+  },
+  {
+   "startSec": 229.64,
+   "durationSec": 2.992,
+   "text": "杭と縄で相似形を拡大していけば、"
+  },
+  {
+   "startSec": 232.632,
+   "durationSec": 2.057,
+   "text": "地上にいながら描ける。"
+  },
+  {
+   "startSec": 234.689,
+   "durationSec": 1.496,
+   "text": "1982年には、"
+  },
+  {
+   "startSec": 236.185,
+   "durationSec": 4.862,
+   "text": "実際に小さな下絵から100メートル級の図形を再現した"
+  },
+  {
+   "startSec": 241.047,
+   "durationSec": 1.122,
+   "text": "実験がある。"
+  },
+  {
+   "startSec": 242.169,
+   "durationSec": 1.87,
+   "text": "参加したのは十数人。"
+  },
+  {
+   "startSec": 244.039,
+   "durationSec": 2.618,
+   "text": "使ったのは木の杭と縄だけだ。"
+  },
+  {
+   "startSec": 246.657,
+   "durationSec": 2.057,
+   "text": "所要日数は数日だった。"
+  },
+  {
+   "startSec": 248.714,
+   "durationSec": 2.057,
+   "text": "ナスカの図形の多くが、"
+  },
+  {
+   "startSec": 250.771,
+   "durationSec": 3.927,
+   "text": "一筆書きになっていることも手がかりになる。"
+  },
+  {
+   "startSec": 254.698,
+   "durationSec": 2.431,
+   "text": "線が交差せず、始点に戻る。"
+  },
+  {
+   "startSec": 257.129,
+   "durationSec": 2.805,
+   "text": "歩いて描いたことを示している。"
+  },
+  {
+   "startSec": 259.935,
+   "durationSec": 3.553,
+   "text": "では、なぜ2000年も残っているのか。"
+  },
+  {
+   "startSec": 263.488,
+   "durationSec": 3.927,
+   "text": "ナスカ一帯の年間降水量は、数ミリしかない。"
+  },
+  {
+   "startSec": 267.415,
+   "durationSec": 1.496,
+   "text": "雨で流されない。"
+  },
+  {
+   "startSec": 268.911,
+   "durationSec": 1.496,
+   "text": "そして風が弱い。"
+  },
+  {
+   "startSec": 270.407,
+   "durationSec": 4.488,
+   "text": "日中に地表が熱せられ、薄い空気の層が石を覆って、"
+  },
+  {
+   "startSec": 274.895,
+   "durationSec": 2.992,
+   "text": "風を弱めているという説明がある。"
+  },
+  {
+   "startSec": 277.887,
+   "durationSec": 2.618,
+   "text": "作られた時期も分かっている。"
+  },
+  {
+   "startSec": 280.505,
+   "durationSec": 3.74,
+   "text": "紀元前100年頃から、紀元後300年頃。"
+  },
+  {
+   "startSec": 284.245,
+   "durationSec": 3.553,
+   "text": "ナスカ文化と呼ばれる人々の時代である。"
+  },
+  {
+   "startSec": 287.798,
+   "durationSec": 4.301,
+   "text": "土器の様式と、放射性炭素年代測定から出ている。"
+  },
+  {
+   "startSec": 292.099,
+   "durationSec": 4.114,
+   "text": "ここまでが、この絵が何なのかという話である。"
+  },
+  {
+   "startSec": 296.213,
+   "durationSec": 1.496,
+   "text": "いつ作られたか。"
+  },
+  {
+   "startSec": 297.709,
+   "durationSec": 1.309,
+   "text": "誰が作ったか。"
+  },
+  {
+   "startSec": 299.018,
+   "durationSec": 1.309,
+   "text": "どう作ったか。"
+  },
+  {
+   "startSec": 300.327,
+   "durationSec": 2.618,
+   "text": "分かっているのはそこまでだ。"
+  },
+  {
+   "startSec": 302.945,
+   "durationSec": 2.618,
+   "text": "では、何のために描いたのか。"
+  },
+  {
+   "startSec": 305.563,
+   "durationSec": 2.992,
+   "text": "最初に学術的な報告を出したのは、"
+  },
+  {
+   "startSec": 308.555,
+   "durationSec": 4.488,
+   "text": "ペルーの考古学者トリビオ・メヒア・ヘスペである。"
+  },
+  {
+   "startSec": 313.043,
+   "durationSec": 1.87,
+   "text": "1927年のことだ。"
+  },
+  {
+   "startSec": 314.914,
+   "durationSec": 4.488,
+   "text": "彼がナスカにいたのは、地上絵を探すためではない。"
+  },
+  {
+   "startSec": 319.402,
+   "durationSec": 2.992,
+   "text": "古代の灌漑用水路を調査していて、"
+  },
+  {
+   "startSec": 322.394,
+   "durationSec": 2.992,
+   "text": "たまたま台地の斜面から線を見た。"
+  },
+  {
+   "startSec": 325.386,
+   "durationSec": 4.488,
+   "text": "彼は地上から線を見て、儀礼のための道だと考えた。"
+  },
+  {
+   "startSec": 329.874,
+   "durationSec": 2.805,
+   "text": "当時としては自然な解釈だった。"
+  },
+  {
+   "startSec": 332.679,
+   "durationSec": 2.992,
+   "text": "地上から見れば、絵には見えない。"
+  },
+  {
+   "startSec": 335.671,
+   "durationSec": 1.87,
+   "text": "ただの浅い溝である。"
+  },
+  {
+   "startSec": 337.541,
+   "durationSec": 3.366,
+   "text": "話が変わるのは、飛行機が来てからだ。"
+  },
+  {
+   "startSec": 340.907,
+   "durationSec": 2.057,
+   "text": "1939年6月22日。"
+  },
+  {
+   "startSec": 342.964,
+   "durationSec": 3.553,
+   "text": "アメリカの歴史学者ポール・コソックが、"
+  },
+  {
+   "startSec": 346.517,
+   "durationSec": 1.87,
+   "text": "ナスカ上空を飛んだ。"
+  },
+  {
+   "startSec": 348.387,
+   "durationSec": 3.927,
+   "text": "コソックもまた、地上絵が目的ではなかった。"
+  },
+  {
+   "startSec": 352.314,
+   "durationSec": 2.805,
+   "text": "彼の専門は古代の灌漑史である。"
+  },
+  {
+   "startSec": 355.119,
+   "durationSec": 4.675,
+   "text": "水路の跡を空から探していて、線の上を通りかかった。"
+  },
+  {
+   "startSec": 359.794,
+   "durationSec": 3.179,
+   "text": "彼はこの日、1本の線の延長線上に、"
+  },
+  {
+   "startSec": 362.973,
+   "durationSec": 1.87,
+   "text": "太陽が沈むのを見る。"
+  },
+  {
+   "startSec": 364.843,
+   "durationSec": 1.309,
+   "text": "そして気づく。"
+  },
+  {
+   "startSec": 366.152,
+   "durationSec": 2.618,
+   "text": "その日は南半球の冬至だった。"
+  },
+  {
+   "startSec": 368.77,
+   "durationSec": 2.992,
+   "text": "1年でもっとも昼が短い日である。"
+  },
+  {
+   "startSec": 371.763,
+   "durationSec": 4.488,
+   "text": "コソックはナスカを「世界最大の天文書」と呼んだ。"
+  },
+  {
+   "startSec": 376.251,
+   "durationSec": 3.553,
+   "text": "ここから50年、この考えが主流になる。"
+  },
+  {
+   "startSec": 379.804,
+   "durationSec": 3.927,
+   "text": "中心にいたのが、1人のドイツ人女性だった。"
+  },
+  {
+   "startSec": 383.731,
+   "durationSec": 1.496,
+   "text": "マリア・ライヘ。"
+  },
+  {
+   "startSec": 385.227,
+   "durationSec": 1.87,
+   "text": "もとは数学者である。"
+  },
+  {
+   "startSec": 387.097,
+   "durationSec": 2.992,
+   "text": "1940年代にナスカへ移り住み、"
+  },
+  {
+   "startSec": 390.089,
+   "durationSec": 2.244,
+   "text": "以後そこを離れなかった。"
+  },
+  {
+   "startSec": 392.333,
+   "durationSec": 3.927,
+   "text": "1903年にドイツのドレスデンで生まれた。"
+  },
+  {
+   "startSec": 396.26,
+   "durationSec": 2.431,
+   "text": "大学で数学と地理学を学び、"
+  },
+  {
+   "startSec": 398.691,
+   "durationSec": 2.992,
+   "text": "1932年にペルーへ渡っている。"
+  },
+  {
+   "startSec": 401.683,
+   "durationSec": 2.057,
+   "text": "当初は家庭教師だった。"
+  },
+  {
+   "startSec": 403.74,
+   "durationSec": 3.553,
+   "text": "1949年には最初の著書を出している。"
+  },
+  {
+   "startSec": 407.293,
+   "durationSec": 2.992,
+   "text": "彼女がやったことは、測量である。"
+  },
+  {
+   "startSec": 410.285,
+   "durationSec": 2.244,
+   "text": "線の方位を1本ずつ測る。"
+  },
+  {
+   "startSec": 412.529,
+   "durationSec": 1.122,
+   "text": "長さを測る。"
+  },
+  {
+   "startSec": 413.651,
+   "durationSec": 2.618,
+   "text": "そして天体の位置と照合する。"
+  },
+  {
+   "startSec": 416.269,
+   "durationSec": 3.553,
+   "text": "道具は巻尺と六分儀と、自分の足である。"
+  },
+  {
+   "startSec": 419.822,
+   "durationSec": 2.992,
+   "text": "記録した線は1000本を超える。"
+  },
+  {
+   "startSec": 422.814,
+   "durationSec": 2.244,
+   "text": "同時に、保存活動もした。"
+  },
+  {
+   "startSec": 425.058,
+   "durationSec": 4.862,
+   "text": "自費で監視人を雇い、自分でほうきを持って線を掃いた。"
+  },
+  {
+   "startSec": 429.921,
+   "durationSec": 4.675,
+   "text": "台地に車が入るのを止めるため、政府と交渉を続けた。"
+  },
+  {
+   "startSec": 434.596,
+   "durationSec": 4.488,
+   "text": "1998年、95歳で亡くなるまで、ナスカにいた。"
+  },
+  {
+   "startSec": 439.084,
+   "durationSec": 2.431,
+   "text": "ライヘの結論はこうだった。"
+  },
+  {
+   "startSec": 441.515,
+   "durationSec": 1.309,
+   "text": "線は暦である。"
+  },
+  {
+   "startSec": 442.824,
+   "durationSec": 2.431,
+   "text": "太陽と月と星の位置を示し、"
+  },
+  {
+   "startSec": 445.255,
+   "durationSec": 3.366,
+   "text": "農作業の時期を伝えるために引かれた。"
+  },
+  {
+   "startSec": 448.621,
+   "durationSec": 2.618,
+   "text": "この説明には説得力があった。"
+  },
+  {
+   "startSec": 451.239,
+   "durationSec": 1.122,
+   "text": "砂漠の民が、"
+  },
+  {
+   "startSec": 452.361,
+   "durationSec": 4.488,
+   "text": "雨季の到来を知る必要があったという文脈にも合う。"
+  },
+  {
+   "startSec": 456.849,
+   "durationSec": 3.927,
+   "text": "ナスカの人々にとって、水は死活問題だった。"
+  },
+  {
+   "startSec": 460.776,
+   "durationSec": 3.74,
+   "text": "台地を流れる川は、1年の大半で干上がる。"
+  },
+  {
+   "startSec": 464.516,
+   "durationSec": 3.553,
+   "text": "彼らはプキオと呼ばれる地下水路を掘り、"
+  },
+  {
+   "startSec": 468.069,
+   "durationSec": 1.87,
+   "text": "地下水を引いていた。"
+  },
+  {
+   "startSec": 469.939,
+   "durationSec": 2.618,
+   "text": "今も使われているものがある。"
+  },
+  {
+   "startSec": 472.557,
+   "durationSec": 4.114,
+   "text": "暦が必要だったという想定に、無理はなかった。"
+  },
+  {
+   "startSec": 476.671,
+   "durationSec": 3.366,
+   "text": "そして何より、確かめようがなかった。"
+  },
+  {
+   "startSec": 480.037,
+   "durationSec": 2.805,
+   "text": "ただし、と付け加えておきたい。"
+  },
+  {
+   "startSec": 482.842,
+   "durationSec": 4.301,
+   "text": "ライヘの測量データそのものは、今も価値がある。"
+  },
+  {
+   "startSec": 487.144,
+   "durationSec": 4.862,
+   "text": "彼女が記録しなければ失われていた線が、いくつもある。"
+  },
+  {
+   "startSec": 492.006,
+   "durationSec": 4.114,
+   "text": "崩れたのは解釈のほうであって、仕事ではない。"
+  },
+  {
+   "startSec": 496.12,
+   "durationSec": 3.366,
+   "text": "ここまでが、信じられた50年である。"
+  },
+  {
+   "startSec": 499.486,
+   "durationSec": 2.992,
+   "text": "では、その検証はどうなったのか。"
+  },
+  {
+   "startSec": 502.478,
+   "durationSec": 1.122,
+   "text": "1968年。"
+  },
+  {
+   "startSec": 503.6,
+   "durationSec": 4.862,
+   "text": "ジェラルド・ホーキンスという天文学者がナスカに来る。"
+  },
+  {
+   "startSec": 508.462,
+   "durationSec": 1.87,
+   "text": "彼には前歴があった。"
+  },
+  {
+   "startSec": 510.332,
+   "durationSec": 4.301,
+   "text": "ストーンヘンジの石の配置をコンピュータに入れ、"
+  },
+  {
+   "startSec": 514.633,
+   "durationSec": 2.244,
+   "text": "天体との対応を計算して、"
+  },
+  {
+   "startSec": 516.877,
+   "durationSec": 2.992,
+   "text": "大きな論争を起こした人物である。"
+  },
+  {
+   "startSec": 519.869,
+   "durationSec": 2.244,
+   "text": "天文説の側の人間だった。"
+  },
+  {
+   "startSec": 522.113,
+   "durationSec": 2.431,
+   "text": "1960年代前半のことだ。"
+  },
+  {
+   "startSec": 524.544,
+   "durationSec": 4.675,
+   "text": "彼はストーンヘンジが日食を予測する装置だと主張し、"
+  },
+  {
+   "startSec": 529.219,
+   "durationSec": 2.618,
+   "text": "学界を二分する議論になった。"
+  },
+  {
+   "startSec": 531.837,
+   "durationSec": 1.309,
+   "text": "ナスカ調査は、"
+  },
+  {
+   "startSec": 533.146,
+   "durationSec": 4.862,
+   "text": "ナショナルジオグラフィック協会の支援を受けて行われて"
+  },
+  {
+   "startSec": 538.008,
+   "durationSec": 0.561,
+   "text": "いる。"
+  },
+  {
+   "startSec": 538.569,
+   "durationSec": 2.805,
+   "text": "ナスカでも、同じことをやった。"
+  },
+  {
+   "startSec": 541.374,
+   "durationSec": 1.683,
+   "text": "方法は単純である。"
+  },
+  {
+   "startSec": 543.058,
+   "durationSec": 2.431,
+   "text": "地上絵の線を186本選ぶ。"
+  },
+  {
+   "startSec": 545.489,
+   "durationSec": 2.057,
+   "text": "それぞれの方位を測る。"
+  },
+  {
+   "startSec": 547.546,
+   "durationSec": 3.553,
+   "text": "そして、当時のナスカから見た太陽、月、"
+  },
+  {
+   "startSec": 551.099,
+   "durationSec": 2.618,
+   "text": "主要な恒星の位置を計算する。"
+  },
+  {
+   "startSec": 553.717,
+   "durationSec": 4.301,
+   "text": "線の方位と一致するものがいくつあるかを数える。"
+  },
+  {
+   "startSec": 558.018,
+   "durationSec": 1.87,
+   "text": "比較対象も用意した。"
+  },
+  {
+   "startSec": 559.888,
+   "durationSec": 4.114,
+   "text": "同じ本数の線を、でたらめな方位に引いた場合、"
+  },
+  {
+   "startSec": 564.002,
+   "durationSec": 2.057,
+   "text": "偶然いくつ一致するか。"
+  },
+  {
+   "startSec": 566.059,
+   "durationSec": 1.683,
+   "text": "結果はこうだった。"
+  },
+  {
+   "startSec": 567.742,
+   "durationSec": 2.805,
+   "text": "実際の線が天体と一致した数は、"
+  },
+  {
+   "startSec": 570.547,
+   "durationSec": 4.862,
+   "text": "でたらめに引いた線の場合と、ほとんど変わらなかった。"
+  },
+  {
+   "startSec": 575.409,
+   "durationSec": 1.496,
+   "text": "186本のうち、"
+  },
+  {
+   "startSec": 576.905,
+   "durationSec": 3.927,
+   "text": "当時の太陽や月の重要な位置と一致したのは、"
+  },
+  {
+   "startSec": 580.832,
+   "durationSec": 1.87,
+   "text": "わずかな本数だった。"
+  },
+  {
+   "startSec": 582.702,
+   "durationSec": 0.935,
+   "text": "その数は、"
+  },
+  {
+   "startSec": 583.637,
+   "durationSec": 4.862,
+   "text": "乱数で引いた線から期待される本数の範囲に収まっていた"
+  },
+  {
+   "startSec": 588.499,
+   "durationSec": 0.187,
+   "text": "。"
+  },
+  {
+   "startSec": 588.686,
+   "durationSec": 3.179,
+   "text": "統計的に意味のある差が出なかった。"
+  },
+  {
+   "startSec": 591.865,
+   "durationSec": 4.862,
+   "text": "ホーキンス自身が天文説を支持していたことを考えると、"
+  },
+  {
+   "startSec": 596.727,
+   "durationSec": 2.244,
+   "text": "この結果の重みは大きい。"
+  },
+  {
+   "startSec": 598.971,
+   "durationSec": 3.366,
+   "text": "自分の説に有利な結果を期待して測り、"
+  },
+  {
+   "startSec": 602.338,
+   "durationSec": 2.244,
+   "text": "期待に反する数字が出た。"
+  },
+  {
+   "startSec": 604.582,
+   "durationSec": 2.057,
+   "text": "そしてそれを公表した。"
+  },
+  {
+   "startSec": 606.639,
+   "durationSec": 3.927,
+   "text": "検証としては、もっとも信頼できる形である。"
+  },
+  {
+   "startSec": 610.566,
+   "durationSec": 3.366,
+   "text": "ただし、ここは正確に言う必要がある。"
+  },
+  {
+   "startSec": 613.932,
+   "durationSec": 2.057,
+   "text": "この研究が示したのは、"
+  },
+  {
+   "startSec": 615.989,
+   "durationSec": 3.366,
+   "text": "天文説が間違いだということではない。"
+  },
+  {
+   "startSec": 619.355,
+   "durationSec": 4.862,
+   "text": "天文説を支持する証拠が、この方法では出てこなかった、"
+  },
+  {
+   "startSec": 624.217,
+   "durationSec": 1.683,
+   "text": "ということである。"
+  },
+  {
+   "startSec": 625.9,
+   "durationSec": 2.992,
+   "text": "線が多すぎる、という問題もある。"
+  },
+  {
+   "startSec": 628.892,
+   "durationSec": 4.301,
+   "text": "数百本も引けば、何本かは偶然どこかの星に向く。"
+  },
+  {
+   "startSec": 633.193,
+   "durationSec": 4.301,
+   "text": "だからこそ、でたらめな線との比較が必要だった。"
+  },
+  {
+   "startSec": 637.494,
+   "durationSec": 2.057,
+   "text": "天文説が後退したあと、"
+  },
+  {
+   "startSec": 639.551,
+   "durationSec": 3.553,
+   "text": "ナスカに入ったのは考古学者たちだった。"
+  },
+  {
+   "startSec": 643.104,
+   "durationSec": 3.553,
+   "text": "彼らがやったことは、意外なものである。"
+  },
+  {
+   "startSec": 646.657,
+   "durationSec": 1.496,
+   "text": "線の上を歩いた。"
+  },
+  {
+   "startSec": 648.153,
+   "durationSec": 3.366,
+   "text": "空から見るのをやめて、地面を調べた。"
+  },
+  {
+   "startSec": 651.519,
+   "durationSec": 3.553,
+   "text": "線がどこから始まり、どこで終わるのか。"
+  },
+  {
+   "startSec": 655.072,
+   "durationSec": 2.244,
+   "text": "線が集まる場所はどこか。"
+  },
+  {
+   "startSec": 657.317,
+   "durationSec": 2.618,
+   "text": "線の上に何が落ちているのか。"
+  },
+  {
+   "startSec": 659.935,
+   "durationSec": 2.244,
+   "text": "分かってきたことがある。"
+  },
+  {
+   "startSec": 662.179,
+   "durationSec": 4.488,
+   "text": "まず、線の多くが水に関係する場所へ向かっていた。"
+  },
+  {
+   "startSec": 666.667,
+   "durationSec": 1.122,
+   "text": "乾いた川床。"
+  },
+  {
+   "startSec": 667.789,
+   "durationSec": 1.496,
+   "text": "地下水路の出口。"
+  },
+  {
+   "startSec": 669.285,
+   "durationSec": 1.309,
+   "text": "水が湧く地点。"
+  },
+  {
+   "startSec": 670.594,
+   "durationSec": 3.366,
+   "text": "線が放射状に集まる地点も見つかった。"
+  },
+  {
+   "startSec": 673.96,
+   "durationSec": 2.618,
+   "text": "こうした中心は62か所ある。"
+  },
+  {
+   "startSec": 676.578,
+   "durationSec": 3.179,
+   "text": "多くは丘の上や、川が見える高台だ。"
+  },
+  {
+   "startSec": 679.757,
+   "durationSec": 1.496,
+   "text": "1つの中心から、"
+  },
+  {
+   "startSec": 681.253,
+   "durationSec": 3.553,
+   "text": "10本以上の線が伸びている場所もある。"
+  },
+  {
+   "startSec": 684.806,
+   "durationSec": 4.488,
+   "text": "次に、線の上や周辺から、土器の破片が大量に出た。"
+  },
+  {
+   "startSec": 689.294,
+   "durationSec": 4.301,
+   "text": "しかもその多くは、意図的に割られたものだった。"
+  },
+  {
+   "startSec": 693.595,
+   "durationSec": 2.805,
+   "text": "持ち込んで、そこで割っている。"
+  },
+  {
+   "startSec": 696.4,
+   "durationSec": 4.862,
+   "text": "割られた土器の年代は、地上絵が作られた時期と重なる。"
+  },
+  {
+   "startSec": 701.262,
+   "durationSec": 2.431,
+   "text": "つまり、絵が描かれたあと、"
+  },
+  {
+   "startSec": 703.693,
+   "durationSec": 3.179,
+   "text": "その場所に人が繰り返し通っていた。"
+  },
+  {
+   "startSec": 706.872,
+   "durationSec": 2.431,
+   "text": "作って終わりではなかった。"
+  },
+  {
+   "startSec": 709.303,
+   "durationSec": 2.992,
+   "text": "そして、カワチという遺跡がある。"
+  },
+  {
+   "startSec": 712.295,
+   "durationSec": 2.805,
+   "text": "ナスカ文化の大きな儀礼の場だ。"
+  },
+  {
+   "startSec": 715.101,
+   "durationSec": 2.992,
+   "text": "線の一部は、そこへ向かっていた。"
+  },
+  {
+   "startSec": 718.093,
+   "durationSec": 3.366,
+   "text": "これらを合わせると、別の像が浮かぶ。"
+  },
+  {
+   "startSec": 721.459,
+   "durationSec": 2.618,
+   "text": "線は見るためのものではなく、"
+  },
+  {
+   "startSec": 724.077,
+   "durationSec": 3.179,
+   "text": "歩くためのものだったのではないか。"
+  },
+  {
+   "startSec": 727.256,
+   "durationSec": 4.488,
+   "text": "人が列をなして線の上を進み、目的地で土器を割る。"
+  },
+  {
+   "startSec": 731.744,
+   "durationSec": 2.805,
+   "text": "そういう場だったのではないか。"
+  },
+  {
+   "startSec": 734.549,
+   "durationSec": 3.179,
+   "text": "これは今も有力な見方の1つである。"
+  },
+  {
+   "startSec": 737.728,
+   "durationSec": 2.431,
+   "text": "ただし、決着はしていない。"
+  },
+  {
+   "startSec": 740.159,
+   "durationSec": 3.366,
+   "text": "線のすべてを説明できるわけではない。"
+  },
+  {
+   "startSec": 743.525,
+   "durationSec": 4.114,
+   "text": "水源へ向かう線は確かに多いが、全部ではない。"
+  },
+  {
+   "startSec": 747.639,
+   "durationSec": 3.927,
+   "text": "土器が出る線もあれば、何も出ない線もある。"
+  },
+  {
+   "startSec": 751.566,
+   "durationSec": 3.179,
+   "text": "カワチへ向かう線は一部にすぎない。"
+  },
+  {
+   "startSec": 754.745,
+   "durationSec": 4.114,
+   "text": "どの説明も、線の一部しかカバーできていない。"
+  },
+  {
+   "startSec": 758.859,
+   "durationSec": 3.74,
+   "text": "ここまでが、地上を調べた時代の話である。"
+  },
+  {
+   "startSec": 762.599,
+   "durationSec": 2.431,
+   "text": "では上空はどうなったのか。"
+  },
+  {
+   "startSec": 765.03,
+   "durationSec": 3.366,
+   "text": "ここで、ずっと残っていた問題に戻る。"
+  },
+  {
+   "startSec": 768.396,
+   "durationSec": 2.431,
+   "text": "台地は450平方キロある。"
+  },
+  {
+   "startSec": 770.827,
+   "durationSec": 4.862,
+   "text": "そして、知られている具象画は約100点しかなかった。"
+  },
+  {
+   "startSec": 775.69,
+   "durationSec": 2.992,
+   "text": "これは「100点しかない」のか、"
+  },
+  {
+   "startSec": 778.682,
+   "durationSec": 3.553,
+   "text": "「100点しか見つかっていない」のか。"
+  },
+  {
+   "startSec": 782.235,
+   "durationSec": 2.057,
+   "text": "誰にも分からなかった。"
+  },
+  {
+   "startSec": 784.292,
+   "durationSec": 2.805,
+   "text": "人が歩いて探すには、広すぎる。"
+  },
+  {
+   "startSec": 787.097,
+   "durationSec": 2.244,
+   "text": "航空写真は膨大にあるが、"
+  },
+  {
+   "startSec": 789.341,
+   "durationSec": 2.992,
+   "text": "1枚ずつ人間の目で見るしかない。"
+  },
+  {
+   "startSec": 792.333,
+   "durationSec": 4.675,
+   "text": "地上絵は薄く、風化していて、写真では判別しにくい。"
+  },
+  {
+   "startSec": 797.008,
+   "durationSec": 1.496,
+   "text": "2004年から、"
+  },
+  {
+   "startSec": 798.504,
+   "durationSec": 3.74,
+   "text": "山形大学の調査隊が現地調査を続けてきた。"
+  },
+  {
+   "startSec": 802.244,
+   "durationSec": 3.927,
+   "text": "地道に歩いて、新しい地上絵を報告してきた。"
+  },
+  {
+   "startSec": 806.171,
+   "durationSec": 3.927,
+   "text": "2004年から2018年までの14年間で、"
+  },
+  {
+   "startSec": 810.098,
+   "durationSec": 4.301,
+   "text": "この調査隊が見つけた地上絵は約100点である。"
+  },
+  {
+   "startSec": 814.399,
+   "durationSec": 1.87,
+   "text": "1年あたり7点ほど。"
+  },
+  {
+   "startSec": 816.269,
+   "durationSec": 4.488,
+   "text": "歩いて探すというのは、そういう速度の作業だった。"
+  },
+  {
+   "startSec": 820.757,
+   "durationSec": 4.675,
+   "text": "2019年、この調査隊がIBMと共同研究を始める。"
+  },
+  {
+   "startSec": 825.432,
+   "durationSec": 1.309,
+   "text": "使われたのは、"
+  },
+  {
+   "startSec": 826.741,
+   "durationSec": 4.675,
+   "text": "解像度が1ピクセル数十センチという航空写真だった。"
+  },
+  {
+   "startSec": 831.417,
+   "durationSec": 1.496,
+   "text": "やり方はこうだ。"
+  },
+  {
+   "startSec": 832.913,
+   "durationSec": 3.553,
+   "text": "高解像度の航空写真を深層学習にかける。"
+  },
+  {
+   "startSec": 836.466,
+   "durationSec": 2.805,
+   "text": "地上絵らしい模様がある場所を、"
+  },
+  {
+   "startSec": 839.271,
+   "durationSec": 2.618,
+   "text": "AIに候補として挙げさせる。"
+  },
+  {
+   "startSec": 841.889,
+   "durationSec": 3.927,
+   "text": "そのうえで、研究者が現地へ行って確かめる。"
+  },
+  {
+   "startSec": 845.816,
+   "durationSec": 4.862,
+   "text": "最初に立ちはだかったのは、学習データの少なさだった。"
+  },
+  {
+   "startSec": 850.678,
+   "durationSec": 4.862,
+   "text": "AIに「地上絵とはこういうものだ」と教えるための例が"
+  },
+  {
+   "startSec": 855.54,
+   "durationSec": 0.187,
+   "text": "、"
+  },
+  {
+   "startSec": 855.727,
+   "durationSec": 1.683,
+   "text": "100点しかない。"
+  },
+  {
+   "startSec": 857.41,
+   "durationSec": 4.301,
+   "text": "通常の画像認識なら数万点は欲しいところである。"
+  },
+  {
+   "startSec": 861.711,
+   "durationSec": 4.675,
+   "text": "そこで、既知の地上絵の画像を回転させ、拡大縮小し、"
+  },
+  {
+   "startSec": 866.386,
+   "durationSec": 2.244,
+   "text": "背景を変えて水増しした。"
+  },
+  {
+   "startSec": 868.63,
+   "durationSec": 4.301,
+   "text": "さらに、地上絵らしく見えるが実際には違うもの、"
+  },
+  {
+   "startSec": 872.931,
+   "durationSec": 3.74,
+   "text": "たとえば自然の岩の模様なども学習させた。"
+  },
+  {
+   "startSec": 876.671,
+   "durationSec": 1.87,
+   "text": "AIが挙げた候補は、"
+  },
+  {
+   "startSec": 878.541,
+   "durationSec": 3.179,
+   "text": "そのまま新発見になるわけではない。"
+  },
+  {
+   "startSec": 881.72,
+   "durationSec": 1.87,
+   "text": "大半は誤検出である。"
+  },
+  {
+   "startSec": 883.59,
+   "durationSec": 3.179,
+   "text": "岩の影、車のわだち、近代の落書き。"
+  },
+  {
+   "startSec": 886.77,
+   "durationSec": 3.74,
+   "text": "候補を現地で1つずつ確かめる作業が要る。"
+  },
+  {
+   "startSec": 890.51,
+   "durationSec": 4.862,
+   "text": "AIがやったのは、450平方キロを歩き回る代わりに、"
+  },
+  {
+   "startSec": 895.372,
+   "durationSec": 2.992,
+   "text": "見に行く場所を絞ったことだった。"
+  },
+  {
+   "startSec": 898.364,
+   "durationSec": 2.244,
+   "text": "2024年、結果が出る。"
+  },
+  {
+   "startSec": 900.608,
+   "durationSec": 1.683,
+   "text": "AIが候補を挙げ、"
+  },
+  {
+   "startSec": 902.291,
+   "durationSec": 3.927,
+   "text": "研究者が現地で確認した新しい具象地上絵は、"
+  },
+  {
+   "startSec": 906.218,
+   "durationSec": 1.496,
+   "text": "303点だった。"
+  },
+  {
+   "startSec": 907.714,
+   "durationSec": 2.431,
+   "text": "調査に要した期間は約2年。"
+  },
+  {
+   "startSec": 910.145,
+   "durationSec": 2.992,
+   "text": "14年で100点だったペースが、"
+  },
+  {
+   "startSec": 913.137,
+   "durationSec": 2.244,
+   "text": "2年で303点になった。"
+  },
+  {
+   "startSec": 915.381,
+   "durationSec": 3.553,
+   "text": "それまで100点ほどとされてきた数が、"
+  },
+  {
+   "startSec": 918.934,
+   "durationSec": 1.683,
+   "text": "およそ倍になった。"
+  },
+  {
+   "startSec": 920.617,
+   "durationSec": 3.74,
+   "text": "ただし、ここで強調したいのは数ではない。"
+  },
+  {
+   "startSec": 924.357,
+   "durationSec": 2.244,
+   "text": "新しく見つかったものに、"
+  },
+  {
+   "startSec": 926.601,
+   "durationSec": 2.992,
+   "text": "はっきりした傾向があったことだ。"
+  },
+  {
+   "startSec": 929.593,
+   "durationSec": 3.553,
+   "text": "大型のものは、直線や台形の近くに多い。"
+  },
+  {
+   "startSec": 933.146,
+   "durationSec": 3.74,
+   "text": "描かれているのは、野生動物が中心である。"
+  },
+  {
+   "startSec": 936.886,
+   "durationSec": 1.683,
+   "text": "小型のものは違う。"
+  },
+  {
+   "startSec": 938.569,
+   "durationSec": 3.74,
+   "text": "曲がりくねった細い道の脇に集まっている。"
+  },
+  {
+   "startSec": 942.309,
+   "durationSec": 2.431,
+   "text": "大きさは10メートル前後。"
+  },
+  {
+   "startSec": 944.741,
+   "durationSec": 4.862,
+   "text": "描かれているのは、人間、家畜化されたラクダ科の動物、"
+  },
+  {
+   "startSec": 949.603,
+   "durationSec": 3.366,
+   "text": "そして首を切られた人の図などである。"
+  },
+  {
+   "startSec": 952.969,
+   "durationSec": 1.87,
+   "text": "大きさの差は大きい。"
+  },
+  {
+   "startSec": 954.839,
+   "durationSec": 3.553,
+   "text": "大型のものは平均でおよそ90メートル。"
+  },
+  {
+   "startSec": 958.392,
+   "durationSec": 3.74,
+   "text": "小型のものは平均9メートル前後しかない。"
+  },
+  {
+   "startSec": 962.132,
+   "durationSec": 1.87,
+   "text": "10倍の開きがある。"
+  },
+  {
+   "startSec": 964.002,
+   "durationSec": 3.366,
+   "text": "つまり、地上絵は1種類ではなかった。"
+  },
+  {
+   "startSec": 967.368,
+   "durationSec": 2.244,
+   "text": "置かれている場所も違う。"
+  },
+  {
+   "startSec": 969.612,
+   "durationSec": 4.114,
+   "text": "大型のものは、人が集まれる開けた斜面にある。"
+  },
+  {
+   "startSec": 973.726,
+   "durationSec": 1.309,
+   "text": "小型のものは、"
+  },
+  {
+   "startSec": 975.035,
+   "durationSec": 4.301,
+   "text": "1人か2人がすれ違える程度の細い道沿いにある。"
+  },
+  {
+   "startSec": 979.336,
+   "durationSec": 3.553,
+   "text": "見せる相手の数が、そもそも違っていた。"
+  },
+  {
+   "startSec": 982.889,
+   "durationSec": 4.862,
+   "text": "大型のものは、共同体が関わる儀礼の場に置かれている。"
+  },
+  {
+   "startSec": 987.751,
+   "durationSec": 4.114,
+   "text": "小型のものは、人が日常的に通る道の脇にある。"
+  },
+  {
+   "startSec": 991.865,
+   "durationSec": 4.675,
+   "text": "作った人も、作った目的も、違っていた可能性が高い。"
+  },
+  {
+   "startSec": 996.54,
+   "durationSec": 3.74,
+   "text": "ただし、AIがやったのは発見までである。"
+  },
+  {
+   "startSec": 1000.281,
+   "durationSec": 3.179,
+   "text": "意味については、何も答えていない。"
+  },
+  {
+   "startSec": 1003.46,
+   "durationSec": 2.992,
+   "text": "ここで、1つ考えたいことがある。"
+  },
+  {
+   "startSec": 1006.452,
+   "durationSec": 2.431,
+   "text": "なぜ2000年ものあいだ、"
+  },
+  {
+   "startSec": 1008.883,
+   "durationSec": 2.992,
+   "text": "目的だけが分からないままなのか。"
+  },
+  {
+   "startSec": 1011.875,
+   "durationSec": 3.366,
+   "text": "答え合わせができないから、ではない。"
+  },
+  {
+   "startSec": 1015.241,
+   "durationSec": 2.431,
+   "text": "ナスカには手がかりがある。"
+  },
+  {
+   "startSec": 1017.672,
+   "durationSec": 1.683,
+   "text": "掘れば土器が出る。"
+  },
+  {
+   "startSec": 1019.355,
+   "durationSec": 1.309,
+   "text": "年代が測れる。"
+  },
+  {
+   "startSec": 1020.664,
+   "durationSec": 2.618,
+   "text": "線をたどれば行き先が分かる。"
+  },
+  {
+   "startSec": 1023.282,
+   "durationSec": 3.366,
+   "text": "実際、分かったことは増え続けてきた。"
+  },
+  {
+   "startSec": 1026.648,
+   "durationSec": 2.805,
+   "text": "問題は、問いの形のほうにある。"
+  },
+  {
+   "startSec": 1029.453,
+   "durationSec": 3.553,
+   "text": "「何のために描いたのか」という問いは、"
+  },
+  {
+   "startSec": 1033.006,
+   "durationSec": 3.366,
+   "text": "答えが1つあることを前提にしている。"
+  },
+  {
+   "startSec": 1036.372,
+   "durationSec": 3.366,
+   "text": "1つの目的、1つの意味、1つの解答。"
+  },
+  {
+   "startSec": 1039.738,
+   "durationSec": 2.805,
+   "text": "だが2024年に分かったのは、"
+  },
+  {
+   "startSec": 1042.543,
+   "durationSec": 3.74,
+   "text": "大型と小型で性格が違うということだった。"
+  },
+  {
+   "startSec": 1046.283,
+   "durationSec": 4.301,
+   "text": "同じ台地の上に、違う目的のものが混ざっている。"
+  },
+  {
+   "startSec": 1050.584,
+   "durationSec": 2.431,
+   "text": "これは意外なことではない。"
+  },
+  {
+   "startSec": 1053.015,
+   "durationSec": 4.862,
+   "text": "現代の街にも、記念碑と落書きが同じ通りに並んでいる。"
+  },
+  {
+   "startSec": 1057.878,
+   "durationSec": 4.862,
+   "text": "両方をまとめて「なぜ人はこの通りに絵を描いたのか」と"
+  },
+  {
+   "startSec": 1062.74,
+   "durationSec": 0.748,
+   "text": "問えば、"
+  },
+  {
+   "startSec": 1063.488,
+   "durationSec": 1.309,
+   "text": "答えは出ない。"
+  },
+  {
+   "startSec": 1064.797,
+   "durationSec": 4.675,
+   "text": "だとすれば、この100年の問いの立て方そのものが、"
+  },
+  {
+   "startSec": 1069.472,
+   "durationSec": 2.805,
+   "text": "答えを遠ざけていたことになる。"
+  },
+  {
+   "startSec": 1072.277,
+   "durationSec": 4.862,
+   "text": "1つの答えを探している限り、どの説も他の説と矛盾し、"
+  },
+  {
+   "startSec": 1077.139,
+   "durationSec": 1.683,
+   "text": "どれも決着しない。"
+  },
+  {
+   "startSec": 1078.822,
+   "durationSec": 2.805,
+   "text": "分からないものを前にしたとき、"
+  },
+  {
+   "startSec": 1081.627,
+   "durationSec": 2.992,
+   "text": "問いが正しいかどうかを疑うのは、"
+  },
+  {
+   "startSec": 1084.619,
+   "durationSec": 2.431,
+   "text": "いちばん最後になりやすい。"
+  },
+  {
+   "startSec": 1087.05,
+   "durationSec": 2.992,
+   "text": "これはナスカに限った話ではない。"
+  },
+  {
+   "startSec": 1090.042,
+   "durationSec": 2.992,
+   "text": "100年かけて答えが出ないとき、"
+  },
+  {
+   "startSec": 1093.034,
+   "durationSec": 2.992,
+   "text": "足りないのは道具や資金ではなく、"
+  },
+  {
+   "startSec": 1096.026,
+   "durationSec": 2.805,
+   "text": "問いの分け方であることがある。"
+  },
+  {
+   "startSec": 1098.831,
+   "durationSec": 3.927,
+   "text": "ナスカでは、それをAIがやったのではない。"
+  },
+  {
+   "startSec": 1102.758,
+   "durationSec": 4.862,
+   "text": "AIが見つけた303点を並べたとき、人間が気づいた。"
+  },
+  {
+   "startSec": 1107.62,
+   "durationSec": 3.553,
+   "text": "さて、ここまでに分かったことを並べる。"
+  },
+  {
+   "startSec": 1111.173,
+   "durationSec": 2.431,
+   "text": "いつ作られたかが分かった。"
+  },
+  {
+   "startSec": 1113.604,
+   "durationSec": 2.431,
+   "text": "どう作られたかが分かった。"
+  },
+  {
+   "startSec": 1116.036,
+   "durationSec": 2.992,
+   "text": "どこへ向かっているかが分かった。"
+  },
+  {
+   "startSec": 1119.028,
+   "durationSec": 2.992,
+   "text": "歩くためのものらしいと分かった。"
+  },
+  {
+   "startSec": 1122.02,
+   "durationSec": 2.057,
+   "text": "そして数が倍になった。"
+  },
+  {
+   "startSec": 1124.077,
+   "durationSec": 2.805,
+   "text": "だが、何のために描いたのかは、"
+  },
+  {
+   "startSec": 1126.882,
+   "durationSec": 3.179,
+   "text": "100年前と同じく分かっていない。"
+  },
+  {
+   "startSec": 1130.061,
+   "durationSec": 3.74,
+   "text": "この100年で増えたのは、答えではない。"
+  },
+  {
+   "startSec": 1133.801,
+   "durationSec": 2.618,
+   "text": "確かめられることの数である。"
+  },
+  {
+   "startSec": 1136.419,
+   "durationSec": 3.366,
+   "text": "1927年の時点で分かっていたのは、"
+  },
+  {
+   "startSec": 1139.785,
+   "durationSec": 2.618,
+   "text": "線が存在することだけだった。"
+  },
+  {
+   "startSec": 1142.403,
+   "durationSec": 4.114,
+   "text": "今は、いつ・誰が・どうやって・どこへ向けて、"
+  },
+  {
+   "startSec": 1146.517,
+   "durationSec": 1.683,
+   "text": "まで分かっている。"
+  },
+  {
+   "startSec": 1148.2,
+   "durationSec": 2.057,
+   "text": "では、いつ分かるのか。"
+  },
+  {
+   "startSec": 1150.257,
+   "durationSec": 4.488,
+   "text": "おそらく、もっと精度の高いAIが出る日ではない。"
+  },
+  {
+   "startSec": 1154.745,
+   "durationSec": 4.114,
+   "text": "「ナスカの地上絵の目的」という1つの問いが、"
+  },
+  {
+   "startSec": 1158.859,
+   "durationSec": 3.927,
+   "text": "いくつもの小さな問いに分解される日である。"
+  },
+  {
+   "startSec": 1162.786,
+   "durationSec": 1.87,
+   "text": "大型と小型を分ける。"
+  },
+  {
+   "startSec": 1164.656,
+   "durationSec": 1.496,
+   "text": "線と絵を分ける。"
+  },
+  {
+   "startSec": 1166.152,
+   "durationSec": 1.683,
+   "text": "時代ごとに分ける。"
+  },
+  {
+   "startSec": 1167.835,
+   "durationSec": 4.675,
+   "text": "303点の発見は、その分解をすでに始めさせている。"
+  },
+  {
+   "startSec": 1172.511,
+   "durationSec": 4.862,
+   "text": "ここで挙げた論文は、すべて概要欄にまとめてあります。"
+  },
+  {
+   "startSec": 1177.373,
+   "durationSec": 3.927,
+   "text": "地上絵の分布図も、AIによる調査の報告も、"
+  },
+  {
+   "startSec": 1181.3,
+   "durationSec": 4.301,
+   "text": "誰でも読める形で公開されているものばかりです。"
+  },
+  {
+   "startSec": 1185.601,
+   "durationSec": 3.179,
+   "text": "ぜひその目で確かめてみてください。"
+  },
+  {
+   "startSec": 1188.78,
+   "durationSec": 4.675,
+   "text": "調べてほしい話があれば、コメントで教えてください。"
+  },
+  {
+   "startSec": 1193.455,
+   "durationSec": 4.301,
+   "text": "チャンネル登録と高評価もよろしくお願いします。"
+  },
+  {
+   "startSec": 1197.756,
+   "durationSec": 2.244,
+   "text": "それではまた次の動画で。"
+  }
+ ],
+ "chapters": [
+  {
+   "startSec": 48.0,
+   "durationSec": 3.0,
+   "label": "第1幕",
+   "title": ""
+  },
+  {
+   "startSec": 254.0,
+   "durationSec": 3.0,
+   "label": "第2幕",
+   "title": ""
+  },
+  {
+   "startSec": 485.0,
+   "durationSec": 3.0,
+   "label": "第3幕",
+   "title": ""
+  },
+  {
+   "startSec": 748.0,
+   "durationSec": 3.0,
+   "label": "第4幕",
+   "title": ""
+  }
+ ],
+ "sourceLabels": [
+  {
+   "startSec": 0.0,
+   "durationSec": 8.0,
+   "text": "Joyofmuseums / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 8.0,
+   "durationSec": 8.0,
+   "text": "Logg Tandy / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 16.0,
+   "durationSec": 8.0,
+   "text": "Unknown author / CC0"
+  },
+  {
+   "startSec": 24.0,
+   "durationSec": 8.0,
+   "text": "Indrajit Das / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 32.0,
+   "durationSec": 8.0,
+   "text": "Piri Reis / Public domain"
+  },
+  {
+   "startSec": 40.0,
+   "durationSec": 8.0,
+   "text": "Unknown author / Public domain"
+  },
+  {
+   "startSec": 48.0,
+   "durationSec": 8.0,
+   "text": "blmcalifornia / Public domain"
+  }
+ ],
+ "quoteCards": [
+  {
+   "startSec": 441.515,
+   "durationSec": 3.74,
+   "side": "left",
+   "heading": "ライヘの結論はこうだった",
+   "translation": "線は暦である。 太陽と月と星の位置を示し、"
+  },
+  {
+   "startSec": 480.037,
+   "durationSec": 7.106,
+   "side": "right",
+   "heading": "留保",
+   "translation": "ただし、と付け加えておきたい"
+  },
+  {
+   "startSec": 610.566,
+   "durationSec": 5.423,
+   "side": "right",
+   "heading": "留保",
+   "translation": "ただし、ここは正確に言う必要がある"
+  },
+  {
+   "startSec": 737.728,
+   "durationSec": 5.797,
+   "side": "right",
+   "heading": "留保",
+   "translation": "ただし、決着はしていない"
+  },
+  {
+   "startSec": 920.617,
+   "durationSec": 5.984,
+   "side": "right",
+   "heading": "留保",
+   "translation": "ただし、ここで強調したいのは数ではない"
+  },
+  {
+   "startSec": 996.54,
+   "durationSec": 6.92,
+   "side": "right",
+   "heading": "留保",
+   "translation": "ただし、AIがやったのは発見までである"
+  }
+ ],
+ "chipStacks": [
+  {
+   "startSec": 340.907,
+   "durationSec": 3.5,
+   "items": [
+    "1939年",
+    "6月",
+    "22日"
+   ]
+  },
+  {
+   "startSec": 806.171,
+   "durationSec": 3.927,
+   "items": [
+    "2004年",
+    "2018年",
+    "14年"
+   ]
+  },
+  {
+   "startSec": 1036.372,
+   "durationSec": 3.5,
+   "items": [
+    "1",
+    "1",
+    "1"
+   ]
+  }
+ ],
+ "cardRows": [
+  {
+   "startSec": 45.068,
+   "durationSec": 3.5,
+   "cards": [
+    {
+     "code": "1",
+     "dimmed": false
+    },
+    {
+     "code": "2",
+     "dimmed": false
+    },
+    {
+     "code": "3",
+     "dimmed": false
+    },
+    {
+     "code": "4",
+     "dimmed": false
+    }
+   ],
+   "caption": "話は4つに分かれる"
+  },
+  {
+   "startSec": 101.169,
+   "durationSec": 5.423,
+   "cards": [
+    {
+     "code": "1",
+     "dimmed": false
+    },
+    {
+     "code": "2",
+     "dimmed": false
+    },
+    {
+     "code": "3",
+     "dimmed": false
+    }
+   ],
+   "caption": "描かれているものは、大きく3種類に分かれる"
+  }
+ ],
+ "documentCards": []
+}
