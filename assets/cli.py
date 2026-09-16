@@ -7,15 +7,38 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
+import subprocess
 import time
 import urllib.request
 from pathlib import Path
+
+# 背景として使える最低限の明るさ。透明PNGと暗すぎる写真の両方をここで落とす。
+MIN_MEAN_LUMA = 25
 
 import yaml
 
 from .credits import build as build_credits
 from .credits import unlicensed
 from .sources import UA, Asset, search_all
+
+
+def mean_luma(path: Path) -> int | None:
+    """画像をアルファごと黒へ落とし込んだときの平均輝度。
+
+    透明なPNG（SVG由来のものに多い）は暗い背景の上で完全に消える。
+    暗すぎる写真も同じで、どちらも「読み込めているのに黒い画面」になる。
+    黒に合成してから測ると、両方まとめて弾ける。
+    """
+    if not shutil.which("ffmpeg"):
+        return None
+    r = subprocess.run(
+        ["ffmpeg", "-loglevel", "error", "-i", str(path),
+         "-vf", "scale=1:1,format=gray", "-f", "rawvideo", "-"],
+        capture_output=True)
+    if r.returncode != 0 or not r.stdout:
+        return None
+    return r.stdout[0]
 
 
 def _sniff_ext(data: bytes) -> str:
@@ -49,6 +72,11 @@ def _download(asset: Asset, stem: Path) -> Path | None:
         return None
     dst = stem.with_suffix(ext)
     dst.write_bytes(data)
+
+    luma = mean_luma(dst)
+    if luma is not None and luma < MIN_MEAN_LUMA:
+        dst.unlink(missing_ok=True)  # 暗すぎる／透明。背景に使えない
+        return None
     return dst
 
 

@@ -13,6 +13,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from autolayout import Line, build as build_overlays  # noqa: E402
 from script_engine.beats import get  # noqa: E402
 
 MAX_SUB_CHARS = 26  # 1枚の字幕に載せる上限。これを超えると読めない
@@ -46,8 +48,34 @@ def wrap(sentence: str) -> list[str]:
     return out
 
 
+def load_manifest(path: Path | None) -> list[dict]:
+    """assets fetch が出した manifest.json。実ファイル名とライセンスが入っている。"""
+    if not path or not path.exists():
+        return []
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def source_labels(manifest: list[dict], shots: list[dict]) -> list[dict]:
+    """各カットの表示中、左上に出典を出しっぱなしにする。
+
+    CC BY / CC BY-SA は表示が条件なので、ここを自動化しないと
+    素材を機械で集めた意味がなくなる。
+    """
+    out = []
+    for shot, entry in zip(shots, manifest):
+        author = entry.get("author") or ""
+        lic = entry.get("license") or ""
+        text = f"{author} / {lic}".strip(" /") if author != "不明" else lic
+        if not text:
+            continue
+        out.append({"startSec": shot["startSec"],
+                    "durationSec": shot["durationSec"], "text": text})
+    return out
+
+
 def build(script: str, duration: float, kind: str, n_claims: int,
-          shot_sec: float, narration: str | None, bgm: str | None) -> dict:
+          shot_sec: float, narration: str | None, bgm: str | None,
+          manifest: list[dict] | None = None) -> dict:
     lines = [w for s in split_sentences(script) for w in wrap(s)]
     total_chars = sum(len(l) for l in lines) or 1
 
@@ -68,23 +96,32 @@ def build(script: str, duration: float, kind: str, n_claims: int,
             })
         at += sec
 
-    # 画は等間隔の枠として置く。src は後で素材に差し替える前提
+    # 画は等間隔の枠。manifest があれば実ファイル名（拡張子つき）を使う
+    manifest = manifest or []
     shots = []
     n = max(1, int(duration // shot_sec))
     for i in range(n):
         start = i * duration / n
         zoom_in = i % 2 == 0
+        src = (f"shots/{manifest[i % len(manifest)]['file']}" if manifest
+               else f"shots/{i:03d}.jpg")
         shots.append({
             "startSec": round(start, 3),
             "durationSec": round(duration / n, 3),
-            "src": f"shots/{i:03d}.jpg",
+            "src": src,
             "from": {"scale": 1.0 if zoom_in else 1.18, "x": 0, "y": 0},
             "to": {"scale": 1.18 if zoom_in else 1.0, "x": 0.2 if zoom_in else -0.2, "y": 0},
         })
 
+    overlays = build_overlays(
+        [Line(**{k: s[k] for k in ("startSec", "durationSec", "text")}) for s in subtitles],
+        codes=[str(i + 1) for i in range(9)])
+
     props: dict = {
-        "bgmVolume": 0.12, "shots": shots, "telops": [],
+        "bgmVolume": 0.12, "backgroundDim": 0.5, "shots": shots, "telops": [],
         "subtitles": subtitles, "chapters": chapters,
+        "sourceLabels": source_labels(manifest, shots),
+        **overlays,
     }
     if narration:
         props["narration"] = narration
@@ -103,12 +140,17 @@ def main() -> int:
     ap.add_argument("--narration", help="public/ からの相対パス")
     ap.add_argument("--bgm")
     ap.add_argument("--out", default="video/props.json")
+    ap.add_argument("--manifest", help="assets fetch が出した manifest.json")
     a = ap.parse_args()
 
     props = build(Path(a.script).read_text(encoding="utf-8"), a.duration,
-                  a.kind, a.claims, a.shot_sec, a.narration, a.bgm)
+                  a.kind, a.claims, a.shot_sec, a.narration, a.bgm,
+                  manifest=load_manifest(Path(a.manifest) if a.manifest else None))
     Path(a.out).write_text(json.dumps(props, ensure_ascii=False, indent=1), encoding="utf-8")
+    n_ov = sum(len(props[k]) for k in
+               ("quoteCards", "chipStacks", "cardRows", "documentCards"))
     print(f"字幕 {len(props['subtitles'])}枚 / カット {len(props['shots'])} / 章 {len(props['chapters'])}")
+    print(f"オーバーレイ {n_ov}件 / 出典ラベル {len(props['sourceLabels'])}件")
     print(f"-> {a.out}")
     return 0
 

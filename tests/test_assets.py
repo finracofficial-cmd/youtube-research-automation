@@ -79,3 +79,22 @@ def test_unlicensed_assets_are_surfaced():
 def test_extension_comes_from_the_bytes_not_the_url(head, ext):
     """Commons は .jpg という名前で PNG や WebP を返す。"""
     assert _sniff_ext(head) == ext
+
+
+def test_dark_and_transparent_images_are_rejected(tmp_path):
+    """透明PNGと暗すぎる写真は、読み込めても黒い画面になる。落とす。"""
+    import shutil
+    import subprocess
+
+    if not shutil.which("ffmpeg"):
+        pytest.skip("ffmpeg が無い")
+    from assets.cli import MIN_MEAN_LUMA, mean_luma
+
+    dark = tmp_path / "dark.png"
+    bright = tmp_path / "bright.png"
+    for path, color in ((dark, "black"), (bright, "white")):
+        subprocess.run(["ffmpeg", "-loglevel", "error", "-f", "lavfi",
+                        "-i", f"color=c={color}:s=64x64:d=0.1", "-frames:v", "1",
+                        "-y", str(path)], check=True)
+    assert mean_luma(dark) < MIN_MEAN_LUMA
+    assert mean_luma(bright) >= MIN_MEAN_LUMA

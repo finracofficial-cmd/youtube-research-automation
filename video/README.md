@@ -88,3 +88,39 @@ python3 video/analyze_edit.py <動画> --threshold 0.30 --frames-dir frames/ --o
 - サムネイル生成
 - 背景のピラーボックス（画を内側に嵌めて左右を暗く落とす表現）
 - 図解・グラフの部品（数値を示すカット用）
+
+## 台本からの自動組版（autolayout.py）
+
+台本自身の言い回しが、出すべき部品を示している。修辞の型をそのまま規則にした。
+
+| 台本の書き方 | 出る部品 |
+|---|---|
+| `2006年にネイチャーへ載る` | `DocumentCard`（年号＋掲載誌を抜く） |
+| `主張はこうだ。` → 次の文 | `QuoteCard`（次の1〜2文を中身に） |
+| `5つを並べた` / `四つに分かれる` | `CardRow`（個数ぶんのカード） |
+| `ただし、決着はしていない` | `QuoteCard`（逆側に留保として） |
+| 1文に数字が3つ以上 | `ChipStack` |
+| それ以外 | 何も出さない（画と字幕だけ） |
+
+```bash
+python3 video/build_props.py drafts/oparts_v1.txt --duration 900 --kind bundle \
+  --claims 5 --manifest video/public/shots/manifest.json
+# -> 字幕320枚 / カット112 / 章5 / オーバーレイ10件 / 出典ラベル7件
+```
+
+**出典ラベルは manifest から自動生成される。** 素材の作者とライセンスが各カットの
+表示中ずっと左上に出るので、CC BY の表示義務が構造的に満たされる。
+
+密度は抑える方に倒している。15分でオーバーレイ10件。出しすぎると読めない。
+`schedule()` が最低間隔 1.2秒 を守り、画面中央を占める部品は同時に1つだけにする。
+
+## 描画するときの注意（実際に事故った）
+
+**Remotion は `staticFile()` をプロセスの作業ディレクトリ基準で解決する。**
+リポジトリ直下から `npx --prefix video remotion ...` と呼ぶと `public/` を見失い、
+**エラーを出さずに画像が全部消えた黒い動画が出来上がる。**
+`video/render.sh` 経由で叩けば必ず正しい場所で動く。
+
+```bash
+cd video && PROPS=props.json ./render.sh render src/index.ts Documentary out/video.mp4
+```

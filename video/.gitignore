@@ -1,4 +1,12 @@
 node_modules/
 out/
 public/shots/
+public/demo/
 props.json
+.remotion/
+# 切り分け用に作った一時propsは残さない
+n[0-9]*.json
+[A-D]_*.json
+one.json
+t[0-9]*.json
+demo.json
