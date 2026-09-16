@@ -96,7 +96,7 @@ def cmd_search(args) -> int:
     return 0
 
 
-def _candidates(queries: list[str], limit: int) -> tuple[list[Asset], str, bool]:
+def _candidates(queries: list[str], limit: int) -> tuple[list[Asset], str, bool, bool]:
     """検索語の並びから候補を作る。記事からの取得を先に試す。
 
     検索語はWikipediaの英語見出しなので、そのまま記事を引ける。記事に
@@ -137,7 +137,8 @@ def _candidates(queries: list[str], limit: int) -> tuple[list[Asset], str, bool]
     uniq = [a for a in from_articles + from_search
             if not (a.title in seen or seen.add(a.title))]
     # 記事から1枚も取れなかった場合だけ、人の確認に回す
-    return uniq, first or (queries[0] if queries else ""), not from_articles
+    return (uniq, first or (queries[0] if queries else ""),
+            bool(from_search), unreachable)
 
 
 def _carry(files: list[dict], segment: int) -> bool:
@@ -158,7 +159,8 @@ def cmd_fetch(args) -> int:
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
 
-    cache: dict[str, tuple[list[Asset], str, bool]] = {}
+    cache: dict[str, tuple[list[Asset], str, bool, bool]] = {}
+    n_unreachable = 0
     used_rank: dict[str, int] = {}   # 同じ記事が続くカットには別の画を回す
     downloaded: dict[str, str] = {}  # 同じファイルを二度落とさない
     chosen: list[Asset] = []
@@ -170,7 +172,8 @@ def cmd_fetch(args) -> int:
         if key not in cache:
             cache[key] = _candidates(queries, args.limit)
             time.sleep(0.3)
-        found, query, relaxed = cache[key]
+        found, query, relaxed, unreachable = cache[key]
+        n_unreachable += bool(unreachable)
         if not found:
             # 候補が1件も無い場合も引き継ぐ。ここを落とすと区間ごと消え、
             # 画の無い時間ができる（通信に失敗した回で20区間が欠けた）。
@@ -230,6 +233,11 @@ def cmd_fetch(args) -> int:
             files.insert(seg, {**head, "segment": seg, "carried": True})
         print(f"冒頭{files[0]['segment'] if False else head['segment']}区間に"
               f"最初の画を遡って当てた")
+
+    if n_unreachable:
+        print(f"\n!! APIに届かなかったカットが {n_unreachable}件ある。"
+              f"その区間は直前の画を引き継いでいる。\n"
+              f"   時間を置いて取り直すと、その区間にも固有の画が入る。")
 
     review = [f for f in files if f.get("needs_review")]
     if review:
