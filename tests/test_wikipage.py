@@ -261,3 +261,30 @@ def test_unreachable_is_not_the_same_as_no_images(monkeypatch):
     # 記事はあるが画が無い場合は、例外ではなく空リスト
     monkeypatch.setattr(wp, "_get", lambda *a, **k: {"parse": {"images": []}})
     assert wp.page_images("Someone With No Images") == []
+
+
+def test_concrete_types_keep_the_subjects_of_a_documentary():
+    """通してよいのは「世界に実在し、写真に撮れる個物」。"""
+    from assets.wikipage import is_concrete
+    for types in (["human"], ["archaeological artefact"], ["archaeological site"],
+                  ["geoglyph"], ["island"], ["volcano"], ["cromlech", "monument"],
+                  ["nautical chart"], ["taxon"], ["civilization"], ["palace"],
+                  ["victory column"], ["tell"], ["hindu deity"], ["battery"]):
+        assert is_concrete(types), types
+
+
+def test_concrete_types_drop_methods_media_and_concepts():
+    """方法・媒体・分野・性質は画にしても題材を指さない。
+
+    除外リストで運用したときは題材が変わるたびに漏れ、Replica の
+    ブガッティ、Aerial photography のキャンプ場、Life and death の静物画、
+    Groundwater の断面図が順に画面に出た。
+    """
+    from assets.wikipage import is_concrete
+    for types in (["photography genre"], ["derivative work"], ["go term"],
+                  ["land waters"], ["invention"], ["machine learning method"],
+                  ["branch of computer science"], ["physical property"],
+                  ["study type"], ["literary genre"], ["communication"],
+                  ["calendar era"], ["heritage designation"], ["evolution"],
+                  ["building material"], ["sedimentary material"], ["spacer"]):
+        assert not is_concrete(types), types

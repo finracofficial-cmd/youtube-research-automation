@@ -5,95 +5,82 @@ shots:
 - query: *id001
 - query: *id001
 - query: &id002
-  - Computer
   - Nazca lines
 - query: *id002
-- query: &id003
-  - World Heritage Site
-- query: *id003
+- query: *id002
+- query: *id002
 - query:
   - Andean condor
   - Hummingbird
 - query:
   - Pelican
-- query: &id004
-  - Andean condor
+- query: &id003
   - Pelican
-- query: *id004
-- query: *id004
-- query: *id004
-- query: *id004
+  - Andean condor
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: &id004
+  - Nazca culture
 - query: *id004
 - query: *id004
 - query: &id005
-  - Anno Domini
-  - Nazca culture
+  - Paul Kosok
 - query: *id005
 - query: *id005
 - query: &id006
-  - Paul Kosok
-  - Airplane
-- query: *id006
-- query:
-  - Southern Hemisphere
-- query: &id007
   - Maria Reiche
   - Dresden
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query:
+  - Stonehenge
+- query: &id007
+  - Stonehenge
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
 - query: *id007
 - query: *id007
 - query: *id007
 - query: &id008
-  - Life and death
-- query: *id008
-- query: *id008
-- query:
-  - Stonehenge
-  - Computer
-- query: &id009
-  - Stonehenge
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
-- query: &id010
   - Nazca culture
-- query: *id010
-- query: *id010
-- query: *id010
-- query:
-  - Aerial photography
-- query:
-  - Field research
-- query:
-  - Image resolution
-  - Aerial photography
-- query:
-  - Aerial photography
-- query: &id011
-  - Pattern recognition
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
-- query: &id012
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: &id009
   - Nazca lines
-- query: *id012
-- query: *id012
+- query: *id009
+- query: *id009

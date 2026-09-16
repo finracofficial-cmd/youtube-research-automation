@@ -155,6 +155,44 @@ _META_TYPE = (
 )
 
 
+# 画にできる具体物の型。除外リストで運用すると題材が変わるたびに漏れる
+# （実測で Replica / Aerial photography / Life and death / Groundwater が
+# 順に漏れ、ブガッティ・キャンプ場の空撮・静物画・地下水断面図が画面に出た）。
+# 落とすべきものを数えるのではなく、通してよいものを数える。
+# 通すのは「世界に実在し、写真に撮れる個物」。方法・媒体・分野・性質は通さない。
+_CONCRETE_TYPE = (
+    # 人
+    "human", "deity", "legendary figure", "mythical",
+    # 場所・地形
+    "site", "city", "town", "village", "settlement", "island", "volcano",
+    "mountain", "crater", "lake", "river", "desert", "plateau", "tell",
+    "trench", "valley", "cave", "spring", "oasis", "peninsula", "cape",
+    # 構造物
+    "monument", "column", "palace", "castle", "temple", "church", "shrine",
+    # 「building」単独は building material（建材）にも当たるので入れない
+    "tower", "wall", "ruins", "cromlech", "henge", "tomb",
+    "stele", "obelisk", "bridge", "aqueduct", "fortress", "pyramid",
+    "landform", "geoglyph", "petroglyph",
+    # 物
+    "artefact", "artifact", "manuscript", "codex", "chart", "painting",
+    "sculpture", "artwork", "book", "mechanism", "battery", "instrument",
+    "vessel", "ship", "spacecraft", "clock", "calculator",
+    # 生き物
+    "taxon", "species", "breed",
+    # 集団・時代
+    "civilization", "culture", "empire", "historical country", "dynasty",
+    "kingdom", "archaeological culture",
+    # 出来事
+    "battle", "war", "expedition", "earthquake", "eruption", "shipwreck",
+)
+
+
+def is_concrete(types: list[str]) -> bool:
+    """写真に撮れる個物か。1つでも当たれば通す。"""
+    return any(re.search(rf"\b{re.escape(w)}\b", t)
+               for t in types for w in _CONCRETE_TYPE)
+
+
 def entity_types(en_titles: list[str]) -> dict[str, dict]:
     """見出しごとに {"t": 型名, "c": クラスか} を返す。
 

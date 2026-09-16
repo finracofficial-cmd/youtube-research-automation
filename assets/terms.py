@@ -17,7 +17,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from .wikipage import entity_types, is_entity, is_meta
+from .wikipage import entity_types, is_concrete, is_entity, is_meta
 
 UA = "youtube-research-automation/0.1 (research; contact: research@example.com)"
 
@@ -183,8 +183,11 @@ def queries_for_segments(segments: list[str], *, per_segment: int = 1,
     cache["types"].update(entity_types(need))
     _save_cache(cache)
     types = {e: (cache["types"].get(e) or {"t": [], "c": False}) for e in resolved}
+    # 通してよい型だけを数える。落とすべき型を数える運用は、題材が変わる
+    # たびに漏れた（Replica / Aerial photography / Life and death が順に漏れ、
+    # ブガッティ・キャンプ場の空撮・静物画が画面に出た）。
     usable = {ja: en for ja, en in en_of.items()
-              if en and (types.get(en) or {}).get("t")}
+              if en and is_concrete((types.get(en) or {}).get("t") or [])}
     meta = {ja for ja, en in usable.items() if is_meta(types[en]["t"])}
     klass = {ja for ja, en in usable.items() if types[en]["c"]}
     print(f"使える語は {len(set(usable.values()))}語"

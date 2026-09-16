@@ -60,22 +60,21 @@ shots:
 - query: *id007
 - query: *id007
 - query: *id007
-- query: &id008
-  - Travel literature
-- query: *id008
-- query: *id008
-- query: *id008
-- query: *id008
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
 - query:
   - Stonehenge
 - query:
   - Göbekli Tepe
-- query: &id009
+- query: &id008
   - Baalbek
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
