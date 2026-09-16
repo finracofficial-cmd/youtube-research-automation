@@ -74,50 +74,121 @@ def _claim_ids(claims: dict, prop: str) -> list[str]:
     return out
 
 
-def _qid(en_title: str) -> str | None:
-    """英語版の見出しから Wikidata の項目IDを引く。
+def _qids(en_titles: list[str]) -> dict[str, str | None]:
+    """英語版の見出しから Wikidata の項目IDをまとめて引く。
 
     Wikidata に見出しで直接問い合わせるとリダイレクトや大文字小文字の
     違いで外れる（実測で "Nazca Lines" が引けなかった）。Wikipedia 側から
     引けば、リダイレクトを辿ったうえで正規の項目IDが返る。
     """
-    d = _get(EN_API, {"action": "query", "titles": en_title, "redirects": 1,
-                      "prop": "pageprops", "ppprop": "wikibase_item"})
-    for page in ((((d or {}).get("query") or {}).get("pages")) or {}).values():
-        qid = (page.get("pageprops") or {}).get("wikibase_item")
-        if qid:
-            return qid
-    return None
+    out: dict[str, str | None] = {t: None for t in en_titles}
+    for i in range(0, len(en_titles), 50):
+        chunk = en_titles[i:i + 50]
+        d = _get(EN_API, {"action": "query", "titles": "|".join(chunk),
+                          "redirects": 1, "prop": "pageprops",
+                          "ppprop": "wikibase_item"})
+        if not d:
+            continue
+        q = d.get("query", {})
+        back: dict[str, str] = {}
+        for kind in ("normalized", "redirects"):
+            for m in q.get(kind, []):
+                back[m["to"]] = back.get(m["from"], m["from"])
+        for page in (q.get("pages") or {}).values():
+            qid = (page.get("pageprops") or {}).get("wikibase_item")
+            if qid:
+                title = page.get("title", "")
+                out[back.get(title, title)] = qid
+        time.sleep(0.3)
+    return out
 
 
-def is_entity(en_title: str) -> bool:
-    """個体（人・物・場所・出来事）か、それとも一般概念か。
+def _entities(qids: list[str], props: str, lang: str | None = None) -> dict:
+    """wbgetentities を50件ずつに割って引く。"""
+    merged: dict = {}
+    for i in range(0, len(qids), 50):
+        params = {"action": "wbgetentities", "ids": "|".join(qids[i:i + 50]),
+                  "props": props}
+        if lang:
+            params["languages"] = lang
+        d = _get(WD_API, params)
+        merged.update((d or {}).get("entities") or {})
+        time.sleep(0.3)
+    return merged
+
+
+# 題材そのものではなく、題材が言及される器。論文の掲載誌、所蔵する博物館、
+# 発見地の国。記事の画像は器の画像（雑誌の表紙、建物、地図）になるので、
+# 主題を指す語があるならそちらを先に使う。落とすのではなく順位を下げる。
+_META_TYPE = (
+    "journal", "newspaper", "magazine", "publisher", "periodical",
+    "university", "institute", "college", "school", "academy",
+    "museum", "library", "archive",
+    "country", "sovereign state", "state of", "province", "prefecture",
+    "ocean", "sea", "continent", "region", "city", "capital",
+)
+
+
+def entity_types(en_titles: list[str]) -> dict[str, list[str]]:
+    """見出しごとに、Wikidata の「〜である」（P31）の型名を返す。
+
+    個体でなければ空リスト。呼び出し側はこれで可否と順位の両方を決める。
+    """
+    return _types_of(en_titles)
+
+
+def is_meta(types: list[str]) -> bool:
+    """題材そのものではなく、題材が言及される器か。"""
+    return any(w in t for t in types for w in _META_TYPE)
+
+
+def are_entities(en_titles: list[str]) -> dict[str, bool]:
+    """個体（人・物・場所・出来事）か、それとも一般概念かをまとめて判定する。
 
     Wikidataでは個体は P31（instance of）を持ち、クラスは P279（subclass of）
     を持つ。Washer (hardware) や Volcanic rock は P279 しか持たない。
     単位や記法は P31 を持ってしまうので、型のラベルで追加で落とす。
+
+    1語ずつだと1語あたり3往復かかる。語の数だけ往復すると台本1本で
+    百回を超え、レート制限の待ちが処理時間の大半になっていた。
     """
-    qid = _qid(en_title)
-    if not qid:
-        return False
-    d = _get(WD_API, {"action": "wbgetentities", "ids": qid, "props": "claims"})
-    ent = ((d or {}).get("entities") or {}).get(qid) or {}
-    claims = ent.get("claims")
-    if not claims:
-        return False
-    p31 = _claim_ids(claims, "P31")
-    if not p31 or _claim_ids(claims, "P279"):
-        return False
-    lab = _get(WD_API, {"action": "wbgetentities", "ids": "|".join(p31[:6]),
-                        "props": "labels", "languages": "en"})
-    names = []
-    for e in ((lab or {}).get("entities") or {}).values():
-        v = (e.get("labels", {}).get("en") or {}).get("value")
+    return {t: bool(v) for t, v in _types_of(en_titles).items()}
+
+
+def _types_of(en_titles: list[str]) -> dict[str, list[str]]:
+    titles = sorted(set(en_titles))
+    qid_of = _qids(titles)
+    qids = sorted({q for q in qid_of.values() if q})
+    claims_of = _entities(qids, "claims")
+
+    p31_of: dict[str, list[str]] = {}
+    for qid in qids:
+        c = (claims_of.get(qid) or {}).get("claims") or {}
+        p31 = _claim_ids(c, "P31")
+        p31_of[qid] = [] if (not p31 or _claim_ids(c, "P279")) else p31
+
+    types = sorted({t for v in p31_of.values() for t in v[:6]})
+    label_of = {}
+    for qid, ent in _entities(types, "labels", "en").items():
+        v = (ent.get("labels", {}).get("en") or {}).get("value")
         if v:
-            names.append(v.lower())
-    if not names:
-        return True
-    return not any(w in n for n in names for w in _ABSTRACT_TYPE)
+            label_of[qid] = v.lower()
+
+    out: dict[str, list[str]] = {}
+    for title in titles:
+        names = [label_of[t] for t in p31_of.get(qid_of.get(title) or "", [])[:6]
+                 if t in label_of]
+        # 抽象（単位・記法・曖昧さ回避）は個体として扱わない
+        if not names or any(w in n for n in names for w in _ABSTRACT_TYPE):
+            out[title] = []
+        else:
+            out[title] = names
+    return out
+
+
+def is_entity(en_title: str) -> bool:
+    """個体か一般概念か。まとめて判定できるなら are_entities を使う。"""
+    return are_entities([en_title])[en_title]
 
 
 def _file_names(en_title: str, limit: int = 40) -> list[str]:

@@ -127,7 +127,10 @@ def _inset(entry: dict | None) -> float:
     if not w or not h:
         return 0.0
     ar = w / h
-    if ar >= FRAME_AR * 0.78:  # ほぼ横長。全画面で問題ない
+    # 4:3（1.33）を16:9に切ると高さを25%失うが、写真なら破綻しない。
+    # 実測の素材26枚のうち11枚が縦長で、そこを切ると人物の頭や写本の欄外が
+    # 落ちる。境目は正方形の少し手前に置く。
+    if ar >= 1.2:
         return 0.0
     return round(min(0.35, (1 - ar / FRAME_AR) / 2), 3)
 

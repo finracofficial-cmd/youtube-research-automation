@@ -96,16 +96,30 @@ def _candidates(queries: list[str], limit: int) -> tuple[list[Asset], str, bool]
     検索語はWikipediaの英語見出しなので、そのまま記事を引ける。記事に
     載っている画像は、定義上その記事の主題のものになる。キーワード検索は
     語義を区別せず、Archimedes に月のクレーターを返してくるので後回し。
+
+    候補は語ごとに打ち切らず、全部つないで返す。1語目で候補が見つかっても、
+    その全部が落とせないことがある（実測で Valerios Stais の記事に画像が
+    無く、検索で拾った1件も403で、冒頭5カットが空になった）。
     """
+    from_articles: list[Asset] = []
+    from_search: list[Asset] = []
+    first = ""
     for q in queries:
-        found = page_images(q, limit=limit)
-        if found:
-            return found, q, False
-    for q in queries:  # 記事に画が無い題材だけ、検索に落とす
-        found, relaxed = search_all(q, per_source=limit)
-        if found:
-            return found, q, True
-    return [], queries[0] if queries else "", False
+        got = page_images(q, limit=limit)
+        if got:
+            from_articles += got
+            first = first or q
+    if not from_articles:  # 記事に画が無い題材だけ、検索に落とす
+        for q in queries:
+            got, _ = search_all(q, per_source=limit)
+            if got:
+                from_search += got
+                first = first or q
+    seen: set[str] = set()
+    uniq = [a for a in from_articles + from_search
+            if not (a.title in seen or seen.add(a.title))]
+    # 記事から1枚も取れなかった場合だけ、人の確認に回す
+    return uniq, first or (queries[0] if queries else ""), not from_articles
 
 
 def cmd_fetch(args) -> int:
@@ -147,7 +161,15 @@ def cmd_fetch(args) -> int:
                 downloaded[cand.title] = str(got)
                 break
         if not asset or not path:
-            print(f"[{i:03d}] 候補{len(found)}件すべて取得失敗: {query}")
+            # 空のカットは黒画面になる。直前に取れた画を引き継ぐ
+            if files:
+                prev = dict(files[-1])
+                prev["segment"] = i
+                prev["carried"] = True
+                files.append(prev)
+                print(f"[{i:03d}] 取得失敗。直前の画を引き継ぐ: {query}")
+            else:
+                print(f"[{i:03d}] 候補{len(found)}件すべて取得失敗: {query}")
             continue
 
         record = asset.to_dict()
@@ -163,6 +185,15 @@ def cmd_fetch(args) -> int:
         flag = " ★要確認" if relaxed else ""
         print(f"[{i:03d}] {path.name:<8} {asset.license:<16} {query[:26]}{flag}")
         time.sleep(0.2)
+
+    # 冒頭の区間は題材の一般名しか含まず、語が取れないことが多い。
+    # 引き継ぎは直前からしかできないので、最初に取れた画を遡って当てる。
+    if files and files[0]["segment"] > 0:
+        head = dict(files[0])
+        for seg in range(files[0]["segment"]):
+            files.insert(seg, {**head, "segment": seg, "carried": True})
+        print(f"冒頭{files[0]['segment'] if False else head['segment']}区間に"
+              f"最初の画を遡って当てた")
 
     review = [f for f in files if f.get("needs_review")]
     if review:

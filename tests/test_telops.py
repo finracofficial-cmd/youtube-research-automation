@@ -119,3 +119,22 @@ def test_phrase_rejects_words_cut_mid_token():
     """
     assert phrase("比較的新しい時代のものです。") is None
     assert phrase("非常に興味深い結果でした。") is None
+
+
+def test_phrase_prefers_words_rare_in_the_script():
+    """どの行にも出る語を大書きしても、画面が埋まるだけで何も伝わらない。
+
+    実測で「観光客」が大書きされた。台本全体での出現回数で選び直す。
+    """
+    freq = {"歯車比": 1, "研究": 30}
+    got = phrase("研究の結果、歯車比が判明した。", freq)
+    assert got == "歯車比"
+
+
+def test_phrase_rejects_fragments_split_off_a_number():
+    """単位や助数詞を数から切り離した断片は語ではない。
+
+    実測で「50万年前」から「万年前」、「30個以上」から「個以上」が出た。
+    """
+    assert "万年前" not in (phrase("50万年前の岩に埋まっていた。", {}) or "")
+    assert "個以上" not in (phrase("歯車は30個以上あった。", {}) or "")

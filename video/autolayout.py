@@ -317,7 +317,11 @@ _PHRASE = re.compile(
 _FLAT = {"可能性", "研究者", "専門家", "一次資料", "当チャンネル", "説明", "解説",
          "考古学", "実際", "結論", "以上", "以下", "現在", "当時", "重要", "存在",
          "報告", "確認", "指摘", "主張", "記録", "内容", "部分", "場合", "結果",
-         "理由", "意味", "必要", "問題", "状態", "関係", "世界", "人間", "時代"}
+         "理由", "意味", "必要", "問題", "状態", "関係", "世界", "人間", "時代",
+         # 単位。数から切り離して大書きしても何も言っていない
+         "メートル", "センチ", "ミリ", "キロ", "グラム", "トン", "パーセント",
+         "ボルト", "アンペア", "万年前", "個以上", "観光客", "研究チーム",
+         "チャンネル", "当チャンネル", "再利用", "動画"}
 
 
 # 語句の直後に来てよい文字。これ以外が続くなら語の途中で切れている。
@@ -330,12 +334,42 @@ def _ends_cleanly(text: str, end: int) -> bool:
     return bool(_BOUNDARY.match(text[end:end + 3]))
 
 
-def phrase(text: str) -> str | None:
+def _starts_cleanly(text: str, start: int) -> bool:
+    """直前が数字なら、単位や助数詞を数から切り離した断片。
+
+    実測で「50万年前」から「万年前」、「30個以上」から「個以上」が出た。
+    語ではないので大書きしても意味を成さない。
+    """
+    return start == 0 or not re.match(r"[0-9０-９]", text[start - 1])
+
+
+def _phrases(text: str) -> list[str]:
+    """その行から取り出せる語句を全部返す。"""
+    out = []
+    for m in _PHRASE.finditer(text):
+        got = next((g for g in m.groups() if g), None)
+        if not got or got in _FLAT:
+            continue
+        if m.group(1) is None and not (
+                _ends_cleanly(text, m.end()) and _starts_cleanly(text, m.start())):
+            continue
+        if got in text:
+            out.append(got)
+    return out
+
+
+def phrase(text: str, freq: dict[str, int] | None = None) -> str | None:
     """その行から、画面に出す語句を選ぶ。
 
     行の連続部分文字列しか返さない。言い換えたり要約したりすると、
     音声と食い違う余地ができる。逐語なら、少なくとも矛盾はしない。
+
+    freq を渡すと、台本全体で出現回数の少ない語を優先する。長さだけで
+    選ぶと、どの行にも出る一般語が大書きされる（実測で「観光客」が出た）。
     """
+    if freq is not None:
+        got = sorted(_phrases(text), key=lambda w: (freq.get(w, 0), -len(w)))
+        return got[0] if got else None
     best = None
     for m in _PHRASE.finditer(text):
         got = next((g for g in m.groups() if g), None)
@@ -361,6 +395,12 @@ def fill_gaps(cues: list[Cue], lines: list[Line], duration: float,
     残りを埋めているのは、参考動画では語りの語句そのものの大字だった。
     逐語なので音声と矛盾せず、密度だけを上げられる。
     """
+    # 台本全体での出現回数。どの行にも出る語を大書きしないための重み
+    freq: dict[str, int] = {}
+    for line in lines:
+        for w in set(_phrases(line.text)):
+            freq[w] = freq.get(w, 0) + 1
+
     spans = sorted((c.startSec, c.endSec) for c in cues)
     merged: list[list[float]] = []
     for a, b in spans:
@@ -390,7 +430,7 @@ def fill_gaps(cues: list[Cue], lines: list[Line], duration: float,
             # その時間帯に読まれている行から語句を採る
             here = [l for l in lines
                     if l.startSec < ge and l.startSec + l.durationSec > cursor]
-            got = next((w for l in here if (w := phrase(l.text))), None)
+            got = next((w for l in here if (w := phrase(l.text, freq))), None)
             if not got:
                 break
             dur = min(MAX_DURATION, ge - cursor)

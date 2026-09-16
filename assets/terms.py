@@ -16,16 +16,21 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-from .wikipage import is_entity
+from .wikipage import entity_types, is_entity, is_meta
 
 UA = "youtube-research-automation/0.1 (research; contact: research@example.com)"
 API = "https://ja.wikipedia.org/w/api.php"
 
 # 固有名詞になりやすい形。「アンティキティラ島の機械」のような複合も拾う。
 _CANDIDATE = re.compile(
-    r"[ァ-ヶー]{3,}(?:・[ァ-ヶー]{2,})*(?:島|山|川|海|人)?の[一-龥]{2,6}"
-    r"|[ァ-ヶー]{4,}(?:・[ァ-ヶー]{2,})*"
-    r"|[一-龥]{2,6}(?:文書|手稿|写本|遺跡|神殿|地上絵|王朝|帝国|事件|鉄柱|電池|地図)"
+    # 中黒で繋ぐ名前は前半が2文字のことがある。{3,} を要求すると
+    # 「ピリ・レイスの地図」を「レイスの地図」としか拾えない。
+    r"(?:[ァ-ヶー]{2,}(?:・[ァ-ヶー]{2,})+|[ァ-ヶー]{3,})"
+    r"(?:島|山|川|海|人|語|族)?の[一-龥]{2,8}"
+    # 「コソ加工物」のようなカタカナ＋漢字の複合
+    r"|(?:[ァ-ヶー]{2,}(?:・[ァ-ヶー]{2,})+|[ァ-ヶー]{2,})[一-龥]{2,6}"
+    r"|[一-龥]{2,8}(?:文書|手稿|写本|遺跡|神殿|地上絵|王朝|帝国|事件|鉄柱|電池|地図|加工物)"
+    r"|(?:[ァ-ヶー]{2,}(?:・[ァ-ヶー]{2,})+|[ァ-ヶー]{4,})"
     r"|[一-龥]{3,8}")
 
 # 一般語。記事が存在してしまうので、先に落とす。
@@ -46,13 +51,14 @@ _STOP = {
 # Wikidata では個体は P31 を、クラスは P279 を持つので、そちらで判定する。
 
 
+def _plausible(en_title: str) -> bool:
+    """通信する前に落とせるもの。曖昧さ回避と短すぎる見出し。"""
+    return "(disambiguation)" not in en_title.lower() and len(en_title) >= 3
+
+
 def _usable(en_title: str) -> bool:
     """画像に使える固有名詞か。Wikidataの構造で個体と一般概念を分ける。"""
-    if "(disambiguation)" in en_title.lower():
-        return False
-    if len(en_title) < 3:
-        return False
-    return is_entity(en_title)
+    return _plausible(en_title) and is_entity(en_title)
 
 
 def _get(params: dict, retries: int = 3) -> dict | None:
@@ -70,19 +76,41 @@ def _get(params: dict, retries: int = 3) -> dict | None:
     return None
 
 
+def english_titles(ja_terms: list[str]) -> dict[str, str | None]:
+    """日本語見出しをまとめて英語見出しに直す。
+
+    1語ずつ引くと、候補語の数だけ往復が要る。実測で1区間あたり数十秒かかり、
+    台本1本の処理が1時間を超えた。APIは50件までまとめて受けるので、
+    語の数ではなくバッチ数で効く形にする。
+
+    リダイレクトと正規化で見出しが変わるため、問い合わせた語に戻す対応表を
+    作ってから結果を引き当てる。
+    """
+    out: dict[str, str | None] = {t: None for t in ja_terms}
+    for i in range(0, len(ja_terms), 50):
+        chunk = ja_terms[i:i + 50]
+        d = _get({"action": "query", "prop": "langlinks", "lllang": "en",
+                  "titles": "|".join(chunk), "redirects": 1, "lllimit": "max"})
+        if not d:
+            continue
+        q = d.get("query", {})
+        back: dict[str, str] = {}
+        for kind in ("normalized", "redirects"):
+            for m in q.get(kind, []):
+                back[m["to"]] = back.get(m["from"], m["from"])
+        for page in (q.get("pages") or {}).values():
+            links = page.get("langlinks")
+            if "missing" in page or not links:
+                continue
+            title = page.get("title", "")
+            out[back.get(title, title)] = links[0]["*"]
+        time.sleep(0.3)
+    return out
+
+
 def english_title(ja_term: str) -> str | None:
     """日本語見出し -> 英語見出し。記事が無ければ None。"""
-    d = _get({"action": "query", "prop": "langlinks", "lllang": "en",
-              "titles": ja_term, "redirects": 1})
-    if not d:
-        return None
-    for page in (d.get("query", {}).get("pages") or {}).values():
-        if "missing" in page:
-            return None
-        links = page.get("langlinks")
-        if links:
-            return links[0]["*"]
-    return None
+    return english_titles([ja_term])[ja_term]
 
 
 def candidates(text: str) -> list[str]:
@@ -98,45 +126,55 @@ def candidates(text: str) -> list[str]:
     return uniq
 
 
-# 1区間で試す候補語の上限。固有性の高い順に並べてあるので、上位で当たらない
-# 区間は当たらない。上限が無いと、語が取れない区間ほどAPIを大量に叩く。
-MAX_TRIES_PER_SEGMENT = 8
-
-
 def queries_for_segments(segments: list[str], *, per_segment: int = 1,
-                         pause: float = 0.3,
-                         max_tries: int = MAX_TRIES_PER_SEGMENT) -> list[list[str]]:
+                         pause: float = 0.3) -> list[list[str]]:
     """区間ごとに、英語の検索語を作る。
 
     長い語から試すだけでは、どの区間にも出る背景語が各区間を占めてしまう
     （実測で「紀元前」が全区間に配られた）。その区間にしか出ない語を優先する。
     画は区間ごとに変わってほしいので、欲しいのは長さではなく固有性になる。
+
+    先に全候補を解決してから選ぶ。区間ごとに上位から試して打ち切る形だと、
+    記事の無い複合語が候補の上位を埋めたときに、その下にある使える語まで
+    諦めてしまう（実測で取得できた区間が17から7に落ちた）。
+    問い合わせはまとめて投げるので、全部解決しても往復は数回で済む。
     """
     per_seg = [candidates(seg) for seg in segments]
+    wanted = sorted({t for terms in per_seg for t in terms})
+    print(f"候補語 {len(wanted)}語をまとめて英訳…", flush=True)
+    en_of = english_titles(wanted)
+
+    resolved = sorted({e for e in en_of.values() if e and _plausible(e)})
+    print(f"英語版があった {len(resolved)}語を個体判定…", flush=True)
+    types = entity_types(resolved)
+    usable = {ja: en for ja, en in en_of.items() if en and types.get(en)}
+    meta = {ja for ja, en in usable.items() if is_meta(types[en])}
+    print(f"個体だったのは {len(set(usable.values()))}語"
+          f"（うち器が {len({usable[j] for j in meta})}語）", flush=True)
+
+    # 使える語だけで出現区間数を数える。使えない語の分布は関係ない
     df: dict[str, int] = {}
     for terms in per_seg:
-        for t in set(terms):
+        for t in {t for t in terms if t in usable}:
             df[t] = df.get(t, 0) + 1
     n = max(1, len(segments))
 
-    cache: dict[str, str | None] = {}
     out: list[list[str]] = []
     for terms in per_seg:
         # 半分以上の区間に出る語は背景。区間の画を分ける役に立たない
-        ranked = sorted({t for t in terms if df.get(t, 0) <= max(1, n // 2)},
-                        key=lambda t: (df.get(t, n), -len(t)))
+        # 器（掲載誌・所蔵館・国）は採らない。台本の本文では主題が代名詞で
+        # 受けられ、名前は主張の頭にしか出ない。器を採ると、その区間だけ
+        # 主題から離れた画に差し替わる（実測で本文の途中にネイチャー誌の
+        # 表紙が出た）。語が無い区間として返し、前の主題を引き継がせる。
+        ranked = sorted({t for t in terms
+                         if t in usable and t not in meta and df[t] <= max(1, n // 2)},
+                        key=lambda t: (df[t], -len(t)))
         picked: list[str] = []
-        for term in ranked[:max_tries]:
+        for t in ranked:
+            en = usable[t]
+            if en not in picked:
+                picked.append(en)
             if len(picked) >= per_segment:
                 break
-            if term not in cache:
-                en = english_title(term)
-                time.sleep(pause)
-                cache[term] = en if (en and _usable(en)) else None
-            en = cache[term]
-            if en and en not in picked:
-                picked.append(en)
         out.append(picked)
-        print(f"  区間{len(out):3d}/{len(segments)}  {' / '.join(picked) or '（語なし）'}",
-              flush=True)
     return out

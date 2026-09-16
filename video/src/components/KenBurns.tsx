@@ -31,13 +31,30 @@ export const KenBurns: React.FC<{ shot: Shot; resolve: (s: string) => string }> 
     })
   );
 
-  // ピラーボックス。縦長の素材は 16:9 に cover で敷くと左右が溢れ、
-  // 肖像画の顔や写本の欄外が切れる。幅をその分だけ詰めて全体を見せる。
-  // 詰める量は素材の実寸から build_props 側で決めている。
-  const pad = `${(shot.inset ?? 0) * 100}%`;
+  // 縦長の素材は 16:9 に cover で敷くと左右が溢れ、肖像画の顔や写本の
+  // 欄外が切れる。幅を詰めて全体を見せる。詰める量は素材の実寸から
+  // build_props 側で決めている。
+  const inset = shot.inset ?? 0;
+  const pad = `${inset * 100}%`;
 
   return (
     <AbsoluteFill style={{ backgroundColor: theme.bg, opacity: fade }}>
+      {/* 空いた左右を黒帯で埋めると、縦長の素材が続く区間で画面が
+          細長い窓のようになる。同じ画をぼかして敷き、色をつなげる。 */}
+      {inset > 0 ? (
+        <AbsoluteFill style={{ overflow: "hidden" }}>
+          <Img
+            src={resolve(shot.src)}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              filter: "blur(48px) brightness(0.45) saturate(0.8)",
+              transform: `scale(${scale * 1.2})`,
+            }}
+          />
+        </AbsoluteFill>
+      ) : null}
       {/* AbsoluteFill は width:100% を持つ。left/right だけ指定すると
           幅が縮まず右へずれて溢れるので、width を auto に戻す。 */}
       <AbsoluteFill style={{ overflow: "hidden", left: pad, right: pad, width: "auto" }}>

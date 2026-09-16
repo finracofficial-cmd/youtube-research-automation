@@ -1,65 +1,84 @@
 shots:
 - query: &id001
-  - Ante Christum natum
-- query: *id001
-- query:
-  - Antikythera
-- query: &id002
   - Valerios Stais
-  - Ante Christum natum
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: &id002
+  - Archimedes
+- query: *id002
 - query: *id002
 - query: &id003
-  - Nature (journal)
+  - Vishnu
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
 - query: *id003
 - query: *id003
 - query: &id004
-  - Egypt
+  - Piri Reis
 - query: *id004
 - query: &id005
-  - Archimedes
-  - Ante Christum natum
-- query: *id005
+  - Queen Maud Land
 - query: *id005
 - query: &id006
-  - Vishnu
+  - Alexander the Great
 - query: *id006
 - query: *id006
 - query: *id006
-- query: *id006
-- query:
-  - Baghdad
 - query: &id007
-  - Independent Administrative Institution National Museum
+  - California
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
 - query: *id007
 - query: *id007
 - query: *id007
 - query:
-  - Independent Administrative Institution National Museum
+  - Antikythera
+  - Iron pillar of Delhi
 - query:
-  - Istanbul
-  - Topkapı Palace
+  - Piri Reis map
+  - Coso artifact
+- query:
+  - Baghdad Battery
+- query:
+  - Antikythera mechanism
 - query: &id008
-  - Atlantic Ocean
-- query: *id008
-- query: *id008
+  - Piri Reis map
+  - Baghdad Battery
 - query: *id008
 - query: *id008
 - query: &id009
-  - California
-- query: *id009
-- query: *id009
-- query: *id009
-- query: *id009
-- query:
-  - Ante Christum natum
-- query: &id010
-  - Antikythera
-  - Iron pillar of Delhi
-- query: *id010
-- query: &id011
   - Antikythera mechanism
-  - Iron pillar of Delhi
-- query: *id011
-- query: &id012
-  - Antikythera mechanism
-- query: *id012
+- query: *id009
+- query: *id009
