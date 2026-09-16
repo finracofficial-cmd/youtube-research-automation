@@ -16,6 +16,8 @@ export const shotSchema = z.object({
   to: frame,
   /** 画面隅に出す出典表記。CC素材は表示が要件になることが多い */
   credit: z.string().optional(),
+  /** 画を内側に嵌めて左右を落とす。縦長の資料や、話を切り替えるときに使う */
+  inset: z.number().min(0).max(0.35).default(0),
 });
 
 export const telopSchema = z.object({

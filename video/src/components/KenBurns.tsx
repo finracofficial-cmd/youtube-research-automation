@@ -31,9 +31,14 @@ export const KenBurns: React.FC<{ shot: Shot; resolve: (s: string) => string }> 
     })
   );
 
+  // ピラーボックス。縦長の素材は 16:9 に cover で敷くと左右が溢れ、
+  // 肖像画の顔や写本の欄外が切れる。幅をその分だけ詰めて全体を見せる。
+  // 詰める量は素材の実寸から build_props 側で決めている。
+  const pad = `${(shot.inset ?? 0) * 100}%`;
+
   return (
     <AbsoluteFill style={{ backgroundColor: theme.bg, opacity: fade }}>
-      <AbsoluteFill style={{ overflow: "hidden" }}>
+      <AbsoluteFill style={{ overflow: "hidden", left: pad, right: pad }}>
         <Img
           src={resolve(shot.src)}
           style={{

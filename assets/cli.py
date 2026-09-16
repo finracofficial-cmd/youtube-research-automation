@@ -21,6 +21,7 @@ import yaml
 from .credits import build as build_credits
 from .credits import unlicensed
 from .sources import UA, Asset, search_all
+from .wikipage import page_images
 
 
 def mean_luma(path: Path) -> int | None:
@@ -89,18 +90,22 @@ def cmd_search(args) -> int:
     return 0
 
 
-def _first_downloadable(candidates: list[Asset], stem: Path) -> tuple[Asset, Path] | None:
-    """落とせるものが出るまで候補を順に試す。
+def _candidates(queries: list[str], limit: int) -> tuple[list[Asset], str, bool]:
+    """検索語の並びから候補を作る。記事からの取得を先に試す。
 
-    Wikimedia の巨大なスキャン画像は、サムネイルが用意できず403になることがある
-    （thumburl でも Special:FilePath でも同じ）。URLの組み立て方では解決しないので、
-    次の候補へ進む。1つの検索語に候補は十数件あるので、これで埋まる。
+    検索語はWikipediaの英語見出しなので、そのまま記事を引ける。記事に
+    載っている画像は、定義上その記事の主題のものになる。キーワード検索は
+    語義を区別せず、Archimedes に月のクレーターを返してくるので後回し。
     """
-    for asset in candidates:
-        path = _download(asset, stem)
-        if path:
-            return asset, path
-    return None
+    for q in queries:
+        found = page_images(q, limit=limit)
+        if found:
+            return found, q, False
+    for q in queries:  # 記事に画が無い題材だけ、検索に落とす
+        found, relaxed = search_all(q, per_source=limit)
+        if found:
+            return found, q, True
+    return [], queries[0] if queries else "", False
 
 
 def cmd_fetch(args) -> int:
@@ -109,41 +114,59 @@ def cmd_fetch(args) -> int:
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
 
+    cache: dict[str, tuple[list[Asset], str, bool]] = {}
+    used_rank: dict[str, int] = {}   # 同じ記事が続くカットには別の画を回す
+    downloaded: dict[str, str] = {}  # 同じファイルを二度落とさない
     chosen: list[Asset] = []
     files: list[dict] = []
     for i, shot in enumerate(spec.get("shots", [])):
         raw = shot.get("query") if isinstance(shot, dict) else shot
-        # 1カットに検索語を複数書ける。タイトル一致は取りこぼすので、言い換えを順に試す
         queries = [str(q) for q in (raw if isinstance(raw, list) else [raw])]
-        found: list[Asset] = []
-        relaxed = False
-        query = queries[0]
-        for q in queries:
-            found, relaxed = search_all(q, per_source=args.limit)
-            if found:
-                query = q
-                break
+        key = "|".join(queries)
+        if key not in cache:
+            cache[key] = _candidates(queries, args.limit)
+            time.sleep(0.3)
+        found, query, relaxed = cache[key]
         if not found:
             print(f"[{i:03d}] 見つからず: {' / '.join(queries)}")
             continue
-        got = _first_downloadable(found, out / f"{i:03d}")
-        if got:
-            asset, path = got
-            record = asset.to_dict()
-            record["file"] = path.name  # 実際の拡張子を控える
-            record["query"] = query
-            record["needs_review"] = relaxed
-            files.append(record)
-            chosen.append(asset)
-            flag = " ★要確認" if relaxed else ""
-            print(f"[{i:03d}] {path.suffix[1:]:<5} {asset.license:<16} {query[:28]}{flag}")
-        else:
+
+        # 記事の何枚目から試すかをずらす。同じ話題が続く区間で画が変わる
+        start = used_rank.get(key, 0)
+        ordered = found[start:] + found[:start]
+        used_rank[key] = (start + 1) % len(found)
+
+        asset = path = None
+        for cand in ordered:
+            if cand.title in downloaded:  # 既に手元にある。落とし直さない
+                asset, path = cand, Path(downloaded[cand.title])
+                break
+            got = _download(cand, out / f"{i:03d}")
+            if got:
+                asset, path = cand, got
+                downloaded[cand.title] = str(got)
+                break
+        if not asset or not path:
             print(f"[{i:03d}] 候補{len(found)}件すべて取得失敗: {query}")
-        time.sleep(0.4)
+            continue
+
+        record = asset.to_dict()
+        record["file"] = path.name
+        # どの区間のために選んだ画かを残す。カット数と区間数は一致しないので、
+        # これが無いと並び順で割り当てるしかなく、語りと画がずれる。
+        record["segment"] = i
+        record["n_segments"] = len(spec.get("shots", []))
+        record["query"] = query
+        record["needs_review"] = relaxed
+        files.append(record)
+        chosen.append(asset)
+        flag = " ★要確認" if relaxed else ""
+        print(f"[{i:03d}] {path.name:<8} {asset.license:<16} {query[:26]}{flag}")
+        time.sleep(0.2)
 
     review = [f for f in files if f.get("needs_review")]
     if review:
-        print(f"\n★ 絞り込みを緩めて拾ったカットが {len(review)}件ある。画を必ず目で見ること:")
+        print(f"\n★ 記事から引けず検索に落ちたカットが {len(review)}件ある。画を目で見ること:")
         for f in review:
             print(f"   {f['file']}  {f['title'][:52]}")
 
@@ -155,7 +178,8 @@ def cmd_fetch(args) -> int:
         json.dumps(files, ensure_ascii=False, indent=1), encoding="utf-8")
     credits_path = Path(args.credits or (out / "credits.txt"))
     credits_path.write_text(build_credits(chosen), encoding="utf-8")
-    print(f"\n{len(chosen)}枚確保 -> {out}")
+    distinct = len({f["file"] for f in files})
+    print(f"\n{len(files)}カット / 異なる画像 {distinct}枚 -> {out}")
     print(f"クレジット -> {credits_path}")
     return 0
 

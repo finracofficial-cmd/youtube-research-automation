@@ -61,13 +61,27 @@ def source_labels(manifest: list[dict], shots: list[dict]) -> list[dict]:
 
     CC BY / CC BY-SA は表示が条件なので、ここを自動化しないと
     素材を機械で集めた意味がなくなる。
+
+    カットと manifest を並び順で突き合わせてはいけない。画は時間で
+    引き当てているので、位置で組むと画面に出ている画と違う作者名が出る。
+    表示義務のあるライセンスでそれをやると、表示していないのと同じになる。
     """
+    by_file = {m["file"]: m for m in manifest if m.get("file")}
     out = []
-    for shot, entry in zip(shots, manifest):
+    for shot in shots:
+        entry = by_file.get(str(shot.get("src", "")).removeprefix("shots/"))
+        if not entry:
+            continue
         author = entry.get("author") or ""
         lic = entry.get("license") or ""
         text = f"{author} / {lic}".strip(" /") if author != "不明" else lic
         if not text:
+            continue
+        # 同じ画が続く間は1枚の帯にまとめる。同じ文字が点滅しないように
+        if out and out[-1]["text"] == text and \
+                abs(out[-1]["startSec"] + out[-1]["durationSec"] - shot["startSec"]) < 0.05:
+            out[-1]["durationSec"] = round(
+                out[-1]["durationSec"] + shot["durationSec"], 3)
             continue
         out.append({"startSec": shot["startSec"],
                     "durationSec": shot["durationSec"], "text": text})
@@ -98,6 +112,40 @@ def overlays_from_llm(lines: list[Line], duration: float,
     return props, f"LLM抽出（検証で{r.rejected}件を棄却）"
 
 
+FRAME_AR = 16 / 9
+
+
+def _inset(entry: dict | None) -> float:
+    """縦長の画を左右に余白を取って収める割合。
+
+    16:9に高さで合わせると、縦長の画は横が足りない。埋めようと拡大すると
+    肖像画の顔が切れる。7カットごとに機械的に入れていたのを、実寸で決める。
+    """
+    if not entry:
+        return 0.0
+    w, h = entry.get("width") or 0, entry.get("height") or 0
+    if not w or not h:
+        return 0.0
+    ar = w / h
+    if ar >= FRAME_AR * 0.78:  # ほぼ横長。全画面で問題ない
+        return 0.0
+    return round(min(0.35, (1 - ar / FRAME_AR) / 2), 3)
+
+
+def _for_time(pos: float, manifest: list[dict], n_seg: int) -> dict | None:
+    """画面上の時刻（0-1）に対応する素材を返す。
+
+    素材は台本を等分した区間ごとに選んである。カット数は区間数と一致しない
+    ので、並び順ではなく時間で引き当てないと、語っている話題と画がずれる。
+    """
+    if not manifest:
+        return None
+    if not n_seg:
+        return manifest[min(int(pos * len(manifest)), len(manifest) - 1)]
+    want = pos * n_seg
+    return min(manifest, key=lambda m: abs((m.get("segment", 0)) - want))
+
+
 def build(script: str, duration: float, kind: str, n_claims: int,
           shot_sec: float, narration: str | None, bgm: str | None,
           manifest: list[dict] | None = None, use_llm: bool = False) -> dict:
@@ -125,15 +173,17 @@ def build(script: str, duration: float, kind: str, n_claims: int,
     manifest = manifest or []
     shots = []
     n = max(1, int(duration // shot_sec))
+    n_seg = max((m.get("n_segments") or 0) for m in manifest) if manifest else 0
     for i in range(n):
         start = i * duration / n
         zoom_in = i % 2 == 0
-        src = (f"shots/{manifest[i % len(manifest)]['file']}" if manifest
-               else f"shots/{i:03d}.jpg")
+        entry = _for_time((start + duration / n / 2) / duration, manifest, n_seg)
+        src = f"shots/{entry['file']}" if entry else f"shots/{i:03d}.jpg"
         shots.append({
             "startSec": round(start, 3),
             "durationSec": round(duration / n, 3),
             "src": src,
+            "inset": _inset(entry),
             "from": {"scale": 1.0 if zoom_in else 1.18, "x": 0, "y": 0},
             "to": {"scale": 1.18 if zoom_in else 1.0, "x": 0.2 if zoom_in else -0.2, "y": 0},
         })

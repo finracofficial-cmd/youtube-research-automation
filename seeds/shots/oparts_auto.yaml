@@ -1,0 +1,93 @@
+shots:
+- query: &id001
+  - Out-of-place artifact
+  - Ante Christum natum
+- query: *id001
+- query:
+  - Antikythera
+  - Out-of-place artifact
+- query: &id002
+  - Valerios Stais
+  - Marble
+- query: *id002
+- query: *id002
+- query:
+  - Olympiad
+- query:
+  - Gear ratio
+- query:
+  - Astrological sign
+  - Egypt
+- query:
+  - Out-of-place artifact
+- query: &id003
+  - Archimedes
+  - Reuse
+- query: *id003
+- query:
+  - Chandragupta
+  - Sanskrit
+- query: &id004
+  - Vishnu
+  - Tourism
+- query: *id004
+- query:
+  - Percentage
+- query: &id005
+  - Micrometre
+- query: *id005
+- query:
+  - Baghdad
+- query: &id006
+  - Rock asphalt
+  - Independent Administrative Institution National Museum
+- query: *id006
+- query: *id006
+- query:
+  - Rock asphalt
+  - Seleucia
+- query:
+  - Rock asphalt
+  - Independent Administrative Institution National Museum
+- query:
+  - Istanbul
+  - Osman
+- query:
+  - Out-of-place artifact
+  - East Coast
+- query:
+  - Queen Maud Land
+  - Antarctica
+- query: &id007
+  - Columbus
+- query: *id007
+- query:
+  - History of science
+  - Parchment
+- query: &id008
+  - California
+- query: *id008
+- query:
+  - Insulator (electricity)
+- query:
+  - Washer (hardware)
+  - Collecting
+- query:
+  - Volcanic rock
+  - Sediment
+- query:
+  - Ante Christum natum
+- query:
+  - Antikythera
+  - Iron pillar of Delhi
+- query:
+  - Out-of-place artifact
+- query:
+  - Antikythera mechanism
+  - Iron pillar of Delhi
+- query:
+  - Out-of-place artifact
+- query:
+  - Antikythera mechanism
+- query:
+  - Comment
