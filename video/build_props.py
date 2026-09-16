@@ -69,7 +69,7 @@ def source_labels(manifest: list[dict], shots: list[dict]) -> list[dict]:
     by_file = {m["file"]: m for m in manifest if m.get("file")}
     out = []
     for shot in shots:
-        entry = by_file.get(str(shot.get("src", "")).removeprefix("shots/"))
+        entry = by_file.get(str(shot.get("src", "")).rsplit("/", 1)[-1])
         if not entry:
             continue
         author = entry.get("author") or ""
@@ -151,7 +151,8 @@ def _for_time(pos: float, manifest: list[dict], n_seg: int) -> dict | None:
 
 def build(script: str, duration: float, kind: str, n_claims: int,
           shot_sec: float, narration: str | None, bgm: str | None,
-          manifest: list[dict] | None = None, use_llm: bool = False) -> dict:
+          manifest: list[dict] | None = None, use_llm: bool = False,
+          shots_dir: str = "shots") -> dict:
     lines = [w for s in split_sentences(script) for w in wrap(s)]
     total_chars = sum(len(l) for l in lines) or 1
 
@@ -181,7 +182,8 @@ def build(script: str, duration: float, kind: str, n_claims: int,
         start = i * duration / n
         zoom_in = i % 2 == 0
         entry = _for_time((start + duration / n / 2) / duration, manifest, n_seg)
-        src = f"shots/{entry['file']}" if entry else f"shots/{i:03d}.jpg"
+        src = (f"{shots_dir}/{entry['file']}" if entry
+               else f"{shots_dir}/{i:03d}.jpg")
         shots.append({
             "startSec": round(start, 3),
             "durationSec": round(duration / n, 3),
@@ -234,7 +236,10 @@ def main() -> int:
     props = build(Path(a.script).read_text(encoding="utf-8"), a.duration,
                   a.kind, a.claims, a.shot_sec, a.narration, a.bgm,
                   manifest=load_manifest(Path(a.manifest) if a.manifest else None),
-                  use_llm=a.llm)
+                  use_llm=a.llm,
+                  # 素材の置き場は manifest の場所から決める。決め打ちだと
+                  # 題材を並行して扱えない（public/shots_nazca を指せない）。
+                  shots_dir=(Path(a.manifest).parent.name if a.manifest else "shots"))
     Path(a.out).write_text(json.dumps(props, ensure_ascii=False, indent=1), encoding="utf-8")
     # 部品を足したらここも増やすこと（4種のときの数え漏らしで9件と誤表示した）
     OVERLAY_KEYS = ("quoteCards", "chipStacks", "cardRows", "documentCards",

@@ -35,6 +35,12 @@ _QUOTE_LEAD = re.compile(r"(主張|説明|話|結論|言い分|見方)は(こう
 _LIST_LEAD = re.compile(r"(?P<n>[0-9０-９一二三四五六七八九]+)\s*(つ|種類|点|件)[^。]{0,8}"
                         r"(に分かれる|を並べた|ある|を挙げ)")
 _CAVEAT = re.compile(r"^(ただし|とはいえ|もっとも)")
+# 留保があると予告するだけで中身を言っていない文。カードに出すと
+# 「ただし、と付け加えておきたい」がそのまま画面に載る。
+_EMPTY_CAVEAT = re.compile(
+    r"^(ただし|とはいえ|もっとも)[、。]?\s*$"
+    r"|と(付け加え|断っ|注記し|言っ|added)"
+    r"|^(ただし|とはいえ|もっとも)[、]?(である|だ|です)")
 
 # 数値＋単位。大きな数字の単独提示に使う。
 # 「紀元前1世紀」の「紀元前」を落とすと2000年ずれた別の事実になるので、
@@ -194,7 +200,8 @@ def classify(lines: list[Line]) -> list[Cue]:
                 cues.append(Cue("cardrow", start, dur, "center",
                                 {"count": n, "caption": text.rstrip("。")}))
 
-        if _CAVEAT.search(text):
+        # 留保の中身が書かれている文だけ出す。予告だけの文は飛ばす
+        if _CAVEAT.search(text) and not _EMPTY_CAVEAT.search(text) and len(text) >= 8:
             cues.append(Cue("caveat", start, dur, "right", {"text": text.rstrip("。")}))
 
         m = _RATIO.search(text)

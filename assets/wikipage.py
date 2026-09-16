@@ -249,6 +249,28 @@ def _lead(en_title: str) -> str | None:
     return None
 
 
+# 図解・地図・グラフ。題材として正しくても背景には向かない。英語の
+# ラベルが敷き詰められていて字幕と競り合う。実測でナスカの回に
+# 米地質調査所の地下水断面図が全画面で出た。
+_DIAGRAM = re.compile(
+    r"diagram|schematic|map|chart|graph|plot|figure|infographic|timeline"
+    r"|cross.?section|illustration|drawing|sketch|blueprint|\bplan\b"
+    r"|locator|location|relief|topograph|\.svg$", re.I)
+
+
+def _is_diagram(title: str) -> bool:
+    """図解らしさ。名前に出ない図解もあるので拡張子も見る。
+
+    実測で Groundwater の代表画像が
+    「Groundwater (aquifer, aquitard, 3 type wells).PNG」で、名前には
+    図解と分かる語が無かった。写真はほぼ JPEG で入っているので、
+    PNG/SVG/GIF は図解寄りとして後ろに回す。落とすのではなく順位を下げる。
+    """
+    if _DIAGRAM.search(title):
+        return True
+    return not title.lower().endswith((".jpg", ".jpeg", ".webp"))
+
+
 def page_images(en_title: str, *, limit: int = 6, width: int = 1920) -> list[Asset]:
     """記事に使われている画像を、ライセンスを確かめたうえで返す。"""
     names = _file_names(en_title)
@@ -282,8 +304,8 @@ def page_images(en_title: str, *, limit: int = 6, width: int = 1920) -> list[Ass
             width=int(info.get("thumbwidth") or w or 0),
             height=int(info.get("thumbheight") or h or 0),
         )
-    # 記事の出現順を保ち、代表画像だけ先頭に上げる
+    # 記事の出現順を保ち、代表画像を先頭に、図解を後ろに回す
     ordered = [by_name[n] for n in names if n in by_name]
-    if lead:
-        ordered.sort(key=lambda a: a.title != lead)
+    # 図解は代表画像であっても後ろ。写真のうちで代表画像を先頭にする
+    ordered.sort(key=lambda a: (_is_diagram(a.title), a.title != lead))
     return ordered[:limit]

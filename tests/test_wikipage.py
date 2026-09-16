@@ -178,3 +178,23 @@ def test_meta_matches_whole_words_only():
     assert is_meta(["ocean"])
     assert not is_meta(["city wall"]) or True  # city は器語なので単独なら器
     assert is_meta(["national museum"])
+
+
+def test_diagrams_rank_after_photographs():
+    """図解は題材として正しくても背景には向かない。
+
+    英語のラベルが敷き詰められていて字幕と競り合う。実測でナスカの回に
+    米地質調査所の地下水断面図が全画面で出た。
+    """
+    from assets.wikipage import _is_diagram
+    for name in ["Stonehenge plan.jpg", "Piri Reis Map Translated.svg",
+                 "Wiltshire UK location map.svg", "Cross-section of a well.png",
+                 "Groundwater (aquifer, aquitard, 3 type wells).PNG"]:
+        assert _is_diagram(name), name
+
+
+def test_photographs_are_not_treated_as_diagrams():
+    from assets.wikipage import _is_diagram
+    for name in ["Stonehenge2007 07 30.jpg", "AhuTongariki.JPG",
+                 "Antikythera Fragment A (Front).webp"]:
+        assert not _is_diagram(name), name

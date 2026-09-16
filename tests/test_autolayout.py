@@ -147,3 +147,18 @@ def test_stat_keeps_hiragana_qualifiers():
                        ("高さは7メートルほどある。", "7メートルほど")]:
         stats = [c for c in classify([Line(0.0, 5.0, text)]) if c.kind == "stat"]
         assert stats and stats[0].payload["value"] == want, text
+
+
+def test_caveat_needs_content_not_just_an_announcement():
+    """留保があると予告するだけの文をカードに出さない。
+
+    実測で「ただし、と付け加えておきたい」がそのまま画面に載った。
+    """
+    def has(text):
+        return any(c.kind == "caveat" for c in classify([Line(0.0, 5.0, text)]))
+
+    assert not has("ただし、と付け加えておきたい。")
+    assert not has("ただし、と断っておく。")
+    assert not has("ただし。")
+    assert has("ただし、決着はしていない。")
+    assert has("とはいえ、年代の根拠は薄い。")
