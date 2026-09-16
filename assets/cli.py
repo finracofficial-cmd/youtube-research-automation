@@ -16,6 +16,12 @@ from pathlib import Path
 # 背景として使える最低限の明るさ。透明PNGと暗すぎる写真の両方をここで落とす。
 MIN_MEAN_LUMA = 25
 
+# 1カットで試す候補の上限。候補を全部試すと、巨大なスキャン画像が並ぶ記事に
+# 当たったとき1カットで何分も止まる（実測で Ancient Rome で停滞した）。
+# 候補は代表画像から順に並んでいるので、上位で取れなければ下位でも取れない。
+MAX_TRIES_PER_SHOT = 4
+MAX_SECONDS_PER_SHOT = 45.0
+
 import yaml
 
 from .credits import build as build_credits
@@ -63,7 +69,7 @@ def _download(asset: Asset, stem: Path) -> Path | None:
     """落とせたら、中身に合った拡張子を付けて保存し、そのパスを返す。"""
     try:
         req = urllib.request.Request(asset.url, headers={"User-Agent": UA})
-        data = urllib.request.urlopen(req, timeout=90).read()
+        data = urllib.request.urlopen(req, timeout=30).read()
     except Exception:  # noqa: BLE001 - 落とせない候補は静かに飛ばして次へ
         return None
     if len(data) < 5000:  # 実体のないプレースホルダを掴むことがある
@@ -151,10 +157,15 @@ def cmd_fetch(args) -> int:
         used_rank[key] = (start + 1) % len(found)
 
         asset = path = None
+        began, tries = time.monotonic(), 0
         for cand in ordered:
             if cand.title in downloaded:  # 既に手元にある。落とし直さない
                 asset, path = cand, Path(downloaded[cand.title])
                 break
+            if tries >= MAX_TRIES_PER_SHOT or \
+                    time.monotonic() - began > MAX_SECONDS_PER_SHOT:
+                break
+            tries += 1
             got = _download(cand, out / f"{i:03d}")
             if got:
                 asset, path = cand, got
