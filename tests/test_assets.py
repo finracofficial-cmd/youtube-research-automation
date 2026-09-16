@@ -98,3 +98,31 @@ def test_dark_and_transparent_images_are_rejected(tmp_path):
                         "-y", str(path)], check=True)
     assert mean_luma(dark) < MIN_MEAN_LUMA
     assert mean_luma(bright) >= MIN_MEAN_LUMA
+
+
+def test_generated_images_force_a_declaration_in_the_credits():
+    """申告を呼び出し側の任意にすると書き忘れる。生成物があれば必ず出す。"""
+    gen = Asset(source="generated", title="reconstruction", url="", page_url="",
+                license="AI生成", author="gpt-image-1")
+    text = build_credits([gen, asset("CC0", "-")])
+    assert "AI生成" in text
+    assert "実写・実物ではありません" in text
+
+
+def test_generated_images_are_not_mixed_into_the_licensed_list():
+    gen = Asset(source="generated", title="x", url="", page_url="",
+                license="AI生成", author="gpt-image-1")
+    text = build_credits([gen])
+    assert "パブリックドメイン" not in text
+
+
+def test_generation_requires_an_explicit_key():
+    from assets.generate import GenerationUnavailable, generate
+    import os
+    saved = os.environ.pop("OPENAI_API_KEY", None)
+    try:
+        with pytest.raises(GenerationUnavailable):
+            generate("test", Path("/tmp/x.png"))
+    finally:
+        if saved:
+            os.environ["OPENAI_API_KEY"] = saved

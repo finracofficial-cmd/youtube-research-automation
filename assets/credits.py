@@ -12,8 +12,16 @@ from .sources import Asset
 
 
 def build(assets: list[Asset], *, ai_generated_note: str | None = None) -> str:
-    must = [a for a in assets if a.needs_attribution]
-    free = [a for a in assets if not a.needs_attribution]
+    generated = [a for a in assets if a.source == "generated"]
+    rest = [a for a in assets if a.source != "generated"]
+    must = [a for a in rest if a.needs_attribution]
+    free = [a for a in rest if not a.needs_attribution]
+
+    # 生成画像が入っていたら、申告は呼び出し側の任意ではなく必須にする。
+    # 書き忘れると「一次資料でやっている」という看板が嘘になるため。
+    if generated and not ai_generated_note:
+        ai_generated_note = (
+            f"一部の画像はAI生成です（{len(generated)}点）。実写・実物ではありません。")
 
     lines = ["【画像・資料の出典】", ""]
 
