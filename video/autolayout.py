@@ -46,7 +46,11 @@ _STAT = re.compile(
     r"点|本|人|個|倍|枚|冊|回|度|度目|世紀|語|字|ページ)"
     # 後ろに付く限定。落とすと断定になる。実測で台本の「歯車は30個以上」から
     # 「30個」を大書きしていた。「以上」の一語で意味が変わる。
-    r"(?P<post>以上|以下|超|未満|前後|程度|近く|余り|弱|強)?")
+    # 数値の後ろに付く限定。落とすと断定になる。実測で台本の
+    # 「歯車は30個以上」から「30個」、「2000字を超える」から「2000字」を
+    # 大書きしていた。「を超える」のように助詞を挟む形もある。
+    r"(?P<post>以上|以下|超|未満|前後|程度|近く|余り|あまり|ほど|くらい|ぐらい"
+    r"|弱|強|を超える|を上回る|を下回る|を割る|を切る|に満たない)?")
 
 # 大書きに値しない小さな数。「2枚の歯車」「1人死亡」を巨大表示すると滑稽になる。
 _TRIVIAL_UNITS = {"人", "枚", "本", "個", "点", "回", "冊", "度"}
@@ -87,6 +91,29 @@ def _clip(text: str, n: int) -> str:
         if i >= n // 2:
             return cut[: i + 1].rstrip("、・ ")
     return cut
+
+
+# 文頭の接続。カードの見出しに残ると、文の途中を切り出したように読める。
+_LEAD = re.compile(r"^(?:だから|つまり|しかし|そして|また|ただし|なお|ところが|"
+                   r"それでも|これは|その|この|さらに|やがて|やはり|むしろ)")
+# 見出しの末尾に残る助詞。名詞句で止める。
+_TAIL = re.compile(r"(?:を|は|が|に|で|と|も|へ|の|から|まで|より)$")
+
+
+def _stat_label(text: str, start: int, end: int) -> str:
+    """数字を含む名詞句を見出しにする。
+
+    文をそのまま切ると、文の途中から始まって助詞で終わる断片になる
+    （実測で「だから手元の20枚あまりを」が出た）。文頭の接続を外し、
+    数値の直後で切って、末尾の助詞を落とす。
+    """
+    head = _LEAD.sub("", text[:start].lstrip("　 "))
+    # 直前の区切りから後ろだけを見出しにする
+    for sep in ("、", "。", "「", "）"):
+        if sep in head:
+            head = head.rsplit(sep, 1)[1]
+    label = _TAIL.sub("", (head + text[start:end]).strip())
+    return _clip(label, 22)
 
 
 def _is_trivial(value: str, unit: str) -> bool:
@@ -206,7 +233,7 @@ def classify(lines: list[Line]) -> list[Cue]:
             cues.append(Cue("stat", start, dur, stat_zones[n_stat % len(stat_zones)],
                             {"value": f"{pre}{m.group('v')}{m.group('u')}"
                                       f"{m.group('post') or ''}",
-                             "label": _clip(text, 22)}))
+                             "label": _stat_label(text, m.start(), m.end())}))
             n_stat += 1
         elif len(re.findall(r"[0-9０-９]+", text)) >= 3:
             cues.append(Cue("chips", start, min(dur, 5.0),

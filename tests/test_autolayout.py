@@ -122,3 +122,28 @@ def test_stat_value_is_contained_in_the_line():
         for c in classify([Line(0.0, 5.0, text)]):
             if c.kind == "stat":
                 assert c.payload["value"].replace(" ", "") in text.replace(" ", "")
+
+
+def test_stat_label_is_a_readable_noun_phrase():
+    """文をそのまま切ると、途中から始まって助詞で終わる断片になる。
+
+    実測で「だから手元の20枚あまりを」がカードの見出しに出た。
+    """
+    cases = [
+        ("だから手元の20枚あまりを、順に並べ直した。", "手元の20枚あまり"),
+        ("判明したことを並べる。歯車は30個以上。", "歯車は30個以上"),
+        ("つまり、最大のものは歯が223枚あった。", "最大のものは歯が223枚"),
+        ("この柱は、高さが7メートルほどある。", "高さが7メートルほど"),
+    ]
+    for text, want in cases:
+        stats = [c for c in classify([Line(0.0, 5.0, text)]) if c.kind == "stat"]
+        assert stats, text
+        assert stats[0].payload["label"] == want, (text, stats[0].payload["label"])
+
+
+def test_stat_keeps_hiragana_qualifiers():
+    """「あまり」「ほど」を落とすと、およその数が確定値になる。"""
+    for text, want in [("20枚あまりを数えた。", "20枚あまり"),
+                       ("高さは7メートルほどある。", "7メートルほど")]:
+        stats = [c for c in classify([Line(0.0, 5.0, text)]) if c.kind == "stat"]
+        assert stats and stats[0].payload["value"] == want, text

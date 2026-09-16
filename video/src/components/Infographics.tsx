@@ -51,15 +51,18 @@ export const StatCallout: React.FC<{ stat: Stat }> = ({ stat }) => {
   const opacity = useFade(stat.durationSec);
   const p = useProgress(stat.durationSec, 0.8);
   const shown = stat.value.slice(0, Math.max(1, Math.ceil(stat.value.length * p)));
+  // 「40メートルを超える」のように、限定を含む値は長くなる。限定を削ると
+  // 断定になってしまうので、削らずに字の方を詰める。
+  const size = stat.value.length <= 5 ? 92 : stat.value.length <= 8 ? 66 : 46;
   return (
     <AbsoluteFill style={{ ...zoneStyle(stat.zone), opacity }}>
-      <div style={{ ...panel, padding: "26px 38px", minWidth: 320 }}>
+      <div style={{ ...panel, padding: "26px 38px", minWidth: 320, maxWidth: 620 }}>
         {stat.label ? (
           <div style={{ fontFamily: theme.subtitleFontFamily, fontSize: 21, color: "rgba(244,241,234,.62)", marginBottom: 10 }}>
             {stat.label}
           </div>
         ) : null}
-        <div style={{ fontFamily: theme.fontFamily, fontWeight: 900, fontSize: 92, lineHeight: 1, color: theme.text }}>
+        <div style={{ fontFamily: theme.fontFamily, fontWeight: 900, fontSize: size, lineHeight: 1.1, color: theme.text }}>
           {shown}
         </div>
         {stat.note ? (
