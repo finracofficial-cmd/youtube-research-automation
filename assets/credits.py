@@ -11,7 +11,26 @@ import collections
 from .sources import Asset
 
 
+def _unique(assets: list[Asset]) -> list[Asset]:
+    """同じ素材は1行にまとめる。
+
+    1枚の画は複数のカットで使う。渡されたまま並べると、概要欄に同じ
+    作者名が使用回数ぶん並ぶ。出典ページで同一性を見るが、出典ページを
+    持たない素材もあるので、表示に使う項目まで含めて鍵にする。
+    """
+    seen: set[tuple] = set()
+    out = []
+    for a in assets:
+        key = (a.page_url, a.source, a.title, a.license, a.author)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(a)
+    return out
+
+
 def build(assets: list[Asset], *, ai_generated_note: str | None = None) -> str:
+    assets = _unique(assets)
     generated = [a for a in assets if a.source == "generated"]
     rest = [a for a in assets if a.source != "generated"]
     must = [a for a in rest if a.needs_attribution]

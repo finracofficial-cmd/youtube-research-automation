@@ -126,3 +126,20 @@ def test_generation_requires_an_explicit_key():
     finally:
         if saved:
             os.environ["OPENAI_API_KEY"] = saved
+
+
+def test_credits_list_each_source_once():
+    """1枚の画は複数カットで使う。概要欄に同じ作者名が使用回数ぶん並ばない。"""
+    a = Asset(source="commons", title="X.jpg", url="u", page_url="https://c/X",
+              license="CC BY-SA 4.0", author="Alice")
+    text = build_credits([a, a, a])
+    assert text.count("Alice") == 1
+
+
+def test_credits_keep_distinct_authors_sharing_a_license():
+    a = Asset(source="commons", title="X.jpg", url="u", page_url="https://c/X",
+              license="CC BY 4.0", author="Alice")
+    b = Asset(source="commons", title="Y.jpg", url="u", page_url="https://c/Y",
+              license="CC BY 4.0", author="Bob")
+    text = build_credits([a, b, a, b])
+    assert text.count("Alice") == 1 and text.count("Bob") == 1
