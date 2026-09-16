@@ -14,6 +14,9 @@ import { ChapterCard } from "./components/ChapterCard";
 import {
   BackgroundPlate, CardRow, ChipStack, DocumentCard, QuoteCard, SourceLabel,
 } from "./components/Overlays";
+import {
+  DataChart, GlyphHero, MatrixGrid, PortraitCard, StatCallout, TimelineBar,
+} from "./components/Infographics";
 import { theme } from "./theme";
 
 /** http(s) はそのまま、それ以外は public/ からの相対パスとして解決する。 */
@@ -35,6 +38,12 @@ export const Documentary: React.FC<DocumentaryProps> = ({
   chipStacks,
   cardRows,
   documentCards,
+  stats,
+  portraits,
+  charts,
+  timelines,
+  glyphs,
+  grids,
   backgroundDim,
 }) => {
   const { fps } = useVideoConfig();
@@ -78,6 +87,44 @@ export const Documentary: React.FC<DocumentaryProps> = ({
         <Sequence key={`chips-${i}`} from={secToFrames(stack.startSec, fps)}
           durationInFrames={secToFrames(stack.durationSec, fps)}>
           <ChipStack stack={stack} />
+        </Sequence>
+      ))}
+
+      {/* 情報グラフィック。ゾーンが違えば同時に出る */}
+      {grids.map((g, i) => (
+        <Sequence key={`grid-${i}`} from={secToFrames(g.startSec, fps)}
+          durationInFrames={secToFrames(g.durationSec, fps)}>
+          <MatrixGrid grid={g} />
+        </Sequence>
+      ))}
+      {glyphs.map((g, i) => (
+        <Sequence key={`glyph-${i}`} from={secToFrames(g.startSec, fps)}
+          durationInFrames={secToFrames(g.durationSec, fps)}>
+          <GlyphHero glyph={g} />
+        </Sequence>
+      ))}
+      {charts.map((c, i) => (
+        <Sequence key={`chart-${i}`} from={secToFrames(c.startSec, fps)}
+          durationInFrames={secToFrames(c.durationSec, fps)}>
+          <DataChart chart={c} />
+        </Sequence>
+      ))}
+      {portraits.map((x, i) => (
+        <Sequence key={`portrait-${i}`} from={secToFrames(x.startSec, fps)}
+          durationInFrames={secToFrames(x.durationSec, fps)}>
+          <PortraitCard portrait={x} />
+        </Sequence>
+      ))}
+      {stats.map((x, i) => (
+        <Sequence key={`stat-${i}`} from={secToFrames(x.startSec, fps)}
+          durationInFrames={secToFrames(x.durationSec, fps)}>
+          <StatCallout stat={x} />
+        </Sequence>
+      ))}
+      {timelines.map((t, i) => (
+        <Sequence key={`tl-${i}`} from={secToFrames(t.startSec, fps)}
+          durationInFrames={secToFrames(t.durationSec, fps)}>
+          <TimelineBar timeline={t} />
         </Sequence>
       ))}
 

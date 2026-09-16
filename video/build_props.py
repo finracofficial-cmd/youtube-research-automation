@@ -115,7 +115,7 @@ def build(script: str, duration: float, kind: str, n_claims: int,
 
     overlays = build_overlays(
         [Line(**{k: s[k] for k in ("startSec", "durationSec", "text")}) for s in subtitles],
-        codes=[str(i + 1) for i in range(9)])
+        codes=[str(i + 1) for i in range(9)], duration=duration)
 
     props: dict = {
         "bgmVolume": 0.12, "backgroundDim": 0.5, "shots": shots, "telops": [],
@@ -147,8 +147,10 @@ def main() -> int:
                   a.kind, a.claims, a.shot_sec, a.narration, a.bgm,
                   manifest=load_manifest(Path(a.manifest) if a.manifest else None))
     Path(a.out).write_text(json.dumps(props, ensure_ascii=False, indent=1), encoding="utf-8")
-    n_ov = sum(len(props[k]) for k in
-               ("quoteCards", "chipStacks", "cardRows", "documentCards"))
+    # 部品を足したらここも増やすこと（4種のときの数え漏らしで9件と誤表示した）
+    OVERLAY_KEYS = ("quoteCards", "chipStacks", "cardRows", "documentCards",
+                    "stats", "portraits", "charts", "timelines", "glyphs", "grids")
+    n_ov = sum(len(props[k]) for k in OVERLAY_KEYS)
     print(f"字幕 {len(props['subtitles'])}枚 / カット {len(props['shots'])} / 章 {len(props['chapters'])}")
     print(f"オーバーレイ {n_ov}件 / 出典ラベル {len(props['sourceLabels'])}件")
     print(f"-> {a.out}")

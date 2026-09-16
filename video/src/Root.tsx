@@ -17,6 +17,12 @@ const defaultProps: DocumentaryProps = {
   chipStacks: [],
   cardRows: [],
   documentCards: [],
+  stats: [],
+  portraits: [],
+  charts: [],
+  timelines: [],
+  glyphs: [],
+  grids: [],
   backgroundDim: 0.45,
 };
 

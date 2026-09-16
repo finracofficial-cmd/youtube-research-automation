@@ -52,6 +52,7 @@ export const quoteCardSchema = z.object({
   startSec: z.number().min(0),
   durationSec: z.number().positive(),
   side: z.enum(["left", "right", "center"]).default("left"),
+  zone: z.enum(["left", "right", "center", "lower", "corner"]).default("left"),
   heading: z.string().optional(),
   original: z.string().optional(),
   translation: z.string().optional(),
@@ -88,6 +89,71 @@ export const documentCardSchema = z.object({
   badgeNote: z.string().optional(),
 });
 
+/** 画面のどこを占めるか。同じゾーンの部品は同時に出さない。 */
+export const zoneSchema = z.enum(["left", "right", "center", "lower", "corner"]);
+
+/** 大きな数値の単独提示。「600枚」「約4,726万円」のような見せ方。 */
+export const statSchema = z.object({
+  startSec: z.number().min(0),
+  durationSec: z.number().positive(),
+  value: z.string(),
+  label: z.string().optional(),
+  note: z.string().optional(),
+  zone: zoneSchema.default("right"),
+});
+
+/** 人物のインサート。肖像が無いときは氏名と肩書だけで出す。 */
+export const portraitSchema = z.object({
+  startSec: z.number().min(0),
+  durationSec: z.number().positive(),
+  name: z.string(),
+  role: z.string().optional(),
+  year: z.string().optional(),
+  src: z.string().optional(),
+  zone: zoneSchema.default("left"),
+});
+
+/** 簡易チャート。値は 0..1 の系列。減衰や推移の提示に使う。 */
+export const chartSchema = z.object({
+  startSec: z.number().min(0),
+  durationSec: z.number().positive(),
+  series: z.array(z.number().min(0).max(1)).min(2),
+  readout: z.string().optional(),
+  caption: z.string().optional(),
+  zone: zoneSchema.default("right"),
+});
+
+/** 区切りのある横バー。年代の推移や工程の段階を示す。 */
+export const timelineSchema = z.object({
+  startSec: z.number().min(0),
+  durationSec: z.number().positive(),
+  marks: z.array(z.object({
+    label: z.string(),
+    active: z.boolean().default(false),
+  })).min(2),
+  zone: zoneSchema.default("lower"),
+});
+
+/** 1文字・1記号を画面いっぱいに出す。 */
+export const glyphSchema = z.object({
+  startSec: z.number().min(0),
+  durationSec: z.number().positive(),
+  glyph: z.string(),
+  caption: z.string().optional(),
+  zone: zoneSchema.default("center"),
+});
+
+/** 格子。文字頻度表や対応表の見せ方。 */
+export const gridSchema = z.object({
+  startSec: z.number().min(0),
+  durationSec: z.number().positive(),
+  cols: z.number().int().min(2).max(24).default(12),
+  rows: z.number().int().min(2).max(16).default(6),
+  filled: z.number().min(0).max(1).default(0.6),
+  caption: z.string().optional(),
+  zone: zoneSchema.default("center"),
+});
+
 export const documentarySchema = z.object({
   /** ナレーション音声。無い場合は無音で尺だけ確保する */
   narration: z.string().optional(),
@@ -102,6 +168,12 @@ export const documentarySchema = z.object({
   chipStacks: z.array(chipStackSchema).default([]),
   cardRows: z.array(cardRowSchema).default([]),
   documentCards: z.array(documentCardSchema).default([]),
+  stats: z.array(statSchema).default([]),
+  portraits: z.array(portraitSchema).default([]),
+  charts: z.array(chartSchema).default([]),
+  timelines: z.array(timelineSchema).default([]),
+  glyphs: z.array(glyphSchema).default([]),
+  grids: z.array(gridSchema).default([]),
   /** 背景の落とし込み。0 で素のまま、1 で真っ暗 */
   backgroundDim: z.number().min(0).max(1).default(0.45),
 });
@@ -116,3 +188,10 @@ export type QuoteCard = z.infer<typeof quoteCardSchema>;
 export type ChipStack = z.infer<typeof chipStackSchema>;
 export type CardRow = z.infer<typeof cardRowSchema>;
 export type DocumentCard = z.infer<typeof documentCardSchema>;
+export type Zone = z.infer<typeof zoneSchema>;
+export type Stat = z.infer<typeof statSchema>;
+export type Portrait = z.infer<typeof portraitSchema>;
+export type Chart = z.infer<typeof chartSchema>;
+export type Timeline = z.infer<typeof timelineSchema>;
+export type Glyph = z.infer<typeof glyphSchema>;
+export type Grid = z.infer<typeof gridSchema>;
