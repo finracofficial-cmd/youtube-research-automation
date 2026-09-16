@@ -1,0 +1,81 @@
+import sys
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from assets.credits import build as build_credits  # noqa: E402
+from assets.credits import unlicensed  # noqa: E402
+from assets.sources import Asset, _clean, license_ok, title_matches  # noqa: E402
+from assets.cli import _sniff_ext  # noqa: E402
+
+
+def asset(license="CC BY-SA 4.0", author="Someone", source="commons"):
+    return Asset(source=source, title="t", url="u", page_url="p",
+                 license=license, author=author)
+
+
+def test_irrelevant_hit_is_rejected():
+    """実測で "Baghdad battery" にバグダッドの米兵の写真が返ってきた回帰。"""
+    assert not title_matches("Flickr - The U.S. Army - Night patrol in Baghdad.jpg",
+                             "Baghdad battery")
+    assert title_matches("Baghdad Battery replica.jpg", "Baghdad battery")
+
+
+def test_head_keyword_is_mandatory():
+    assert not title_matches("Delhi metro station.jpg", "Iron pillar Delhi")
+    assert title_matches("Iron Pillar Delhi closeup.jpg", "Iron pillar Delhi")
+
+
+def test_relaxed_match_requires_only_the_head():
+    assert title_matches("Ottoman Empire scenery.jpg", "Ottoman portolan chart", min_ratio=0.0)
+    assert not title_matches("Ottoman Empire scenery.jpg", "Ottoman portolan chart")
+
+
+@pytest.mark.parametrize("name,ok", [
+    ("Public domain", True), ("CC0", True), ("CC BY 4.0", True), ("CC BY-SA 3.0", True),
+    ("CC BY-NC 4.0", False), ("CC BY-ND 4.0", False), ("Fair use", False), ("", False),
+])
+def test_only_reusable_licenses_pass(name, ok):
+    assert license_ok(name) is ok
+
+
+def test_duplicated_metadata_text_is_folded():
+    """extmetadata は同じ語を二重に返すことがある。"""
+    assert _clean("<a>Unknown author</a>Unknown author") == "Unknown author"
+    assert _clean("<span>Jane Doe</span>") == "Jane Doe"
+
+
+def test_attribution_is_required_only_for_cc_by():
+    assert asset("CC BY-SA 4.0").needs_attribution
+    assert asset("CC BY 4.0").needs_attribution
+    assert not asset("Public domain").needs_attribution
+    assert not asset("CC0").needs_attribution
+
+
+def test_credits_name_cc_authors_and_group_the_rest():
+    text = build_credits([asset("CC BY-SA 4.0", "Aiwok"), asset("Public domain", "-"),
+                          asset("CC0", "-")])
+    assert "Aiwok — CC BY-SA 4.0" in text
+    assert "Wikimedia Commons（2点）" in text
+
+
+def test_credits_can_declare_ai_generated_footage():
+    text = build_credits([asset("CC0", "-")], ai_generated_note="0章の再現映像はAI生成")
+    assert "AI生成" in text and "0章の再現映像はAI生成" in text
+
+
+def test_unlicensed_assets_are_surfaced():
+    assert len(unlicensed([asset(""), asset("CC0")])) == 1
+
+
+@pytest.mark.parametrize("head,ext", [
+    (b"\xff\xd8\xff\xe0", ".jpg"),
+    (b"\x89PNG\r\n\x1a\n", ".png"),
+    (b"RIFF????WEBPVP8 ", ".webp"),
+    (b"GIF89a....", ".gif"),
+    (b"not an image at all", ""),
+])
+def test_extension_comes_from_the_bytes_not_the_url(head, ext):
+    """Commons は .jpg という名前で PNG や WebP を返す。"""
+    assert _sniff_ext(head) == ext
