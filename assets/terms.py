@@ -35,6 +35,9 @@ _STOP = {
     "問題", "方法", "状態", "関係", "世界", "日本", "人間", "時代", "年代",
     "チャンネル", "一次資料", "分解能", "考古学", "都市伝説", "研究者", "専門家",
     "可能性", "研究所", "大学", "博物館", "図書館", "報告書", "参考文献",
+    # 暦の表記。記事はあるが題材ではない。実測で「紀元前」が
+    # Ante Christum natum として全区間に配られた。
+    "紀元前", "西暦", "世紀", "年代", "今世紀", "前世紀",
 }
 
 # 英語の見出しが一般概念だと、画像検索でも記事からでも題材と無関係な画が返る。
@@ -99,21 +102,33 @@ def queries_for_segments(segments: list[str], *, per_segment: int = 1,
                          pause: float = 0.3) -> list[list[str]]:
     """区間ごとに、英語の検索語を作る。
 
-    区間から候補語を長い順に試し、Wikipediaに記事があったものを採る。
-    見つからない区間は空リストを返す（呼び出し側で前の語を引き継ぐ）。
+    長い語から試すだけでは、どの区間にも出る背景語が各区間を占めてしまう
+    （実測で「紀元前」が全区間に配られた）。その区間にしか出ない語を優先する。
+    画は区間ごとに変わってほしいので、欲しいのは長さではなく固有性になる。
     """
+    per_seg = [candidates(seg) for seg in segments]
+    df: dict[str, int] = {}
+    for terms in per_seg:
+        for t in set(terms):
+            df[t] = df.get(t, 0) + 1
+    n = max(1, len(segments))
+
     cache: dict[str, str | None] = {}
     out: list[list[str]] = []
-    for seg in segments:
+    for terms in per_seg:
+        # 半分以上の区間に出る語は背景。区間の画を分ける役に立たない
+        ranked = sorted({t for t in terms if df.get(t, 0) <= max(1, n // 2)},
+                        key=lambda t: (df.get(t, n), -len(t)))
         picked: list[str] = []
-        for term in candidates(seg):
+        for term in ranked:
             if len(picked) >= per_segment:
                 break
             if term not in cache:
-                cache[term] = english_title(term)
+                en = english_title(term)
                 time.sleep(pause)
+                cache[term] = en if (en and _usable(en)) else None
             en = cache[term]
-            if en and _usable(en) and en not in picked:
+            if en and en not in picked:
                 picked.append(en)
         out.append(picked)
     return out

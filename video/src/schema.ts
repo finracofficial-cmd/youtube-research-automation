@@ -26,6 +26,8 @@ export const telopSchema = z.object({
   text: z.string(),
   /** impact = 赤の大字、plain = 白の中字 */
   variant: z.enum(["impact", "plain"]).default("plain"),
+  /** 空き時間を埋める語句テロップは upper に置き、画の中心を塞がない */
+  zone: z.enum(["center", "upper", "lower"]).default("center"),
 });
 
 export const subtitleSchema = z.object({
@@ -54,7 +56,7 @@ export const quoteCardSchema = z.object({
   startSec: z.number().min(0),
   durationSec: z.number().positive(),
   side: z.enum(["left", "right", "center"]).default("left"),
-  zone: z.enum(["left", "right", "center", "lower", "corner"]).default("left"),
+  zone: z.enum(["left", "right", "center", "upper", "lower", "corner"]).default("left"),
   heading: z.string().optional(),
   original: z.string().optional(),
   translation: z.string().optional(),
@@ -92,7 +94,7 @@ export const documentCardSchema = z.object({
 });
 
 /** 画面のどこを占めるか。同じゾーンの部品は同時に出さない。 */
-export const zoneSchema = z.enum(["left", "right", "center", "lower", "corner"]);
+export const zoneSchema = z.enum(["left", "right", "center", "upper", "lower", "corner"]);
 
 /** 大きな数値の単独提示。「600枚」「約4,726万円」のような見せ方。 */
 export const statSchema = z.object({

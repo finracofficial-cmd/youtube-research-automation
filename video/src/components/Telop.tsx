@@ -1,9 +1,10 @@
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import type { Telop as TelopType } from "../schema";
+import { zoneStyle } from "./Infographics";
 import { theme } from "../theme";
 
-/** 強調したい一言を画面中央に出す。数字や結論の提示に使う。 */
+/** 強調したい一言を出す。center は結論の提示、upper は空き時間を埋める語句。 */
 export const Telop: React.FC<{ telop: TelopType }> = ({ telop }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -19,8 +20,7 @@ export const Telop: React.FC<{ telop: TelopType }> = ({ telop }) => {
   return (
     <AbsoluteFill
       style={{
-        justifyContent: "center",
-        alignItems: "center",
+        ...zoneStyle(telop.zone),
         opacity: Math.min(enter, exit),
       }}
     >

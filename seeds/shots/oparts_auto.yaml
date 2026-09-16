@@ -1,93 +1,65 @@
 shots:
 - query: &id001
-  - Out-of-place artifact
   - Ante Christum natum
 - query: *id001
 - query:
   - Antikythera
-  - Out-of-place artifact
 - query: &id002
   - Valerios Stais
-  - Marble
+  - Ante Christum natum
 - query: *id002
-- query: *id002
-- query:
-  - Olympiad
-- query:
-  - Gear ratio
-- query:
-  - Astrological sign
-  - Egypt
-- query:
-  - Out-of-place artifact
 - query: &id003
-  - Archimedes
-  - Reuse
+  - Nature (journal)
 - query: *id003
-- query:
-  - Chandragupta
-  - Sanskrit
+- query: *id003
 - query: &id004
-  - Vishnu
-  - Tourism
+  - Egypt
 - query: *id004
-- query:
-  - Percentage
 - query: &id005
-  - Micrometre
+  - Archimedes
+  - Ante Christum natum
 - query: *id005
+- query: *id005
+- query: &id006
+  - Vishnu
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
 - query:
   - Baghdad
-- query: &id006
-  - Rock asphalt
+- query: &id007
   - Independent Administrative Institution National Museum
-- query: *id006
-- query: *id006
+- query: *id007
+- query: *id007
+- query: *id007
 - query:
-  - Rock asphalt
-  - Seleucia
-- query:
-  - Rock asphalt
   - Independent Administrative Institution National Museum
 - query:
   - Istanbul
-  - Osman
-- query:
-  - Out-of-place artifact
-  - East Coast
-- query:
-  - Queen Maud Land
-  - Antarctica
-- query: &id007
-  - Columbus
-- query: *id007
-- query:
-  - History of science
-  - Parchment
+  - Topkapı Palace
 - query: &id008
-  - California
+  - Atlantic Ocean
 - query: *id008
-- query:
-  - Insulator (electricity)
-- query:
-  - Washer (hardware)
-  - Collecting
-- query:
-  - Volcanic rock
-  - Sediment
+- query: *id008
+- query: *id008
+- query: *id008
+- query: &id009
+  - California
+- query: *id009
+- query: *id009
+- query: *id009
+- query: *id009
 - query:
   - Ante Christum natum
-- query:
+- query: &id010
   - Antikythera
   - Iron pillar of Delhi
-- query:
-  - Out-of-place artifact
-- query:
+- query: *id010
+- query: &id011
   - Antikythera mechanism
   - Iron pillar of Delhi
-- query:
-  - Out-of-place artifact
-- query:
+- query: *id011
+- query: &id012
   - Antikythera mechanism
-- query:
-  - Comment
+- query: *id012

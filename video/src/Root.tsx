@@ -9,7 +9,7 @@ const FPS = 30;
 const defaultProps: DocumentaryProps = {
   bgmVolume: 0.12,
   shots: [],
-  telops: [{ startSec: 0, durationSec: 3, text: "props.json を渡してください", variant: "plain" }],
+  telops: [{ startSec: 0, durationSec: 3, text: "props.json を渡してください", variant: "plain", zone: "center" }],
   subtitles: [],
   chapters: [],
   sourceLabels: [],

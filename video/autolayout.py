@@ -24,6 +24,7 @@ MAX_DURATION = 7.5
 MAX_CONCURRENT = 3      # 同時に出す部品の上限。これ以上は読めない
 ZONE_GAP = 0.4          # 同じゾーンを使い回すまでの最低間隔
 MAX_HOLD = 16.0         # 1つの部品を出しっぱなしにできる上限
+TARGET_COVERAGE = 0.67  # 参考動画の実測。埋めきらずここで止める
 
 _DECLARATION = re.compile(r"当チャンネル")
 
@@ -60,7 +61,7 @@ _RATIO = re.compile(r"([0-9０-９]+(?:\.[0-9０-９]+)?)\s*(パーセント|％
 _YEAR = re.compile(r"([0-9０-９]{3,4})年")
 # 人物。カタカナの氏名か、漢字姓＋敬称なし＋役割語
 _PERSON = re.compile(
-    r"(?P<name>[ァ-ヶー]{3,}(?:・[ァ-ヶー]{2,})*|[一-龥]{2,4})"
+    r"(?P<name>(?:[ァ-ヶー]{2,}(?:・[ァ-ヶー]{2,})+|[ァ-ヶー]{3,})|[一-龥]{2,4})"
     r"(?:という|は|が|も)?[^。]{0,10}?"
     r"(?P<role>考古学者|天文学者|数学者|物理学者|言語学者|歴史学者|研究者|教授|"
     r"技師|発明家|提督|探検家|軍人|司祭|作家|記者|学者)")
@@ -253,12 +254,16 @@ def to_props(cues: list[Cue], codes: list[str] | None = None) -> dict:
     out: dict[str, list] = {
         "quoteCards": [], "chipStacks": [], "cardRows": [], "documentCards": [],
         "stats": [], "portraits": [], "charts": [], "timelines": [], "glyphs": [], "grids": [],
+        "telops": [],
     }
     for cue in cues:
         base = {"startSec": round(cue.startSec, 3), "durationSec": round(cue.durationSec, 3)}
         z = {"zone": cue.zone}
         p = cue.payload
-        if cue.kind == "document":
+        if cue.kind == "telop":
+            out["telops"].append({**base, "text": p["text"],
+                                  "variant": "plain", "zone": cue.zone})
+        elif cue.kind == "document":
             out["documentCards"].append({**base, "venue": f"{p['venue']} {p['year']}".strip(),
                                          "title": p["title"], "badge": "一次資料"})
         elif cue.kind == "quote":
@@ -293,6 +298,113 @@ def to_props(cues: list[Cue], codes: list[str] | None = None) -> dict:
     return out
 
 
+# 語句テロップ。ナレーションから切り出した連続部分文字列だけを出す。
+_PHRASE = re.compile(
+    r"「([^」]{2,16})」"                      # 鉤括弧はそのまま見出しになる
+    # 長い複合語を先に試す。「ヴォイニッチ手稿」を「ヴォイニッチ」より優先する。
+    # 交替は左から順に試され、先に当たった枝がその位置を消費してしまう。
+    r"|((?:[ァ-ヶー]{2,}(?:・[ァ-ヶー]{2,})+|[ァ-ヶー]{3,})(?:島|山|川|海|人|語|族)?の[一-龥]{2,8})"
+    r"|((?:[ァ-ヶー]{2,}(?:・[ァ-ヶー]{2,})+|[ァ-ヶー]{3,})[一-龥]{2,6})"
+    r"|([一-龥]{2,8}(?:文書|手稿|写本|遺跡|神殿|地上絵|王朝|帝国|事件|鉄柱|電池|地図))"
+    r"|((?:[ァ-ヶー]{2,}(?:・[ァ-ヶー]{2,})+|[ァ-ヶー]{4,}))"
+    r"|([一-龥]{3,6})")
+
+# どの台本にも出るので、出しても情報が増えない語
+_FLAT = {"可能性", "研究者", "専門家", "一次資料", "当チャンネル", "説明", "解説",
+         "考古学", "実際", "結論", "以上", "以下", "現在", "当時", "重要", "存在",
+         "報告", "確認", "指摘", "主張", "記録", "内容", "部分", "場合", "結果",
+         "理由", "意味", "必要", "問題", "状態", "関係", "世界", "人間", "時代"}
+
+
+# 語句の直後に来てよい文字。これ以外が続くなら語の途中で切れている。
+# 実測で「比較的新しい」から「比較的新」が出た。漢字の連なりだけを見ると、
+# 送り仮名のある語はどこで切っても漢字として成立してしまう。
+_BOUNDARY = re.compile(r"[はがをにでとのもやへ、。！？「」（）\s]|という|によ|から|まで|など|だっ|であ|$")
+
+
+def _ends_cleanly(text: str, end: int) -> bool:
+    return bool(_BOUNDARY.match(text[end:end + 3]))
+
+
+def phrase(text: str) -> str | None:
+    """その行から、画面に出す語句を選ぶ。
+
+    行の連続部分文字列しか返さない。言い換えたり要約したりすると、
+    音声と食い違う余地ができる。逐語なら、少なくとも矛盾はしない。
+    """
+    best = None
+    for m in _PHRASE.finditer(text):
+        got = next((g for g in m.groups() if g), None)
+        if not got or got in _FLAT:
+            continue
+        # 鉤括弧以外は、語の切れ目で終わっているか確かめる
+        if m.group(1) is None and not _ends_cleanly(text, m.end()):
+            continue
+        if best is None or len(got) > len(best):
+            best = got
+    if best is None or best not in text:  # 念のため。逐語でなければ出さない
+        return None
+    return best
+
+
+def fill_gaps(cues: list[Cue], lines: list[Line], duration: float,
+              min_gap: float = MIN_DURATION,
+              target: float = TARGET_COVERAGE) -> list[Cue]:
+    """部品が何も無い時間帯に、語句テロップを置く。
+
+    データ由来の部品は、台本に根拠となる値がある所にしか出せない。
+    そこだけ埋めた結果、被覆率は42%で頭打ちになった（参考は67%）。
+    残りを埋めているのは、参考動画では語りの語句そのものの大字だった。
+    逐語なので音声と矛盾せず、密度だけを上げられる。
+    """
+    spans = sorted((c.startSec, c.endSec) for c in cues)
+    merged: list[list[float]] = []
+    for a, b in spans:
+        if merged and a <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], b)
+        else:
+            merged.append([a, b])
+
+    gaps: list[tuple[float, float]] = []
+    at = 0.0
+    for a, b in merged:
+        if a - at >= min_gap:
+            gaps.append((at, a))
+        at = max(at, b)
+    if duration - at >= min_gap:
+        gaps.append((at, duration))
+
+    out = list(cues)
+    # 参考動画は67%で、9%は何も載っていなかった。埋めきると密度が逆に外れる。
+    filled = coverage(cues, duration) * duration
+    budget = max(0.0, target * duration - filled)
+    for gs, ge in gaps:
+        if budget < min_gap:
+            break
+        cursor = gs
+        while ge - cursor >= min_gap:
+            # その時間帯に読まれている行から語句を採る
+            here = [l for l in lines
+                    if l.startSec < ge and l.startSec + l.durationSec > cursor]
+            got = next((w for l in here if (w := phrase(l.text))), None)
+            if not got:
+                break
+            dur = min(MAX_DURATION, ge - cursor)
+            dur = min(dur, budget)
+            if dur < min_gap:
+                break
+            # 同じ語を続けて出さない。画面が止まって見える
+            if out and out[-1].kind == "telop" and out[-1].payload["text"] == got:
+                cursor += dur + ZONE_GAP
+                continue
+            out.append(Cue(kind="telop", startSec=round(cursor, 3),
+                           durationSec=round(dur, 3), zone="upper",
+                           payload={"text": got}))
+            budget -= dur
+            cursor += dur + ZONE_GAP
+    return out
+
+
 def coverage(cues: list[Cue], duration: float) -> float:
     """オーバーレイが載っている時間の割合。参考動画の実測は0.67。"""
     spans = sorted((c.startSec, c.endSec) for c in cues)
@@ -308,4 +420,5 @@ def coverage(cues: list[Cue], duration: float) -> float:
 def build(lines: list[Line], codes: list[str] | None = None,
           duration: float | None = None) -> dict:
     total = duration or (lines[-1].startSec + lines[-1].durationSec if lines else 0.0)
-    return to_props(hold(schedule(classify(lines)), total), codes)
+    cues = hold(schedule(classify(lines)), total)
+    return to_props(fill_gaps(cues, lines, total), codes)

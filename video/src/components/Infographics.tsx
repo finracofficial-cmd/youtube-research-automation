@@ -10,6 +10,8 @@ export const zoneStyle = (zone: Zone): React.CSSProperties => {
       return { alignItems: "flex-start", justifyContent: "center", padding: "0 0 0 72px" };
     case "right":
       return { alignItems: "flex-end", justifyContent: "center", padding: "0 72px 0 0" };
+    case "upper":
+      return { alignItems: "center", justifyContent: "flex-start", padding: "150px 90px 0 90px" };
     case "lower":
       return { alignItems: "center", justifyContent: "flex-end", padding: "0 0 190px 0" };
     case "corner":
