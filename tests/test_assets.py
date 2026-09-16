@@ -162,3 +162,22 @@ def test_compound_proper_nouns_are_kept_whole():
     assert "ピリ・レイスの地図" in candidates("ピリ・レイスの地図が見つかった。")
     assert "アンティキティラ島の機械" in candidates("アンティキティラ島の機械の話。")
     assert "コソ加工物" in candidates("コソ加工物は失われた。")
+
+
+def test_carry_forward_fills_a_segment_with_no_asset():
+    """素材の無い区間を落とすと画の無い時間ができる。
+
+    実測で、通信に失敗した回に20区間が manifest から丸ごと欠けた。
+    """
+    from assets.cli import _carry
+    files = [{"file": "005.jpg", "segment": 5, "license": "CC0"}]
+    assert _carry(files, 6)
+    assert files[-1]["file"] == "005.jpg"
+    assert files[-1]["segment"] == 6 and files[-1]["carried"] is True
+
+
+def test_carry_forward_does_nothing_at_the_very_start():
+    """冒頭は引き継ぐ先が無い。ここは後から遡って埋める。"""
+    from assets.cli import _carry
+    files: list[dict] = []
+    assert not _carry(files, 0) and files == []

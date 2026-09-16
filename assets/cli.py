@@ -140,6 +140,18 @@ def _candidates(queries: list[str], limit: int) -> tuple[list[Asset], str, bool]
     return uniq, first or (queries[0] if queries else ""), not from_articles
 
 
+def _carry(files: list[dict], segment: int) -> bool:
+    """直前に取れた画をこの区間にも当てる。取れていなければ偽。
+
+    空のカットは黒画面になる。素材が無い区間は、題材の合った直前の画を
+    続けて使う方がよい。
+    """
+    if not files:
+        return False
+    files.append({**files[-1], "segment": segment, "carried": True})
+    return True
+
+
 def cmd_fetch(args) -> int:
     """カットごとの検索語リストから、素材を1枚ずつ確保する。"""
     spec = yaml.safe_load(Path(args.spec).read_text(encoding="utf-8"))
@@ -160,7 +172,12 @@ def cmd_fetch(args) -> int:
             time.sleep(0.3)
         found, query, relaxed = cache[key]
         if not found:
-            print(f"[{i:03d}] 見つからず: {' / '.join(queries)}")
+            # 候補が1件も無い場合も引き継ぐ。ここを落とすと区間ごと消え、
+            # 画の無い時間ができる（通信に失敗した回で20区間が欠けた）。
+            if _carry(files, i):
+                print(f"[{i:03d}] 候補なし。直前の画を引き継ぐ: {queries[0]}")
+            else:
+                print(f"[{i:03d}] 見つからず: {' / '.join(queries)}")
             continue
 
         # 記事の何枚目から試すかをずらす。同じ話題が続く区間で画が変わる
@@ -185,11 +202,7 @@ def cmd_fetch(args) -> int:
                 break
         if not asset or not path:
             # 空のカットは黒画面になる。直前に取れた画を引き継ぐ
-            if files:
-                prev = dict(files[-1])
-                prev["segment"] = i
-                prev["carried"] = True
-                files.append(prev)
+            if _carry(files, i):
                 print(f"[{i:03d}] 取得失敗。直前の画を引き継ぐ: {query}")
             else:
                 print(f"[{i:03d}] 候補{len(found)}件すべて取得失敗: {query}")
