@@ -17,8 +17,8 @@ shots:
 - query:
   - Pelican
 - query: &id004
-  - Pelican
   - Andean condor
+  - Pelican
 - query: *id004
 - query: *id004
 - query: *id004
@@ -50,7 +50,6 @@ shots:
   - Stonehenge
   - Computer
 - query: &id009
-  - National Geographic Society
   - Stonehenge
 - query: *id009
 - query: *id009

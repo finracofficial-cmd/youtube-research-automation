@@ -1,77 +1,74 @@
 shots:
 - query: &id001
-  - Shipwrecking
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query:
   - Valerios Stais
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
 - query: &id002
-  - Shipwrecking
-- query: *id002
-- query: *id002
-- query: *id002
-- query: *id002
-- query: *id002
-- query: *id002
-- query: *id002
-- query: *id002
-- query: *id002
+  - Archimedes
 - query: *id002
 - query: *id002
 - query: &id003
-  - Archimedes
-- query: *id003
+  - Vishnu
 - query: *id003
 - query: &id004
-  - Vishnu
+  - Indian Institutes of Technology
+- query: *id004
+- query: *id004
+- query: *id004
+- query: *id004
+- query: *id004
+- query: *id004
+- query: *id004
+- query: *id004
+- query: *id004
+- query: *id004
+- query: *id004
 - query: *id004
 - query: &id005
-  - Indian Institutes of Technology
-- query: *id005
-- query: *id005
-- query: *id005
-- query: *id005
-- query: *id005
-- query: *id005
-- query: *id005
-- query: *id005
-- query: *id005
-- query: *id005
-- query: *id005
-- query: *id005
-- query: &id006
   - Seleucia
-- query: *id006
-- query: *id006
+- query: *id005
+- query: *id005
 - query:
   - Istanbul
   - Topkapı Palace
-- query: &id007
-  - Piri Reis
+- query: &id006
   - Ottoman Empire
-- query: *id007
-- query: &id008
+  - Piri Reis
+- query: *id006
+- query: &id007
   - Queen Maud Land
   - Antarctica
+- query: *id007
+- query: &id008
+  - Alexander the Great
+- query: *id008
+- query: *id008
 - query: *id008
 - query: &id009
-  - Alexander the Great
-- query: *id009
-- query: *id009
-- query: *id009
-- query: &id010
   - California
-- query: *id010
-- query: *id010
-- query: *id010
-- query: &id011
-  - Insulator (electricity)
-- query: *id011
-- query: *id011
-- query: *id011
-- query: *id011
+- query: *id009
+- query: *id009
+- query: *id009
+- query: *id009
+- query: *id009
+- query: *id009
+- query: *id009
+- query: *id009
 - query:
   - Antikythera
   - Iron pillar of Delhi
@@ -82,12 +79,12 @@ shots:
   - Baghdad Battery
 - query:
   - Antikythera mechanism
-- query: &id012
+- query: &id010
   - Piri Reis map
   - Baghdad Battery
-- query: *id012
-- query: *id012
-- query: &id013
+- query: *id010
+- query: *id010
+- query: &id011
   - Antikythera mechanism
-- query: *id013
-- query: *id013
+- query: *id011
+- query: *id011
