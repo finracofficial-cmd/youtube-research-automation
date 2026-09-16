@@ -242,3 +242,22 @@ def test_organizations_are_containers_not_subjects():
                     "publishing house"])
     assert is_meta(["national museum"])
     assert not is_meta(["geoglyph", "archaeological site"])
+
+
+def test_unreachable_is_not_the_same_as_no_images(monkeypatch):
+    """APIに届かなかったのを「画が無い」と同じ扱いにすると、黙って
+    キーワード検索に落ちる。検索は語義を区別しないので、通信が詰まった
+    ぶんだけ題材と食い違う画が増える。
+
+    実測で、続けて3テーマ取得した3本目で要確認が23件に跳ねた。
+    """
+    import pytest
+    import assets.wikipage as wp
+
+    monkeypatch.setattr(wp, "_get", lambda *a, **k: None)
+    with pytest.raises(wp.Unreachable):
+        wp.page_images("Stonehenge")
+
+    # 記事はあるが画が無い場合は、例外ではなく空リスト
+    monkeypatch.setattr(wp, "_get", lambda *a, **k: {"parse": {"images": []}})
+    assert wp.page_images("Someone With No Images") == []

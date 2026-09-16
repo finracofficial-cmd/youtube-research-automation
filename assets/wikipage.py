@@ -56,7 +56,18 @@ _ABSTRACT_TYPE = (
 )
 
 
+# 直前の呼び出しからの最低間隔。連続で叩くと 429 が返り、その分だけ
+# 記事から画を引けずに検索へ落ちる。待つ方が結果として速い。
+_MIN_INTERVAL = 0.35
+_last_call = 0.0
+
+
 def _get(api: str, params: dict, retries: int = 5) -> dict | None:
+    global _last_call
+    wait = _MIN_INTERVAL - (time.monotonic() - _last_call)
+    if wait > 0:
+        time.sleep(wait)
+    _last_call = time.monotonic()
     url = api + "?" + urllib.parse.urlencode({**params, "format": "json"})
     for a in range(retries):
         try:
@@ -65,6 +76,7 @@ def _get(api: str, params: dict, retries: int = 5) -> dict | None:
         except urllib.error.HTTPError as exc:
             if exc.code in (429, 500, 502, 503):
                 time.sleep(2 ** a * 3)
+                _last_call = time.monotonic()
                 continue
             return None
         except Exception:  # noqa: BLE001
@@ -228,7 +240,17 @@ def is_entity(en_title: str) -> bool:
     return are_entities([en_title])[en_title]
 
 
-def _file_names(en_title: str, limit: int = 40) -> list[str]:
+class Unreachable(RuntimeError):
+    """APIに届かなかった。「記事に画が無い」とは区別する。
+
+    レート制限や一時的な失敗を「画が無い」と同じ扱いにすると、黙って
+    キーワード検索に落ちる。検索は語義を区別しないので、通信が詰まった
+    ぶんだけ題材と食い違う画が増える。実測で、続けて3テーマ取得した
+    3本目で要確認が23件に跳ねた。
+    """
+
+
+def _file_names(en_title: str, limit: int = 40) -> list[str] | None:
     """記事に出てくる順で画像のファイル名を返す。
 
     prop=images は名前順に並ぶ。parse は本文の出現順で返すので、
@@ -236,7 +258,9 @@ def _file_names(en_title: str, limit: int = 40) -> list[str]:
     """
     d = _get(EN_API, {"action": "parse", "page": en_title,
                       "prop": "images", "redirects": 1})
-    names = ((d or {}).get("parse") or {}).get("images") or []
+    if d is None:
+        return None
+    names = (d.get("parse") or {}).get("images") or []
     out = []
     for raw in names:
         # parse はアンダースコア、Commons は空白で返す。先に揃えないと
@@ -314,6 +338,8 @@ def page_images(en_title: str, *, limit: int = 6, width: int = 1920,
     ように見える。ライセンスが許しても出してよい絵にはならない。
     """
     names = _file_names(en_title)
+    if names is None:
+        raise Unreachable(en_title)
     if not names:
         return []
     lead = _lead(en_title)
@@ -321,8 +347,8 @@ def page_images(en_title: str, *, limit: int = 6, width: int = 1920,
         "action": "query", "titles": "|".join("File:" + n for n in names[:40]),
         "prop": "imageinfo", "iiprop": "url|extmetadata|size", "iiurlwidth": width,
     })
-    if not d:
-        return []
+    if d is None:
+        raise Unreachable(en_title)
     by_name: dict[str, Asset] = {}
     for page in (((d.get("query") or {}).get("pages")) or {}).values():
         info = (page.get("imageinfo") or [{}])[0]

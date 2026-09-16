@@ -27,7 +27,7 @@ import yaml
 from .credits import build as build_credits
 from .credits import unlicensed
 from .sources import UA, Asset, search_all
-from .wikipage import entity_types, page_images
+from .wikipage import Unreachable, entity_types, page_images
 
 
 def mean_luma(path: Path) -> int | None:
@@ -113,13 +113,21 @@ def _candidates(queries: list[str], limit: int) -> tuple[list[Asset], str, bool]
     # 人物の顔写真は、その人物を指す語のときだけ使う。題材が人物でないのに
     # 顔写真を全画面に出すと、その人が題材に関係しているように見える。
     types = entity_types(queries)
+    unreachable = False
     for q in queries:
         human = "human" in (types.get(q) or {}).get("t", [])
-        got = page_images(q, limit=limit, people_ok=human)
+        try:
+            got = page_images(q, limit=limit, people_ok=human)
+        except Unreachable:
+            unreachable = True
+            continue
         if got:
             from_articles += got
             first = first or q
-    if not from_articles:  # 記事に画が無い題材だけ、検索に落とす
+    # APIに届かなかっただけなら検索に落とさない。検索は語義を区別しないので、
+    # 通信が詰まったぶんだけ題材と食い違う画が増える。空のまま返して
+    # 呼び出し側に直前の画を引き継がせる。
+    if not from_articles and not unreachable:
         for q in queries:
             got, _ = search_all(q, per_source=limit)
             if got:
