@@ -38,7 +38,9 @@ export const KenBurns: React.FC<{ shot: Shot; resolve: (s: string) => string }> 
 
   return (
     <AbsoluteFill style={{ backgroundColor: theme.bg, opacity: fade }}>
-      <AbsoluteFill style={{ overflow: "hidden", left: pad, right: pad }}>
+      {/* AbsoluteFill は width:100% を持つ。left/right だけ指定すると
+          幅が縮まず右へずれて溢れるので、width を auto に戻す。 */}
+      <AbsoluteFill style={{ overflow: "hidden", left: pad, right: pad, width: "auto" }}>
         <Img
           src={resolve(shot.src)}
           style={{

@@ -95,3 +95,30 @@ def test_build_routes_each_kind_to_its_own_props_array():
     assert len(props["documentCards"]) == 1
     assert len(props["quoteCards"]) == 1
     assert props["quoteCards"][0]["side"] == "right"   # 留保は逆側に置く
+
+
+def test_stat_keeps_the_trailing_qualifier():
+    """「以上」を落とすと断定になる。実測で「歯車は30個以上」を「30個」と出した。
+
+    数字の後ろに付く一語で、下限が確定値に変わる。画面に出る以上、
+    ナレーションより強いことを言ってはいけない。
+    """
+    cases = [
+        ("判明したことを並べる。歯車は30個以上。", "30個以上"),
+        ("重さは6トン前後とされる。", "6トン前後"),
+        ("厚さは3センチ未満だった。", "3センチ未満"),
+        ("最大のものは歯が223枚。", "223枚"),
+    ]
+    for text, want in cases:
+        stats = [c for c in classify([Line(0.0, 5.0, text)]) if c.kind == "stat"]
+        assert stats, text
+        assert stats[0].payload["value"] == want, (text, stats[0].payload["value"])
+
+
+def test_stat_value_is_contained_in_the_line():
+    """大書きした値は、必ず台本のその行に現れている文字列でなければならない。"""
+    for text in ["歯車は30個以上。", "約50万年前の岩に埋まっていた。",
+                 "重さは6トン前後とされる。"]:
+        for c in classify([Line(0.0, 5.0, text)]):
+            if c.kind == "stat":
+                assert c.payload["value"].replace(" ", "") in text.replace(" ", "")

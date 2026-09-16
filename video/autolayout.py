@@ -43,7 +43,10 @@ _STAT = re.compile(
     r"(?P<pre>紀元前|前|約|およそ|推定)?\s*"
     r"(?P<v>[0-9０-９][0-9０-９,，.．]*(?:万|億|兆)?)\s*"
     r"(?P<u>年前|トン|メートル|キロ|センチ|ミリ|ボルト|パーセント|％|平方キロ|"
-    r"点|本|人|個|倍|枚|冊|回|度|度目|世紀|語|字|ページ)")
+    r"点|本|人|個|倍|枚|冊|回|度|度目|世紀|語|字|ページ)"
+    # 後ろに付く限定。落とすと断定になる。実測で台本の「歯車は30個以上」から
+    # 「30個」を大書きしていた。「以上」の一語で意味が変わる。
+    r"(?P<post>以上|以下|超|未満|前後|程度|近く|余り|弱|強)?")
 
 # 大書きに値しない小さな数。「2枚の歯車」「1人死亡」を巨大表示すると滑稽になる。
 _TRIVIAL_UNITS = {"人", "枚", "本", "個", "点", "回", "冊", "度"}
@@ -201,7 +204,8 @@ def classify(lines: list[Line]) -> list[Cue]:
         if m and not _is_trivial(m.group("v"), m.group("u")):
             pre = m.group("pre") or ""
             cues.append(Cue("stat", start, dur, stat_zones[n_stat % len(stat_zones)],
-                            {"value": f"{pre}{m.group('v')}{m.group('u')}",
+                            {"value": f"{pre}{m.group('v')}{m.group('u')}"
+                                      f"{m.group('post') or ''}",
                              "label": _clip(text, 22)}))
             n_stat += 1
         elif len(re.findall(r"[0-9０-９]+", text)) >= 3:
