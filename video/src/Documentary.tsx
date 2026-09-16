@@ -11,6 +11,9 @@ import { KenBurns } from "./components/KenBurns";
 import { Telop } from "./components/Telop";
 import { Subtitle } from "./components/Subtitle";
 import { ChapterCard } from "./components/ChapterCard";
+import {
+  BackgroundPlate, CardRow, ChipStack, DocumentCard, QuoteCard, SourceLabel,
+} from "./components/Overlays";
 import { theme } from "./theme";
 
 /** http(s) はそのまま、それ以外は public/ からの相対パスとして解決する。 */
@@ -27,6 +30,12 @@ export const Documentary: React.FC<DocumentaryProps> = ({
   telops,
   subtitles,
   chapters,
+  sourceLabels,
+  quoteCards,
+  chipStacks,
+  cardRows,
+  documentCards,
+  backgroundDim,
 }) => {
   const { fps } = useVideoConfig();
 
@@ -40,6 +49,43 @@ export const Documentary: React.FC<DocumentaryProps> = ({
           durationInFrames={secToFrames(shot.durationSec, fps)}
         >
           <KenBurns shot={shot} resolve={resolve} />
+        </Sequence>
+      ))}
+
+      {/* 画の上に下地を敷く。ここから上は全部この上に載る */}
+      <BackgroundPlate dim={backgroundDim} />
+
+      {/* 構造化オーバーレイ */}
+      {cardRows.map((row, i) => (
+        <Sequence key={`row-${i}`} from={secToFrames(row.startSec, fps)}
+          durationInFrames={secToFrames(row.durationSec, fps)}>
+          <CardRow row={row} />
+        </Sequence>
+      ))}
+      {documentCards.map((card, i) => (
+        <Sequence key={`doc-${i}`} from={secToFrames(card.startSec, fps)}
+          durationInFrames={secToFrames(card.durationSec, fps)}>
+          <DocumentCard card={card} />
+        </Sequence>
+      ))}
+      {quoteCards.map((card, i) => (
+        <Sequence key={`quote-${i}`} from={secToFrames(card.startSec, fps)}
+          durationInFrames={secToFrames(card.durationSec, fps)}>
+          <QuoteCard card={card} />
+        </Sequence>
+      ))}
+      {chipStacks.map((stack, i) => (
+        <Sequence key={`chips-${i}`} from={secToFrames(stack.startSec, fps)}
+          durationInFrames={secToFrames(stack.durationSec, fps)}>
+          <ChipStack stack={stack} />
+        </Sequence>
+      ))}
+
+      {/* 出典ラベルは常に上。CC BY の表示義務を隠さないため */}
+      {sourceLabels.map((label, i) => (
+        <Sequence key={`src-${i}`} from={secToFrames(label.startSec, fps)}
+          durationInFrames={secToFrames(label.durationSec, fps)}>
+          <SourceLabel label={label} />
         </Sequence>
       ))}
 

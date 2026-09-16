@@ -12,6 +12,12 @@ const defaultProps: DocumentaryProps = {
   telops: [{ startSec: 0, durationSec: 3, text: "props.json を渡してください", variant: "plain" }],
   subtitles: [],
   chapters: [],
+  sourceLabels: [],
+  quoteCards: [],
+  chipStacks: [],
+  cardRows: [],
+  documentCards: [],
+  backgroundDim: 0.45,
 };
 
 export const RemotionRoot: React.FC = () => (
