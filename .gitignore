@@ -4,3 +4,10 @@ __pycache__/
 *.pyc
 .remotion/
 node_modules/
+
+# 取得した素材そのもの。assets fetch で再取得できる一方、
+# 1テーマ25〜31MBあり履歴に永久に残る。出典の記録（manifest.json /
+# credits.txt）は版が変わると追えなくなるので、そちらだけ追跡する。
+video/public/shots*/*
+!video/public/shots*/manifest.json
+!video/public/shots*/credits.txt
