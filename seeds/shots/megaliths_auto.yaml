@@ -1,0 +1,102 @@
+shots:
+- query: &id001
+  - Stonehenge
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: &id002
+  - Quarry
+- query: *id002
+- query: *id002
+- query: &id003
+  - Quarry
+- query: *id003
+- query: *id003
+- query: &id004
+  - Urfa
+  - Göbekli Tepe
+- query: *id004
+- query: *id004
+- query: *id004
+- query:
+  - Pyramid
+  - Stonehenge
+- query: &id005
+  - Bronzeware
+- query: *id005
+- query: &id006
+  - Göbekli Tepe
+- query: *id006
+- query: &id007
+  - Radar
+- query: *id007
+- query:
+  - Easter
+  - Easter Island
+- query:
+  - Quarry
+- query:
+  - Rano Raraku
+  - Quarry
+- query: &id008
+  - Quarry
+- query: *id008
+- query: &id009
+  - Replica
+- query: *id009
+- query: *id009
+- query: *id009
+- query:
+  - Corchorus capsularis
+- query: &id010
+  - Ancient Rome
+  - Baalbek
+- query: *id010
+- query:
+  - Quarry
+- query:
+  - Crane (machine)
+- query:
+  - Crane (machine)
+- query:
+  - Quarry
+- query:
+  - Quarry
+- query: &id011
+  - Quarry
+- query: *id011
+- query: &id012
+  - Quarry
+- query: *id012
+- query: *id012
+- query: *id012
+- query: &id013
+  - Travel literature
+- query: *id013
+- query: &id014
+  - Hammer
+- query: *id014
+- query: *id014
+- query:
+  - Stonehenge
+- query:
+  - Replica
+  - Göbekli Tepe
+- query: &id015
+  - Baalbek
+  - Quarry
+- query: *id015
+- query: *id015
+- query: *id015
+- query:
+  - Quarry
+- query: &id016
+  - Quarry
+- query: *id016
+- query: *id016

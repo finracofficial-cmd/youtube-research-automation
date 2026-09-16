@@ -133,3 +133,36 @@ def test_junk_drops_dispute_and_navigation_icons():
     for name in ["Unbalanced scales.svg", "Globe icon.svg",
                  "Split-arrows.svg", "Imbox scales.svg"]:
         assert _JUNK.search(name), name
+
+
+def test_meta_needs_every_type_to_be_a_container():
+    """型が1つでも器なら器、とすると取りこぼす。
+
+    Stonehenge の P31 には併設の展示施設に由来する history museum が
+    混ざっていて、cromlech / monument / archaeological site を
+    押しのけて器と判定されていた。
+    """
+    from assets.wikipage import is_meta
+    assert not is_meta(["cromlech", "monument", "archaeological site",
+                        "history museum", "henge"])
+    assert is_meta(["national museum"])
+    assert is_meta(["scientific journal", "academic journal"])
+    assert not is_meta([])
+
+
+def test_media_files_are_not_used_as_images():
+    """記事には読み上げ音声や動画も並ぶ。実測で Moai の記事から
+    En-moai.oga（記事の読み上げ）が素材として通った。"""
+    from assets.wikipage import _file_names
+    import assets.wikipage as wp
+
+    got = []
+    for name in ["Moai.jpg", "En-moai.oga", "Clip.webm", "Scan.djvu", "Model.stl"]:
+        if wp._JUNK.search(name):
+            continue
+        if name.lower().endswith((".ogg", ".oga", ".ogv", ".opus", ".flac", ".mp3",
+                                  ".mp4", ".webm", ".mid", ".wav", ".pdf", ".djvu",
+                                  ".stl", ".xcf")):
+            continue
+        got.append(name)
+    assert got == ["Moai.jpg"]

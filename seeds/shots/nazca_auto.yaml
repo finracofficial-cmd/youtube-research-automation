@@ -1,0 +1,118 @@
+shots:
+- query: &id001
+  - Nazca lines
+  - Hummingbird
+- query: *id001
+- query: *id001
+- query:
+  - Computer
+  - Nazca lines
+- query:
+  - Geoglyph
+- query: &id002
+  - World Heritage Site
+  - Precipitation measurement
+- query: *id002
+- query:
+  - Andean condor
+  - Hummingbird
+- query:
+  - Pelican
+- query: &id003
+  - Andean condor
+  - Pelican
+- query: *id003
+- query: &id004
+  - Geoglyph
+- query: *id004
+- query: *id004
+- query: *id004
+- query: *id004
+- query: &id005
+  - Anno Domini
+  - Nazca culture
+- query: *id005
+- query:
+  - Geoglyph
+- query:
+  - Paul Kosok
+  - Airplane
+- query:
+  - Geoglyph
+- query:
+  - Southern Hemisphere
+- query:
+  - Maria Reiche
+  - Dresden
+- query: &id006
+  - Sextant
+- query: *id006
+- query:
+  - Persuasion
+- query: &id007
+  - Life and death
+  - Groundwater
+- query: *id007
+- query: *id007
+- query:
+  - Stonehenge
+  - Computer
+- query:
+  - National Geographic Society
+  - Stonehenge
+- query: &id008
+  - Geoglyph
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query:
+  - Geoglyph
+- query: &id009
+  - Nazca culture
+- query: *id009
+- query: *id009
+- query: *id009
+- query:
+  - Aerial photography
+- query:
+  - Field research
+  - Geoglyph
+- query:
+  - Image resolution
+  - Aerial photography
+- query:
+  - Deep learning
+  - Aerial photography
+- query:
+  - Pattern recognition
+  - Geoglyph
+- query: &id010
+  - Geoglyph
+- query: *id010
+- query: *id010
+- query: *id010
+- query:
+  - Domestication
+- query: &id011
+  - Geoglyph
+- query: *id011
+- query: *id011
+- query: *id011
+- query: *id011
+- query: &id012
+  - Stele
+- query: *id012
+- query: *id012
+- query: *id012
+- query: *id012
+- query: *id012
+- query:
+  - Nazca lines
+- query: &id013
+  - Geoglyph
+- query: *id013

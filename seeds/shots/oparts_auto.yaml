@@ -1,68 +1,91 @@
 shots:
 - query: &id001
+  - Out-of-place artifact
+- query: *id001
+- query: *id001
+- query:
+  - Out-of-place artifact
+- query:
+  - Shipwrecking
+- query:
   - Valerios Stais
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
-- query: *id001
 - query: &id002
-  - Archimedes
+  - Marble
+  - Bronze sculpture
+- query: *id002
+- query: *id002
+- query: *id002
+- query: *id002
 - query: *id002
 - query: *id002
 - query: &id003
-  - Vishnu
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
-- query: *id003
+  - Astrological sign
+  - Gear ratio
 - query: *id003
 - query: *id003
 - query: &id004
-  - Piri Reis
+  - Out-of-place artifact
 - query: *id004
 - query: &id005
-  - Queen Maud Land
+  - Archimedes
+  - Celestial globe
+- query: *id005
 - query: *id005
 - query: &id006
-  - Alexander the Great
-- query: *id006
-- query: *id006
+  - Vishnu
 - query: *id006
 - query: &id007
+  - Indian Institutes of Technology
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
+- query: *id007
+- query: &id008
+  - Rock asphalt
+- query: *id008
+- query: *id008
+- query: *id008
+- query: *id008
+- query:
+  - Seleucia
+- query: &id009
+  - Rock asphalt
+- query: *id009
+- query:
+  - Istanbul
+  - Topkapı Palace
+- query:
+  - Ottoman Empire
+  - Piri Reis
+- query:
+  - Out-of-place artifact
+- query: &id010
+  - Queen Maud Land
+  - Antarctica
+- query: *id010
+- query: &id011
+  - Alexander the Great
+- query: *id011
+- query: &id012
+  - Parchment
+- query: *id012
+- query: &id013
   - California
-- query: *id007
-- query: *id007
-- query: *id007
-- query: *id007
-- query: *id007
-- query: *id007
-- query: *id007
-- query: *id007
+- query: *id013
+- query: *id013
+- query: *id013
+- query: &id014
+  - Washer (hardware)
+  - Insulator (electricity)
+- query: *id014
+- query: *id014
+- query: &id015
+  - Volcanic rock
+  - Sediment
+- query: *id015
 - query:
   - Antikythera
   - Iron pillar of Delhi
@@ -71,14 +94,16 @@ shots:
   - Coso artifact
 - query:
   - Baghdad Battery
+  - Out-of-place artifact
 - query:
   - Antikythera mechanism
-- query: &id008
+- query:
   - Piri Reis map
   - Baghdad Battery
-- query: *id008
-- query: *id008
-- query: &id009
+- query: &id016
+  - Out-of-place artifact
+- query: *id016
+- query: &id017
   - Antikythera mechanism
-- query: *id009
-- query: *id009
+- query: *id017
+- query: *id017

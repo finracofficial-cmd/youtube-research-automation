@@ -44,6 +44,15 @@ _ABSTRACT_TYPE = (
     "unit", "notation", "disambiguation", "metaclass", "class of",
     "list of", "template", "category", "concept", "quantity",
     "number format", "writing system", "aspect of",
+    # 学問分野。台本が方法を語る場面で拾われる（考古学・地質学）
+    "academic discipline", "academic major", "branch of science",
+    "field of study", "field of work", "科学",
+    # 活動・過程。名前ではなく振る舞いを指す（協力・観光・収集・再利用）
+    "activity", "hobby", "gathering", "process", "travel",
+    "economic sector", "industry", "occupation", "profession",
+    # 集団・図形。画にしても題材を指さない（共同体・三角形・多角形）
+    "social group", "group of humans", "cluster",
+    "geometric shape", "plane figure", "polytope", "geometric figure",
 )
 
 
@@ -138,8 +147,14 @@ def entity_types(en_titles: list[str]) -> dict[str, list[str]]:
 
 
 def is_meta(types: list[str]) -> bool:
-    """題材そのものではなく、題材が言及される器か。"""
-    return any(w in t for t in types for w in _META_TYPE)
+    """題材そのものではなく、題材が言及される器か。
+
+    1つでも当たれば器、とすると取りこぼす。Stonehenge の P31 には
+    併設の展示施設に由来する history museum が混ざっていて、
+    cromlech / monument / archaeological site / henge を押しのけて
+    器と判定されていた。型が全部器のときだけ器とみなす。
+    """
+    return bool(types) and all(any(w in t for w in _META_TYPE) for t in types)
 
 
 def are_entities(en_titles: list[str]) -> dict[str, bool]:
@@ -161,11 +176,16 @@ def _types_of(en_titles: list[str]) -> dict[str, list[str]]:
     qids = sorted({q for q in qid_of.values() if q})
     claims_of = _entities(qids, "claims")
 
+    # P31（individual）と P279（class）の両方を見る。
+    # 画を検索で拾っていた頃はクラスを落としていた。語義を区別しない検索が
+    # Volcanic rock に無関係な岩を返したためだが、記事から引く今は、
+    # クラスの記事はそのクラスの画を返す（Moai の記事にはモアイが載っている）。
+    # 落とし続けると、題材がクラスである回（巨石遺跡のモアイ、ドルメン、
+    # メンヒル）で主題が丸ごと検索語から消える。
     p31_of: dict[str, list[str]] = {}
     for qid in qids:
         c = (claims_of.get(qid) or {}).get("claims") or {}
-        p31 = _claim_ids(c, "P31")
-        p31_of[qid] = [] if (not p31 or _claim_ids(c, "P279")) else p31
+        p31_of[qid] = _claim_ids(c, "P31") or _claim_ids(c, "P279")
 
     types = sorted({t for v in p31_of.values() for t in v[:6]})
     label_of = {}
@@ -204,7 +224,11 @@ def _file_names(en_title: str, limit: int = 40) -> list[str]:
     for n in names:
         if _JUNK.search(n):
             continue
-        if n.lower().endswith((".ogg", ".ogv", ".webm", ".mid", ".wav", ".pdf")):
+        # 読み上げ音声や動画が記事画像として並ぶ。実測で Moai の記事から
+        # En-moai.oga（記事の読み上げ）が素材として通った。
+        if n.lower().endswith((".ogg", ".oga", ".ogv", ".opus", ".flac", ".mp3",
+                               ".mp4", ".webm", ".mid", ".wav", ".pdf", ".djvu",
+                               ".stl", ".xcf")):
             continue
         # parse はアンダースコア、Commons は空白で返す。ここで揃えないと
         # 後段の突き合わせが複数語の名前で全部外れ、UI画像だけが残る。

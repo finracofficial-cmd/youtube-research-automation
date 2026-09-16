@@ -15,10 +15,35 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from pathlib import Path
 
 from .wikipage import entity_types, is_entity, is_meta
 
 UA = "youtube-research-automation/0.1 (research; contact: research@example.com)"
+
+# 同じ語を何度も引き直さないための控え。題材を変えても語は重なるし、
+# 検索語の選び方を試すたびに全部引き直していては手数が合わない。
+CACHE = Path(__file__).resolve().parent.parent / ".cache" / "terms.json"
+
+
+def _load_cache() -> dict:
+    try:
+        return json.loads(CACHE.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 - 壊れていたら作り直す
+        return {"en": {}, "types": {}}
+
+
+def _save_cache(c: dict) -> None:
+    """書き戻す前にもう一度読んで混ぜる。
+
+    題材ごとに並行して走らせると、後から書いた方が前の結果を消していた
+    （実測でナスカの語が丸ごと消え、取得できた区間が30から3に見えた）。
+    """
+    CACHE.parent.mkdir(parents=True, exist_ok=True)
+    merged = _load_cache()
+    for key in ("en", "types"):
+        merged.setdefault(key, {}).update(c.get(key, {}))
+    CACHE.write_text(json.dumps(merged, ensure_ascii=False), encoding="utf-8")
 API = "https://ja.wikipedia.org/w/api.php"
 
 # 固有名詞になりやすい形。「アンティキティラ島の機械」のような複合も拾う。
@@ -141,12 +166,19 @@ def queries_for_segments(segments: list[str], *, per_segment: int = 1,
     """
     per_seg = [candidates(seg) for seg in segments]
     wanted = sorted({t for terms in per_seg for t in terms})
-    print(f"候補語 {len(wanted)}語をまとめて英訳…", flush=True)
-    en_of = english_titles(wanted)
+    cache = _load_cache()
+
+    fresh = [t for t in wanted if t not in cache["en"]]
+    print(f"候補語 {len(wanted)}語（うち未取得 {len(fresh)}語）を英訳…", flush=True)
+    cache["en"].update({k: v for k, v in english_titles(fresh).items()})
+    en_of = {t: cache["en"].get(t) for t in wanted}
 
     resolved = sorted({e for e in en_of.values() if e and _plausible(e)})
-    print(f"英語版があった {len(resolved)}語を個体判定…", flush=True)
-    types = entity_types(resolved)
+    need = [e for e in resolved if e not in cache["types"]]
+    print(f"英語版があった {len(resolved)}語（うち未判定 {len(need)}語）を判定…", flush=True)
+    cache["types"].update(entity_types(need))
+    _save_cache(cache)
+    types = {e: cache["types"].get(e) or [] for e in resolved}
     usable = {ja: en for ja, en in en_of.items() if en and types.get(en)}
     meta = {ja for ja, en in usable.items() if is_meta(types[en])}
     print(f"個体だったのは {len(set(usable.values()))}語"
