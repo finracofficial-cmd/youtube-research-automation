@@ -82,3 +82,44 @@ def test_build_emits_the_new_component_arrays():
              Line(startSec=5, durationSec=5, text="1600年から2000年までの記録が残る。")]
     props = build(lines, duration=30)
     assert props["stats"] and props["timelines"]
+
+
+def test_bce_prefix_is_kept():
+    """「紀元前1世紀」の接頭辞を落とすと2000年ずれた別の事実になる。実際に落とした。"""
+    cues = [c for c in classify([Line(startSec=0, durationSec=5,
+                                      text="沈没船の年代は紀元前1世紀である。")])
+            if c.kind == "stat"]
+    assert cues and cues[0].payload["value"] == "紀元前1世紀"
+
+
+def test_trivial_counts_are_not_blown_up():
+    """「潜水夫が1人死亡した」の1人を巨大表示すると滑稽になる。"""
+    for text in ("潜水夫が1人死亡した。", "2枚の歯車を噛ませていた。"):
+        kinds = [c.kind for c in classify([Line(startSec=0, durationSec=5, text=text)])]
+        assert "stat" not in kinds, text
+
+
+def test_large_counts_still_pass():
+    cues = [c for c in classify([Line(startSec=0, durationSec=5, text="歯が223枚ある。")])
+            if c.kind == "stat"]
+    assert cues and cues[0].payload["value"] == "223枚"
+
+
+def test_labels_do_not_cut_mid_word():
+    cues = [c for c in classify([Line(startSec=0, durationSec=5,
+        text="50万年前の岩に埋まっていたという点火プラグである。")]) if c.kind == "stat"]
+    assert cues and not cues[0].payload["label"].endswith("点火プ")
+
+
+def test_role_is_not_taken_from_a_negation():
+    """「地質学者ではない」から役割を取ると逆の意味になる。実際に取った。"""
+    kinds = [c.kind for c in classify([Line(startSec=0, durationSec=5,
+        text="ハプグッド自身は地質学者ではない。")])]
+    assert "portrait" not in kinds
+
+
+def test_organisation_is_not_treated_as_a_person():
+    """「オスマン帝国の提督ピリ・レイス」から「オスマン」を人名として拾った。"""
+    kinds = [c.kind for c in classify([Line(startSec=0, durationSec=5,
+        text="描いたのはオスマン帝国の提督ピリ・レイスである。")])]
+    assert "portrait" not in kinds

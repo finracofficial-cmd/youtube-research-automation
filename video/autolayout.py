@@ -35,11 +35,25 @@ _LIST_LEAD = re.compile(r"(?P<n>[0-9０-９一二三四五六七八九]+)\s*(つ
                         r"(に分かれる|を並べた|ある|を挙げ)")
 _CAVEAT = re.compile(r"^(ただし|とはいえ|もっとも)")
 
-# 数値＋単位。大きな数字の単独提示に使う
+# 数値＋単位。大きな数字の単独提示に使う。
+# 「紀元前1世紀」の「紀元前」を落とすと2000年ずれた別の事実になるので、
+# 接頭辞ごと取り込む。実際に落として誤表示した。
 _STAT = re.compile(
+    r"(?P<pre>紀元前|前|約|およそ|推定)?\s*"
     r"(?P<v>[0-9０-９][0-9０-９,，.．]*(?:万|億|兆)?)\s*"
     r"(?P<u>年前|トン|メートル|キロ|センチ|ミリ|ボルト|パーセント|％|平方キロ|"
     r"点|本|人|個|倍|枚|冊|回|度|度目|世紀|語|字|ページ)")
+
+# 大書きに値しない小さな数。「2枚の歯車」「1人死亡」を巨大表示すると滑稽になる。
+_TRIVIAL_UNITS = {"人", "枚", "本", "個", "点", "回", "冊", "度"}
+_TRIVIAL_MAX = 9
+
+# 否定文。「地質学者ではない」から役割を取ると逆の意味になる。実際に取った。
+_NEGATION = re.compile(r"(ではない|ではなかった|でもない|とは言えない|わけではない)")
+
+# 組織名。「オスマン帝国の提督ピリ・レイス」から「オスマン」を人名として
+# 拾ってしまった。直後がこれらなら組織なので人物ではない。
+_ORG_SUFFIX = re.compile(r"^(帝国|王国|王朝|共和国|大学|博物館|図書館|社|軍|教会|会|省|庁|州|島|山|川|海)")
 # 割合。チャートの読み値になる
 _RATIO = re.compile(r"([0-9０-９]+(?:\.[0-9０-９]+)?)\s*(パーセント|％)")
 # 年号。2つ以上あれば推移としてタイムラインにする
@@ -56,6 +70,31 @@ _GLYPH = re.compile(r"[「『]([^」』]{1,3})[」』]")
 _GRID = re.compile(r"([0-9０-９][0-9０-９,，]*)\s*(ページ|枚|字|語|点)[^。]{0,6}(ある|超|に及)")
 
 _KANJI_NUM = {"一":1,"二":2,"三":3,"四":4,"五":5,"六":6,"七":7,"八":8,"九":9}
+
+
+def _clip(text: str, n: int) -> str:
+    """ラベルを詰める。語の途中で切らず、直前の区切りまで戻す。"""
+    text = text.rstrip("。")
+    if len(text) <= n:
+        return text
+    cut = text[:n]
+    for sep in ("、", "・", " ", "は", "を", "が"):
+        i = cut.rfind(sep)
+        if i >= n // 2:
+            return cut[: i + 1].rstrip("、・ ")
+    return cut
+
+
+def _is_trivial(value: str, unit: str) -> bool:
+    """小さすぎて大書きに値しない数かどうか。"""
+    if unit not in _TRIVIAL_UNITS:
+        return False
+    digits = value.translate(str.maketrans("０１２３４５６７８９", "0123456789"))
+    digits = digits.replace(",", "").replace("，", "")
+    try:
+        return float(digits) <= _TRIVIAL_MAX
+    except ValueError:
+        return False
 
 
 def _to_int(text: str) -> int:
@@ -133,7 +172,7 @@ def classify(lines: list[Line]) -> list[Cue]:
             cues.append(Cue("chart", start, dur, "right", {
                 "readout": f"{m.group(1)}{m.group(2)}",
                 "series": [1.0, 0.82, 0.55, 0.36, max(0.02, min(1.0, pct / 100))],
-                "caption": text.rstrip("。")[:28]}))
+                "caption": _clip(text, 28)}))
 
         years = _YEAR.findall(text)
         if len(years) >= 2:
@@ -146,7 +185,8 @@ def classify(lines: list[Line]) -> list[Cue]:
                 "caption": f"{m.group(1)}{m.group(2)}"}))
 
         m = _PERSON.search(text)
-        if m and len(m.group("name")) >= 3:
+        if (m and len(m.group("name")) >= 3 and not _NEGATION.search(text)
+                and not _ORG_SUFFIX.match(text[m.end("name"):])):
             year = years[0] + "年" if years else ""
             cues.append(Cue("portrait", start, dur, "left", {
                 "name": m.group("name"), "role": m.group("role"), "year": year}))
@@ -154,13 +194,14 @@ def classify(lines: list[Line]) -> list[Cue]:
         m = _GLYPH.search(text)
         if m and len(m.group(1)) <= 2:
             cues.append(Cue("glyph", start, min(dur, 4.0), "center",
-                            {"glyph": m.group(1), "caption": text.rstrip("。")[:24]}))
+                            {"glyph": m.group(1), "caption": _clip(text, 24)}))
 
-        stats = _STAT.findall(text)
-        if stats:
-            v, u = stats[0]
+        m = _STAT.search(text)
+        if m and not _is_trivial(m.group("v"), m.group("u")):
+            pre = m.group("pre") or ""
             cues.append(Cue("stat", start, dur, stat_zones[n_stat % len(stat_zones)],
-                            {"value": f"{v}{u}", "label": text.rstrip("。")[:20]}))
+                            {"value": f"{pre}{m.group('v')}{m.group('u')}",
+                             "label": _clip(text, 22)}))
             n_stat += 1
         elif len(re.findall(r"[0-9０-９]+", text)) >= 3:
             cues.append(Cue("chips", start, min(dur, 5.0),
