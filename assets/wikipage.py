@@ -138,10 +138,11 @@ _META_TYPE = (
 )
 
 
-def entity_types(en_titles: list[str]) -> dict[str, list[str]]:
-    """見出しごとに、Wikidata の「〜である」（P31）の型名を返す。
+def entity_types(en_titles: list[str]) -> dict[str, dict]:
+    """見出しごとに {"t": 型名, "c": クラスか} を返す。
 
-    個体でなければ空リスト。呼び出し側はこれで可否と順位の両方を決める。
+    使えない語は型名が空リスト。"c" は P31（個体）ではなく P279（クラス）で
+    判定が通ったことを示す。呼び出し側は可否・順位・扱いの差をこれで決める。
     """
     return _types_of(en_titles)
 
@@ -168,7 +169,7 @@ def are_entities(en_titles: list[str]) -> dict[str, bool]:
     1語ずつだと1語あたり3往復かかる。語の数だけ往復すると台本1本で
     百回を超え、レート制限の待ちが処理時間の大半になっていた。
     """
-    return {t: bool(v) for t, v in _types_of(en_titles).items()}
+    return {t: bool(v["t"]) for t, v in _types_of(en_titles).items()}
 
 
 def _types_of(en_titles: list[str]) -> dict[str, list[str]]:
@@ -184,9 +185,12 @@ def _types_of(en_titles: list[str]) -> dict[str, list[str]]:
     # 落とし続けると、題材がクラスである回（巨石遺跡のモアイ、ドルメン、
     # メンヒル）で主題が丸ごと検索語から消える。
     p31_of: dict[str, list[str]] = {}
+    class_of: dict[str, bool] = {}
     for qid in qids:
         c = (claims_of.get(qid) or {}).get("claims") or {}
-        p31_of[qid] = _claim_ids(c, "P31") or _claim_ids(c, "P279")
+        individual = _claim_ids(c, "P31")
+        p31_of[qid] = individual or _claim_ids(c, "P279")
+        class_of[qid] = not individual
 
     types = sorted({t for v in p31_of.values() for t in v[:6]})
     label_of = {}
@@ -195,15 +199,22 @@ def _types_of(en_titles: list[str]) -> dict[str, list[str]]:
         if v:
             label_of[qid] = v.lower()
 
-    out: dict[str, list[str]] = {}
+    out: dict[str, dict] = {}
     for title in titles:
-        names = [label_of[t] for t in p31_of.get(qid_of.get(title) or "", [])[:6]
-                 if t in label_of]
+        qid = qid_of.get(title) or ""
+        names = [label_of[t] for t in p31_of.get(qid, [])[:6] if t in label_of]
         # 抽象（単位・記法・曖昧さ回避）は個体として扱わない
         if not names or any(w in n for n in names for w in _ABSTRACT_TYPE):
-            out[title] = []
+            out[title] = {"t": [], "c": False}
         else:
-            out[title] = names
+            # 「type of tool」のように、型のラベル自体が種別を名乗る記事も
+            # クラス扱いにする。P279 を持たなくても中身は分類の説明で、
+            # 載っている画は任意の一例になる（Replica にブガッティ、
+            # Quarry に適当な採石場）。
+            klass = class_of.get(qid, False) or any(
+                n.startswith(("type of", "class of", "form of", "genre of",
+                              "kind of", "category of")) for n in names)
+            out[title] = {"t": names, "c": klass}
     return out
 
 

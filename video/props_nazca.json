@@ -149,8 +149,8 @@
   {
    "startSec": 72.321,
    "durationSec": 8.036,
-   "src": "shots_nazca/005.jpg",
-   "inset": 0.35,
+   "src": "shots_nazca/006.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -165,8 +165,8 @@
   {
    "startSec": 80.357,
    "durationSec": 8.036,
-   "src": "shots_nazca/005.jpg",
-   "inset": 0.35,
+   "src": "shots_nazca/006.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -534,7 +534,7 @@
    "startSec": 265.179,
    "durationSec": 8.036,
    "src": "shots_nazca/021.jpg",
-   "inset": 0.0,
+   "inset": 0.232,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -550,7 +550,7 @@
    "startSec": 273.214,
    "durationSec": 8.036,
    "src": "shots_nazca/021.jpg",
-   "inset": 0.0,
+   "inset": 0.232,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -597,8 +597,8 @@
   {
    "startSec": 297.321,
    "durationSec": 8.036,
-   "src": "shots_nazca/023.png",
-   "inset": 0.242,
+   "src": "shots_nazca/023.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -613,8 +613,8 @@
   {
    "startSec": 305.357,
    "durationSec": 8.036,
-   "src": "shots_nazca/023.png",
-   "inset": 0.242,
+   "src": "shots_nazca/023.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -629,8 +629,8 @@
   {
    "startSec": 313.393,
    "durationSec": 8.036,
-   "src": "shots_nazca/023.png",
-   "inset": 0.242,
+   "src": "shots_nazca/023.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -661,7 +661,7 @@
   {
    "startSec": 329.464,
    "durationSec": 8.036,
-   "src": "shots_nazca/026.png",
+   "src": "shots_nazca/026.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -677,7 +677,7 @@
   {
    "startSec": 337.5,
    "durationSec": 8.036,
-   "src": "shots_nazca/026.png",
+   "src": "shots_nazca/026.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -693,7 +693,7 @@
   {
    "startSec": 345.536,
    "durationSec": 8.036,
-   "src": "shots_nazca/026.png",
+   "src": "shots_nazca/026.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -709,7 +709,7 @@
   {
    "startSec": 353.571,
    "durationSec": 8.036,
-   "src": "shots_nazca/026.png",
+   "src": "shots_nazca/026.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -725,8 +725,8 @@
   {
    "startSec": 361.607,
    "durationSec": 8.036,
-   "src": "shots_nazca/026.png",
-   "inset": 0.0,
+   "src": "shots_nazca/028.jpg",
+   "inset": 0.207,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -774,7 +774,7 @@
    "startSec": 385.714,
    "durationSec": 8.036,
    "src": "shots_nazca/030.jpg",
-   "inset": 0.0,
+   "inset": 0.312,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -790,7 +790,7 @@
    "startSec": 393.75,
    "durationSec": 8.036,
    "src": "shots_nazca/030.jpg",
-   "inset": 0.0,
+   "inset": 0.312,
    "from": {
     "scale": 1.18,
     "x": 0,
@@ -1061,8 +1061,8 @@
   {
    "startSec": 530.357,
    "durationSec": 8.036,
-   "src": "shots_nazca/041.png",
-   "inset": 0.312,
+   "src": "shots_nazca/041.jpg",
+   "inset": 0.0,
    "from": {
     "scale": 1.0,
     "x": 0,
@@ -1077,7 +1077,7 @@
   {
    "startSec": 538.393,
    "durationSec": 8.036,
-   "src": "shots_nazca/042.jpg",
+   "src": "shots_nazca/041.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1093,7 +1093,7 @@
   {
    "startSec": 546.429,
    "durationSec": 8.036,
-   "src": "shots_nazca/042.jpg",
+   "src": "shots_nazca/041.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1109,7 +1109,7 @@
   {
    "startSec": 554.464,
    "durationSec": 8.036,
-   "src": "shots_nazca/042.jpg",
+   "src": "shots_nazca/041.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1125,7 +1125,7 @@
   {
    "startSec": 562.5,
    "durationSec": 8.036,
-   "src": "shots_nazca/042.jpg",
+   "src": "shots_nazca/041.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1141,7 +1141,7 @@
   {
    "startSec": 570.536,
    "durationSec": 8.036,
-   "src": "shots_nazca/042.jpg",
+   "src": "shots_nazca/044.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1653,7 +1653,7 @@
   {
    "startSec": 827.679,
    "durationSec": 8.036,
-   "src": "shots_nazca/064.jpg",
+   "src": "shots_nazca/060.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1669,7 +1669,7 @@
   {
    "startSec": 835.714,
    "durationSec": 8.036,
-   "src": "shots_nazca/064.jpg",
+   "src": "shots_nazca/060.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1685,7 +1685,7 @@
   {
    "startSec": 843.75,
    "durationSec": 8.036,
-   "src": "shots_nazca/064.jpg",
+   "src": "shots_nazca/060.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1812,8 +1812,22 @@
   },
   {
    "startSec": 247.417,
-   "durationSec": 4.105,
+   "durationSec": 7.5,
    "text": "飛行機",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 271.68,
+   "durationSec": 7.5,
+   "text": "延長線上",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 279.58,
+   "durationSec": 5.105,
+   "text": "世界最大の天文書",
    "variant": "plain",
    "zone": "upper"
   }
@@ -3864,8 +3878,13 @@
   },
   {
    "startSec": 56.25,
-   "durationSec": 32.144,
+   "durationSec": 16.072,
    "text": "Diazinon.bm / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 72.321,
+   "durationSec": 16.072,
+   "text": "Yann (talk) / CC BY-SA 4.0"
   },
   {
    "startSec": 88.393,
@@ -3930,7 +3949,7 @@
   {
    "startSec": 265.179,
    "durationSec": 16.072,
-   "text": "Ministerio Bienes Nacionales / CC BY 2.0"
+   "text": "Albrecht Dürer / CC0"
   },
   {
    "startSec": 281.25,
@@ -3940,7 +3959,7 @@
   {
    "startSec": 297.321,
    "durationSec": 24.108,
-   "text": "Joaquim Alves Gaspar / CC BY 2.5"
+   "text": "Seanavigatorsson Olaf Arndt / CC BY-SA 4.0"
   },
   {
    "startSec": 321.429,
@@ -3949,8 +3968,13 @@
   },
   {
    "startSec": 329.464,
-   "durationSec": 40.18,
-   "text": "T.C. Winter, J.W. Harvey, O.L. Franke, and W.M. Alley / Public domain"
+   "durationSec": 32.144,
+   "text": "Stewart Tomlinson, Florida / Public domain"
+  },
+  {
+   "startSec": 361.607,
+   "durationSec": 8.036,
+   "text": "NASA / Public domain"
   },
   {
    "startSec": 369.643,
@@ -3960,7 +3984,7 @@
   {
    "startSec": 385.714,
    "durationSec": 16.072,
-   "text": "APK / CC BY-SA 3.0"
+   "text": "CC0"
   },
   {
    "startSec": 401.786,
@@ -3994,13 +4018,13 @@
   },
   {
    "startSec": 530.357,
-   "durationSec": 8.036,
-   "text": "QQuantum / CC BY-SA 4.0"
-  },
-  {
-   "startSec": 538.393,
    "durationSec": 40.18,
    "text": "David Jackson / CC BY-SA 2.0 uk"
+  },
+  {
+   "startSec": 570.536,
+   "durationSec": 8.036,
+   "text": "CC BY-SA 2.5 es"
   },
   {
    "startSec": 578.571,
@@ -4069,13 +4093,8 @@
   },
   {
    "startSec": 779.464,
-   "durationSec": 48.216,
+   "durationSec": 72.324,
    "text": "Unknown artist / CC BY 3.0"
-  },
-  {
-   "startSec": 827.679,
-   "durationSec": 24.108,
-   "text": "Unknown artist / CC BY 2.5"
   },
   {
    "startSec": 851.786,
@@ -4109,14 +4128,6 @@
    "side": "left",
    "heading": "ライヘの結論はこうだった",
    "translation": "線は暦である。 太陽と月と星の位置を示し、"
-  },
-  {
-   "startSec": 360.028,
-   "durationSec": 16.0,
-   "zone": "right",
-   "side": "right",
-   "heading": "留保",
-   "translation": "ただし、と付け加えておきたい"
   },
   {
    "startSec": 457.924,

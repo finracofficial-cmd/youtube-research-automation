@@ -237,10 +237,15 @@ def classify(lines: list[Line]) -> list[Cue]:
         m = _STAT.search(text)
         if m and not _is_trivial(m.group("v"), m.group("u")):
             pre = m.group("pre") or ""
+            value = f"{pre}{m.group('v')}{m.group('u')}{m.group('post') or ''}"
+            label = _stat_label(text, m.start(), m.end())
+            # 数値で始まる文だと、見出しが値と同じ文字列になる。同じ語を
+            # 上下に並べても情報が増えないので、そのときは見出しを出さない。
+            if label == value:
+                label = ""
             cues.append(Cue("stat", start, dur, stat_zones[n_stat % len(stat_zones)],
-                            {"value": f"{pre}{m.group('v')}{m.group('u')}"
-                                      f"{m.group('post') or ''}",
-                             "label": _stat_label(text, m.start(), m.end())}))
+                            {"value": value,
+                             "label": label}))
             n_stat += 1
         elif len(re.findall(r"[0-9０-９]+", text)) >= 3:
             cues.append(Cue("chips", start, min(dur, 5.0),

@@ -198,3 +198,16 @@ def test_photographs_are_not_treated_as_diagrams():
     for name in ["Stonehenge2007 07 30.jpg", "AhuTongariki.JPG",
                  "Antikythera Fragment A (Front).webp"]:
         assert not _is_diagram(name), name
+
+
+def test_type_of_labels_count_as_classes():
+    """型のラベル自体が種別を名乗る記事は、中身が分類の説明になる。
+
+    載っている画は任意の一例で、題材ではない。実測で Replica の記事の
+    ブガッティが巨石遺跡の回に5区間ぶん出た。
+    """
+    import assets.wikipage as wp
+    for label in ["type of tool", "type of machine", "type of mining site",
+                  "class of vehicle", "form of art"]:
+        assert label.startswith(("type of", "class of", "form of", "genre of",
+                                 "kind of", "category of")), label

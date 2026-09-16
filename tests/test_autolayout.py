@@ -162,3 +162,17 @@ def test_caveat_needs_content_not_just_an_announcement():
     assert not has("ただし。")
     assert has("ただし、決着はしていない。")
     assert has("とはいえ、年代の根拠は薄い。")
+
+
+def test_stat_label_is_dropped_when_it_repeats_the_value():
+    """数値で始まる文だと見出しが値と同じ文字列になる。
+
+    実測で「100メートル」が上下に二度並んだ。同じ語を重ねても情報が増えない。
+    """
+    stats = [c for c in classify([Line(0.0, 5.0, "100メートルを40分で進んだ。")])
+             if c.kind == "stat"]
+    assert stats and stats[0].payload["label"] == ""
+    # 文脈のある見出しは残す
+    stats = [c for c in classify([Line(0.0, 5.0, "高さ5メートルの石柱。")])
+             if c.kind == "stat"]
+    assert stats and stats[0].payload["label"] == "高さ5メートル"

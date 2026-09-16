@@ -1,0 +1,4180 @@
+{
+ "bgmVolume": 0.12,
+ "backgroundDim": 0.5,
+ "shots": [
+  {
+   "startSec": 0.0,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 8.036,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 16.071,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 24.107,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 32.143,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 40.179,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 48.214,
+   "durationSec": 8.036,
+   "src": "shots/004.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 56.25,
+   "durationSec": 8.036,
+   "src": "shots/004.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 64.286,
+   "durationSec": 8.036,
+   "src": "shots/004.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 72.321,
+   "durationSec": 8.036,
+   "src": "shots/006.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 80.357,
+   "durationSec": 8.036,
+   "src": "shots/006.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 88.393,
+   "durationSec": 8.036,
+   "src": "shots/006.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 96.429,
+   "durationSec": 8.036,
+   "src": "shots/006.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 104.464,
+   "durationSec": 8.036,
+   "src": "shots/008.jpg",
+   "inset": 0.241,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 112.5,
+   "durationSec": 8.036,
+   "src": "shots/009.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 120.536,
+   "durationSec": 8.036,
+   "src": "shots/009.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 128.571,
+   "durationSec": 8.036,
+   "src": "shots/010.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 136.607,
+   "durationSec": 8.036,
+   "src": "shots/010.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 144.643,
+   "durationSec": 8.036,
+   "src": "shots/010.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 152.679,
+   "durationSec": 8.036,
+   "src": "shots/012.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 160.714,
+   "durationSec": 8.036,
+   "src": "shots/012.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 168.75,
+   "durationSec": 8.036,
+   "src": "shots/013.jpg",
+   "inset": 0.22,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 176.786,
+   "durationSec": 8.036,
+   "src": "shots/013.jpg",
+   "inset": 0.22,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 184.821,
+   "durationSec": 8.036,
+   "src": "shots/013.jpg",
+   "inset": 0.22,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 192.857,
+   "durationSec": 8.036,
+   "src": "shots/015.jpg",
+   "inset": 0.192,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 200.893,
+   "durationSec": 8.036,
+   "src": "shots/015.jpg",
+   "inset": 0.192,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 208.929,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 216.964,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 225.0,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 233.036,
+   "durationSec": 8.036,
+   "src": "shots/018.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 241.071,
+   "durationSec": 8.036,
+   "src": "shots/018.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 249.107,
+   "durationSec": 8.036,
+   "src": "shots/018.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 257.143,
+   "durationSec": 8.036,
+   "src": "shots/018.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 265.179,
+   "durationSec": 8.036,
+   "src": "shots/020.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 273.214,
+   "durationSec": 8.036,
+   "src": "shots/021.jpg",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 281.25,
+   "durationSec": 8.036,
+   "src": "shots/021.jpg",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 289.286,
+   "durationSec": 8.036,
+   "src": "shots/021.jpg",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 297.321,
+   "durationSec": 8.036,
+   "src": "shots/021.jpg",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 305.357,
+   "durationSec": 8.036,
+   "src": "shots/023.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 313.393,
+   "durationSec": 8.036,
+   "src": "shots/024.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 321.429,
+   "durationSec": 8.036,
+   "src": "shots/024.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 329.464,
+   "durationSec": 8.036,
+   "src": "shots/024.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 337.5,
+   "durationSec": 8.036,
+   "src": "shots/024.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 345.536,
+   "durationSec": 8.036,
+   "src": "shots/026.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 353.571,
+   "durationSec": 8.036,
+   "src": "shots/026.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 361.607,
+   "durationSec": 8.036,
+   "src": "shots/026.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 369.643,
+   "durationSec": 8.036,
+   "src": "shots/028.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 377.679,
+   "durationSec": 8.036,
+   "src": "shots/028.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 385.714,
+   "durationSec": 8.036,
+   "src": "shots/028.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 393.75,
+   "durationSec": 8.036,
+   "src": "shots/028.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 401.786,
+   "durationSec": 8.036,
+   "src": "shots/028.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 409.821,
+   "durationSec": 8.036,
+   "src": "shots/031.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 417.857,
+   "durationSec": 8.036,
+   "src": "shots/031.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 425.893,
+   "durationSec": 8.036,
+   "src": "shots/032.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 433.929,
+   "durationSec": 8.036,
+   "src": "shots/032.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 441.964,
+   "durationSec": 8.036,
+   "src": "shots/032.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 450.0,
+   "durationSec": 8.036,
+   "src": "shots/032.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 458.036,
+   "durationSec": 8.036,
+   "src": "shots/032.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 466.071,
+   "durationSec": 8.036,
+   "src": "shots/035.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 474.107,
+   "durationSec": 8.036,
+   "src": "shots/036.png",
+   "inset": 0.301,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 482.143,
+   "durationSec": 8.036,
+   "src": "shots/036.png",
+   "inset": 0.301,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 490.179,
+   "durationSec": 8.036,
+   "src": "shots/035.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 498.214,
+   "durationSec": 8.036,
+   "src": "shots/035.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 506.25,
+   "durationSec": 8.036,
+   "src": "shots/035.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 514.286,
+   "durationSec": 8.036,
+   "src": "shots/039.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 522.321,
+   "durationSec": 8.036,
+   "src": "shots/039.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 530.357,
+   "durationSec": 8.036,
+   "src": "shots/040.png",
+   "inset": 0.265,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 538.393,
+   "durationSec": 8.036,
+   "src": "shots/040.png",
+   "inset": 0.265,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 546.429,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 554.464,
+   "durationSec": 8.036,
+   "src": "shots/042.png",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 562.5,
+   "durationSec": 8.036,
+   "src": "shots/042.png",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 570.536,
+   "durationSec": 8.036,
+   "src": "shots/043.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 578.571,
+   "durationSec": 8.036,
+   "src": "shots/043.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 586.607,
+   "durationSec": 8.036,
+   "src": "shots/044.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 594.643,
+   "durationSec": 8.036,
+   "src": "shots/044.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 602.679,
+   "durationSec": 8.036,
+   "src": "shots/044.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 610.714,
+   "durationSec": 8.036,
+   "src": "shots/046.jpg",
+   "inset": 0.309,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 618.75,
+   "durationSec": 8.036,
+   "src": "shots/046.jpg",
+   "inset": 0.309,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 626.786,
+   "durationSec": 8.036,
+   "src": "shots/046.jpg",
+   "inset": 0.309,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 634.821,
+   "durationSec": 8.036,
+   "src": "shots/048.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 642.857,
+   "durationSec": 8.036,
+   "src": "shots/048.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 650.893,
+   "durationSec": 8.036,
+   "src": "shots/048.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 658.929,
+   "durationSec": 8.036,
+   "src": "shots/048.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 666.964,
+   "durationSec": 8.036,
+   "src": "shots/050.jpg",
+   "inset": 0.227,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 675.0,
+   "durationSec": 8.036,
+   "src": "shots/051.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 683.036,
+   "durationSec": 8.036,
+   "src": "shots/051.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 691.071,
+   "durationSec": 8.036,
+   "src": "shots/052.jpg",
+   "inset": 0.274,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 699.107,
+   "durationSec": 8.036,
+   "src": "shots/052.jpg",
+   "inset": 0.274,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 707.143,
+   "durationSec": 8.036,
+   "src": "shots/052.jpg",
+   "inset": 0.274,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 715.179,
+   "durationSec": 8.036,
+   "src": "shots/052.jpg",
+   "inset": 0.274,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 723.214,
+   "durationSec": 8.036,
+   "src": "shots/052.jpg",
+   "inset": 0.274,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 731.25,
+   "durationSec": 8.036,
+   "src": "shots/055.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 739.286,
+   "durationSec": 8.036,
+   "src": "shots/055.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 747.321,
+   "durationSec": 8.036,
+   "src": "shots/055.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 755.357,
+   "durationSec": 8.036,
+   "src": "shots/057.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 763.393,
+   "durationSec": 8.036,
+   "src": "shots/057.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 771.429,
+   "durationSec": 8.036,
+   "src": "shots/058.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 779.464,
+   "durationSec": 8.036,
+   "src": "shots/058.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 787.5,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 795.536,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 803.571,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 811.607,
+   "durationSec": 8.036,
+   "src": "shots/058.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 819.643,
+   "durationSec": 8.036,
+   "src": "shots/058.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 827.679,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 835.714,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 843.75,
+   "durationSec": 8.036,
+   "src": "shots/000.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 851.786,
+   "durationSec": 8.036,
+   "src": "shots/064.webp",
+   "inset": 0.231,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 859.821,
+   "durationSec": 8.036,
+   "src": "shots/064.webp",
+   "inset": 0.231,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 867.857,
+   "durationSec": 8.036,
+   "src": "shots/065.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 875.893,
+   "durationSec": 8.036,
+   "src": "shots/065.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 883.929,
+   "durationSec": 8.036,
+   "src": "shots/065.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 891.964,
+   "durationSec": 8.036,
+   "src": "shots/065.webp",
+   "inset": 0.219,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  }
+ ],
+ "telops": [
+  {
+   "startSec": 0.0,
+   "durationSec": 7.5,
+   "text": "オーパーツ",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 7.9,
+   "durationSec": 5.822,
+   "text": "紀元前",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 49.952,
+   "durationSec": 7.5,
+   "text": "オーパーツ",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 75.636,
+   "durationSec": 6.342,
+   "text": "ヴァレリオス・スタイス",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 111.876,
+   "durationSec": 3.175,
+   "text": "ソーラ・プライス",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 156.207,
+   "durationSec": 7.5,
+   "text": "歯車比",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 172.007,
+   "durationSec": 7.5,
+   "text": "バビロニアの観測値",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 179.907,
+   "durationSec": 7.5,
+   "text": "黄道十二宮",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 187.807,
+   "durationSec": 7.5,
+   "text": "メトン周期",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 250.324,
+   "durationSec": 7.5,
+   "text": "クトゥブ・コンプレックス",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 287.091,
+   "durationSec": 7.5,
+   "text": "サンスクリット碑文",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 347.255,
+   "durationSec": 7.5,
+   "text": "保護皮膜",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 355.155,
+   "durationSec": 7.5,
+   "text": "バラスブラマニアム",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 363.055,
+   "durationSec": 7.5,
+   "text": "数十年",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 370.955,
+   "durationSec": 7.5,
+   "text": "不純物",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 410.455,
+   "durationSec": 6.296,
+   "text": "クジュト・ラブア",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 432.751,
+   "durationSec": 7.5,
+   "text": "ヴィルヘルム・ケーニッヒ",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 458.435,
+   "durationSec": 7.5,
+   "text": "出土状況",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 482.135,
+   "durationSec": 7.5,
+   "text": "保管容器",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 490.035,
+   "durationSec": 7.5,
+   "text": "セレウキア遺跡",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 497.935,
+   "durationSec": 7.5,
+   "text": "パピルスの断片",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 505.835,
+   "durationSec": 3.274,
+   "text": "アスファルト",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 525.109,
+   "durationSec": 7.5,
+   "text": "イスタンブール",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 540.909,
+   "durationSec": 7.078,
+   "text": "オスマン帝国",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 563.987,
+   "durationSec": 5.11,
+   "text": "チャールズ・ハプグッド",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 585.097,
+   "durationSec": 7.5,
+   "text": "ピリ・レイス本人",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 600.897,
+   "durationSec": 7.5,
+   "text": "アレクサンドロス大王",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 608.797,
+   "durationSec": 7.5,
+   "text": "編集物",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 635.058,
+   "durationSec": 7.5,
+   "text": "海岸線",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 642.958,
+   "durationSec": 7.5,
+   "text": "ハプグッド自身",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 650.858,
+   "durationSec": 7.5,
+   "text": "見える",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 658.758,
+   "durationSec": 7.5,
+   "text": "カリフォルニア",
+   "variant": "plain",
+   "zone": "upper"
+  },
+  {
+   "startSec": 702.787,
+   "durationSec": 6.128,
+   "text": "プラグの収集家団体",
+   "variant": "plain",
+   "zone": "upper"
+  }
+ ],
+ "subtitles": [
+  {
+   "startSec": 0.0,
+   "durationSec": 1.056,
+   "text": "オーパーツ。"
+  },
+  {
+   "startSec": 1.056,
+   "durationSec": 3.518,
+   "text": "時代にそぐわない出土品を指す言葉である。"
+  },
+  {
+   "startSec": 4.574,
+   "durationSec": 4.222,
+   "text": "1960年代に使われ始めた、比較的新しい言葉だ。"
+  },
+  {
+   "startSec": 8.796,
+   "durationSec": 2.287,
+   "text": "紀元前の海底から出た歯車。"
+  },
+  {
+   "startSec": 11.083,
+   "durationSec": 2.639,
+   "text": "1600年錆びていない鉄の柱。"
+  },
+  {
+   "startSec": 13.722,
+   "durationSec": 4.046,
+   "text": "50万年前の岩に埋まっていたという点火プラグ。"
+  },
+  {
+   "startSec": 17.768,
+   "durationSec": 3.342,
+   "text": "当チャンネルでは、こうした古代の謎を、"
+  },
+  {
+   "startSec": 21.11,
+   "durationSec": 2.639,
+   "text": "都市伝説として語るのではなく、"
+  },
+  {
+   "startSec": 23.749,
+   "durationSec": 2.991,
+   "text": "論文と一次資料からひも解いていく。"
+  },
+  {
+   "startSec": 26.74,
+   "durationSec": 2.639,
+   "text": "問題は、本物かどうかではない。"
+  },
+  {
+   "startSec": 29.378,
+   "durationSec": 4.574,
+   "text": "本物と作り話が、ひとまとめに語られていることである。"
+  },
+  {
+   "startSec": 33.952,
+   "durationSec": 3.518,
+   "text": "この動画では、語られている5つを並べた。"
+  },
+  {
+   "startSec": 37.471,
+   "durationSec": 3.694,
+   "text": "はじめは、言われている通り本物だったもの。"
+  },
+  {
+   "startSec": 41.165,
+   "durationSec": 2.639,
+   "text": "次に、本物だが理由が違うもの。"
+  },
+  {
+   "startSec": 43.804,
+   "durationSec": 4.046,
+   "text": "最後に、一次資料まで戻ると跡形もなくなるもの。"
+  },
+  {
+   "startSec": 47.85,
+   "durationSec": 4.046,
+   "text": "それでは私と共に、オーパーツへと迫っていこう。"
+  },
+  {
+   "startSec": 51.896,
+   "durationSec": 3.87,
+   "text": "1901年、ギリシャのアンティキティラ島沖。"
+  },
+  {
+   "startSec": 55.766,
+   "durationSec": 3.87,
+   "text": "海綿を採っていた潜水夫が、沈没船を見つけた。"
+  },
+  {
+   "startSec": 59.636,
+   "durationSec": 4.574,
+   "text": "回収作業は1900年から1901年にかけて行われた。"
+  },
+  {
+   "startSec": 64.21,
+   "durationSec": 4.398,
+   "text": "引き上げられた品の中に、腐食した青銅の塊があった。"
+  },
+  {
+   "startSec": 68.608,
+   "durationSec": 1.407,
+   "text": "大きさは本ほど。"
+  },
+  {
+   "startSec": 70.016,
+   "durationSec": 2.463,
+   "text": "当時は誰も気に留めなかった。"
+  },
+  {
+   "startSec": 72.478,
+   "durationSec": 4.046,
+   "text": "1902年、考古学者ヴァレリオス・スタイスが、"
+  },
+  {
+   "startSec": 76.525,
+   "durationSec": 2.815,
+   "text": "割れた塊の断面に歯車を見つける。"
+  },
+  {
+   "startSec": 79.339,
+   "durationSec": 1.056,
+   "text": "歯車である。"
+  },
+  {
+   "startSec": 80.395,
+   "durationSec": 1.583,
+   "text": "紀元前の船からだ。"
+  },
+  {
+   "startSec": 81.978,
+   "durationSec": 2.463,
+   "text": "沈没船の年代は紀元前1世紀。"
+  },
+  {
+   "startSec": 84.441,
+   "durationSec": 3.342,
+   "text": "積荷の陶器と貨幣から割り出されている。"
+  },
+  {
+   "startSec": 87.783,
+   "durationSec": 2.639,
+   "text": "船からは大理石の彫像や青銅像、"
+  },
+  {
+   "startSec": 90.422,
+   "durationSec": 2.111,
+   "text": "ガラス器も上がっている。"
+  },
+  {
+   "startSec": 92.533,
+   "durationSec": 3.342,
+   "text": "ローマへ運ぶ途中の積荷と見られている。"
+  },
+  {
+   "startSec": 95.876,
+   "durationSec": 4.046,
+   "text": "潜水は水深40メートルを超える場所で行われた。"
+  },
+  {
+   "startSec": 99.922,
+   "durationSec": 4.222,
+   "text": "当時の装備での作業で、潜水夫が1人死亡している。"
+  },
+  {
+   "startSec": 104.144,
+   "durationSec": 3.694,
+   "text": "機械そのものは、それより古い可能性がある。"
+  },
+  {
+   "startSec": 107.838,
+   "durationSec": 1.056,
+   "text": "1971年、"
+  },
+  {
+   "startSec": 108.894,
+   "durationSec": 3.87,
+   "text": "デレク・デ・ソーラ・プライスがX線を当てた。"
+  },
+  {
+   "startSec": 112.764,
+   "durationSec": 2.287,
+   "text": "内部に歯車が重なっていた。"
+  },
+  {
+   "startSec": 115.051,
+   "durationSec": 2.463,
+   "text": "1974年、彼は論文を出す。"
+  },
+  {
+   "startSec": 117.514,
+   "durationSec": 2.991,
+   "text": "これは天体の位置を計算する装置だ。"
+  },
+  {
+   "startSec": 120.504,
+   "durationSec": 2.639,
+   "text": "2005年、X線CTが入った。"
+  },
+  {
+   "startSec": 123.143,
+   "durationSec": 1.935,
+   "text": "分解能は0.05ミリ。"
+  },
+  {
+   "startSec": 125.078,
+   "durationSec": 2.815,
+   "text": "塊の内部が、切らずに全部見えた。"
+  },
+  {
+   "startSec": 127.893,
+   "durationSec": 3.167,
+   "text": "結果は2006年にネイチャーへ載る。"
+  },
+  {
+   "startSec": 131.059,
+   "durationSec": 2.287,
+   "text": "2008年には続報が出た。"
+  },
+  {
+   "startSec": 133.346,
+   "durationSec": 1.935,
+   "text": "判明したことを並べる。"
+  },
+  {
+   "startSec": 135.281,
+   "durationSec": 1.583,
+   "text": "歯車は30個以上。"
+  },
+  {
+   "startSec": 136.865,
+   "durationSec": 3.342,
+   "text": "歯の数が判読できたものだけで30種類。"
+  },
+  {
+   "startSec": 140.207,
+   "durationSec": 2.287,
+   "text": "最大のものは歯が223枚。"
+  },
+  {
+   "startSec": 142.494,
+   "durationSec": 1.935,
+   "text": "何を計算していたのか。"
+  },
+  {
+   "startSec": 144.429,
+   "durationSec": 1.407,
+   "text": "太陽と月の位置。"
+  },
+  {
+   "startSec": 145.837,
+   "durationSec": 1.231,
+   "text": "月の満ち欠け。"
+  },
+  {
+   "startSec": 147.068,
+   "durationSec": 2.111,
+   "text": "日食と月食の起きる周期。"
+  },
+  {
+   "startSec": 149.179,
+   "durationSec": 2.815,
+   "text": "そしてオリンピアードの4年周期。"
+  },
+  {
+   "startSec": 151.994,
+   "durationSec": 2.463,
+   "text": "とくに月の運動が精巧だった。"
+  },
+  {
+   "startSec": 154.457,
+   "durationSec": 2.287,
+   "text": "月は一定の速さで回らない。"
+  },
+  {
+   "startSec": 156.744,
+   "durationSec": 2.815,
+   "text": "近いときは速く、遠いときは遅い。"
+  },
+  {
+   "startSec": 159.558,
+   "durationSec": 1.759,
+   "text": "この速度の揺らぎを、"
+  },
+  {
+   "startSec": 161.317,
+   "durationSec": 4.574,
+   "text": "2枚の歯車をピンと溝でずらして噛ませることで再現して"
+  },
+  {
+   "startSec": 165.891,
+   "durationSec": 0.528,
+   "text": "いた。"
+  },
+  {
+   "startSec": 166.419,
+   "durationSec": 1.935,
+   "text": "歯車比は254対19。"
+  },
+  {
+   "startSec": 168.354,
+   "durationSec": 2.287,
+   "text": "19年で月が254周する、"
+  },
+  {
+   "startSec": 170.641,
+   "durationSec": 3.518,
+   "text": "という古代バビロニアの観測値と一致する。"
+  },
+  {
+   "startSec": 174.159,
+   "durationSec": 2.639,
+   "text": "装置の表と裏に文字盤があった。"
+  },
+  {
+   "startSec": 176.798,
+   "durationSec": 3.518,
+   "text": "表は黄道十二宮と、365日のエジプト暦。"
+  },
+  {
+   "startSec": 180.317,
+   "durationSec": 3.342,
+   "text": "裏は上下2つの螺旋目盛りになっている。"
+  },
+  {
+   "startSec": 183.659,
+   "durationSec": 2.111,
+   "text": "上の螺旋は235か月分。"
+  },
+  {
+   "startSec": 185.77,
+   "durationSec": 3.87,
+   "text": "19年で太陽と月の暦が揃うメトン周期である。"
+  },
+  {
+   "startSec": 189.64,
+   "durationSec": 2.111,
+   "text": "下の螺旋は223か月分。"
+  },
+  {
+   "startSec": 191.751,
+   "durationSec": 3.518,
+   "text": "日食と月食が繰り返すサロス周期にあたる。"
+  },
+  {
+   "startSec": 195.27,
+   "durationSec": 2.991,
+   "text": "目盛りの脇には、食が起きる時刻と、"
+  },
+  {
+   "startSec": 198.26,
+   "durationSec": 3.87,
+   "text": "そのときの月の色を示す記号まで刻まれていた。"
+  },
+  {
+   "startSec": 202.131,
+   "durationSec": 1.935,
+   "text": "装置に刻まれた文字は、"
+  },
+  {
+   "startSec": 204.066,
+   "durationSec": 3.518,
+   "text": "判読できたものだけで2000字を超える。"
+  },
+  {
+   "startSec": 207.584,
+   "durationSec": 1.583,
+   "text": "つまりこの装置は、"
+  },
+  {
+   "startSec": 209.167,
+   "durationSec": 3.167,
+   "text": "天文表を機械に置き換えたものである。"
+  },
+  {
+   "startSec": 212.334,
+   "durationSec": 3.694,
+   "text": "ではなぜ、これがオーパーツと呼ばれるのか。"
+  },
+  {
+   "startSec": 216.028,
+   "durationSec": 1.935,
+   "text": "同じ水準の歯車機構が、"
+  },
+  {
+   "startSec": 217.963,
+   "durationSec": 4.574,
+   "text": "次に現れるのが14世紀のヨーロッパの天文時計だからだ"
+  },
+  {
+   "startSec": 222.537,
+   "durationSec": 0.176,
+   "text": "。"
+  },
+  {
+   "startSec": 222.713,
+   "durationSec": 2.639,
+   "text": "あいだが1400年空いている。"
+  },
+  {
+   "startSec": 225.352,
+   "durationSec": 3.518,
+   "text": "ただし、空白は技術が消えた証拠ではない。"
+  },
+  {
+   "startSec": 228.87,
+   "durationSec": 2.463,
+   "text": "青銅は溶かせば再利用できる。"
+  },
+  {
+   "startSec": 231.333,
+   "durationSec": 2.991,
+   "text": "記録も、写本が途切れれば残らない。"
+  },
+  {
+   "startSec": 234.324,
+   "durationSec": 4.574,
+   "text": "紀元前3世紀のアルキメデスが天球儀を作ったという記述"
+  },
+  {
+   "startSec": 238.898,
+   "durationSec": 0.352,
+   "text": "を、"
+  },
+  {
+   "startSec": 239.249,
+   "durationSec": 1.759,
+   "text": "キケロが残している。"
+  },
+  {
+   "startSec": 241.009,
+   "durationSec": 3.518,
+   "text": "同じ系統の装置が複数あった可能性は高い。"
+  },
+  {
+   "startSec": 244.527,
+   "durationSec": 4.574,
+   "text": "残ったのが海の底の1個だけだった、ということである。"
+  },
+  {
+   "startSec": 249.101,
+   "durationSec": 3.167,
+   "text": "この1件は、言われている通りだった。"
+  },
+  {
+   "startSec": 252.267,
+   "durationSec": 1.056,
+   "text": "本物である。"
+  },
+  {
+   "startSec": 253.323,
+   "durationSec": 1.407,
+   "text": "では次はどうか。"
+  },
+  {
+   "startSec": 254.73,
+   "durationSec": 0.88,
+   "text": "インドに、"
+  },
+  {
+   "startSec": 255.61,
+   "durationSec": 3.87,
+   "text": "1600年錆びていないとされる鉄の柱がある。"
+  },
+  {
+   "startSec": 259.48,
+   "durationSec": 3.167,
+   "text": "デリーのクトゥブ・コンプレックスに、"
+  },
+  {
+   "startSec": 262.647,
+   "durationSec": 1.759,
+   "text": "鉄の柱が立っている。"
+  },
+  {
+   "startSec": 264.406,
+   "durationSec": 2.639,
+   "text": "高さは地上部分で約7メートル。"
+  },
+  {
+   "startSec": 267.045,
+   "durationSec": 2.639,
+   "text": "地下を含めると7.2メートル。"
+  },
+  {
+   "startSec": 269.683,
+   "durationSec": 1.407,
+   "text": "重さは約6トン。"
+  },
+  {
+   "startSec": 271.091,
+   "durationSec": 2.815,
+   "text": "建てられたのは4世紀から5世紀。"
+  },
+  {
+   "startSec": 273.905,
+   "durationSec": 3.518,
+   "text": "柱に刻まれたサンスクリット語の碑文から、"
+  },
+  {
+   "startSec": 277.424,
+   "durationSec": 3.167,
+   "text": "チャンドラグプタ2世の時代とされる。"
+  },
+  {
+   "startSec": 280.59,
+   "durationSec": 2.463,
+   "text": "1600年、雨ざらしである。"
+  },
+  {
+   "startSec": 283.053,
+   "durationSec": 1.231,
+   "text": "柱の表面には、"
+  },
+  {
+   "startSec": 284.285,
+   "durationSec": 4.046,
+   "text": "グプタ文字のサンスクリット碑文が刻まれている。"
+  },
+  {
+   "startSec": 288.331,
+   "durationSec": 3.694,
+   "text": "チャンドラという王がヴィシュヌ神に捧げた、"
+  },
+  {
+   "startSec": 292.025,
+   "durationSec": 1.231,
+   "text": "という内容だ。"
+  },
+  {
+   "startSec": 293.256,
+   "durationSec": 2.463,
+   "text": "碑文が今も読めること自体が、"
+  },
+  {
+   "startSec": 295.719,
+   "durationSec": 3.167,
+   "text": "表面が削れていない証拠になっている。"
+  },
+  {
+   "startSec": 298.886,
+   "durationSec": 2.991,
+   "text": "それでも表面に深い錆が出ていない。"
+  },
+  {
+   "startSec": 301.876,
+   "durationSec": 1.231,
+   "text": "これは事実だ。"
+  },
+  {
+   "startSec": 303.108,
+   "durationSec": 2.815,
+   "text": "観光客が触り続けた下部を除けば、"
+  },
+  {
+   "startSec": 305.923,
+   "durationSec": 2.639,
+   "text": "鉄はほぼ健全なまま残っている。"
+  },
+  {
+   "startSec": 308.561,
+   "durationSec": 2.287,
+   "text": "語られている説明はこうだ。"
+  },
+  {
+   "startSec": 310.848,
+   "durationSec": 3.518,
+   "text": "古代インドには失われた製鉄技術があった。"
+  },
+  {
+   "startSec": 314.367,
+   "durationSec": 1.935,
+   "text": "現代でも再現できない。"
+  },
+  {
+   "startSec": 316.302,
+   "durationSec": 2.815,
+   "text": "一次資料に当たると、話が変わる。"
+  },
+  {
+   "startSec": 319.116,
+   "durationSec": 1.407,
+   "text": "2000年前後、"
+  },
+  {
+   "startSec": 320.524,
+   "durationSec": 4.574,
+   "text": "インド工科大学のR・バラスブラマニアムが柱の表面を分"
+  },
+  {
+   "startSec": 325.098,
+   "durationSec": 0.704,
+   "text": "析した。"
+  },
+  {
+   "startSec": 325.801,
+   "durationSec": 4.046,
+   "text": "錆の層に、リン酸水素鉄の結晶が見つかっている。"
+  },
+  {
+   "startSec": 329.848,
+   "durationSec": 1.407,
+   "text": "鍵はリンである。"
+  },
+  {
+   "startSec": 331.255,
+   "durationSec": 4.046,
+   "text": "この鉄には、リンが約1パーセント含まれている。"
+  },
+  {
+   "startSec": 335.301,
+   "durationSec": 1.231,
+   "text": "現代の鋼では、"
+  },
+  {
+   "startSec": 336.532,
+   "durationSec": 4.398,
+   "text": "リンは脆くなるので0.05パーセント以下に抑える。"
+  },
+  {
+   "startSec": 340.93,
+   "durationSec": 0.88,
+   "text": "不純物だ。"
+  },
+  {
+   "startSec": 341.81,
+   "durationSec": 3.342,
+   "text": "ところが雨に濡れて乾くのを繰り返すと、"
+  },
+  {
+   "startSec": 345.152,
+   "durationSec": 2.287,
+   "text": "このリンが表面に濃縮する。"
+  },
+  {
+   "startSec": 347.439,
+   "durationSec": 2.463,
+   "text": "そこに薄い保護皮膜ができる。"
+  },
+  {
+   "startSec": 349.902,
+   "durationSec": 2.463,
+   "text": "厚さは数十マイクロメートル。"
+  },
+  {
+   "startSec": 352.365,
+   "durationSec": 3.342,
+   "text": "これが内部への酸素と水の侵入を止める。"
+  },
+  {
+   "startSec": 355.708,
+   "durationSec": 1.935,
+   "text": "バラスブラマニアムは、"
+  },
+  {
+   "startSec": 357.643,
+   "durationSec": 4.574,
+   "text": "この皮膜ができるまでに数十年かかると見積もっている。"
+  },
+  {
+   "startSec": 362.217,
+   "durationSec": 3.518,
+   "text": "建った直後から錆びなかったわけではない。"
+  },
+  {
+   "startSec": 365.735,
+   "durationSec": 3.87,
+   "text": "最初の数十年で薄く錆び、その錆が鎧になった。"
+  },
+  {
+   "startSec": 369.605,
+   "durationSec": 2.287,
+   "text": "なぜリンが多く残ったのか。"
+  },
+  {
+   "startSec": 371.892,
+   "durationSec": 3.342,
+   "text": "当時の製鉄は、炉で鉄を溶かしきらない。"
+  },
+  {
+   "startSec": 375.235,
+   "durationSec": 2.991,
+   "text": "固体のまま還元して、叩いて鍛える。"
+  },
+  {
+   "startSec": 378.225,
+   "durationSec": 3.518,
+   "text": "この方法では、リンが取り除かれずに残る。"
+  },
+  {
+   "startSec": 381.744,
+   "durationSec": 2.991,
+   "text": "つまり、優れた技術の産物ではない。"
+  },
+  {
+   "startSec": 384.734,
+   "durationSec": 2.639,
+   "text": "溶かしきれなかった結果である。"
+  },
+  {
+   "startSec": 387.373,
+   "durationSec": 2.991,
+   "text": "デリーの乾燥した気候も効いている。"
+  },
+  {
+   "startSec": 390.364,
+   "durationSec": 3.342,
+   "text": "同じ柱を海辺に置けば、こうはならない。"
+  },
+  {
+   "startSec": 393.706,
+   "durationSec": 1.407,
+   "text": "当たってはいる。"
+  },
+  {
+   "startSec": 395.113,
+   "durationSec": 2.111,
+   "text": "錆びていないのは本当だ。"
+  },
+  {
+   "startSec": 397.224,
+   "durationSec": 1.759,
+   "text": "だが理由が逆である。"
+  },
+  {
+   "startSec": 398.984,
+   "durationSec": 4.574,
+   "text": "失われた技術ではなく、除去できなかった不純物だった。"
+  },
+  {
+   "startSec": 403.557,
+   "durationSec": 1.935,
+   "text": "次も同じ形をしている。"
+  },
+  {
+   "startSec": 405.493,
+   "durationSec": 4.046,
+   "text": "バグダッドから出たとされる、古代の電池である。"
+  },
+  {
+   "startSec": 409.539,
+   "durationSec": 4.398,
+   "text": "1930年代、バグダッド近郊のクジュト・ラブアで、"
+  },
+  {
+   "startSec": 413.937,
+   "durationSec": 2.815,
+   "text": "素焼きの壺が見つかったとされる。"
+  },
+  {
+   "startSec": 416.751,
+   "durationSec": 1.759,
+   "text": "高さは約14センチ。"
+  },
+  {
+   "startSec": 418.511,
+   "durationSec": 1.583,
+   "text": "中身が奇妙だった。"
+  },
+  {
+   "startSec": 420.094,
+   "durationSec": 1.759,
+   "text": "銅の筒が入っている。"
+  },
+  {
+   "startSec": 421.853,
+   "durationSec": 1.935,
+   "text": "筒の中に鉄の棒が1本。"
+  },
+  {
+   "startSec": 423.788,
+   "durationSec": 3.518,
+   "text": "棒は上部のアスファルトで固定されている。"
+  },
+  {
+   "startSec": 427.306,
+   "durationSec": 1.056,
+   "text": "1938年、"
+  },
+  {
+   "startSec": 428.362,
+   "durationSec": 4.574,
+   "text": "イラク国立博物館にいたヴィルヘルム・ケーニッヒが論文"
+  },
+  {
+   "startSec": 432.936,
+   "durationSec": 0.88,
+   "text": "を書いた。"
+  },
+  {
+   "startSec": 433.815,
+   "durationSec": 1.935,
+   "text": "これは電池ではないか。"
+  },
+  {
+   "startSec": 435.751,
+   "durationSec": 2.639,
+   "text": "再現実験は何度も行われている。"
+  },
+  {
+   "startSec": 438.389,
+   "durationSec": 4.046,
+   "text": "酢やブドウ果汁を入れると、実際に電流が流れる。"
+  },
+  {
+   "startSec": 442.435,
+   "durationSec": 3.167,
+   "text": "電圧は0.5ボルトから1ボルト程度。"
+  },
+  {
+   "startSec": 445.602,
+   "durationSec": 1.583,
+   "text": "ここまでは本当だ。"
+  },
+  {
+   "startSec": 447.185,
+   "durationSec": 2.463,
+   "text": "構造上、電池として機能する。"
+  },
+  {
+   "startSec": 449.648,
+   "durationSec": 1.759,
+   "text": "問題はその先である。"
+  },
+  {
+   "startSec": 451.407,
+   "durationSec": 2.287,
+   "text": "一緒に出土したものを見る。"
+  },
+  {
+   "startSec": 453.694,
+   "durationSec": 1.056,
+   "text": "導線がない。"
+  },
+  {
+   "startSec": 454.75,
+   "durationSec": 1.935,
+   "text": "電気を使う器具もない。"
+  },
+  {
+   "startSec": 456.685,
+   "durationSec": 3.342,
+   "text": "複数をつないで電圧を上げた形跡もない。"
+  },
+  {
+   "startSec": 460.027,
+   "durationSec": 2.639,
+   "text": "壺1個では1ボルトに届かない。"
+  },
+  {
+   "startSec": 462.666,
+   "durationSec": 3.167,
+   "text": "メッキに使われたという説も語られる。"
+  },
+  {
+   "startSec": 465.833,
+   "durationSec": 3.87,
+   "text": "だが当時のメッキは、水銀に金を溶かして塗り、"
+  },
+  {
+   "startSec": 469.703,
+   "durationSec": 3.167,
+   "text": "熱して水銀を飛ばす方法で説明がつく。"
+  },
+  {
+   "startSec": 472.869,
+   "durationSec": 1.407,
+   "text": "電気は要らない。"
+  },
+  {
+   "startSec": 474.277,
+   "durationSec": 2.287,
+   "text": "出土状況の記録自体も弱い。"
+  },
+  {
+   "startSec": 476.564,
+   "durationSec": 2.111,
+   "text": "ケーニッヒの記述以外に、"
+  },
+  {
+   "startSec": 478.675,
+   "durationSec": 3.342,
+   "text": "発掘の一次記録がほとんど残っていない。"
+  },
+  {
+   "startSec": 482.017,
+   "durationSec": 2.287,
+   "text": "現在の考古学で有力なのは、"
+  },
+  {
+   "startSec": 484.304,
+   "durationSec": 2.815,
+   "text": "巻物の保管容器という見方である。"
+  },
+  {
+   "startSec": 487.119,
+   "durationSec": 4.222,
+   "text": "同じ形の壺が、近隣のセレウキア遺跡から出ている。"
+  },
+  {
+   "startSec": 491.341,
+   "durationSec": 2.991,
+   "text": "そちらには巻物の痕跡が入っていた。"
+  },
+  {
+   "startSec": 494.332,
+   "durationSec": 1.759,
+   "text": "セレウキアの壺では、"
+  },
+  {
+   "startSec": 496.091,
+   "durationSec": 3.518,
+   "text": "銅の筒の中にパピルスの断片が残っていた。"
+  },
+  {
+   "startSec": 499.609,
+   "durationSec": 2.991,
+   "text": "アスファルトの栓も同じ構造である。"
+  },
+  {
+   "startSec": 502.6,
+   "durationSec": 3.518,
+   "text": "湿気と虫から巻物を守る容器として見れば、"
+  },
+  {
+   "startSec": 506.118,
+   "durationSec": 2.991,
+   "text": "銅も鉄もアスファルトも説明がつく。"
+  },
+  {
+   "startSec": 509.109,
+   "durationSec": 2.287,
+   "text": "ただし、決着はしていない。"
+  },
+  {
+   "startSec": 511.396,
+   "durationSec": 2.111,
+   "text": "電池だったという証明も、"
+  },
+  {
+   "startSec": 513.507,
+   "durationSec": 3.518,
+   "text": "電池ではなかったという証明も、まだない。"
+  },
+  {
+   "startSec": 517.025,
+   "durationSec": 1.231,
+   "text": "そして現物は、"
+  },
+  {
+   "startSec": 518.256,
+   "durationSec": 4.574,
+   "text": "2003年のイラク国立博物館の略奪で所在が分からなく"
+  },
+  {
+   "startSec": 522.83,
+   "durationSec": 1.056,
+   "text": "なっている。"
+  },
+  {
+   "startSec": 523.886,
+   "durationSec": 2.639,
+   "text": "確かめる対象そのものが消えた。"
+  },
+  {
+   "startSec": 526.525,
+   "durationSec": 2.991,
+   "text": "ここまでの3つは、現物が実在する。"
+  },
+  {
+   "startSec": 529.515,
+   "durationSec": 2.111,
+   "text": "次の2つは、そこが違う。"
+  },
+  {
+   "startSec": 531.626,
+   "durationSec": 3.87,
+   "text": "1929年、イスタンブールのトプカプ宮殿で、"
+  },
+  {
+   "startSec": 535.496,
+   "durationSec": 2.815,
+   "text": "1枚の羊皮紙の地図が見つかった。"
+  },
+  {
+   "startSec": 538.311,
+   "durationSec": 3.694,
+   "text": "描いたのはオスマン帝国の提督ピリ・レイス。"
+  },
+  {
+   "startSec": 542.005,
+   "durationSec": 2.815,
+   "text": "年代は1513年と記されている。"
+  },
+  {
+   "startSec": 544.82,
+   "durationSec": 3.167,
+   "text": "残っているのは西側の断片だけである。"
+  },
+  {
+   "startSec": 547.987,
+   "durationSec": 3.518,
+   "text": "大きさは縦90センチ、横63センチほど。"
+  },
+  {
+   "startSec": 551.505,
+   "durationSec": 1.935,
+   "text": "大西洋、南米の東海岸、"
+  },
+  {
+   "startSec": 553.44,
+   "durationSec": 2.815,
+   "text": "アフリカの西海岸が描かれている。"
+  },
+  {
+   "startSec": 556.255,
+   "durationSec": 3.518,
+   "text": "この地図がオーパーツとして語られるのは、"
+  },
+  {
+   "startSec": 559.773,
+   "durationSec": 2.463,
+   "text": "1966年の1冊の本からだ。"
+  },
+  {
+   "startSec": 562.236,
+   "durationSec": 4.574,
+   "text": "チャールズ・ハプグッドの『古代の海の王たちの地図』。"
+  },
+  {
+   "startSec": 566.81,
+   "durationSec": 2.287,
+   "text": "ハプグッドの主張はこうだ。"
+  },
+  {
+   "startSec": 569.097,
+   "durationSec": 2.287,
+   "text": "地図の下端に伸びる陸地は、"
+  },
+  {
+   "startSec": 571.384,
+   "durationSec": 3.694,
+   "text": "南極大陸のクイーン・モード・ランドである。"
+  },
+  {
+   "startSec": 575.078,
+   "durationSec": 2.639,
+   "text": "しかも氷の下の地形と一致する。"
+  },
+  {
+   "startSec": 577.717,
+   "durationSec": 3.342,
+   "text": "南極の存在が確認されるのは1820年。"
+  },
+  {
+   "startSec": 581.059,
+   "durationSec": 3.87,
+   "text": "氷床下の地形が測られたのは1949年以降だ。"
+  },
+  {
+   "startSec": 584.93,
+   "durationSec": 3.167,
+   "text": "1513年の地図に描けるはずがない。"
+  },
+  {
+   "startSec": 588.096,
+   "durationSec": 1.407,
+   "text": "一次資料に戻る。"
+  },
+  {
+   "startSec": 589.504,
+   "durationSec": 1.407,
+   "text": "地図そのものに、"
+  },
+  {
+   "startSec": 590.911,
+   "durationSec": 4.574,
+   "text": "ピリ・レイス本人の註記が20か所以上書き込まれている"
+  },
+  {
+   "startSec": 595.485,
+   "durationSec": 0.176,
+   "text": "。"
+  },
+  {
+   "startSec": 595.661,
+   "durationSec": 2.111,
+   "text": "そこに出典が書いてある。"
+  },
+  {
+   "startSec": 597.772,
+   "durationSec": 3.342,
+   "text": "アレクサンドロス大王の時代の地図8枚。"
+  },
+  {
+   "startSec": 601.114,
+   "durationSec": 1.583,
+   "text": "ポルトガルの地図。"
+  },
+  {
+   "startSec": 602.697,
+   "durationSec": 3.167,
+   "text": "そして、コロンブスが持っていた地図。"
+  },
+  {
+   "startSec": 605.864,
+   "durationSec": 3.87,
+   "text": "つまりこの地図は、既存の地図の編集物である。"
+  },
+  {
+   "startSec": 609.734,
+   "durationSec": 1.935,
+   "text": "本人がそう書いている。"
+  },
+  {
+   "startSec": 611.669,
+   "durationSec": 2.639,
+   "text": "註記には動機まで書かれている。"
+  },
+  {
+   "startSec": 614.308,
+   "durationSec": 2.463,
+   "text": "西の海の新しい陸地について、"
+  },
+  {
+   "startSec": 616.771,
+   "durationSec": 2.287,
+   "text": "信頼できる1枚がなかった。"
+  },
+  {
+   "startSec": 619.058,
+   "durationSec": 4.398,
+   "text": "だから手元の20枚あまりを突き合わせて1枚にした、"
+  },
+  {
+   "startSec": 623.456,
+   "durationSec": 1.583,
+   "text": "という趣旨である。"
+  },
+  {
+   "startSec": 625.039,
+   "durationSec": 2.815,
+   "text": "編集物であることを隠していない。"
+  },
+  {
+   "startSec": 627.854,
+   "durationSec": 1.935,
+   "text": "では下端の陸地は何か。"
+  },
+  {
+   "startSec": 629.789,
+   "durationSec": 3.342,
+   "text": "南米の海岸線が、羊皮紙の幅に収まらず、"
+  },
+  {
+   "startSec": 633.131,
+   "durationSec": 4.046,
+   "text": "東へ折り曲げられたものとする見方が主流である。"
+  },
+  {
+   "startSec": 637.177,
+   "durationSec": 4.046,
+   "text": "海岸線の形と地名の並びが、そのまま続いている。"
+  },
+  {
+   "startSec": 641.224,
+   "durationSec": 2.991,
+   "text": "ハプグッド自身は地質学者ではない。"
+  },
+  {
+   "startSec": 644.214,
+   "durationSec": 3.694,
+   "text": "専門は科学史で、この本は査読を経ていない。"
+  },
+  {
+   "startSec": 647.909,
+   "durationSec": 1.407,
+   "text": "南極説の根拠は、"
+  },
+  {
+   "startSec": 649.316,
+   "durationSec": 3.87,
+   "text": "地図の下端が南極に「見える」ことだけだった。"
+  },
+  {
+   "startSec": 653.186,
+   "durationSec": 2.991,
+   "text": "最後は、いちばん有名なものである。"
+  },
+  {
+   "startSec": 656.177,
+   "durationSec": 3.694,
+   "text": "1961年にカリフォルニアで拾われた石だ。"
+  },
+  {
+   "startSec": 659.871,
+   "durationSec": 4.222,
+   "text": "1961年2月、カリフォルニア州オランチャ近郊。"
+  },
+  {
+   "startSec": 664.093,
+   "durationSec": 3.87,
+   "text": "鉱物を探していた3人が、丸い石を持ち帰った。"
+  },
+  {
+   "startSec": 667.963,
+   "durationSec": 1.583,
+   "text": "晶洞だと思われた。"
+  },
+  {
+   "startSec": 669.547,
+   "durationSec": 2.639,
+   "text": "中に結晶が入っている石である。"
+  },
+  {
+   "startSec": 672.185,
+   "durationSec": 2.991,
+   "text": "切断すると、結晶は出てこなかった。"
+  },
+  {
+   "startSec": 675.176,
+   "durationSec": 2.639,
+   "text": "代わりに、白い陶器の筒が出た。"
+  },
+  {
+   "startSec": 677.815,
+   "durationSec": 2.463,
+   "text": "筒の中心には金属の芯がある。"
+  },
+  {
+   "startSec": 680.278,
+   "durationSec": 1.407,
+   "text": "まわりに銅の環。"
+  },
+  {
+   "startSec": 681.685,
+   "durationSec": 1.231,
+   "text": "主張はこうだ。"
+  },
+  {
+   "startSec": 682.916,
+   "durationSec": 3.87,
+   "text": "この石が採れた地層は50万年前のものである。"
+  },
+  {
+   "startSec": 686.787,
+   "durationSec": 3.167,
+   "text": "50万年前の地層から、人工物が出た。"
+  },
+  {
+   "startSec": 689.953,
+   "durationSec": 1.056,
+   "text": "1999年、"
+  },
+  {
+   "startSec": 691.009,
+   "durationSec": 4.574,
+   "text": "ピエール・ストロンバーグとポール・ハインリックが調べ"
+  },
+  {
+   "startSec": 695.582,
+   "durationSec": 0.352,
+   "text": "た。"
+  },
+  {
+   "startSec": 695.934,
+   "durationSec": 2.991,
+   "text": "彼らがやったのは単純なことである。"
+  },
+  {
+   "startSec": 698.925,
+   "durationSec": 4.046,
+   "text": "断面の写真を、点火プラグの収集家団体に送った。"
+  },
+  {
+   "startSec": 702.971,
+   "durationSec": 1.583,
+   "text": "回答は即座だった。"
+  },
+  {
+   "startSec": 704.554,
+   "durationSec": 3.518,
+   "text": "1920年代のチャンピオン製点火プラグ。"
+  },
+  {
+   "startSec": 708.073,
+   "durationSec": 2.111,
+   "text": "型番まで特定されている。"
+  },
+  {
+   "startSec": 710.184,
+   "durationSec": 2.111,
+   "text": "構造が全部一致していた。"
+  },
+  {
+   "startSec": 712.295,
+   "durationSec": 1.935,
+   "text": "白い陶器の筒は絶縁体。"
+  },
+  {
+   "startSec": 714.23,
+   "durationSec": 1.935,
+   "text": "中心の金属は中心電極。"
+  },
+  {
+   "startSec": 716.165,
+   "durationSec": 4.222,
+   "text": "外側の銅の環は、プラグを締めるワッシャーである。"
+  },
+  {
+   "startSec": 720.387,
+   "durationSec": 4.222,
+   "text": "断面を見れば、収集家には一目で分かるものだった。"
+  },
+  {
+   "startSec": 724.609,
+   "durationSec": 1.935,
+   "text": "そして石の側も違った。"
+  },
+  {
+   "startSec": 726.544,
+   "durationSec": 1.231,
+   "text": "晶洞ではない。"
+  },
+  {
+   "startSec": 727.776,
+   "durationSec": 2.111,
+   "text": "鉄が酸化してできた塊が、"
+  },
+  {
+   "startSec": 729.887,
+   "durationSec": 2.639,
+   "text": "外側に付着していたものだった。"
+  },
+  {
+   "startSec": 732.525,
+   "durationSec": 4.398,
+   "text": "鉄が錆びて周囲の砂を固める現象は、数十年で起きる。"
+  },
+  {
+   "startSec": 736.923,
+   "durationSec": 4.222,
+   "text": "50万年という数字の出どころも確かめられている。"
+  },
+  {
+   "startSec": 741.145,
+   "durationSec": 2.815,
+   "text": "地層の年代を測ったわけではない。"
+  },
+  {
+   "startSec": 743.96,
+   "durationSec": 4.222,
+   "text": "周辺の岩の年代を、発見者が当てはめただけだった。"
+  },
+  {
+   "startSec": 748.182,
+   "durationSec": 4.046,
+   "text": "採取地点はオランチャの北にある山の斜面である。"
+  },
+  {
+   "startSec": 752.228,
+   "durationSec": 4.046,
+   "text": "その一帯に分布するのは、数百万年前の火山岩と、"
+  },
+  {
+   "startSec": 756.274,
+   "durationSec": 2.639,
+   "text": "その上に乗った新しい堆積物だ。"
+  },
+  {
+   "startSec": 758.913,
+   "durationSec": 3.87,
+   "text": "石がどちらから出たかで、年代は桁ごと変わる。"
+  },
+  {
+   "startSec": 762.783,
+   "durationSec": 3.694,
+   "text": "現物は、その後所在が分からなくなっている。"
+  },
+  {
+   "startSec": 766.478,
+   "durationSec": 1.056,
+   "text": "5つ並べた。"
+  },
+  {
+   "startSec": 767.533,
+   "durationSec": 1.231,
+   "text": "年代でいえば、"
+  },
+  {
+   "startSec": 768.765,
+   "durationSec": 4.574,
+   "text": "紀元前1世紀から1961年までの2000年分である。"
+  },
+  {
+   "startSec": 773.339,
+   "durationSec": 2.463,
+   "text": "ここで共通点を1つ挙げたい。"
+  },
+  {
+   "startSec": 775.801,
+   "durationSec": 3.87,
+   "text": "本物だった2つには、出土の記録が残っていた。"
+  },
+  {
+   "startSec": 779.672,
+   "durationSec": 3.87,
+   "text": "アンティキティラは沈没船の位置と積荷がある。"
+  },
+  {
+   "startSec": 783.542,
+   "durationSec": 4.222,
+   "text": "デリーの鉄柱は、柱そのものに碑文が刻まれている。"
+  },
+  {
+   "startSec": 787.764,
+   "durationSec": 3.342,
+   "text": "跡形もなくなった2つには、記録がない。"
+  },
+  {
+   "startSec": 791.106,
+   "durationSec": 4.574,
+   "text": "ピリ・レイスの地図は南極説の根拠が「見える」だけだっ"
+  },
+  {
+   "startSec": 795.68,
+   "durationSec": 0.352,
+   "text": "た。"
+  },
+  {
+   "startSec": 796.032,
+   "durationSec": 3.342,
+   "text": "コソ加工物は、地層を測っていなかった。"
+  },
+  {
+   "startSec": 799.375,
+   "durationSec": 4.398,
+   "text": "そして中間のバグダッド電池は、出土記録が弱いまま、"
+  },
+  {
+   "startSec": 803.772,
+   "durationSec": 1.407,
+   "text": "現物まで消えた。"
+  },
+  {
+   "startSec": 805.18,
+   "durationSec": 4.574,
+   "text": "オーパーツが生まれる条件は、古さでも精巧さでもない。"
+  },
+  {
+   "startSec": 809.754,
+   "durationSec": 1.056,
+   "text": "誰が、いつ、"
+  },
+  {
+   "startSec": 810.809,
+   "durationSec": 3.87,
+   "text": "どこで掘ったのかを確かめられないことである。"
+  },
+  {
+   "startSec": 814.679,
+   "durationSec": 3.342,
+   "text": "確かめられない物ほど、話は大きくなる。"
+  },
+  {
+   "startSec": 818.022,
+   "durationSec": 1.935,
+   "text": "反証が届かないからだ。"
+  },
+  {
+   "startSec": 819.957,
+   "durationSec": 1.407,
+   "text": "この5つのうち、"
+  },
+  {
+   "startSec": 821.364,
+   "durationSec": 3.87,
+   "text": "現物の所在が分かっているのは2つだけである。"
+  },
+  {
+   "startSec": 825.235,
+   "durationSec": 4.574,
+   "text": "アンティキティラ島の機械はアテネの国立考古学博物館に"
+  },
+  {
+   "startSec": 829.808,
+   "durationSec": 0.528,
+   "text": "ある。"
+  },
+  {
+   "startSec": 830.336,
+   "durationSec": 3.518,
+   "text": "デリーの鉄柱は今も同じ場所に立っている。"
+  },
+  {
+   "startSec": 833.855,
+   "durationSec": 3.342,
+   "text": "バグダッド電池とコソ加工物は失われた。"
+  },
+  {
+   "startSec": 837.197,
+   "durationSec": 3.694,
+   "text": "ピリ・レイスの地図はトプカプ宮殿にあるが、"
+  },
+  {
+   "startSec": 840.891,
+   "durationSec": 2.287,
+   "text": "公開されることは稀である。"
+  },
+  {
+   "startSec": 843.178,
+   "durationSec": 3.342,
+   "text": "話が大きいものほど、現物に近づけない。"
+  },
+  {
+   "startSec": 846.521,
+   "durationSec": 2.111,
+   "text": "これは古代の話ではない。"
+  },
+  {
+   "startSec": 848.632,
+   "durationSec": 2.287,
+   "text": "今も同じ構造で起きている。"
+  },
+  {
+   "startSec": 850.919,
+   "durationSec": 4.574,
+   "text": "次にオーパーツを見たとき、確かめる順番は1つでいい。"
+  },
+  {
+   "startSec": 855.493,
+   "durationSec": 3.342,
+   "text": "物の凄さを見る前に、出土の記録を探す。"
+  },
+  {
+   "startSec": 858.835,
+   "durationSec": 2.815,
+   "text": "誰が、何年に、どこで掘ったのか。"
+  },
+  {
+   "startSec": 861.65,
+   "durationSec": 2.287,
+   "text": "それが書かれていなければ、"
+  },
+  {
+   "startSec": 863.937,
+   "durationSec": 3.167,
+   "text": "そこから先は検証ではなく想像になる。"
+  },
+  {
+   "startSec": 867.103,
+   "durationSec": 2.111,
+   "text": "記録が残っているものは、"
+  },
+  {
+   "startSec": 869.214,
+   "durationSec": 2.639,
+   "text": "調べれば調べるほど面白くなる。"
+  },
+  {
+   "startSec": 871.853,
+   "durationSec": 3.87,
+   "text": "アンティキティラ島の機械が、その一例である。"
+  },
+  {
+   "startSec": 875.723,
+   "durationSec": 4.574,
+   "text": "ここで挙げた資料は、すべて概要欄にまとめてあります。"
+  },
+  {
+   "startSec": 880.297,
+   "durationSec": 1.935,
+   "text": "論文もCTのデータも、"
+  },
+  {
+   "startSec": 882.232,
+   "durationSec": 4.222,
+   "text": "誰でも見られる形で公開されているものばかりです。"
+  },
+  {
+   "startSec": 886.454,
+   "durationSec": 2.991,
+   "text": "ぜひその目で確かめてみてください。"
+  },
+  {
+   "startSec": 889.445,
+   "durationSec": 4.398,
+   "text": "調べてほしい話があれば、コメントで教えてください。"
+  },
+  {
+   "startSec": 893.843,
+   "durationSec": 4.046,
+   "text": "チャンネル登録と高評価もよろしくお願いします。"
+  },
+  {
+   "startSec": 897.889,
+   "durationSec": 2.111,
+   "text": "それではまた次の動画で。"
+  }
+ ],
+ "chapters": [
+  {
+   "startSec": 37.0,
+   "durationSec": 3.0,
+   "label": "第1主張",
+   "title": ""
+  },
+  {
+   "startSec": 189.0,
+   "durationSec": 3.0,
+   "label": "第2主張",
+   "title": ""
+  },
+  {
+   "startSec": 341.0,
+   "durationSec": 3.0,
+   "label": "第3主張",
+   "title": ""
+  },
+  {
+   "startSec": 493.0,
+   "durationSec": 3.0,
+   "label": "第4主張",
+   "title": ""
+  },
+  {
+   "startSec": 645.0,
+   "durationSec": 3.0,
+   "label": "第5主張",
+   "title": ""
+  }
+ ],
+ "sourceLabels": [
+  {
+   "startSec": 0.0,
+   "durationSec": 48.216,
+   "text": "Logg Tandy / CC BY 4.0"
+  },
+  {
+   "startSec": 48.214,
+   "durationSec": 24.108,
+   "text": "Willy Stöwer / Public domain"
+  },
+  {
+   "startSec": 72.321,
+   "durationSec": 32.144,
+   "text": "Lyokoï88 / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 104.464,
+   "durationSec": 8.036,
+   "text": "Wilfredor / CC0"
+  },
+  {
+   "startSec": 112.5,
+   "durationSec": 16.072,
+   "text": "Moonik / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 128.571,
+   "durationSec": 24.108,
+   "text": "Postdlf / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 152.679,
+   "durationSec": 16.072,
+   "text": "Saidmann / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 168.75,
+   "durationSec": 40.18,
+   "text": "AnotherGypsy / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 208.929,
+   "durationSec": 24.108,
+   "text": "Logg Tandy / CC BY 4.0"
+  },
+  {
+   "startSec": 233.036,
+   "durationSec": 32.144,
+   "text": "Benjamin West / Public domain"
+  },
+  {
+   "startSec": 265.179,
+   "durationSec": 8.036,
+   "text": "MikeRun / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 273.214,
+   "durationSec": 32.144,
+   "text": "Biswarup Ganguly / CC BY 3.0"
+  },
+  {
+   "startSec": 305.357,
+   "durationSec": 8.036,
+   "text": "Vis M / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 313.393,
+   "durationSec": 32.144,
+   "text": "Deepak Singhanwal / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 345.536,
+   "durationSec": 24.108,
+   "text": "Tushraa / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 369.643,
+   "durationSec": 40.18,
+   "text": "Arne Hückelheim / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 409.821,
+   "durationSec": 16.072,
+   "text": "Daniel Tzvi / Public domain"
+  },
+  {
+   "startSec": 425.893,
+   "durationSec": 40.18,
+   "text": "Burger / Public domain"
+  },
+  {
+   "startSec": 466.071,
+   "durationSec": 8.036,
+   "text": "Stealth Communications / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 474.107,
+   "durationSec": 16.072,
+   "text": "Renato de carvalho ferreira / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 490.179,
+   "durationSec": 24.108,
+   "text": "Stealth Communications / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 514.286,
+   "durationSec": 16.072,
+   "text": "Hunanuk / CC0"
+  },
+  {
+   "startSec": 530.357,
+   "durationSec": 16.072,
+   "text": "Juris Tiltins / Public domain"
+  },
+  {
+   "startSec": 546.429,
+   "durationSec": 8.036,
+   "text": "Logg Tandy / CC BY 4.0"
+  },
+  {
+   "startSec": 554.464,
+   "durationSec": 16.072,
+   "text": "Derivative work: Carnby / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 570.536,
+   "durationSec": 16.072,
+   "text": "Wilfried Bauer / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 586.607,
+   "durationSec": 24.108,
+   "text": "Marie-Lan Nguyen / Public domain"
+  },
+  {
+   "startSec": 610.714,
+   "durationSec": 24.108,
+   "text": "Mushki Brichta / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 634.821,
+   "durationSec": 32.144,
+   "text": "William Henry Powell / Public domain"
+  },
+  {
+   "startSec": 666.964,
+   "durationSec": 8.036,
+   "text": "Dorothea Lange / Public domain"
+  },
+  {
+   "startSec": 675.0,
+   "durationSec": 16.072,
+   "text": "HQ / Public domain (NASA)"
+  },
+  {
+   "startSec": 691.071,
+   "durationSec": 40.18,
+   "text": "Susan Wright / Public domain"
+  },
+  {
+   "startSec": 731.25,
+   "durationSec": 24.108,
+   "text": "Woudloper / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 755.357,
+   "durationSec": 16.072,
+   "text": "Jimmyoneill at English Wikipedia / CC BY 2.5"
+  },
+  {
+   "startSec": 771.429,
+   "durationSec": 16.072,
+   "text": "Piri Reis / Public domain"
+  },
+  {
+   "startSec": 787.5,
+   "durationSec": 24.108,
+   "text": "Logg Tandy / CC BY 4.0"
+  },
+  {
+   "startSec": 811.607,
+   "durationSec": 16.072,
+   "text": "Piri Reis / Public domain"
+  },
+  {
+   "startSec": 827.679,
+   "durationSec": 24.108,
+   "text": "Logg Tandy / CC BY 4.0"
+  },
+  {
+   "startSec": 851.786,
+   "durationSec": 16.072,
+   "text": "Logg Tandy / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 867.857,
+   "durationSec": 32.144,
+   "text": "Logg Tandy / CC BY 4.0"
+  }
+ ],
+ "quoteCards": [
+  {
+   "startSec": 225.352,
+   "durationSec": 16.0,
+   "zone": "right",
+   "side": "right",
+   "heading": "留保",
+   "translation": "ただし、空白は技術が消えた証拠ではない"
+  },
+  {
+   "startSec": 310.848,
+   "durationSec": 16.0,
+   "zone": "left",
+   "side": "left",
+   "heading": "語られている説明はこうだ",
+   "translation": "古代インドには失われた製鉄技術があった。 現代でも再現できない"
+  },
+  {
+   "startSec": 509.109,
+   "durationSec": 16.0,
+   "zone": "right",
+   "side": "right",
+   "heading": "留保",
+   "translation": "ただし、決着はしていない"
+  },
+  {
+   "startSec": 569.097,
+   "durationSec": 16.0,
+   "zone": "left",
+   "side": "left",
+   "heading": "ハプグッドの主張はこうだ",
+   "translation": "地図の下端に伸びる陸地は、 南極大陸のクイーン・モード・ランドである"
+  },
+  {
+   "startSec": 682.916,
+   "durationSec": 16.0,
+   "zone": "left",
+   "side": "left",
+   "heading": "主張はこうだ",
+   "translation": "この石が採れた地層は50万年前のものである。 50万年前の地層から、人工物が出た"
+  }
+ ],
+ "chipStacks": [],
+ "cardRows": [
+  {
+   "startSec": 33.952,
+   "durationSec": 16.0,
+   "caption": "この動画では、語られている5つを並べた",
+   "cards": [
+    {
+     "code": "1",
+     "dimmed": false
+    },
+    {
+     "code": "2",
+     "dimmed": false
+    },
+    {
+     "code": "3",
+     "dimmed": false
+    },
+    {
+     "code": "4",
+     "dimmed": false
+    },
+    {
+     "code": "5",
+     "dimmed": false
+    }
+   ]
+  },
+  {
+   "startSec": 821.364,
+   "durationSec": 16.0,
+   "caption": "現物の所在が分かっているのは2つだけである",
+   "cards": [
+    {
+     "code": "1",
+     "dimmed": false
+    },
+    {
+     "code": "2",
+     "dimmed": false
+    }
+   ]
+  }
+ ],
+ "documentCards": [
+  {
+   "startSec": 115.051,
+   "durationSec": 12.442,
+   "venue": "論文 1974",
+   "title": "1974年、彼は論文を出す",
+   "badge": "一次資料"
+  },
+  {
+   "startSec": 127.893,
+   "durationSec": 16.0,
+   "venue": "ネイチャー 2006",
+   "title": "結果は2006年にネイチャーへ載る",
+   "badge": "一次資料"
+  }
+ ],
+ "stats": [
+  {
+   "startSec": 13.722,
+   "durationSec": 16.0,
+   "zone": "right",
+   "value": "50万年前",
+   "label": "50万年前"
+  },
+  {
+   "startSec": 81.978,
+   "durationSec": 16.0,
+   "zone": "corner",
+   "value": "紀元前1世紀",
+   "label": "沈没船の年代は紀元前1世紀"
+  },
+  {
+   "startSec": 95.876,
+   "durationSec": 16.0,
+   "zone": "left",
+   "value": "40メートルを超える",
+   "label": "潜水は水深40メートルを超える"
+  },
+  {
+   "startSec": 123.143,
+   "durationSec": 16.0,
+   "zone": "right",
+   "value": "0.05ミリ",
+   "label": "分解能は0.05ミリ"
+  },
+  {
+   "startSec": 135.281,
+   "durationSec": 16.0,
+   "zone": "corner",
+   "value": "30個以上",
+   "label": "歯車は30個以上"
+  },
+  {
+   "startSec": 140.207,
+   "durationSec": 16.0,
+   "zone": "left",
+   "value": "223枚",
+   "label": "最大のものは歯が223枚"
+  },
+  {
+   "startSec": 204.066,
+   "durationSec": 16.0,
+   "zone": "right",
+   "value": "2000字を超える",
+   "label": "判読できたものだけで2000字を超える"
+  },
+  {
+   "startSec": 217.963,
+   "durationSec": 16.0,
+   "zone": "corner",
+   "value": "14世紀",
+   "label": "次に現れるのが14世紀"
+  },
+  {
+   "startSec": 234.324,
+   "durationSec": 16.0,
+   "zone": "left",
+   "value": "紀元前3世紀",
+   "label": "紀元前3世紀"
+  },
+  {
+   "startSec": 264.406,
+   "durationSec": 6.285,
+   "zone": "right",
+   "value": "約7メートル",
+   "label": "高さは地上部分で約7メートル"
+  },
+  {
+   "startSec": 267.045,
+   "durationSec": 16.0,
+   "zone": "corner",
+   "value": "7.2メートル",
+   "label": "地下を含めると7.2メートル"
+  },
+  {
+   "startSec": 269.683,
+   "durationSec": 16.0,
+   "zone": "left",
+   "value": "約6トン",
+   "label": "重さは約6トン"
+  },
+  {
+   "startSec": 271.091,
+   "durationSec": 16.0,
+   "zone": "right",
+   "value": "4世紀",
+   "label": "建てられたのは4世紀"
+  },
+  {
+   "startSec": 319.116,
+   "durationSec": 16.0,
+   "zone": "corner",
+   "value": "2000年前",
+   "label": "2000年前"
+  },
+  {
+   "startSec": 331.255,
+   "durationSec": 16.0,
+   "zone": "left",
+   "value": "約1パーセント",
+   "label": "リンが約1パーセント"
+  },
+  {
+   "startSec": 416.751,
+   "durationSec": 16.0,
+   "zone": "corner",
+   "value": "約14センチ",
+   "label": "高さは約14センチ"
+  },
+  {
+   "startSec": 442.435,
+   "durationSec": 16.0,
+   "zone": "left",
+   "value": "0.5ボルト",
+   "label": "電圧は0.5ボルト"
+  },
+  {
+   "startSec": 547.987,
+   "durationSec": 16.0,
+   "zone": "right",
+   "value": "90センチ",
+   "label": "大きさは縦90センチ"
+  },
+  {
+   "startSec": 619.058,
+   "durationSec": 16.0,
+   "zone": "corner",
+   "value": "20枚あまり",
+   "label": "手元の20枚あまり"
+  },
+  {
+   "startSec": 686.787,
+   "durationSec": 16.0,
+   "zone": "right",
+   "value": "50万年前",
+   "label": "50万年前"
+  },
+  {
+   "startSec": 768.765,
+   "durationSec": 16.0,
+   "zone": "corner",
+   "value": "紀元前1世紀",
+   "label": "紀元前1世紀"
+  }
+ ],
+ "portraits": [],
+ "charts": [
+  {
+   "startSec": 331.255,
+   "durationSec": 16.0,
+   "zone": "right",
+   "series": [
+    1.0,
+    0.82,
+    0.55,
+    0.36,
+    0.02
+   ],
+   "readout": "1パーセント",
+   "caption": "この鉄には、リンが約1パーセント含まれている"
+  }
+ ],
+ "timelines": [
+  {
+   "startSec": 59.636,
+   "durationSec": 16.0,
+   "zone": "lower",
+   "marks": [
+    {
+     "label": "1900年",
+     "active": true
+    },
+    {
+     "label": "1901年",
+     "active": true
+    }
+   ]
+  },
+  {
+   "startSec": 768.765,
+   "durationSec": 16.0,
+   "zone": "lower",
+   "marks": [
+    {
+     "label": "1961年",
+     "active": true
+    },
+    {
+     "label": "2000年",
+     "active": true
+    }
+   ]
+  }
+ ],
+ "glyphs": [],
+ "grids": [
+  {
+   "startSec": 204.066,
+   "durationSec": 16.0,
+   "zone": "center",
+   "cols": 12,
+   "rows": 6,
+   "filled": 0.62,
+   "caption": "2000字"
+  }
+ ]
+}

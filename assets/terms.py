@@ -182,11 +182,14 @@ def queries_for_segments(segments: list[str], *, per_segment: int = 1,
     print(f"英語版があった {len(resolved)}語（うち未判定 {len(need)}語）を判定…", flush=True)
     cache["types"].update(entity_types(need))
     _save_cache(cache)
-    types = {e: cache["types"].get(e) or [] for e in resolved}
-    usable = {ja: en for ja, en in en_of.items() if en and types.get(en)}
-    meta = {ja for ja, en in usable.items() if is_meta(types[en])}
-    print(f"個体だったのは {len(set(usable.values()))}語"
-          f"（うち器が {len({usable[j] for j in meta})}語）", flush=True)
+    types = {e: (cache["types"].get(e) or {"t": [], "c": False}) for e in resolved}
+    usable = {ja: en for ja, en in en_of.items()
+              if en and (types.get(en) or {}).get("t")}
+    meta = {ja for ja, en in usable.items() if is_meta(types[en]["t"])}
+    klass = {ja for ja, en in usable.items() if types[en]["c"]}
+    print(f"使える語は {len(set(usable.values()))}語"
+          f"（器 {len({usable[j] for j in meta})} / クラス "
+          f"{len({usable[j] for j in klass})}）", flush=True)
 
     # 使える語だけで出現区間数を数える。使えない語の分布は関係ない
     df: dict[str, int] = {}
@@ -202,8 +205,15 @@ def queries_for_segments(segments: list[str], *, per_segment: int = 1,
         # 受けられ、名前は主張の頭にしか出ない。器を採ると、その区間だけ
         # 主題から離れた画に差し替わる（実測で本文の途中にネイチャー誌の
         # 表紙が出た）。語が無い区間として返し、前の主題を引き継がせる。
+        # クラスの記事に載っているのは分類の一例で、題材ではない。実測で
+        # Replica の記事のブガッティが巨石の回に5区間ぶん出た。出現回数では
+        # 分かれない（「レプリカ」は実際に複数区間に出る）ので、クラスは
+        # 採らない。モアイ・ストーンヘンジ・ナスカの地上絵はいずれも
+        # 個体（P31）なので、主題は落ちない。
         ranked = sorted({t for t in terms
-                         if t in usable and t not in meta and df[t] <= max(1, n // 2)},
+                         if t in usable and t not in meta
+                         and df[t] <= max(1, n // 2)
+                         and t not in klass},
                         key=lambda t: (df[t], -len(t)))
         picked: list[str] = []
         for t in ranked:
