@@ -262,3 +262,37 @@ cd video && PROPS=props.json ./render.sh render src/index.ts Documentary out/vid
 - `stats` の値（接頭辞・単位の取りこぼし）
 - `portraits` の氏名（組織名との混同）
 - `charts` の読み値（文脈と合っているか）
+
+## LLMによる抽出（llm_extract.py）
+
+正規表現では文脈が読めず、実際に画面へ事実誤りを出した。
+どれも「その文が何を言っているか」が分かれば起きない誤りなので、LLMの領分。
+
+```bash
+export OPENAI_API_KEY=...
+python3 video/build_props.py drafts/oparts_v1.txt --duration 900 --kind bundle \
+  --claims 5 --manifest video/public/shots/manifest.json --llm
+```
+
+**キーが無い／API が失敗したら、黙って正規表現に戻る。** 止まらない。
+
+### 幻覚は必ず検証で落とす
+
+LLMは台本に無い値を書くことがある。戻り値は全件検証する:
+
+1. 参照している行が実在すること
+2. `value` / `name` / `readout` / `glyph` が、**その行にそのまま出てくる**こと
+3. `timeline` の年が、その行に出てくること
+4. 種別・ゾーンが既知であること
+
+**部分文字列の一致だけでは足りない。** 「紀元前1世紀」から「1世紀」を取っても
+部分文字列としては一致してしまう。値の直前が `紀元前` `約` `推定` などの
+修飾語だった場合は、落としているとみなして棄却する（テストで検出した穴）。
+
+棄却件数は `ExtractResult.rejected` に入り、実行時に表示される。
+ここが多いときはプロンプトか検証条件を疑う。
+
+### 正規表現版との関係
+
+正規表現版は残してある。LLMが使えない環境でも動くこと、
+LLMの出力を比べる基準が要ることの両方が理由。

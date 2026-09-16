@@ -15,6 +15,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from autolayout import Line, build as build_overlays  # noqa: E402
+from autolayout import hold, schedule, to_props  # noqa: E402
 from script_engine.beats import get  # noqa: E402
 
 MAX_SUB_CHARS = 26  # 1枚の字幕に載せる上限。これを超えると読めない
@@ -73,9 +74,33 @@ def source_labels(manifest: list[dict], shots: list[dict]) -> list[dict]:
     return out
 
 
+def overlays_from_llm(lines: list[Line], duration: float,
+                      codes: list[str]) -> tuple[dict, str] | None:
+    """LLMで抽出を試す。キーが無い／失敗したら None を返して正規表現に任せる。
+
+    LLMは文脈が読めるので、否定文や組織名の取り違えを避けられる。
+    ただし台本に無い値を書くことがあるので llm_extract 側で検証している。
+    """
+    try:
+        import llm_extract
+    except ImportError:
+        return None
+    if not llm_extract.available():
+        return None
+    try:
+        r = llm_extract.extract(lines)
+    except Exception as exc:  # noqa: BLE001 - 失敗したら正規表現で続行する
+        print(f"  ! LLM抽出に失敗、正規表現で続行: {str(exc)[:90]}")
+        return None
+    if not r.cues:
+        return None
+    props = to_props(hold(schedule(r.cues), duration), codes)
+    return props, f"LLM抽出（検証で{r.rejected}件を棄却）"
+
+
 def build(script: str, duration: float, kind: str, n_claims: int,
           shot_sec: float, narration: str | None, bgm: str | None,
-          manifest: list[dict] | None = None) -> dict:
+          manifest: list[dict] | None = None, use_llm: bool = False) -> dict:
     lines = [w for s in split_sentences(script) for w in wrap(s)]
     total_chars = sum(len(l) for l in lines) or 1
 
@@ -113,9 +138,17 @@ def build(script: str, duration: float, kind: str, n_claims: int,
             "to": {"scale": 1.18 if zoom_in else 1.0, "x": 0.2 if zoom_in else -0.2, "y": 0},
         })
 
-    overlays = build_overlays(
-        [Line(**{k: s[k] for k in ("startSec", "durationSec", "text")}) for s in subtitles],
-        codes=[str(i + 1) for i in range(9)], duration=duration)
+    lines = [Line(**{k: s[k] for k in ("startSec", "durationSec", "text")})
+             for s in subtitles]
+    codes = [str(i + 1) for i in range(9)]
+    overlays, how = None, "正規表現抽出"
+    if use_llm:
+        got = overlays_from_llm(lines, duration, codes)
+        if got:
+            overlays, how = got
+    if overlays is None:
+        overlays = build_overlays(lines, codes=codes, duration=duration)
+    print(f"  抽出方法: {how}")
 
     props: dict = {
         "bgmVolume": 0.12, "backgroundDim": 0.5, "shots": shots, "telops": [],
@@ -141,11 +174,14 @@ def main() -> int:
     ap.add_argument("--bgm")
     ap.add_argument("--out", default="video/props.json")
     ap.add_argument("--manifest", help="assets fetch が出した manifest.json")
+    ap.add_argument("--llm", action="store_true",
+                    help="オーバーレイ抽出にLLMを使う（OPENAI_API_KEY が要る）")
     a = ap.parse_args()
 
     props = build(Path(a.script).read_text(encoding="utf-8"), a.duration,
                   a.kind, a.claims, a.shot_sec, a.narration, a.bgm,
-                  manifest=load_manifest(Path(a.manifest) if a.manifest else None))
+                  manifest=load_manifest(Path(a.manifest) if a.manifest else None),
+                  use_llm=a.llm)
     Path(a.out).write_text(json.dumps(props, ensure_ascii=False, indent=1), encoding="utf-8")
     # 部品を足したらここも増やすこと（4種のときの数え漏らしで9件と誤表示した）
     OVERLAY_KEYS = ("quoteCards", "chipStacks", "cardRows", "documentCards",
