@@ -143,3 +143,22 @@ def test_credits_keep_distinct_authors_sharing_a_license():
               license="CC BY 4.0", author="Bob")
     text = build_credits([a, b, a, b])
     assert text.count("Alice") == 1 and text.count("Bob") == 1
+
+
+def test_place_names_keep_their_one_character_suffix():
+    """地名の接尾辞は1文字。ここで切ると別の記事に当たる。
+
+    実測で「イースター島」が「イースター」（復活祭）に切れ、
+    復活祭の記事の画が素材として採られた。
+    """
+    from assets.terms import candidates
+    assert "イースター島" in candidates("イースター島のモアイを見る。")
+    assert "ナスカ台地" in candidates("ナスカ台地に描かれている。")
+
+
+def test_compound_proper_nouns_are_kept_whole():
+    """「ピリ・レイスの地図」を「レイスの地図」としか拾えない状態だった。"""
+    from assets.terms import candidates
+    assert "ピリ・レイスの地図" in candidates("ピリ・レイスの地図が見つかった。")
+    assert "アンティキティラ島の機械" in candidates("アンティキティラ島の機械の話。")
+    assert "コソ加工物" in candidates("コソ加工物は失われた。")
