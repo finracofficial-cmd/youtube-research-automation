@@ -50,20 +50,43 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: pip
 
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: npm
+          cache-dependency-path: video/package-lock.json
 
-      - name: 必要なものを入れる
+      - run: pip install -r requirements.txt
+
+      - name: ffmpeg を入れる
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg
-          pip install pyyaml
-          npm ci --prefix video || npm install --prefix video
+          ffmpeg -version | head -1
 
-      - name: 描画用のブラウザを入れる
+      - name: node の依存を入れる
+        run: npm ci --prefix video
+
+      # 描画用のブラウザは200MB近くある。毎回取り直すと時間を食う
+      - name: ブラウザの控えを使う
+        uses: actions/cache@v4
+        with:
+          path: video/node_modules/.remotion
+          key: remotion-browser-${{ runner.os }}-${{ hashFiles('video/package-lock.json') }}
+
+      - name: 描画用のブラウザを確かめる
         run: npx --prefix video remotion browser ensure
+
+      # 90分かけてから設定の不備で落ちるのを防ぐ。ここで落ちれば数分で分かる
+      - name: 1枚だけ描いて設定を確かめる
+        run: |
+          python3 video/build_props.py "${{ inputs.script }}" \
+            --duration 60 --kind bundle --claims 1 --out video/_smoke.json
+          cd video && PROPS=_smoke.json ./render.sh still Documentary \
+            /tmp/smoke.png --frame=30
+          ls -lh /tmp/smoke.png
 
       - name: 動画を作る
         env:
@@ -83,6 +106,18 @@ jobs:
             "out/${{ inputs.name }}.mp4"
 
       # Release に置く。添付は履歴に残らないので、リポジトリは重くならない
+      # Release が失敗しても取り出せるようにしておく
+      - name: 成果物としても残す
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.name }}-${{ github.run_number }}
+          path: |
+            out/${{ inputs.name }}.mp4
+            video/public/shots_${{ inputs.name }}/credits.txt
+          retention-days: 30
+          if-no-files-found: warn
+
       - name: Release に置く
         uses: softprops/action-gh-release@v2
         with:

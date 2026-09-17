@@ -90,6 +90,37 @@ def cmd_compare(args) -> int:
     return 0
 
 
+def cmd_write(args) -> int:
+    """プロンプトを渡して台本を書かせ、実測から外れていれば直させる。"""
+    from .write import WriteFailed, write
+
+    prompt = Path(args.prompt).read_text(encoding="utf-8")
+
+    def checker(text: str) -> list[str]:
+        m = validate(text, args.duration)
+        notes = list(m.violations)
+        # レンジは通っていても型として痩せている場合がある。そこも直させる
+        if m.fidelity < 0.85:
+            notes += [l for l in m.fidelity_report() if "±" not in l][:3]
+        return notes
+
+    try:
+        text, left = write(prompt, model=args.model, rounds=args.rounds,
+                           checker=checker)
+    except WriteFailed as exc:
+        print(f"生成できなかった: {exc}")
+        return 1
+
+    Path(args.out).write_text(text, encoding="utf-8")
+    m = validate(text, args.duration)
+    print(f"{len(text)}字 / 忠実度 {m.fidelity:.0%} -> {args.out}")
+    if left:
+        print("直しきれなかった点:")
+        for n in left:
+            print(f"  - {n}")
+    return 0 if m.ok else 1
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="script_engine")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -108,6 +139,15 @@ def main(argv=None) -> int:
     c.add_argument("file")
     c.add_argument("--duration", type=int, required=True, help="尺（秒）")
     c.set_defaults(func=cmd_check)
+
+    w = sub.add_parser("write", help="プロンプトから台本を書かせる")
+    w.add_argument("prompt", help="prompt サブコマンドが出したファイル")
+    w.add_argument("--out", required=True)
+    w.add_argument("--duration", type=float, default=900.0)
+    w.add_argument("--model", default="gpt-4.1")
+    w.add_argument("--rounds", type=int, default=2,
+                   help="実測から外れていたときに直させる回数")
+    w.set_defaults(func=cmd_write)
 
     m = sub.add_parser("compare", help="複数の台本を参照動画と横並びで比べる")
     m.add_argument("drafts", nargs="+", help="path:duration の形で複数指定")

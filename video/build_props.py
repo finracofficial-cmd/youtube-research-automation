@@ -170,10 +170,16 @@ def build(script: str, duration: float, kind: str, n_claims: int,
     lines = [w for s in split_sentences(script) for w in wrap(s)]
     total_chars = sum(len(l) for l in lines) or 1
 
+    # 1フレームに満たない字幕は描画側で長さ0として弾かれ、描画そのものが
+    # 落ちる。実測で「る。」が0.025秒になり、60秒尺の確認が通らなかった。
+    # 短すぎる字幕は読めもしないので、下限を置く。
+    MIN_SUBTITLE_SEC = 0.35
     subtitles, t = [], 0.0
     for line in lines:
         dur = duration * len(line) / total_chars
-        subtitles.append({"startSec": round(t, 3), "durationSec": round(dur, 3), "text": line})
+        subtitles.append({"startSec": round(t, 3),
+                          "durationSec": round(max(MIN_SUBTITLE_SEC, dur), 3),
+                          "text": line})
         t += dur
 
     sheet = get(kind, n_claims=n_claims)

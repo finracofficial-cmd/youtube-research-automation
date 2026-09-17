@@ -43,3 +43,30 @@ def test_char_budget_is_inflated_against_measured_shortfall():
     import re
     total = int(re.search(r"目安の総文字数: (\d+)字", p).group(1))
     assert total > 5475
+
+
+def test_no_subtitle_is_shorter_than_one_frame():
+    """1フレームに満たない字幕があると、描画そのものが落ちる。
+
+    実測で「る。」が0.025秒になり、60秒尺の確認で
+    "durationInFrames must be positive, but got 0" が出た。
+    短すぎる字幕は読めもしないので、下限を置く。
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "video"))
+    import build_props
+
+    script = Path("drafts/megaliths_v1.txt").read_text(encoding="utf-8")
+    # 尺を短くするほど1本あたりが短くなり、下限に当たりやすい
+    for duration in (60.0, 300.0, 900.0):
+        props = build_props.build(script, duration, "bundle", 1,
+                                  shot_sec=8.0, narration=None, bgm=None)
+        for key, items in props.items():
+            if not isinstance(items, list) or not items:
+                continue
+            if not isinstance(items[0], dict) or "durationSec" not in items[0]:
+                continue
+            for item in items:
+                assert item["durationSec"] * 30 >= 1, (duration, key, item)

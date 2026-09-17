@@ -1,0 +1,70 @@
+# 題材を発掘して採点し、結果をリポジトリに書き戻す。
+#
+# 出てきた題材はGitHub上でそのまま読める（analysis/ 以下のCSV）。
+# 動画と違ってテキストなので、履歴に残しても重くならない。
+name: Pick topics
+
+on:
+  workflow_dispatch:
+    inputs:
+      channels:
+        description: 走査するチャンネル数
+        required: false
+        default: "30"
+      per_channel:
+        description: 1chあたり何本のタイトルを見るか
+        required: false
+        default: "60"
+      limit:
+        description: ランキングに残す件数
+        required: false
+        default: "60"
+  schedule:
+    # 毎週月曜 朝9時（JST）。題材の在庫を切らさないため
+    - cron: "0 0 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  scout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: 題材を発掘する
+        run: |
+          mkdir -p out analysis
+          python3 -m topic_scout discover \
+            --channels "${{ inputs.channels || 30 }}" \
+            --per-channel "${{ inputs.per_channel || 60 }}" \
+            --out out/candidates.csv
+
+      - name: 採点してランキングにする
+        run: |
+          python3 -m topic_scout scout \
+            --seeds out/candidates.csv \
+            --limit "${{ inputs.limit || 60 }}" \
+            --out "analysis/topics_$(date +%Y-%m-%d).csv"
+
+      - name: 結果を書き戻す
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/
+          git diff --staged --quiet && { echo "変化なし"; exit 0; }
+          git commit -m "題材のランキングを更新（$(date +%Y-%m-%d)）"
+          git push
+
+      - name: 上位を表示する
+        run: head -20 analysis/topics_*.csv | tail -18

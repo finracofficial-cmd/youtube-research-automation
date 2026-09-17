@@ -1,0 +1,96 @@
+# 題材名から台本を1本書き、リポジトリに書き戻す。
+#
+#   題材名 -> 取材仕様 -> 一次資料の調査 -> プロンプト -> 台本 -> 実測チェック
+#
+# 出来た台本は drafts/ でそのまま読める。Make video の入力になる。
+name: Write script
+
+on:
+  workflow_dispatch:
+    inputs:
+      subject:
+        description: "題材（例 ヴォイニッチ手稿）"
+        required: true
+      name:
+        description: 出力名（drafts/<name>.txt になる）
+        required: true
+      kind:
+        description: 単独題材か、複数を束ねるか
+        type: choice
+        options: [bundle, flagship]
+        default: bundle
+      claims:
+        description: 取り上げる主張の数
+        required: false
+        default: "5"
+      duration:
+        description: 想定の尺（秒）
+        required: false
+        default: "900"
+
+permissions:
+  contents: write
+
+jobs:
+  write:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      # 一次資料は英語で書かれているので、英語の検索語まで含めて仕様を組む
+      - name: 取材仕様を組む
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python3 -m research.spec_from_subject "${{ inputs.subject }}" \
+            --claims "${{ inputs.claims }}" \
+            --out "seeds/topics/${{ inputs.name }}.yaml"
+
+      - name: 一次資料を調べてプロンプトにする
+        run: |
+          mkdir -p out drafts
+          python3 -m research pipeline "seeds/topics/${{ inputs.name }}.yaml" \
+            --kind "${{ inputs.kind }}" \
+            --duration "${{ inputs.duration }}" \
+            --out "out/prompt_${{ inputs.name }}.txt"
+
+      - name: 台本を書かせる
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python3 -m script_engine write "out/prompt_${{ inputs.name }}.txt" \
+            --out "drafts/${{ inputs.name }}.txt" \
+            --duration "${{ inputs.duration }}"
+
+      # 落ちても台本は残す。直すか捨てるかは中身を見て決めたい
+      - name: 実測に照らす
+        continue-on-error: true
+        run: |
+          python3 -m script_engine check "drafts/${{ inputs.name }}.txt" \
+            --duration "${{ inputs.duration }}"
+
+      - name: 台本と仕様を書き戻す
+        if: always()
+        run: |
+          [ -f "drafts/${{ inputs.name }}.txt" ] || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "drafts/${{ inputs.name }}.txt" "seeds/topics/${{ inputs.name }}.yaml"
+          git diff --staged --quiet && exit 0
+          git commit -m "台本を追加: ${{ inputs.subject }}"
+          git pull --rebase --autostash
+          git push
+
+      - name: 中身を表示する
+        if: always()
+        run: head -30 "drafts/${{ inputs.name }}.txt" || true
