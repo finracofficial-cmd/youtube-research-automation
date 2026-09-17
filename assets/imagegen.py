@@ -37,15 +37,36 @@ Rules:
 - Never depict a specific real document, manuscript, artifact, artwork,
   inscription, map, logo, or identifiable person. No text or lettering.
 - No people in focus. Distant silhouettes at most.
+- You are given a LOOK to use. Follow it exactly: it fixes the light, the
+  weather and the camera. Do not substitute your own; in particular do not
+  default to mist or dawn unless the LOOK says so.
 - Keep it under 40 words. Output the prompt only, nothing else."""
+
+# 画の条件を区間ごとに配る。指示を付けずに任せると、どの区間でも同じ答えが
+# 返る。実測で6枚中5枚が「Misty」、4枚が「at dawn」で始まり、
+# 枚数を増やしても見た目が変わらなかった。
+_LOOKS = (
+    "high noon, hard sunlight, deep short shadows, clear sky, wide vista",
+    "overcast afternoon, flat grey light, low horizon, distant weather",
+    "golden hour, long raking shadows, warm low sun, side lighting",
+    "blue hour after sunset, cool deep shadows, first stars, still air",
+    "close macro on stone surface texture, shallow focus, raking light",
+    "heavy rain, wet dark rock, puddles, low cloud, muted colour",
+    "clear night, moonlight, cold blue tones, silhouetted horizon",
+    "dry midday heat, dust haze, bleached tones, shimmering air",
+    "low aerial vantage looking down, geometric ground pattern, midday",
+    "winter, bare ground, frost, pale flat light, long empty distance",
+    "dense fog at dawn, shapes dissolving, near-monochrome",
+    "storm light, dark sky with one bright break, dramatic contrast",
+)
 
 _STYLE = ("Cinematic documentary background plate, muted earth tones, "
           "soft directional light, shallow depth of field, no text, "
           "no lettering, no watermark.")
 
 
-def _chat(text: str, *, timeout: int = 60) -> str | None:
-    """ナレーション1行から、情景の指示文を起こす。"""
+def _chat(text: str, look: str = "", *, timeout: int = 60) -> str | None:
+    """ナレーション1行と画の条件から、情景の指示文を起こす。"""
     key = os.environ.get("OPENAI_API_KEY")
     if not key and not os.environ.get("OPENAI_VIA_PROXY"):
         raise GenerationUnavailable(
@@ -54,8 +75,9 @@ def _chat(text: str, *, timeout: int = 60) -> str | None:
     body = json.dumps({
         "model": PROMPT_MODEL,
         "messages": [{"role": "system", "content": _SYSTEM},
-                     {"role": "user", "content": text[:600]}],
-        "temperature": 0.7,
+                     {"role": "user",
+                      "content": f"LOOK: {look}\n\nNARRATION: {text[:600]}"}],
+        "temperature": 0.9,
         "max_tokens": 120,
     }).encode()
     headers = {"Content-Type": "application/json"}
@@ -114,7 +136,7 @@ def fill(manifest: list[dict], segments: list[str], out_dir: Path,
         if len(text) < 20:
             continue
         try:
-            prompt = _chat(text)
+            prompt = _chat(text, _LOOKS[made % len(_LOOKS)])
             if not prompt:
                 continue
             dst = out_dir / f"gen{seg:03d}.png"
