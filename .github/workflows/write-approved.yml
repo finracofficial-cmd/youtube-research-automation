@@ -1,0 +1,109 @@
+# Issueでチェックされた題材の台本を、まとめて書く。
+#
+# Pick topics が出したIssueのチェックボックスを人が選び、その番号を渡す。
+# 選ばれたものだけ台本にするので、外した題材に時間を使わない。
+name: Write approved
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: 題材の候補Issueの番号
+        required: true
+      duration:
+        description: 想定の尺（秒）
+        required: false
+        default: "900"
+      claims:
+        description: 1本あたり取り上げる主張の数
+        required: false
+        default: "5"
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  write:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: チェックされた題材を読む
+        id: picked
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue view "${{ inputs.issue }}" --json body -q .body > /tmp/issue.md
+          python3 - <<'PY' > /tmp/subjects.txt
+          from pathlib import Path
+          from topic_scout.review import checked_subjects
+          for s in checked_subjects(Path("/tmp/issue.md").read_text(encoding="utf-8")):
+              print(s)
+          PY
+          n=$(wc -l < /tmp/subjects.txt)
+          echo "選ばれた題材 ${n}件"
+          cat /tmp/subjects.txt
+          [ "$n" -gt 0 ] || { echo "チェックが1つも無い。Issueで選んでから実行すること"; exit 1; }
+
+      - name: 台本を書く
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          mkdir -p out drafts seeds/topics
+          : > /tmp/done.txt
+          while IFS= read -r subject; do
+            [ -n "$subject" ] || continue
+            # ファイル名は英数字に寄せる。日本語のままだと扱いに難がある
+            name=$(python3 -c "
+          import hashlib, sys
+          s = sys.argv[1]
+          print('t' + hashlib.sha1(s.encode()).hexdigest()[:8])" "$subject")
+            echo "=== $subject -> drafts/${name}.txt ==="
+            python3 -m research.spec_from_subject "$subject" \
+              --claims "${{ inputs.claims }}" --out "seeds/topics/${name}.yaml" || continue
+            python3 -m research pipeline "seeds/topics/${name}.yaml" \
+              --kind bundle --duration "${{ inputs.duration }}" \
+              --out "out/prompt_${name}.txt" || continue
+            python3 -m script_engine write "out/prompt_${name}.txt" \
+              --out "drafts/${name}.txt" --duration "${{ inputs.duration }}" || true
+            [ -f "drafts/${name}.txt" ] && echo "${name}|${subject}" >> /tmp/done.txt
+          done < /tmp/subjects.txt
+          echo "書けた台本:"; cat /tmp/done.txt
+
+      - name: 台本を書き戻す
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add drafts/ seeds/topics/
+          git diff --staged --quiet && { echo "書けた台本が無い"; exit 0; }
+          git commit -m "選ばれた題材の台本を追加（Issue #${{ inputs.issue }}）"
+          git pull --rebase --autostash
+          git push
+
+      - name: Issueに結果を返す
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ -s /tmp/done.txt ] || exit 0
+          {
+            echo "台本ができました。中身を見て、良ければ **Make video** で動画にしてください。"
+            echo
+            while IFS='|' read -r name subject; do
+              echo "- **${subject}** — \`drafts/${name}.txt\`"
+              echo "  Make video の入力: script=\`drafts/${name}.txt\` / name=\`${name}\`"
+            done < /tmp/done.txt
+          } > /tmp/comment.md
+          gh issue comment "${{ inputs.issue }}" --body-file /tmp/comment.md

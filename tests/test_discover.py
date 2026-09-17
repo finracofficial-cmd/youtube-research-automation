@@ -42,3 +42,50 @@ def test_bound_morpheme_endings_are_rejected():
     assert _strip_stopword_affixes("再現不") == ""
     assert _strip_stopword_affixes("超高") == ""
     assert _strip_stopword_affixes("ヴォイニッチ手稿") == "ヴォイニッチ手稿"
+
+
+def test_checked_topics_round_trip():
+    """Issueに出した題材を、チェックされた状態から正しく読み戻せるか。
+
+    ここがずれると、選んでいない題材の台本を書いてしまう。1本あたり
+    取材と描画で1時間半かかるので、取り違えの代償が大きい。
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from topic_scout.review import checked_subjects, to_checklist
+
+    rows = [
+        {"query": "ヴォイニッチ手稿", "verdict": "狙う", "score": "0.76",
+         "demand": "0.95", "gap": "1.0", "trend": "0.78",
+         "views_max": "5717338", "reasons": "需要あり×空白あり"},
+        {"query": "地上絵", "verdict": "狙う", "score": "0.61",
+         "demand": "0.97", "gap": "0.81", "trend": "0.69",
+         "views_max": "5724500", "reasons": ""},
+        {"query": "スフィンクス", "verdict": "狙う", "score": "0.58",
+         "demand": "0.92", "gap": "1.0", "trend": "0.60",
+         "views_max": "10560169", "reasons": ""},
+    ]
+    body = to_checklist(rows)
+    # 出した直後は、どれも選ばれていない
+    assert checked_subjects(body) == []
+
+    # 1件目と3件目にチェックを入れる
+    picked = body.replace("- [ ] **ヴォイニッチ手稿**", "- [x] **ヴォイニッチ手稿**")
+    picked = picked.replace("- [ ] **スフィンクス**", "- [X] **スフィンクス**")
+    assert checked_subjects(picked) == ["ヴォイニッチ手稿", "スフィンクス"]
+
+
+def test_unscored_topics_still_get_listed():
+    """「狙う」が1件も無い回でも、候補は出す。空のIssueは判断材料にならない。"""
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from topic_scout.review import to_checklist
+
+    rows = [{"query": "見送り題材", "verdict": "見送り", "score": "0.1",
+             "demand": "0.2", "gap": "0.0", "trend": "0.5",
+             "views_max": "1000", "reasons": ""}]
+    assert "見送り題材" in to_checklist(rows)

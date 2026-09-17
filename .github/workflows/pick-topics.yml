@@ -66,5 +66,18 @@ jobs:
           git commit -m "題材のランキングを更新（$(date +%Y-%m-%d)）"
           git push
 
-      - name: 上位を表示する
-        run: head -20 analysis/topics_*.csv | tail -18
+      # 人が選ぶ工程。自動で選ばせると、外した題材に取材と描画で
+      # 1時間半を丸ごと使ってしまう
+      - name: 検討用のIssueを作る
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest=$(ls -t analysis/topics_*.csv | head -1)
+          python3 -m topic_scout.review "$latest" --limit 20 --out /tmp/body.md
+          gh issue create \
+            --title "題材の候補（$(date +%Y-%m-%d)）" \
+            --body-file /tmp/body.md \
+            --label "題材候補" || \
+          gh issue create \
+            --title "題材の候補（$(date +%Y-%m-%d)）" \
+            --body-file /tmp/body.md
