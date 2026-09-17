@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 import sys
 import time
@@ -36,6 +37,11 @@ def main() -> int:
     ap.add_argument("--skip-assets", action="store_true",
                     help="素材の収集を飛ばす（手元の素材で作り直すとき）")
     ap.add_argument("--still", type=int, help="動画の代わりに指定フレームの静止画を出す")
+    ap.add_argument("--generate-images", action="store_true",
+                    help="同じ画が続く区間を生成画像で埋める（OPENAI_API_KEY が要る）")
+    ap.add_argument("--voice", help="ElevenLabs の voice_id。渡すと読み上げが入る"
+                                    "（ELEVENLABS_API_KEY が要る）")
+    ap.add_argument("--bgm", help="public/ からの相対パス")
     a = ap.parse_args()
 
     script = Path(a.script)
@@ -61,12 +67,55 @@ def main() -> int:
     elif not spec.exists():
         raise SystemExit(f"--skip-assets だが検索語が無い: {spec}")
 
+    shots_path = ROOT / "video" / "public" / shots_dir
+    if a.generate_images:
+        print("\n■ 同じ画が続く区間を生成で埋める")
+        from assets.imagegen import fill
+        from assets.plan_shots import split_script
+        man = shots_path / "manifest.json"
+        entries = json.loads(man.read_text(encoding="utf-8"))
+        segs = split_script(script.read_text(encoding="utf-8"),
+                            max((e.get("n_segments") or 0) for e in entries) or a.segments)
+        entries = fill(entries, segs, shots_path)
+        man.write_text(json.dumps(entries, ensure_ascii=False, indent=1),
+                       encoding="utf-8")
+        # 生成が入ったらクレジットを作り直す（概要欄の申告が要る）
+        from assets.credits import build as build_credits
+        from assets.sources import Asset
+        keys = {f.name for f in __import__("dataclasses").fields(Asset)}
+        assets_ = [Asset(**{k: v for k, v in e.items() if k in keys}) for e in entries]
+        (shots_path / "credits.txt").write_text(build_credits(assets_), encoding="utf-8")
+
+    duration, marks, narration = a.duration, [], None
+    if a.voice:
+        print("\n■ 読み上げる")
+        from assets import tts
+        mp3 = shots_path / "narration.mp3"
+        marks = tts.synthesize(script.read_text(encoding="utf-8"), mp3, a.voice)
+        duration = tts._duration(mp3)
+        narration = f"{shots_dir}/narration.mp3"
+        print(f"  音声 {duration / 60:.1f}分 -> {mp3}")
+
     print("\n■ 3/4 部品を配置する")
-    run([sys.executable, "video/build_props.py", str(script),
-         "--duration", str(a.duration), "--kind", a.kind,
-         "--claims", str(a.claims),
-         "--manifest", f"video/public/{shots_dir}/manifest.json",
-         "--out", str(props)])
+    cmd = [sys.executable, "video/build_props.py", str(script),
+           "--duration", str(duration), "--kind", a.kind,
+           "--claims", str(a.claims),
+           "--manifest", f"video/public/{shots_dir}/manifest.json",
+           "--out", str(props)]
+    if narration:
+        cmd += ["--narration", narration]
+    if a.bgm:
+        cmd += ["--bgm", a.bgm]
+    run(cmd)
+
+    if marks:
+        # 字幕の時刻は文字数から割った概算。実際の発話に貼り直す
+        from assets.tts import retime
+        data = json.loads(props.read_text(encoding="utf-8"))
+        data["subtitles"] = retime(data["subtitles"], marks)
+        props.write_text(json.dumps(data, ensure_ascii=False, indent=1),
+                         encoding="utf-8")
+        print("  字幕を実際の発話に合わせ直した")
 
     print("\n■ 4/4 描画する（尺が長いと時間がかかる）")
     render = ["./render.sh", "still" if a.still else "render",
