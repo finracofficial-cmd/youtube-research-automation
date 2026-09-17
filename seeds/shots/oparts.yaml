@@ -1,11 +1,86 @@
-# カット順の検索語。台本の主張の順に並べる。
-# query は配列で言い換えを並べられる。上から順に試し、最初に見つかったものを使う。
 shots:
-  - query: [Antikythera mechanism, Antikythera]
-  - query: [Antikythera mechanism fragment, Antikythera fragment]
-  - query: [Iron pillar Delhi, Delhi iron pillar]
-  - query: [Qutub Minar complex Delhi, Qutb Minar]
-  - query: [Baghdad battery, Parthian battery, Khujut Rabu]
-  - query: [Piri Reis map, Piri Reis]
-  - query: [Ottoman map, Ottoman portolan, Piri Reis Kitab]
-  - query: [Coso Range California, Coso volcanic field, Owens Valley California]
+- query: &id001
+  - Valerios Stais
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: *id001
+- query: &id002
+  - Archimedes
+- query: *id002
+- query: *id002
+- query: &id003
+  - Vishnu
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: *id003
+- query: &id004
+  - Seleucia
+- query: *id004
+- query: *id004
+- query:
+  - Istanbul
+  - Topkapı Palace
+- query: &id005
+  - Ottoman Empire
+  - Piri Reis
+- query: *id005
+- query: *id005
+- query: *id005
+- query: &id006
+  - Alexander the Great
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query: *id006
+- query:
+  - Antikythera
+  - Iron pillar of Delhi
+- query:
+  - Piri Reis map
+  - Coso artifact
+- query:
+  - Baghdad Battery
+- query:
+  - Antikythera mechanism
+- query: &id007
+  - Piri Reis map
+  - Baghdad Battery
+- query: *id007
+- query: *id007
+- query: &id008
+  - Antikythera mechanism
+- query: *id008
+- query: *id008
