@@ -1,0 +1,102 @@
+# 台本から動画を1本作り、Release に置く。
+#
+# 動画は 1GB を超えるので、リポジトリには入れられない（1ファイル100MBまで）。
+# git の履歴は消せないため、入れてしまうと以後 clone のたびに毎回ついてくる。
+# Release の添付なら 1ファイル2GB まで載り、履歴には残らない。
+#
+# 実行: Actions タブ -> Make video -> Run workflow
+name: Make video
+
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: 台本のファイル（drafts/ 以下）
+        required: true
+        default: drafts/megaliths_v1.txt
+      name:
+        description: 出力名。素材の置き場とタグ名になる
+        required: true
+        default: megaliths
+      voice:
+        description: ElevenLabs の voice_id。空なら無音で作る
+        required: false
+        default: ss9cJxDAEMXP4wfQ3GPr
+      claims:
+        description: 取り上げる主張の数
+        required: false
+        default: "5"
+      generate_images:
+        description: 繰り返している区間を生成画像で埋める
+        type: boolean
+        default: true
+      bgm:
+        description: BGM（video/public/ 以下）。空なら無音
+        required: false
+        default: bgm.mp3
+
+# Release を作るために書き込みが要る
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    # 素材集め・生成・読み上げ・描画で1時間半ほどかかる
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: 必要なものを入れる
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          pip install pyyaml
+          npm ci --prefix video || npm install --prefix video
+
+      - name: 描画用のブラウザを入れる
+        run: npx --prefix video remotion browser ensure
+
+      - name: 動画を作る
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: |
+          args=(--name "${{ inputs.name }}" --claims "${{ inputs.claims }}")
+          [ -n "${{ inputs.voice }}" ] && args+=(--voice "${{ inputs.voice }}")
+          [ -n "${{ inputs.bgm }}" ] && args+=(--bgm "${{ inputs.bgm }}")
+          [ "${{ inputs.generate_images }}" = "true" ] && args+=(--generate-images)
+          python3 make.py "${{ inputs.script }}" "${args[@]}"
+
+      - name: 出来たものを確認する
+        run: |
+          ls -lh "out/${{ inputs.name }}.mp4"
+          ffprobe -v error -show_entries format=duration -of csv=p=0 \
+            "out/${{ inputs.name }}.mp4"
+
+      # Release に置く。添付は履歴に残らないので、リポジトリは重くならない
+      - name: Release に置く
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.name }}-${{ github.run_number }}
+          name: ${{ inputs.name }}（自動生成 #${{ github.run_number }}）
+          body: |
+            台本 `${{ inputs.script }}` から自動生成。
+
+            - 声: `${{ inputs.voice }}`
+            - 画像生成: `${{ inputs.generate_images }}`
+            - BGM: `${{ inputs.bgm }}`
+
+            画像の出典は `credits.txt` にあります。生成画像が含まれる場合、
+            その旨も `credits.txt` に書かれています。概要欄に貼ってください。
+          files: |
+            out/${{ inputs.name }}.mp4
+            video/public/shots_${{ inputs.name }}/credits.txt
