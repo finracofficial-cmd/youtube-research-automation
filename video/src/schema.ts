@@ -163,6 +163,8 @@ export const documentarySchema = z.object({
   narration: z.string().optional(),
   bgm: z.string().optional(),
   bgmVolume: z.number().min(0).max(1).default(0.12),
+  /** BGM1周の長さ（秒）。尺より短いので繰り返して敷く */
+  bgmLoopSec: z.number().positive().optional(),
   shots: z.array(shotSchema).default([]),
   telops: z.array(telopSchema).default([]),
   subtitles: z.array(subtitleSchema).default([]),

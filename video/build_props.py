@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import re
 import sys
 from pathlib import Path
@@ -47,6 +48,19 @@ def wrap(sentence: str) -> list[str]:
         if p:
             out.append(p)
     return out
+
+
+def _audio_seconds(path: Path) -> float | None:
+    """音声の長さ。取れなければ None。"""
+    if not path.exists():
+        return None
+    r = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+                        "format=duration", "-of", "csv=p=0", str(path)],
+                       capture_output=True, text=True)
+    try:
+        return float(r.stdout.strip())
+    except ValueError:
+        return None
 
 
 def load_manifest(path: Path | None) -> list[dict]:
@@ -215,6 +229,11 @@ def build(script: str, duration: float, kind: str, n_claims: int,
         props["narration"] = narration
     if bgm:
         props["bgm"] = bgm
+        # 曲1周の長さ。動画の方が長いので、この長さで繰り返して敷く。
+        # 渡さないと1回鳴って以降が無音になる。
+        loop = _audio_seconds(Path("video/public") / bgm)
+        if loop:
+            props["bgmLoopSec"] = round(loop, 3)
     return props
 
 

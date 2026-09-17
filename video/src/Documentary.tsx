@@ -2,7 +2,9 @@ import React from "react";
 import {
   AbsoluteFill,
   Audio,
+  Loop,
   Sequence,
+  interpolate,
   staticFile,
   useVideoConfig,
 } from "remotion";
@@ -29,6 +31,7 @@ export const Documentary: React.FC<DocumentaryProps> = ({
   narration,
   bgm,
   bgmVolume,
+  bgmLoopSec,
   shots,
   telops,
   subtitles,
@@ -169,7 +172,21 @@ export const Documentary: React.FC<DocumentaryProps> = ({
         </Sequence>
       ))}
 
-      {bgm ? <Audio src={resolve(bgm)} volume={bgmVolume} /> : null}
+      {/* BGMは曲の長さより動画が長い。繰り返して敷き、終わりは絞って切る。
+          1回鳴らすだけだと途中で無音になる（曲2分37秒に対し本編15分）。 */}
+      {bgm ? (
+        <Loop durationInFrames={Math.max(1, Math.round((bgmLoopSec ?? 60) * fps))}>
+          <Audio
+            src={resolve(bgm)}
+            volume={(f) => {
+              // 繰り返しの継ぎ目で音量が跳ねないよう、周回の頭を少し絞る
+              const seam = Math.round(fps * 1.2);
+              return bgmVolume * interpolate(f, [0, seam], [0, 1],
+                { extrapolateRight: "clamp" });
+            }}
+          />
+        </Loop>
+      ) : null}
       {narration ? <Audio src={resolve(narration)} /> : null}
     </AbsoluteFill>
   );
