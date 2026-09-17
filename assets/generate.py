@@ -37,16 +37,25 @@ class GenerationUnavailable(RuntimeError):
 
 
 def available() -> bool:
-    return bool(os.environ.get("OPENAI_API_KEY"))
+    """鍵が手元にあるか、代理が付けてくれる設定になっているか。
+
+    Claude Code の「API credentials」を使うと、鍵はこちらに渡らず、
+    要求が出ていった後に代理が見出しを付ける。その場合は環境変数が空でも
+    呼べるので、空を理由に止めない。
+    """
+    return bool(os.environ.get("OPENAI_API_KEY")
+                or os.environ.get("OPENAI_VIA_PROXY"))
 
 
 def generate(prompt: str, dst: Path, *, size: str = "1536x1024",
              model: str = DEFAULT_MODEL, timeout: int = 180) -> Asset:
     """1枚生成して保存し、生成物として印を付けた Asset を返す。"""
     key = os.environ.get("OPENAI_API_KEY")
-    if not key:
+    if not key and not os.environ.get("OPENAI_VIA_PROXY"):
         raise GenerationUnavailable(
-            "OPENAI_API_KEY が未設定。環境変数で渡すこと（会話やコードに書かない）")
+            "OPENAI_API_KEY が未設定。環境変数で渡すか、Claude Code の "
+            "API credentials に登録して OPENAI_VIA_PROXY=1 を立てること"
+            "（会話やコードに書かない）")
 
     body = json.dumps({
         "model": model,
@@ -54,9 +63,11 @@ def generate(prompt: str, dst: Path, *, size: str = "1536x1024",
         "size": size,
         "n": 1,
     }).encode()
-    req = urllib.request.Request(
-        API_URL, data=body,
-        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
+    # 鍵が無いときは見出しを付けずに出す。代理が付ける設定のときの経路。
+    headers = {"Content-Type": "application/json"}
+    if key:
+        headers["Authorization"] = f"Bearer {key}"
+    req = urllib.request.Request(API_URL, data=body, headers=headers)
     try:
         payload = json.loads(urllib.request.urlopen(req, timeout=timeout).read())
     except urllib.error.HTTPError as exc:

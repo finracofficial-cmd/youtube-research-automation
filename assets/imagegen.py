@@ -47,9 +47,10 @@ _STYLE = ("Cinematic documentary background plate, muted earth tones, "
 def _chat(text: str, *, timeout: int = 60) -> str | None:
     """ナレーション1行から、情景の指示文を起こす。"""
     key = os.environ.get("OPENAI_API_KEY")
-    if not key:
+    if not key and not os.environ.get("OPENAI_VIA_PROXY"):
         raise GenerationUnavailable(
-            "OPENAI_API_KEY が未設定。環境変数で渡すこと（会話やコードに書かない）")
+            "OPENAI_API_KEY が未設定。環境変数で渡すか、Claude Code の "
+            "API credentials に登録して OPENAI_VIA_PROXY=1 を立てること")
     body = json.dumps({
         "model": PROMPT_MODEL,
         "messages": [{"role": "system", "content": _SYSTEM},
@@ -57,10 +58,10 @@ def _chat(text: str, *, timeout: int = 60) -> str | None:
         "temperature": 0.7,
         "max_tokens": 120,
     }).encode()
-    req = urllib.request.Request(
-        CHAT_URL, data=body,
-        headers={"Authorization": f"Bearer {key}",
-                 "Content-Type": "application/json"})
+    headers = {"Content-Type": "application/json"}
+    if key:
+        headers["Authorization"] = f"Bearer {key}"
+    req = urllib.request.Request(CHAT_URL, data=body, headers=headers)
     try:
         d = json.loads(urllib.request.urlopen(req, timeout=timeout).read())
     except urllib.error.HTTPError as exc:

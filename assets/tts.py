@@ -40,20 +40,32 @@ class Word:
 
 
 def available() -> bool:
-    return bool(os.environ.get("ELEVENLABS_API_KEY"))
+    """鍵が手元にあるか、代理が付けてくれる設定になっているか。
+
+    Claude Code の「API credentials」を使うと、鍵はこちらに渡らず、
+    要求が出ていった後に代理が見出しを付ける。その場合は環境変数が空でも
+    呼べるので、空を理由に止めない。
+    """
+    return bool(os.environ.get("ELEVENLABS_API_KEY")
+                or os.environ.get("ELEVENLABS_VIA_PROXY"))
 
 
-def _key() -> str:
+def _headers(extra: dict | None = None) -> dict:
+    """鍵が無いときは見出しを付けずに出す。代理が付ける設定のときの経路。"""
     key = os.environ.get("ELEVENLABS_API_KEY")
-    if not key:
+    if not key and not os.environ.get("ELEVENLABS_VIA_PROXY"):
         raise TTSUnavailable(
-            "ELEVENLABS_API_KEY が未設定。環境変数で渡すこと（会話やコードに書かない）")
-    return key
+            "ELEVENLABS_API_KEY が未設定。環境変数で渡すか、Claude Code の "
+            "API credentials に登録して ELEVENLABS_VIA_PROXY=1 を立てること")
+    h = dict(extra or {})
+    if key:
+        h["xi-api-key"] = key
+    return h
 
 
 def voices() -> list[dict]:
     """使える声の一覧。voice_id を選ぶのに使う。"""
-    req = urllib.request.Request(f"{API}/voices", headers={"xi-api-key": _key()})
+    req = urllib.request.Request(f"{API}/voices", headers=_headers())
     d = json.loads(urllib.request.urlopen(req, timeout=60).read())
     return [{"voice_id": v["voice_id"], "name": v.get("name", ""),
              "labels": v.get("labels", {})} for v in d.get("voices", [])]
@@ -85,7 +97,7 @@ def _speak(chunk: str, voice_id: str, model: str, *, retries: int = 4) -> tuple[
     for a in range(retries):
         req = urllib.request.Request(
             url, data=body,
-            headers={"xi-api-key": _key(), "Content-Type": "application/json"})
+            headers=_headers({"Content-Type": "application/json"}))
         try:
             d = json.loads(urllib.request.urlopen(req, timeout=180).read())
             return base64.b64decode(d["audio_base64"]), d.get("alignment") or {}
