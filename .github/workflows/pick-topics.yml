@@ -25,6 +25,9 @@ on:
 
 permissions:
   contents: write
+  # Issue を立てるのに要る。contents だけだと createIssue が
+  # "Resource not accessible by integration" で弾かれる
+  issues: write
 
 jobs:
   scout:
@@ -83,10 +86,10 @@ jobs:
         run: |
           latest=$(ls -t analysis/topics_*.csv | head -1)
           python3 -m topic_scout.review "$latest" --limit 20 --out /tmp/body.md
-          gh issue create \
+          # ラベルは付けない。無いラベルを指定すると gh がそこで失敗する
+          url=$(gh issue create \
             --title "題材の候補（$(date +%Y-%m-%d)）" \
-            --body-file /tmp/body.md \
-            --label "題材候補" || \
-          gh issue create \
-            --title "題材の候補（$(date +%Y-%m-%d)）" \
-            --body-file /tmp/body.md
+            --body-file /tmp/body.md)
+          echo "検討用のIssue: $url"
+          echo "### 題材を選んでください" >> $GITHUB_STEP_SUMMARY
+          echo "$url" >> $GITHUB_STEP_SUMMARY
