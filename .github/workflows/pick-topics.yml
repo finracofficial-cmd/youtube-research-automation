@@ -42,10 +42,19 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: 題材を発掘する
+      # 工程の順序: 需要の観測 -> 供給側の発掘 -> 採点
+      # discover は collect が出す search_raw.json を要る。順序を違えると
+      # FileNotFoundError で落ちる（実際に落とした）。
+      - name: 需要を観測する
+        id: collect
         run: |
           mkdir -p out analysis
+          python3 collect.py
+
+      - name: 題材を発掘する
+        run: |
           python3 -m topic_scout discover \
+            --search-raw out/search_raw.json \
             --channels "${{ inputs.channels || 30 }}" \
             --per-channel "${{ inputs.per_channel || 60 }}" \
             --out out/candidates.csv

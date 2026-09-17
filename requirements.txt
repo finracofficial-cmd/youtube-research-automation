@@ -1,2 +1,3 @@
 pyyaml>=6
 pytest>=8
+yt-dlp>=2025.1.1
