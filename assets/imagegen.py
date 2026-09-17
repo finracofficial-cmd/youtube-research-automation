@@ -75,12 +75,31 @@ def _chat(text: str, *, timeout: int = 60) -> str | None:
 
 
 def segments_needing_art(manifest: list[dict]) -> list[int]:
-    """生成で埋めたい区間。直前の画を引き継いでいるところ。"""
-    return [e["segment"] for e in manifest if e.get("carried")]
+    """生成で埋めたい区間。
+
+    同じ画が2回以上出ている箇所を対象にする。引き継ぎだけを埋めても、
+    1枚が3〜4回ずつ出る状態は変わらず、見ていて飽きるのは解消しない。
+
+    各画の1回目は資料として残し、2回目以降を生成に置き換える。こうすると
+    題材に固有の画は必ず1度は出たうえで、繰り返しだけが消える。
+    """
+    seen: set[str] = set()
+    out = []
+    for e in sorted(manifest, key=lambda x: x.get("segment", 0)):
+        if e.get("generated"):
+            continue
+        f = e.get("file")
+        if not f:
+            continue
+        if f in seen or e.get("carried"):
+            out.append(e["segment"])
+        else:
+            seen.add(f)
+    return out
 
 
 def fill(manifest: list[dict], segments: list[str], out_dir: Path,
-         *, limit: int = 30, pause: float = 1.0) -> list[dict]:
+         *, limit: int = 60, pause: float = 1.0) -> list[dict]:
     """引き継ぎで埋めていた区間に、生成した情景を入れる。
 
     manifest を書き換えて返す。生成に失敗した区間は引き継ぎのまま残す。
@@ -115,5 +134,5 @@ def fill(manifest: list[dict], segments: list[str], out_dir: Path,
         made += 1
         print(f"  [{seg:03d}] 生成 {dst.name}  {prompt[:56]}")
         time.sleep(pause)
-    print(f"\n{made}枚を生成で補った（引き継ぎだった {len(want)}区間のうち）")
+    print(f"\n{made}枚を生成で補った（繰り返していた {len(want)}区間のうち）")
     return [by_segment[k] for k in sorted(by_segment)]

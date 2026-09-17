@@ -181,3 +181,31 @@ def test_carry_forward_does_nothing_at_the_very_start():
     from assets.cli import _carry
     files: list[dict] = []
     assert not _carry(files, 0) and files == []
+
+
+def test_generation_targets_every_repeat_not_just_carry_forward():
+    """引き継ぎだけ埋めても、1枚が3〜4回ずつ出る状態は変わらない。
+
+    各画の1回目は資料として残し、2回目以降を生成に置き換える。
+    題材に固有の画は必ず一度は出たうえで、繰り返しだけが消える。
+    """
+    from assets.imagegen import segments_needing_art
+    manifest = [
+        {"segment": 0, "file": "a.jpg"},
+        {"segment": 1, "file": "a.jpg"},                  # 2回目
+        {"segment": 2, "file": "b.jpg"},
+        {"segment": 3, "file": "b.jpg", "carried": True},  # 引き継ぎ
+        {"segment": 4, "file": "c.jpg"},
+    ]
+    assert segments_needing_art(manifest) == [1, 3]
+
+
+def test_already_generated_segments_are_left_alone():
+    """作り直すたびに生成し直すと、費用も時間も無駄になる。"""
+    from assets.imagegen import segments_needing_art
+    manifest = [
+        {"segment": 0, "file": "a.jpg"},
+        {"segment": 1, "file": "gen001.png", "generated": True},
+        {"segment": 2, "file": "a.jpg"},
+    ]
+    assert segments_needing_art(manifest) == [2]
