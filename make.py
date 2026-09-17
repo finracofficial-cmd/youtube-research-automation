@@ -42,6 +42,7 @@ def main() -> int:
     ap.add_argument("--voice", help="ElevenLabs の voice_id。渡すと読み上げが入る"
                                     "（ELEVENLABS_API_KEY が要る）")
     ap.add_argument("--bgm", help="public/ からの相対パス")
+    ap.add_argument("--tts-model", help="ElevenLabs のモデル。既定は eleven_v3")
     a = ap.parse_args()
 
     script = Path(a.script)
@@ -91,7 +92,8 @@ def main() -> int:
         print("\n■ 読み上げる")
         from assets import tts
         mp3 = shots_path / "narration.mp3"
-        marks = tts.synthesize(script.read_text(encoding="utf-8"), mp3, a.voice)
+        marks = tts.synthesize(script.read_text(encoding="utf-8"), mp3, a.voice,
+                               model=a.tts_model or tts.DEFAULT_MODEL)
         duration = tts._duration(mp3)
         narration = f"{shots_dir}/narration.mp3"
         print(f"  音声 {duration / 60:.1f}分 -> {mp3}")

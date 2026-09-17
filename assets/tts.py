@@ -23,7 +23,8 @@ from pathlib import Path
 
 API = "https://api.elevenlabs.io/v1"
 # 日本語を読ませるので多言語モデル。英語専用モデルは読みが崩れる。
-DEFAULT_MODEL = "eleven_multilingual_v2"
+# v3 と multilingual_v2 を同じ声・同じ文で聞き比べて v3 を採った。
+DEFAULT_MODEL = "eleven_v3"
 # 1回に送る長さ。長すぎると落ちるので文の切れ目で割る。
 CHUNK_CHARS = 1200
 
