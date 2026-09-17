@@ -65,3 +65,35 @@ def test_fidelity_falls_when_density_drops():
     thin = "歯車が出たのである。" * 150
     from script_engine.style import analyze as a
     assert a(dense, 600).fidelity > a(thin, 600).fidelity
+
+
+def test_markdown_is_stripped_from_written_scripts():
+    """構成ブロックの名前が見出しとして出力に混ざる。
+
+    指示で禁じても従わないことがあり、実測で15個混入した。読み上げると
+    「シャープシャープ 体言止めの一撃」と読まれるので、後処理で落とす。
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from script_engine.write import clean
+
+    raw = (
+        "## 体言止めの一撃\n\n"
+        "オーパーツ。  \n"
+        "2024年現在、報告は16件を超える。\n\n"
+        "### 第1主張\n\n"
+        "- 与那国島の海底に階段状の構造がある。\n"
+        "**重要**なのは年代である。\n"
+    )
+    out = clean(raw)
+    assert "#" not in out
+    assert "**" not in out
+    assert not any(l.startswith(("- ", "* ")) for l in out.splitlines())
+    # 本文は残る
+    assert "オーパーツ。" in out
+    assert "与那国島の海底に階段状の構造がある。" in out
+    assert "重要なのは年代である。" in out
+    # 行末の空白（Markdownの改行指示）も落ちる
+    assert not any(l != l.rstrip() for l in out.splitlines())

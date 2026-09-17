@@ -106,7 +106,7 @@ def cmd_write(args) -> int:
 
     try:
         text, left = write(prompt, model=args.model, rounds=args.rounds,
-                           checker=checker)
+                           checker=checker, duration_sec=args.duration)
     except WriteFailed as exc:
         print(f"生成できなかった: {exc}")
         return 1
