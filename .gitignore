@@ -11,3 +11,11 @@ node_modules/
 video/public/shots*/*
 !video/public/shots*/manifest.json
 !video/public/shots*/credits.txt
+
+# APIキー。コミットするとGitHubの自動検出でキーが失効する（OpenAIは
+# 通知を受けて自動で無効化する）。履歴からは消せないので、そもそも入れない。
+.env
+.env.*
+!.env.example
+*.key
+secrets.json
