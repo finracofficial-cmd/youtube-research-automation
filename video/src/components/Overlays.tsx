@@ -33,13 +33,29 @@ export const SourceLabel: React.FC<{ label: SourceLabelType }> = ({ label }) => 
   const opacity = useFade(label.durationSec, 0.5, 0.5);
   return (
     <AbsoluteFill style={{ opacity }}>
+      {/* 画像の出典。何の文字列か分かるよう「出典」を添える。
+          添えないと、作者名とライセンス名だけが並んで暗号に見える
+          （実測で「よく分からない」という指摘を受けた）。
+          表示義務があるので消せない。控えめにして邪魔をしない形にする。 */}
       <div style={{
         position: "absolute", left: 40, top: 32,
-        fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-        fontSize: 20, letterSpacing: "0.14em",
-        color: "rgba(244,241,234,.62)", textShadow: theme.textShadow,
+        display: "flex", alignItems: "baseline", gap: 10,
+        textShadow: theme.textShadow,
       }}>
-        {label.text}
+        <span style={{
+          fontFamily: theme.subtitleFontFamily,
+          fontSize: 15, letterSpacing: "0.08em",
+          color: "rgba(244,241,234,.38)",
+        }}>
+          出典
+        </span>
+        <span style={{
+          fontFamily: theme.subtitleFontFamily,
+          fontSize: 16, letterSpacing: "0.02em",
+          color: "rgba(244,241,234,.48)",
+        }}>
+          {label.text}
+        </span>
       </div>
     </AbsoluteFill>
   );

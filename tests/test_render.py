@@ -70,3 +70,37 @@ def test_no_subtitle_is_shorter_than_one_frame():
                 continue
             for item in items:
                 assert item["durationSec"] * 30 >= 1, (duration, key, item)
+
+
+def test_adjacent_cuts_never_show_the_same_image():
+    """切り替わったのに絵が変わらないと、見ていて飽きる。
+
+    実測で129カット中66箇所（51%）が直前と同じ画で、最長4カット続いていた。
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "video"))
+    import build_props
+
+    shots = [{"src": f"shots/{f}"} for f in
+             ["a.jpg", "a.jpg", "a.jpg", "b.jpg", "b.jpg", "c.jpg"]]
+    manifest = [{"file": "a.jpg", "segment": 0},
+                {"file": "b.jpg", "segment": 5},
+                {"file": "c.jpg", "segment": 9}]
+    build_props._avoid_repeat(shots, manifest)
+    srcs = [s["src"] for s in shots]
+    assert all(a != b for a, b in zip(srcs, srcs[1:])), srcs
+
+
+def test_avoid_repeat_does_nothing_with_a_single_image():
+    """画が1枚しか無ければ、選び直す先が無い。落ちずにそのまま返す。"""
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "video"))
+    import build_props
+
+    shots = [{"src": "shots/a.jpg"}, {"src": "shots/a.jpg"}]
+    build_props._avoid_repeat(shots, [{"file": "a.jpg", "segment": 0}])
+    assert [s["src"] for s in shots] == ["shots/a.jpg", "shots/a.jpg"]

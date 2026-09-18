@@ -149,6 +149,36 @@ def _inset(entry: dict | None) -> float:
     return round(min(0.35, (1 - ar / FRAME_AR) / 2), 3)
 
 
+def _avoid_repeat(shots: list[dict], manifest: list[dict]) -> None:
+    """隣り合うカットが同じ画にならないようにする。
+
+    画は時間で引き当てているので、1つの区間に複数のカットが入ると同じ画が
+    続く。実測で129カット中66箇所（51%）が直前と同じ画で、最長4カット
+    続いていた。切り替わったのに絵が変わらないので、見ていて飽きる。
+
+    近い区間の画から、直前と違うものを選び直す。題材が離れすぎないよう、
+    区間の近い順に探す。
+    """
+    by_file = {}
+    for e in manifest:
+        by_file.setdefault(e["file"], e.get("segment", 0))
+    if len(by_file) < 2:
+        return  # 選び直す先が無い
+
+    for i in range(1, len(shots)):
+        prev = shots[i - 1]["src"]
+        if shots[i]["src"] != prev:
+            continue
+        want = by_file.get(shots[i]["src"].removeprefix("shots/").split("/")[-1], 0)
+        # 区間が近く、直前と違う画を選ぶ
+        best = min(
+            (f for f in by_file if f != prev.split("/")[-1]),
+            key=lambda f: abs(by_file[f] - want),
+            default=None)
+        if best:
+            shots[i]["src"] = shots[i]["src"].rsplit("/", 1)[0] + "/" + best
+
+
 def _for_time(pos: float, manifest: list[dict], n_seg: int) -> dict | None:
     """画面上の時刻（0-1）に対応する素材を返す。
 
@@ -212,6 +242,8 @@ def build(script: str, duration: float, kind: str, n_claims: int,
             "from": {"scale": 1.0 if zoom_in else 1.18, "x": 0, "y": 0},
             "to": {"scale": 1.18 if zoom_in else 1.0, "x": 0.2 if zoom_in else -0.2, "y": 0},
         })
+
+    _avoid_repeat(shots, manifest)
 
     lines = [Line(**{k: s[k] for k in ("startSec", "durationSec", "text")})
              for s in subtitles]

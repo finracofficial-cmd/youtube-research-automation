@@ -60,11 +60,17 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: ffmpeg を入れる
+      # 日本語のフォントが無いと、字幕もカードも豆腐（□）になる。
+      # ランナーには入っていないので必ず入れる。実測で本編まるごと
+      # 読めない状態で出来上がった。
+      - name: ffmpeg と日本語フォントを入れる
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          sudo apt-get install -y ffmpeg fonts-noto-cjk fonts-noto-cjk-extra
+          fc-cache -f
           ffmpeg -version | head -1
+          echo "日本語フォント: $(fc-list :lang=ja family | wc -l)種"
+          fc-list :lang=ja family | head -3
 
       - name: node の依存を入れる
         run: npm ci --prefix video
@@ -87,6 +93,7 @@ jobs:
           cd video && PROPS=_smoke.json ./render.sh still Documentary \
             /tmp/smoke.png --frame=30
           ls -lh /tmp/smoke.png
+          cd .. && python3 video/check_frame.py /tmp/smoke.png
 
       - name: 動画を作る
         env:
