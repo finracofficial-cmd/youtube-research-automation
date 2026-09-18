@@ -16,6 +16,8 @@ import time
 import urllib.error
 import urllib.request
 
+from .tighten import tighten
+
 API = "https://api.openai.com/v1/chat/completions"
 DEFAULT_MODEL = "gpt-4.1"
 
@@ -26,6 +28,10 @@ _SYSTEM = """あなたは日本語のドキュメンタリー動画の構成作�
 - 断定できないことは断定しない。「〜とされる」「〜という説がある」を使う。
 - 数字は出典にある値をそのまま使う。丸めない。「以上」「前後」を落とさない。
 - 一次資料に当たった結果を語る口調にする。
+- 出典の題名を本文に書かない。英語の題名は読み上げると日本語の途中で
+  英語が読まれ、ナレーションとして成立しない。実測で1つ70字あり、
+  文の長さも押し上げていた。「2006年の論文では」「ある調査では」のように
+  年と種別だけで指し、題名は概要欄に回す。
 
 文の長さが要点です。数値だけでは伝わらないので、書き方を示します。
 
@@ -121,7 +127,7 @@ def write(prompt: str, *, model: str = DEFAULT_MODEL, rounds: int = 2,
          f"この字数に届かせてください。足りない場合は、各主張の"
          f"検証の過程をもう一段詳しく書きます。"},
     ]
-    text = clean(_chat(messages, model))
+    text = tighten(clean(_chat(messages, model)))
     notes: list[str] = []
     for _ in range(rounds):
         notes = checker(text) if checker else []
@@ -138,5 +144,5 @@ def write(prompt: str, *, model: str = DEFAULT_MODEL, rounds: int = 2,
              "要約して短くするのではなく、同じ内容のまま文の数を増やします。"
              "たとえば「Aだが、Bである」は「Aである。しかしBだ」に分けます。"},
         ]
-        text = clean(_chat(messages, model))
+        text = tighten(clean(_chat(messages, model)))
     return text, notes

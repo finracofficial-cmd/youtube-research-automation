@@ -97,3 +97,71 @@ def test_markdown_is_stripped_from_written_scripts():
     assert "重要なのは年代である。" in out
     # 行末の空白（Markdownの改行指示）も落ちる
     assert not any(l != l.rstrip() for l in out.splitlines())
+
+
+def test_foreign_titles_are_dropped_from_narration():
+    """英語の題名は読み上げると日本語の途中で英語が読まれる。
+
+    実測で1つ70字あり、長文272件のうち57件は読点すら無く、
+    文が長い原因は文法ではなく埋め込まれた題名だった。
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from script_engine.tighten import drop_foreign_titles as drop
+
+    assert drop("2006年の論文「Archaeological theory and Japanese methodology」では、"
+                "銅鐸の用途が議論されている。") == \
+        "2006年の論文では、銅鐸の用途が議論されている。"
+    # 抜くと修飾先が消える形は、名詞を補う
+    assert drop("今回扱った「Archaeological theory in Jomon research」や"
+                "「The evaluation of survey」も原文を参照できます。") == \
+        "今回扱った論文も原文を参照できます。"
+
+
+def test_japanese_quotes_survive():
+    """日本語の引用は台本の中身。落としてはいけない。"""
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from script_engine.tighten import drop_foreign_titles as drop
+
+    for text in ["彼は「未解読である」と述べた。",
+                 "「与那国島海底遺跡は人工的に作られたものだ」という主張がある。"]:
+        assert drop(text) == text
+
+
+def test_every_foreign_title_is_found_not_just_the_first():
+    """日本語の引用が先にある台本で打ち切ると、英語の題名に届かない。
+
+    実測で12件中5件が残った。
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from script_engine.tighten import drop_foreign_titles as drop
+
+    text = ("「与那国島海底遺跡は人工的に作られたものだ」という主張がある。"
+            "2006年の論文「Archaeological theory in Jomon research」では否定された。"
+            "2018年の論文「The evaluation of archaeological survey」も同じである。")
+    out = drop(text)
+    assert "Archaeological" not in out and "evaluation" not in out
+    assert "与那国島海底遺跡は人工的に作られたものだ" in out
+
+
+def test_long_sentences_split_only_at_safe_joints():
+    """「歯車が、回る」の「が」は主語の印。切ると非文になる。"""
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from script_engine.tighten import split_long
+
+    # 述語で終わっているので切ってよい
+    got = split_long("この装置は1901年に引き上げられたが、当初は腐食した塊と見なされていた。", 26)
+    assert "。しかし" in got
+    # 主語の印。短い文なのでそもそも触らない
+    assert split_long("歯車が、回る。", 26) == "歯車が、回る。"
