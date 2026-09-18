@@ -64,14 +64,13 @@ jobs:
           : > /tmp/done.txt
           while IFS= read -r subject; do
             [ -n "$subject" ] || continue
-            # ファイル名は英数字に寄せる。日本語のままだと扱いに難がある
-            name=$(python3 -c "
-          import hashlib, sys
-          s = sys.argv[1]
-          print('t' + hashlib.sha1(s.encode()).hexdigest()[:8])" "$subject")
-            echo "=== $subject -> drafts/${name}.txt ==="
+            # 名前は英語の検索語から作る。ハッシュにすると、どの台本か
+            # 中身を開くまで分からない（実測で tbfd74af4 になった）。
             python3 -m research.spec_from_subject "$subject" \
-              --claims "${{ inputs.claims }}" --out "seeds/topics/${name}.yaml" || continue
+              --claims "${{ inputs.claims }}" --print-slug > /tmp/slug.txt || continue
+            name=$(head -1 /tmp/slug.txt)
+            echo "=== $subject -> drafts/${name}.txt ==="
+            mv "seeds/topics/${name}.yaml" "seeds/topics/${name}.yaml" 2>/dev/null || true
             python3 -m research pipeline "seeds/topics/${name}.yaml" \
               --kind bundle --duration "${{ inputs.duration }}" \
               --out "out/prompt_${name}.txt" || continue

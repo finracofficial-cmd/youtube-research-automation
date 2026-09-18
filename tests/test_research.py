@@ -108,3 +108,28 @@ def test_exclude_drops_homonym_fields():
                             exclude=("plate", "subduction"))
     assert len(kept) == 1
     assert "geoglyph" in kept[0].title
+
+
+def test_script_names_are_readable_not_hashes():
+    """ハッシュ名だと、どの台本か中身を開くまで分からない。
+
+    実測で「オーパーツ」の台本が tbfd74af4.txt になり、
+    drafts/ を見ても題材が判別できなかった。
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from research.spec_from_subject import slug
+
+    assert slug({"subject_en": "Voynich manuscript radiocarbon dating"}) == \
+        "voynich-manuscript"
+    assert slug({"subject_en": "megalithic construction archaeology"}) == \
+        "megalithic-construction"
+    # 英語が無ければ落ちずに既定を返す
+    assert slug({"subject": "謎の遺跡"}) == "topic"
+    # ファイル名に使えない文字が混ざらない
+    for spec in ({"subject_en": "Piri Reis map, 1513 Ottoman cartography"},
+                 {"subject_en": "The Antikythera Mechanism (Greece)"}):
+        name = slug(spec)
+        assert name.replace("-", "").isalnum(), name

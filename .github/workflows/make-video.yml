@@ -11,13 +11,13 @@ on:
   workflow_dispatch:
     inputs:
       script:
-        description: 台本のファイル（drafts/ 以下）
+        description: "台本のファイル。drafts/ を見て選ぶ"
         required: true
         default: drafts/megaliths_v1.txt
       name:
-        description: 出力名。素材の置き場とタグ名になる
-        required: true
-        default: megaliths
+        description: "出力名（空でよい。台本のファイル名から決まる）"
+        required: false
+        default: ""
       voice:
         description: ElevenLabs の voice_id。空なら無音で作る
         required: false
@@ -93,17 +93,23 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
         run: |
-          args=(--name "${{ inputs.name }}" --claims "${{ inputs.claims }}")
+          args=(--claims "${{ inputs.claims }}")
+          [ -n "${{ inputs.name }}" ] && args+=(--name "${{ inputs.name }}")
           [ -n "${{ inputs.voice }}" ] && args+=(--voice "${{ inputs.voice }}")
           [ -n "${{ inputs.bgm }}" ] && args+=(--bgm "${{ inputs.bgm }}")
           [ "${{ inputs.generate_images }}" = "true" ] && args+=(--generate-images)
           python3 make.py "${{ inputs.script }}" "${args[@]}"
+          # 後段（確認・Release）が使う名前を控える
+          name="${{ inputs.name }}"
+          [ -n "$name" ] || name=$(basename "${{ inputs.script }}" .txt | sed 's/_v[0-9]*$//')
+          echo "NAME=$name" >> $GITHUB_ENV
+          echo "出力名: $name"
 
       - name: 出来たものを確認する
         run: |
-          ls -lh "out/${{ inputs.name }}.mp4"
+          ls -lh "out/$NAME.mp4"
           ffprobe -v error -show_entries format=duration -of csv=p=0 \
-            "out/${{ inputs.name }}.mp4"
+            "out/$NAME.mp4"
 
       # Release に置く。添付は履歴に残らないので、リポジトリは重くならない
       # Release が失敗しても取り出せるようにしておく
@@ -111,18 +117,18 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.name }}-${{ github.run_number }}
+          name: ${{ env.NAME }}-${{ github.run_number }}
           path: |
-            out/${{ inputs.name }}.mp4
-            video/public/shots_${{ inputs.name }}/credits.txt
+            out/${{ env.NAME }}.mp4
+            video/public/shots_${{ env.NAME }}/credits.txt
           retention-days: 30
           if-no-files-found: warn
 
       - name: Release に置く
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ inputs.name }}-${{ github.run_number }}
-          name: ${{ inputs.name }}（自動生成 #${{ github.run_number }}）
+          tag_name: ${{ env.NAME }}-${{ github.run_number }}
+          name: ${{ env.NAME }}（自動生成 #${{ github.run_number }}）
           body: |
             台本 `${{ inputs.script }}` から自動生成。
 
@@ -133,5 +139,5 @@ jobs:
             画像の出典は `credits.txt` にあります。生成画像が含まれる場合、
             その旨も `credits.txt` に書かれています。概要欄に貼ってください。
           files: |
-            out/${{ inputs.name }}.mp4
-            video/public/shots_${{ inputs.name }}/credits.txt
+            out/${{ env.NAME }}.mp4
+            video/public/shots_${{ env.NAME }}/credits.txt

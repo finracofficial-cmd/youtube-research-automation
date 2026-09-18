@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 import time
@@ -48,7 +49,9 @@ def main() -> int:
     script = Path(a.script)
     if not script.exists():
         raise SystemExit(f"台本が無い: {script}")
-    name = a.name or script.stem
+    # 出力名は台本のファイル名から決める。手で合わせる欄が2つあると、
+    # 食い違ったまま1時間半かけて別の題材の動画ができる。
+    name = a.name or re.sub(r"_v\d+$", "", script.stem)
     shots_dir = f"shots_{name}"
     spec = ROOT / "seeds" / "shots" / f"{name}.yaml"
     props = ROOT / "video" / f"props_{name}.json"

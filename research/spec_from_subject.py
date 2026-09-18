@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.request
@@ -72,20 +73,42 @@ def build(subject: str, n_claims: int, *, model: str = "gpt-4.1",
             "claims": claims}
 
 
+def slug(spec: dict) -> str:
+    """ファイル名に使う短い名前。
+
+    題材名は日本語なので、そのままではファイル名に使いにくい。かといって
+    ハッシュにすると、どの台本か分からなくなる（実測で tbfd74af4 という
+    名前になり、中身を開くまで題材が分からなかった）。英語の検索語から
+    読める名前を作る。
+    """
+    src = (spec.get("subject_en") or spec.get("subject") or "topic")
+    # 最初の意味のある語を2つ取る。長い題名をそのまま使うと扱いにくい
+    words = [w.lower() for w in re.findall(r"[A-Za-z][A-Za-z0-9]{2,}", src)
+             if w.lower() not in {"the", "and", "for", "with", "japanese",
+                                  "ancient", "archaeological", "archaeology"}]
+    name = "-".join(words[:2]) or "topic"
+    return name[:40]
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="題材名から取材仕様を組む")
     ap.add_argument("subject")
     ap.add_argument("--claims", type=int, default=5)
     ap.add_argument("--model", default="gpt-4.1")
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--out", help="書き出し先。省略すると seeds/topics/<名前>.yaml")
+    ap.add_argument("--print-slug", action="store_true",
+                    help="ファイル名に使う名前だけを出す")
     a = ap.parse_args(argv)
 
     spec = build(a.subject, a.claims, model=a.model)
-    out = Path(a.out)
+    name = slug(spec)
+    if a.print_slug:
+        print(name)
+    out = Path(a.out or f"seeds/topics/{name}.yaml")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(yaml.safe_dump(spec, allow_unicode=True, sort_keys=False),
                    encoding="utf-8")
-    print(f"主張 {len(spec['claims'])}件 -> {out}")
+    print(f"主張 {len(spec['claims'])}件 / 名前 {name} -> {out}")
     for c in spec["claims"]:
         print(f"  {c['ja']}")
         print(f"    {c['en']}")
