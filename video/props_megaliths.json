@@ -4,7 +4,7 @@
  "shots": [
   {
    "startSec": 0.0,
-   "durationSec": 8.013,
+   "durationSec": 8.016,
    "src": "shots_megaliths/000.jpg",
    "inset": 0.0,
    "from": {
@@ -19,8 +19,8 @@
    }
   },
   {
-   "startSec": 8.013,
-   "durationSec": 8.013,
+   "startSec": 8.016,
+   "durationSec": 8.016,
    "src": "shots_megaliths/001.jpg",
    "inset": 0.0,
    "from": {
@@ -35,41 +35,41 @@
    }
   },
   {
-   "startSec": 16.025,
-   "durationSec": 8.013,
+   "startSec": 16.031,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/000.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 24.047,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/002.jpg",
+   "inset": 0.167,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 32.062,
+   "durationSec": 8.016,
    "src": "shots_megaliths/001.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 24.038,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/002.jpg",
-   "inset": 0.167,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 32.051,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/002.jpg",
    "inset": 0.167,
    "from": {
     "scale": 1.0,
@@ -83,8 +83,8 @@
    }
   },
   {
-   "startSec": 40.064,
-   "durationSec": 8.013,
+   "startSec": 40.078,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen003.png",
    "inset": 0.0,
    "from": {
@@ -99,8 +99,40 @@
    }
   },
   {
-   "startSec": 48.076,
-   "durationSec": 8.013,
+   "startSec": 48.093,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/002.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 56.109,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen004.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 64.124,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen003.png",
    "inset": 0.0,
    "from": {
@@ -115,40 +147,8 @@
    }
   },
   {
-   "startSec": 56.089,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen004.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 64.102,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen004.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 72.114,
-   "durationSec": 8.013,
+   "startSec": 72.14,
+   "durationSec": 8.016,
    "src": "shots_megaliths/005.jpg",
    "inset": 0.0,
    "from": {
@@ -163,8 +163,40 @@
    }
   },
   {
-   "startSec": 80.127,
-   "durationSec": 8.013,
+   "startSec": 80.155,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen004.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 88.171,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen006.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 96.186,
+   "durationSec": 8.016,
    "src": "shots_megaliths/005.jpg",
    "inset": 0.0,
    "from": {
@@ -179,40 +211,8 @@
    }
   },
   {
-   "startSec": 88.14,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen006.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 96.152,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen006.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 104.165,
-   "durationSec": 8.013,
+   "startSec": 104.202,
+   "durationSec": 8.016,
    "src": "shots_megaliths/007.jpg",
    "inset": 0.0,
    "from": {
@@ -227,8 +227,40 @@
    }
   },
   {
-   "startSec": 112.178,
-   "durationSec": 8.013,
+   "startSec": 112.217,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen006.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 120.233,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen008.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 128.248,
+   "durationSec": 8.016,
    "src": "shots_megaliths/007.jpg",
    "inset": 0.0,
    "from": {
@@ -243,40 +275,8 @@
    }
   },
   {
-   "startSec": 120.191,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen008.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 128.203,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen008.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 136.216,
-   "durationSec": 8.013,
+   "startSec": 136.264,
+   "durationSec": 8.016,
    "src": "shots_megaliths/009.jpg",
    "inset": 0.0,
    "from": {
@@ -291,41 +291,41 @@
    }
   },
   {
-   "startSec": 144.229,
-   "durationSec": 8.013,
+   "startSec": 144.279,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen008.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 152.295,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/010.jpg",
+   "inset": 0.284,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 160.31,
+   "durationSec": 8.016,
    "src": "shots_megaliths/009.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 152.241,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/010.jpg",
-   "inset": 0.284,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 160.254,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/010.jpg",
    "inset": 0.284,
    "from": {
     "scale": 1.0,
@@ -339,8 +339,8 @@
    }
   },
   {
-   "startSec": 168.267,
-   "durationSec": 8.013,
+   "startSec": 168.326,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen011.png",
    "inset": 0.0,
    "from": {
@@ -355,8 +355,40 @@
    }
   },
   {
-   "startSec": 176.28,
-   "durationSec": 8.013,
+   "startSec": 176.341,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/010.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 184.357,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen012.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 192.372,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen011.png",
    "inset": 0.0,
    "from": {
@@ -371,40 +403,8 @@
    }
   },
   {
-   "startSec": 184.292,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen012.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 192.305,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen012.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 200.318,
-   "durationSec": 8.013,
+   "startSec": 200.388,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen013.png",
    "inset": 0.0,
    "from": {
@@ -419,8 +419,40 @@
    }
   },
   {
-   "startSec": 208.33,
-   "durationSec": 8.013,
+   "startSec": 208.403,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen012.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 216.419,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen014.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 224.434,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen013.png",
    "inset": 0.0,
    "from": {
@@ -435,40 +467,8 @@
    }
   },
   {
-   "startSec": 216.343,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen014.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 224.356,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen014.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 232.368,
-   "durationSec": 8.013,
+   "startSec": 232.45,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen015.png",
    "inset": 0.0,
    "from": {
@@ -483,8 +483,40 @@
    }
   },
   {
-   "startSec": 240.381,
-   "durationSec": 8.013,
+   "startSec": 240.465,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen014.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 248.481,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/016.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 256.496,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen015.png",
    "inset": 0.0,
    "from": {
@@ -499,40 +531,8 @@
    }
   },
   {
-   "startSec": 248.394,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/016.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 256.407,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/016.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 264.419,
-   "durationSec": 8.013,
+   "startSec": 264.512,
+   "durationSec": 8.016,
    "src": "shots_megaliths/017.jpg",
    "inset": 0.0,
    "from": {
@@ -547,8 +547,40 @@
    }
   },
   {
-   "startSec": 272.432,
-   "durationSec": 8.013,
+   "startSec": 272.527,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/016.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 280.543,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/018.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 288.558,
+   "durationSec": 8.016,
    "src": "shots_megaliths/017.jpg",
    "inset": 0.0,
    "from": {
@@ -563,40 +595,8 @@
    }
   },
   {
-   "startSec": 280.445,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/018.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 288.457,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/018.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 296.47,
-   "durationSec": 8.013,
+   "startSec": 296.574,
+   "durationSec": 8.016,
    "src": "shots_megaliths/019.jpg",
    "inset": 0.0,
    "from": {
@@ -611,8 +611,40 @@
    }
   },
   {
-   "startSec": 304.483,
-   "durationSec": 8.013,
+   "startSec": 304.589,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/018.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 312.605,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen020.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 320.62,
+   "durationSec": 8.016,
    "src": "shots_megaliths/019.jpg",
    "inset": 0.0,
    "from": {
@@ -627,40 +659,8 @@
    }
   },
   {
-   "startSec": 312.496,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen020.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 320.508,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen020.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 328.521,
-   "durationSec": 8.013,
+   "startSec": 328.636,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen021.png",
    "inset": 0.0,
    "from": {
@@ -675,8 +675,40 @@
    }
   },
   {
-   "startSec": 336.534,
-   "durationSec": 8.013,
+   "startSec": 336.651,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen020.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 344.667,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen022.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 352.682,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen021.png",
    "inset": 0.0,
    "from": {
@@ -691,40 +723,8 @@
    }
   },
   {
-   "startSec": 344.546,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen022.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 352.559,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen022.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 360.572,
-   "durationSec": 8.013,
+   "startSec": 360.698,
+   "durationSec": 8.016,
    "src": "shots_megaliths/023.jpg",
    "inset": 0.0,
    "from": {
@@ -739,8 +739,40 @@
    }
   },
   {
-   "startSec": 368.585,
-   "durationSec": 8.013,
+   "startSec": 368.713,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen022.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 376.729,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/024.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 384.744,
+   "durationSec": 8.016,
    "src": "shots_megaliths/023.jpg",
    "inset": 0.0,
    "from": {
@@ -755,40 +787,8 @@
    }
   },
   {
-   "startSec": 376.597,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/024.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 384.61,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/024.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 392.623,
-   "durationSec": 8.013,
+   "startSec": 392.76,
+   "durationSec": 8.016,
    "src": "shots_megaliths/025.jpg",
    "inset": 0.0,
    "from": {
@@ -803,8 +803,40 @@
    }
   },
   {
-   "startSec": 400.635,
-   "durationSec": 8.013,
+   "startSec": 400.775,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/024.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 408.791,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/026.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 416.806,
+   "durationSec": 8.016,
    "src": "shots_megaliths/025.jpg",
    "inset": 0.0,
    "from": {
@@ -819,40 +851,8 @@
    }
   },
   {
-   "startSec": 408.648,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/026.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 416.661,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/026.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 424.673,
-   "durationSec": 8.013,
+   "startSec": 424.822,
+   "durationSec": 8.016,
    "src": "shots_megaliths/027.jpg",
    "inset": 0.0,
    "from": {
@@ -867,8 +867,40 @@
    }
   },
   {
-   "startSec": 432.686,
-   "durationSec": 8.013,
+   "startSec": 432.837,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/026.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 440.853,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/028.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 448.868,
+   "durationSec": 8.016,
    "src": "shots_megaliths/027.jpg",
    "inset": 0.0,
    "from": {
@@ -883,40 +915,8 @@
    }
   },
   {
-   "startSec": 440.699,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/028.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 448.712,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/028.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 456.724,
-   "durationSec": 8.013,
+   "startSec": 456.884,
+   "durationSec": 8.016,
    "src": "shots_megaliths/029.jpg",
    "inset": 0.0,
    "from": {
@@ -931,41 +931,41 @@
    }
   },
   {
-   "startSec": 464.737,
-   "durationSec": 8.013,
+   "startSec": 464.899,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/028.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 472.915,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/030.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 480.93,
+   "durationSec": 8.016,
    "src": "shots_megaliths/029.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 472.75,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/030.jpg",
-   "inset": 0.289,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 480.762,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/030.jpg",
    "inset": 0.289,
    "from": {
     "scale": 1.0,
@@ -979,8 +979,8 @@
    }
   },
   {
-   "startSec": 488.775,
-   "durationSec": 8.013,
+   "startSec": 488.946,
+   "durationSec": 8.016,
    "src": "shots_megaliths/031.jpg",
    "inset": 0.0,
    "from": {
@@ -995,9 +995,9 @@
    }
   },
   {
-   "startSec": 496.788,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/031.jpg",
+   "startSec": 496.961,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/030.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1011,8 +1011,8 @@
    }
   },
   {
-   "startSec": 504.801,
-   "durationSec": 8.013,
+   "startSec": 504.977,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen032.png",
    "inset": 0.0,
    "from": {
@@ -1027,9 +1027,9 @@
    }
   },
   {
-   "startSec": 512.813,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen032.png",
+   "startSec": 512.992,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/031.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -1043,8 +1043,8 @@
    }
   },
   {
-   "startSec": 520.826,
-   "durationSec": 8.013,
+   "startSec": 521.008,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen033.png",
    "inset": 0.0,
    "from": {
@@ -1059,8 +1059,8 @@
    }
   },
   {
-   "startSec": 528.839,
-   "durationSec": 8.013,
+   "startSec": 529.023,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen034.png",
    "inset": 0.0,
    "from": {
@@ -1075,8 +1075,40 @@
    }
   },
   {
-   "startSec": 536.851,
-   "durationSec": 8.013,
+   "startSec": 537.039,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen033.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 545.054,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/035.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 553.07,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen034.png",
    "inset": 0.0,
    "from": {
@@ -1091,40 +1123,8 @@
    }
   },
   {
-   "startSec": 544.864,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/035.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 552.877,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/035.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 560.889,
-   "durationSec": 8.013,
+   "startSec": 561.085,
+   "durationSec": 8.016,
    "src": "shots_megaliths/036.jpg",
    "inset": 0.289,
    "from": {
@@ -1139,41 +1139,41 @@
    }
   },
   {
-   "startSec": 568.902,
-   "durationSec": 8.013,
+   "startSec": 569.101,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/035.jpg",
+   "inset": 0.289,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 577.116,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/037.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 585.132,
+   "durationSec": 8.016,
    "src": "shots_megaliths/036.jpg",
-   "inset": 0.289,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 576.915,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/037.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 584.928,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/037.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1187,8 +1187,8 @@
    }
   },
   {
-   "startSec": 592.94,
-   "durationSec": 8.013,
+   "startSec": 593.147,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen038.png",
    "inset": 0.0,
    "from": {
@@ -1203,8 +1203,40 @@
    }
   },
   {
-   "startSec": 600.953,
-   "durationSec": 8.013,
+   "startSec": 601.163,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/037.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 609.178,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/039.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 617.194,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen038.png",
    "inset": 0.0,
    "from": {
@@ -1219,40 +1251,8 @@
    }
   },
   {
-   "startSec": 608.966,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/039.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 616.978,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/039.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 624.991,
-   "durationSec": 8.013,
+   "startSec": 625.209,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen040.png",
    "inset": 0.0,
    "from": {
@@ -1267,8 +1267,40 @@
    }
   },
   {
-   "startSec": 633.004,
-   "durationSec": 8.013,
+   "startSec": 633.225,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/039.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 641.24,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen041.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 649.256,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen040.png",
    "inset": 0.0,
    "from": {
@@ -1283,40 +1315,8 @@
    }
   },
   {
-   "startSec": 641.017,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen041.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 649.029,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen041.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 657.042,
-   "durationSec": 8.013,
+   "startSec": 657.271,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen042.png",
    "inset": 0.0,
    "from": {
@@ -1331,41 +1331,41 @@
    }
   },
   {
-   "startSec": 665.055,
-   "durationSec": 8.013,
+   "startSec": 665.287,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen041.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 673.302,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/043.jpg",
+   "inset": 0.324,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 681.318,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen042.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 673.067,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/043.jpg",
-   "inset": 0.324,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 681.08,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/043.jpg",
    "inset": 0.324,
    "from": {
     "scale": 1.18,
@@ -1379,8 +1379,8 @@
    }
   },
   {
-   "startSec": 689.093,
-   "durationSec": 8.013,
+   "startSec": 689.333,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen044.png",
    "inset": 0.0,
    "from": {
@@ -1395,8 +1395,40 @@
    }
   },
   {
-   "startSec": 697.105,
-   "durationSec": 8.013,
+   "startSec": 697.349,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/043.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 705.364,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen045.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 713.38,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen044.png",
    "inset": 0.0,
    "from": {
@@ -1411,40 +1443,8 @@
    }
   },
   {
-   "startSec": 705.118,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen045.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 713.131,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen045.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 721.144,
-   "durationSec": 8.013,
+   "startSec": 721.395,
+   "durationSec": 8.016,
    "src": "shots_megaliths/046.jpg",
    "inset": 0.0,
    "from": {
@@ -1459,8 +1459,40 @@
    }
   },
   {
-   "startSec": 729.156,
-   "durationSec": 8.013,
+   "startSec": 729.411,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen045.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 737.426,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen047.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 745.442,
+   "durationSec": 8.016,
    "src": "shots_megaliths/046.jpg",
    "inset": 0.0,
    "from": {
@@ -1475,40 +1507,8 @@
    }
   },
   {
-   "startSec": 737.169,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen047.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 745.182,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen047.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 753.194,
-   "durationSec": 8.013,
+   "startSec": 753.457,
+   "durationSec": 8.016,
    "src": "shots_megaliths/048.jpg",
    "inset": 0.0,
    "from": {
@@ -1523,9 +1523,9 @@
    }
   },
   {
-   "startSec": 761.207,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/048.jpg",
+   "startSec": 761.473,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen047.png",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1539,8 +1539,8 @@
    }
   },
   {
-   "startSec": 769.22,
-   "durationSec": 8.013,
+   "startSec": 769.488,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen049.png",
    "inset": 0.0,
    "from": {
@@ -1555,8 +1555,40 @@
    }
   },
   {
-   "startSec": 777.233,
-   "durationSec": 8.013,
+   "startSec": 777.504,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/048.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 785.519,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/050.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 793.535,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen049.png",
    "inset": 0.0,
    "from": {
@@ -1571,40 +1603,8 @@
    }
   },
   {
-   "startSec": 785.245,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/050.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 793.258,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/050.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 801.271,
-   "durationSec": 8.013,
+   "startSec": 801.55,
+   "durationSec": 8.016,
    "src": "shots_megaliths/051.jpg",
    "inset": 0.0,
    "from": {
@@ -1619,9 +1619,9 @@
    }
   },
   {
-   "startSec": 809.283,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/051.jpg",
+   "startSec": 809.566,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/050.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1635,8 +1635,8 @@
    }
   },
   {
-   "startSec": 817.296,
-   "durationSec": 8.013,
+   "startSec": 817.581,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen052.png",
    "inset": 0.0,
    "from": {
@@ -1651,8 +1651,40 @@
    }
   },
   {
-   "startSec": 825.309,
-   "durationSec": 8.013,
+   "startSec": 825.597,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/051.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 833.612,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/053.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 841.628,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen052.png",
    "inset": 0.0,
    "from": {
@@ -1667,40 +1699,8 @@
    }
   },
   {
-   "startSec": 833.322,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/053.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 841.334,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/053.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 849.347,
-   "durationSec": 8.013,
+   "startSec": 849.643,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen054.png",
    "inset": 0.0,
    "from": {
@@ -1715,8 +1715,40 @@
    }
   },
   {
-   "startSec": 857.36,
-   "durationSec": 8.013,
+   "startSec": 857.659,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/053.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 865.674,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen055.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 873.69,
+   "durationSec": 8.016,
    "src": "shots_megaliths/gen054.png",
    "inset": 0.0,
    "from": {
@@ -1731,40 +1763,8 @@
    }
   },
   {
-   "startSec": 865.372,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen055.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 873.385,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/gen055.png",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 881.398,
-   "durationSec": 8.013,
+   "startSec": 881.705,
+   "durationSec": 8.016,
    "src": "shots_megaliths/056.jpg",
    "inset": 0.289,
    "from": {
@@ -1779,9 +1779,9 @@
    }
   },
   {
-   "startSec": 889.41,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/056.jpg",
+   "startSec": 889.721,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen055.png",
    "inset": 0.289,
    "from": {
     "scale": 1.18,
@@ -1795,8 +1795,8 @@
    }
   },
   {
-   "startSec": 897.423,
-   "durationSec": 8.013,
+   "startSec": 897.736,
+   "durationSec": 8.016,
    "src": "shots_megaliths/048.jpg",
    "inset": 0.0,
    "from": {
@@ -1811,9 +1811,9 @@
    }
   },
   {
-   "startSec": 905.436,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/048.jpg",
+   "startSec": 905.752,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen047.png",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1827,8 +1827,8 @@
    }
   },
   {
-   "startSec": 913.449,
-   "durationSec": 8.013,
+   "startSec": 913.767,
+   "durationSec": 8.016,
    "src": "shots_megaliths/050.jpg",
    "inset": 0.0,
    "from": {
@@ -1843,8 +1843,40 @@
    }
   },
   {
-   "startSec": 921.461,
-   "durationSec": 8.013,
+   "startSec": 921.783,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen049.png",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.18,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.0,
+    "x": -0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 929.798,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/051.jpg",
+   "inset": 0.0,
+   "from": {
+    "scale": 1.0,
+    "x": 0,
+    "y": 0
+   },
+   "to": {
+    "scale": 1.18,
+    "x": 0.2,
+    "y": 0
+   }
+  },
+  {
+   "startSec": 937.814,
+   "durationSec": 8.016,
    "src": "shots_megaliths/050.jpg",
    "inset": 0.0,
    "from": {
@@ -1859,8 +1891,8 @@
    }
   },
   {
-   "startSec": 929.474,
-   "durationSec": 8.013,
+   "startSec": 945.829,
+   "durationSec": 8.016,
    "src": "shots_megaliths/051.jpg",
    "inset": 0.0,
    "from": {
@@ -1875,9 +1907,9 @@
    }
   },
   {
-   "startSec": 937.487,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/051.jpg",
+   "startSec": 953.845,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/050.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1891,40 +1923,8 @@
    }
   },
   {
-   "startSec": 945.499,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/051.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.0,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.18,
-    "x": 0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 953.512,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/051.jpg",
-   "inset": 0.0,
-   "from": {
-    "scale": 1.18,
-    "x": 0,
-    "y": 0
-   },
-   "to": {
-    "scale": 1.0,
-    "x": -0.2,
-    "y": 0
-   }
-  },
-  {
-   "startSec": 961.525,
-   "durationSec": 8.013,
+   "startSec": 961.86,
+   "durationSec": 8.016,
    "src": "shots_megaliths/053.jpg",
    "inset": 0.0,
    "from": {
@@ -1939,9 +1939,9 @@
    }
   },
   {
-   "startSec": 969.538,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/053.jpg",
+   "startSec": 969.876,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen052.png",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1955,8 +1955,8 @@
    }
   },
   {
-   "startSec": 977.55,
-   "durationSec": 8.013,
+   "startSec": 977.891,
+   "durationSec": 8.016,
    "src": "shots_megaliths/053.jpg",
    "inset": 0.0,
    "from": {
@@ -1971,9 +1971,9 @@
    }
   },
   {
-   "startSec": 985.563,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/053.jpg",
+   "startSec": 985.907,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/gen052.png",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -1987,8 +1987,8 @@
    }
   },
   {
-   "startSec": 993.576,
-   "durationSec": 8.013,
+   "startSec": 993.922,
+   "durationSec": 8.016,
    "src": "shots_megaliths/063.jpg",
    "inset": 0.0,
    "from": {
@@ -2003,9 +2003,9 @@
    }
   },
   {
-   "startSec": 1001.588,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/063.jpg",
+   "startSec": 1001.938,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/064.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.18,
@@ -2019,9 +2019,9 @@
    }
   },
   {
-   "startSec": 1009.601,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/064.jpg",
+   "startSec": 1009.953,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/063.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -2035,8 +2035,8 @@
    }
   },
   {
-   "startSec": 1017.614,
-   "durationSec": 8.013,
+   "startSec": 1017.969,
+   "durationSec": 8.016,
    "src": "shots_megaliths/064.jpg",
    "inset": 0.0,
    "from": {
@@ -2051,9 +2051,9 @@
    }
   },
   {
-   "startSec": 1025.626,
-   "durationSec": 8.013,
-   "src": "shots_megaliths/064.jpg",
+   "startSec": 1025.984,
+   "durationSec": 8.016,
+   "src": "shots_megaliths/063.jpg",
    "inset": 0.0,
    "from": {
     "scale": 1.0,
@@ -2070,133 +2070,133 @@
  "telops": [
   {
    "startSec": 0.0,
-   "durationSec": 7.27,
+   "durationSec": 7.273,
    "text": "巨石遺跡",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 95.971,
+   "startSec": 95.999,
    "durationSec": 7.5,
    "text": "ウェスト・ウッズ",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 172.521,
+   "startSec": 172.576,
    "durationSec": 7.5,
    "text": "カーン・メニン",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 180.421,
+   "startSec": 180.476,
    "durationSec": 7.5,
    "text": "岩石学的",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 228.758,
+   "startSec": 228.832,
    "durationSec": 7.5,
    "text": "作業痕",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 236.658,
+   "startSec": 236.732,
    "durationSec": 7.5,
    "text": "ストーンヘンジ自体",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 244.558,
+   "startSec": 244.632,
    "durationSec": 7.5,
    "text": "数百年後",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 252.458,
+   "startSec": 252.532,
    "durationSec": 7.5,
    "text": "シャンルウルファ",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 276.158,
-   "durationSec": 5.88,
+   "startSec": 276.232,
+   "durationSec": 5.904,
    "text": "ギョベクリ・テペ",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 328.829,
+   "startSec": 328.938,
    "durationSec": 7.5,
    "text": "ストーンヘンジ",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 336.729,
+   "startSec": 336.838,
    "durationSec": 7.5,
    "text": "ピラミッド",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 374.588,
-   "durationSec": 4.313,
+   "startSec": 374.713,
+   "durationSec": 4.321,
    "text": "ギョベクリ・テペ",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 402.813,
+   "startSec": 402.948,
    "durationSec": 7.5,
    "text": "レーダーの調査",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 410.713,
+   "startSec": 410.848,
    "durationSec": 7.5,
    "text": "未発掘",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 418.613,
+   "startSec": 418.748,
    "durationSec": 7.5,
    "text": "レーダー",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 426.513,
+   "startSec": 426.648,
    "durationSec": 7.5,
    "text": "意図的",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 434.413,
+   "startSec": 434.548,
    "durationSec": 7.5,
    "text": "ラパ・ヌイ",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 483.212,
+   "startSec": 483.375,
    "durationSec": 7.5,
    "text": "採石場",
    "variant": "plain",
    "zone": "upper"
   },
   {
-   "startSec": 491.112,
-   "durationSec": 6.211,
+   "startSec": 491.275,
+   "durationSec": 5.937,
    "text": "数十体",
    "variant": "plain",
    "zone": "upper"
@@ -2205,1492 +2205,1492 @@
  "subtitles": [
   {
    "startSec": 0.0,
-   "durationSec": 1.76,
+   "durationSec": 1.07,
    "text": "巨石遺跡。"
   },
   {
-   "startSec": 1.76,
-   "durationSec": 2.16,
+   "startSec": 1.07,
+   "durationSec": 3.209,
    "text": "人力では動かせないはずの石が、"
   },
   {
-   "startSec": 3.92,
-   "durationSec": 2.64,
+   "startSec": 4.278,
+   "durationSec": 2.995,
    "text": "積み上がっている場所である。"
   },
   {
-   "startSec": 6.56,
-   "durationSec": 3.36,
+   "startSec": 7.273,
+   "durationSec": 3.85,
    "text": "ウェールズから250キロ運ばれた石。"
   },
   {
-   "startSec": 9.92,
-   "durationSec": 4.96,
+   "startSec": 11.123,
+   "durationSec": 4.92,
    "text": "1万1千年前に立てられた高さ5メートルの石柱。"
   },
   {
-   "startSec": 14.88,
-   "durationSec": 3.96,
+   "startSec": 16.043,
+   "durationSec": 4.278,
    "text": "80トンの像が、歩いて運ばれたという島。"
   },
   {
-   "startSec": 18.84,
-   "durationSec": 3.68,
+   "startSec": 20.321,
+   "durationSec": 4.064,
    "text": "当チャンネルでは、こうした古代の謎を、"
   },
   {
-   "startSec": 22.52,
-   "durationSec": 2.36,
+   "startSec": 24.385,
+   "durationSec": 3.209,
    "text": "都市伝説として語るのではなく、"
   },
   {
-   "startSec": 24.88,
-   "durationSec": 3.6,
+   "startSec": 27.593,
+   "durationSec": 3.636,
    "text": "論文と一次資料からひも解いていく。"
   },
   {
-   "startSec": 28.48,
-   "durationSec": 3.44,
+   "startSec": 31.23,
+   "durationSec": 3.209,
    "text": "問題は、重いかどうかではない。"
   },
   {
-   "startSec": 31.92,
-   "durationSec": 2.48,
+   "startSec": 34.438,
+   "durationSec": 3.209,
    "text": "重さの数字だけが一人歩きして、"
   },
   {
-   "startSec": 34.4,
-   "durationSec": 3.413,
+   "startSec": 37.647,
+   "durationSec": 5.561,
    "text": "どうやって運んだかの研究が読まれていないことである。"
   },
   {
-   "startSec": 37.813,
-   "durationSec": 5.067,
+   "startSec": 43.208,
+   "durationSec": 4.278,
    "text": "この動画では、語られている5つを並べた。"
   },
   {
-   "startSec": 42.88,
-   "durationSec": 4.16,
+   "startSec": 47.486,
+   "durationSec": 4.492,
    "text": "はじめは、言われている通り本物だったもの。"
   },
   {
-   "startSec": 47.04,
-   "durationSec": 4.32,
+   "startSec": 51.978,
+   "durationSec": 4.064,
    "text": "次に、当たってはいるが理由が違うもの。"
   },
   {
-   "startSec": 51.36,
-   "durationSec": 4.24,
+   "startSec": 56.042,
+   "durationSec": 4.92,
    "text": "最後に、一次資料まで戻ると跡形もなくなるもの。"
   },
   {
-   "startSec": 55.6,
-   "durationSec": 6.32,
+   "startSec": 60.962,
+   "durationSec": 4.706,
    "text": "それでは私と共に、巨石遺跡へと迫っていこう。"
   },
   {
-   "startSec": 61.92,
-   "durationSec": 4.32,
+   "startSec": 65.668,
+   "durationSec": 3.636,
    "text": "イギリス南部、ソールズベリー平原。"
   },
   {
-   "startSec": 66.24,
-   "durationSec": 2.96,
+   "startSec": 69.304,
+   "durationSec": 3.85,
    "text": "ストーンヘンジには2種類の石がある。"
   },
   {
-   "startSec": 69.2,
-   "durationSec": 4.32,
+   "startSec": 73.154,
+   "durationSec": 4.492,
    "text": "外側の大きな輪は、サーセン石という砂岩だ。"
   },
   {
-   "startSec": 73.52,
-   "durationSec": 2.4,
+   "startSec": 77.646,
+   "durationSec": 2.353,
    "text": "1本あたり約25トン。"
   },
   {
-   "startSec": 75.92,
-   "durationSec": 3.68,
+   "startSec": 79.999,
+   "durationSec": 3.209,
    "text": "最大のもので30トンを超える。"
   },
   {
-   "startSec": 79.6,
-   "durationSec": 3.84,
+   "startSec": 83.208,
+   "durationSec": 4.706,
    "text": "サーセン石の産地も、近年になって特定された。"
   },
   {
-   "startSec": 83.44,
-   "durationSec": 3.44,
+   "startSec": 87.914,
+   "durationSec": 2.567,
    "text": "2020年の研究である。"
   },
   {
-   "startSec": 86.88,
-   "durationSec": 4.347,
+   "startSec": 90.48,
+   "durationSec": 4.92,
    "text": "1958年の修復工事で1本の柱から抜き取られ、"
   },
   {
-   "startSec": 91.227,
-   "durationSec": 4.373,
+   "startSec": 95.4,
+   "durationSec": 5.348,
    "text": "その後60年間行方が分からなくなっていた石の芯が、"
   },
   {
-   "startSec": 95.6,
-   "durationSec": 2.4,
+   "startSec": 100.748,
+   "durationSec": 2.567,
    "text": "2018年に返却された。"
   },
   {
-   "startSec": 98.0,
-   "durationSec": 4.32,
+   "startSec": 103.314,
+   "durationSec": 4.064,
    "text": "その芯の地球化学的な指紋を測ることで、"
   },
   {
-   "startSec": 102.32,
-   "durationSec": 3.4,
+   "startSec": 107.379,
+   "durationSec": 5.561,
    "text": "産地がマールバラ丘陵のウェスト・ウッズに絞り込まれて"
   },
   {
-   "startSec": 105.72,
-   "durationSec": 2.04,
+   "startSec": 112.94,
+   "durationSec": 0.642,
    "text": "いる。"
   },
   {
-   "startSec": 107.76,
-   "durationSec": 2.96,
+   "startSec": 113.582,
+   "durationSec": 4.064,
    "text": "内側に、それより小さい石が並んでいる。"
   },
   {
-   "startSec": 110.72,
-   "durationSec": 2.88,
+   "startSec": 117.646,
+   "durationSec": 2.995,
    "text": "これがブルーストーンである。"
   },
   {
-   "startSec": 113.6,
-   "durationSec": 2.32,
+   "startSec": 120.64,
+   "durationSec": 2.353,
    "text": "1本2トンから4トン。"
   },
   {
-   "startSec": 115.92,
-   "durationSec": 3.92,
+   "startSec": 122.993,
+   "durationSec": 4.492,
    "text": "もとは80本ほど立っていたと見られている。"
   },
   {
-   "startSec": 119.84,
-   "durationSec": 2.16,
+   "startSec": 127.485,
+   "durationSec": 1.711,
    "text": "問題はこちらだ。"
   },
   {
-   "startSec": 122.0,
-   "durationSec": 1.2,
+   "startSec": 129.197,
+   "durationSec": 1.497,
    "text": "サーセン石は、"
   },
   {
-   "startSec": 123.2,
-   "durationSec": 4.24,
+   "startSec": 130.694,
+   "durationSec": 4.92,
    "text": "北へ25キロほどのマールバラ丘陵から来ている。"
   },
   {
-   "startSec": 127.44,
-   "durationSec": 1.44,
+   "startSec": 135.614,
+   "durationSec": 0.642,
    "text": "近い。"
   },
   {
-   "startSec": 128.88,
-   "durationSec": 2.4,
+   "startSec": 136.255,
+   "durationSec": 2.353,
    "text": "ブルーストーンは違う。"
   },
   {
-   "startSec": 131.28,
-   "durationSec": 3.36,
+   "startSec": 138.608,
+   "durationSec": 4.492,
    "text": "ウェールズ西部のプレセリ丘陵から来ている。"
   },
   {
-   "startSec": 134.64,
-   "durationSec": 4.4,
+   "startSec": 143.1,
+   "durationSec": 2.995,
    "text": "直線距離で約250キロある。"
   },
   {
-   "startSec": 139.04,
-   "durationSec": 2.24,
+   "startSec": 146.095,
+   "durationSec": 1.711,
    "text": "なぜ分かるのか。"
   },
   {
-   "startSec": 141.28,
-   "durationSec": 4.16,
+   "startSec": 147.806,
+   "durationSec": 4.064,
    "text": "岩石の化学組成と磁化率を比べたからだ。"
   },
   {
-   "startSec": 145.44,
-   "durationSec": 3.44,
+   "startSec": 151.87,
+   "durationSec": 4.706,
    "text": "2006年に、ブルーストーンの石器12点と、"
   },
   {
-   "startSec": 148.88,
-   "durationSec": 2.4,
+   "startSec": 156.576,
+   "durationSec": 3.209,
    "text": "ストーンヘンジの石柱11本と、"
   },
   {
-   "startSec": 151.28,
-   "durationSec": 3.6,
+   "startSec": 159.784,
+   "durationSec": 4.278,
    "text": "候補になる露頭を突き合わせた研究がある。"
   },
   {
-   "startSec": 154.88,
-   "durationSec": 2.56,
+   "startSec": 164.062,
+   "durationSec": 1.711,
    "text": "組成が一致した。"
   },
   {
-   "startSec": 157.44,
-   "durationSec": 4.8,
+   "startSec": 165.774,
+   "durationSec": 5.134,
    "text": "2014年には、採石場そのものが見つかっている。"
   },
   {
-   "startSec": 162.24,
-   "durationSec": 3.44,
+   "startSec": 170.907,
+   "durationSec": 5.134,
    "text": "カーン・メニンと、クレイグ・ロス・ア・フェリン。"
   },
   {
-   "startSec": 165.68,
-   "durationSec": 5.04,
+   "startSec": 176.041,
+   "durationSec": 5.348,
    "text": "石を切り出した跡と、楔を打ち込んだ穴が残っていた。"
   },
   {
-   "startSec": 170.72,
-   "durationSec": 2.24,
+   "startSec": 181.388,
+   "durationSec": 1.925,
    "text": "さらに2023年、"
   },
   {
-   "startSec": 172.96,
-   "durationSec": 2.96,
+   "startSec": 183.314,
+   "durationSec": 3.85,
    "text": "過去の発掘で出た小さな石の破片まで、"
   },
   {
-   "startSec": 175.92,
-   "durationSec": 3.84,
+   "startSec": 187.164,
+   "durationSec": 3.422,
    "text": "岩石学的に産地が特定されている。"
   },
   {
-   "startSec": 179.76,
-   "durationSec": 2.72,
+   "startSec": 190.586,
+   "durationSec": 3.209,
    "text": "1924年に掘り出されて以来、"
   },
   {
-   "startSec": 182.48,
-   "durationSec": 3.76,
+   "startSec": 193.795,
+   "durationSec": 4.492,
    "text": "ほとんど調べられずに保管されていたものだ。"
   },
   {
-   "startSec": 186.24,
-   "durationSec": 4.96,
+   "startSec": 198.287,
+   "durationSec": 4.706,
    "text": "つまり250キロという数字は、伝説ではない。"
   },
   {
-   "startSec": 191.2,
-   "durationSec": 4.08,
+   "startSec": 202.993,
+   "durationSec": 3.85,
    "text": "岩石を突き合わせて出た測定値である。"
   },
   {
-   "startSec": 195.28,
-   "durationSec": 1.28,
+   "startSec": 206.843,
+   "durationSec": 1.497,
    "text": "運ばれた石は、"
   },
   {
-   "startSec": 196.56,
-   "durationSec": 4.72,
+   "startSec": 208.34,
+   "durationSec": 4.492,
    "text": "分かっているだけで43本が今も現地に残る。"
   },
   {
-   "startSec": 201.28,
-   "durationSec": 4.0,
+   "startSec": 212.832,
+   "durationSec": 4.064,
    "text": "ただし、どう運んだかは決着していない。"
   },
   {
-   "startSec": 205.28,
-   "durationSec": 3.4,
+   "startSec": 216.896,
+   "durationSec": 4.064,
    "text": "人力で引いたのか、氷河が運んだのかで、"
   },
   {
-   "startSec": 208.68,
-   "durationSec": 2.44,
+   "startSec": 220.96,
+   "durationSec": 1.711,
    "text": "長く議論がある。"
   },
   {
-   "startSec": 211.12,
-   "durationSec": 3.12,
+   "startSec": 222.671,
+   "durationSec": 2.353,
    "text": "近年は人力説が優勢だ。"
   },
   {
-   "startSec": 214.24,
-   "durationSec": 4.08,
+   "startSec": 225.024,
+   "durationSec": 4.706,
    "text": "採石場に人の手による作業痕が残っていること。"
   },
   {
-   "startSec": 218.32,
-   "durationSec": 2.107,
+   "startSec": 229.73,
+   "durationSec": 3.422,
    "text": "氷河の流れる向きが合わないこと。"
   },
   {
-   "startSec": 220.427,
-   "durationSec": 3.893,
+   "startSec": 233.153,
+   "durationSec": 2.995,
    "text": "この2つが根拠になっている。"
   },
   {
-   "startSec": 224.32,
-   "durationSec": 4.56,
+   "startSec": 236.147,
+   "durationSec": 5.561,
    "text": "ストーンヘンジ自体も、一度に建てられたものではない。"
   },
   {
-   "startSec": 228.88,
-   "durationSec": 3.16,
+   "startSec": 241.709,
+   "durationSec": 3.85,
    "text": "最初に掘られたのは円形の溝と土手で、"
   },
   {
-   "startSec": 232.04,
-   "durationSec": 2.52,
+   "startSec": 245.559,
+   "durationSec": 2.139,
    "text": "紀元前3000年頃。"
   },
   {
-   "startSec": 234.56,
-   "durationSec": 2.48,
+   "startSec": 247.698,
+   "durationSec": 4.064,
    "text": "ブルーストーンが立つのはその数百年後。"
   },
   {
-   "startSec": 237.04,
-   "durationSec": 4.267,
+   "startSec": 251.762,
+   "durationSec": 5.561,
    "text": "サーセン石の輪が完成するのは紀元前2500年頃とされ"
   },
   {
-   "startSec": 241.307,
-   "durationSec": 1.093,
+   "startSec": 257.324,
+   "durationSec": 0.428,
    "text": "る。"
   },
   {
-   "startSec": 242.4,
-   "durationSec": 2.933,
+   "startSec": 257.751,
+   "durationSec": 4.278,
    "text": "500年かけて作り替えられた場所である。"
   },
   {
-   "startSec": 245.333,
-   "durationSec": 4.907,
+   "startSec": 262.029,
+   "durationSec": 3.85,
    "text": "この1件は、言われている通りだった。"
   },
   {
-   "startSec": 250.24,
-   "durationSec": 2.64,
+   "startSec": 265.88,
+   "durationSec": 1.711,
    "text": "では次はどうか。"
   },
   {
-   "startSec": 252.88,
-   "durationSec": 2.88,
+   "startSec": 267.591,
+   "durationSec": 2.353,
    "text": "もっと古い遺跡がある。"
   },
   {
-   "startSec": 255.76,
-   "durationSec": 3.84,
+   "startSec": 269.944,
+   "durationSec": 4.064,
    "text": "トルコ南東部、シャンルウルファの近く。"
   },
   {
-   "startSec": 259.6,
-   "durationSec": 3.36,
+   "startSec": 274.008,
+   "durationSec": 3.422,
    "text": "ギョベクリ・テペという丘がある。"
   },
   {
-   "startSec": 262.96,
-   "durationSec": 5.04,
+   "startSec": 277.43,
+   "durationSec": 4.706,
    "text": "ここに、T字型の石柱が円を描いて立っている。"
   },
   {
-   "startSec": 268.0,
-   "durationSec": 3.36,
+   "startSec": 282.136,
+   "durationSec": 2.995,
    "text": "高さは最大で5.5メートル。"
   },
   {
-   "startSec": 271.36,
-   "durationSec": 3.44,
+   "startSec": 285.131,
+   "durationSec": 3.422,
    "text": "重さは10トンから15トンほど。"
   },
   {
-   "startSec": 274.8,
-   "durationSec": 4.16,
+   "startSec": 288.553,
+   "durationSec": 3.85,
    "text": "柱の表面には、キツネ、ヘビ、サソリ、"
   },
   {
-   "startSec": 278.96,
-   "durationSec": 1.96,
+   "startSec": 292.403,
+   "durationSec": 1.925,
    "text": "鳥が彫られている。"
   },
   {
-   "startSec": 280.92,
-   "durationSec": 5.56,
+   "startSec": 294.329,
+   "durationSec": 4.064,
    "text": "本格的な発掘が始まったのは1994年。"
   },
   {
-   "startSec": 286.48,
-   "durationSec": 3.76,
+   "startSec": 298.393,
+   "durationSec": 5.134,
    "text": "ドイツ人考古学者クラウス・シュミットが指揮した。"
   },
   {
-   "startSec": 290.24,
-   "durationSec": 1.707,
+   "startSec": 303.526,
+   "durationSec": 1.07,
    "text": "それ以前、"
   },
   {
-   "startSec": 291.947,
-   "durationSec": 3.893,
+   "startSec": 304.596,
+   "durationSec": 5.561,
    "text": "この丘は中世の墓地だと考えられて調査されていなかった"
   },
   {
-   "startSec": 295.84,
-   "durationSec": 1.84,
+   "startSec": 310.157,
+   "durationSec": 0.35,
    "text": "。"
   },
   {
-   "startSec": 297.68,
-   "durationSec": 2.88,
+   "startSec": 310.371,
+   "durationSec": 2.567,
    "text": "語られている話はこうだ。"
   },
   {
-   "startSec": 300.56,
-   "durationSec": 3.52,
+   "startSec": 312.938,
+   "durationSec": 2.139,
    "text": "ここは文明より古い。"
   },
   {
-   "startSec": 304.08,
-   "durationSec": 2.16,
+   "startSec": 315.077,
+   "durationSec": 1.283,
    "text": "年代を見る。"
   },
   {
-   "startSec": 306.24,
-   "durationSec": 5.16,
+   "startSec": 316.36,
+   "durationSec": 5.348,
    "text": "放射性炭素年代測定で、紀元前9500年頃まで遡る。"
   },
   {
-   "startSec": 311.4,
-   "durationSec": 5.0,
+   "startSec": 321.708,
+   "durationSec": 3.422,
    "text": "今からおよそ1万1千年前である。"
   },
   {
-   "startSec": 316.4,
-   "durationSec": 2.64,
+   "startSec": 325.13,
+   "durationSec": 2.353,
    "text": "比較するとよく分かる。"
   },
   {
-   "startSec": 319.04,
-   "durationSec": 4.8,
+   "startSec": 327.483,
+   "durationSec": 5.348,
    "text": "ストーンヘンジが立ち始めるのが紀元前3000年頃。"
   },
   {
-   "startSec": 323.84,
-   "durationSec": 4.88,
+   "startSec": 332.831,
+   "durationSec": 4.492,
    "text": "エジプトのピラミッドが紀元前2500年頃。"
   },
   {
-   "startSec": 328.72,
-   "durationSec": 1.48,
+   "startSec": 337.323,
+   "durationSec": 2.139,
    "text": "ギョベクリ・テペは、"
   },
   {
-   "startSec": 330.2,
-   "durationSec": 4.12,
+   "startSec": 339.462,
+   "durationSec": 3.85,
    "text": "そこからさらに6千年以上さかのぼる。"
   },
   {
-   "startSec": 334.32,
-   "durationSec": 4.24,
+   "startSec": 343.312,
+   "durationSec": 4.492,
    "text": "文字が生まれるより6千年、車輪より5千年、"
   },
   {
-   "startSec": 338.56,
-   "durationSec": 3.3,
+   "startSec": 347.804,
+   "durationSec": 2.353,
    "text": "青銅器より6千年早い。"
   },
   {
-   "startSec": 341.86,
-   "durationSec": 4.06,
+   "startSec": 350.157,
+   "durationSec": 4.064,
    "text": "そして重要なのは年代そのものではない。"
   },
   {
-   "startSec": 345.92,
-   "durationSec": 5.68,
+   "startSec": 354.221,
+   "durationSec": 4.492,
    "text": "当時、この地域にまだ農耕がなかったことだ。"
   },
   {
-   "startSec": 351.6,
-   "durationSec": 3.76,
+   "startSec": 358.713,
+   "durationSec": 3.636,
    "text": "19世紀以来の考え方はこうだった。"
   },
   {
-   "startSec": 355.36,
-   "durationSec": 1.6,
+   "startSec": 362.349,
+   "durationSec": 1.497,
    "text": "農耕が始まる。"
   },
   {
-   "startSec": 356.96,
-   "durationSec": 1.68,
+   "startSec": 363.847,
+   "durationSec": 1.283,
    "text": "食料が余る。"
   },
   {
-   "startSec": 358.64,
-   "durationSec": 2.16,
+   "startSec": 365.13,
+   "durationSec": 1.497,
    "text": "人が定住する。"
   },
   {
-   "startSec": 360.8,
-   "durationSec": 3.44,
+   "startSec": 366.627,
+   "durationSec": 2.995,
    "text": "余裕ができて、神殿を建てる。"
   },
   {
-   "startSec": 364.24,
-   "durationSec": 3.6,
+   "startSec": 369.622,
+   "durationSec": 3.209,
    "text": "順番はこうだと考えられていた。"
   },
   {
-   "startSec": 367.84,
-   "durationSec": 4.4,
+   "startSec": 372.83,
+   "durationSec": 4.278,
    "text": "ギョベクリ・テペは、その順番に合わない。"
   },
   {
-   "startSec": 372.24,
-   "durationSec": 1.6,
+   "startSec": 377.108,
+   "durationSec": 1.925,
    "text": "狩猟採集の段階で、"
   },
   {
-   "startSec": 373.84,
-   "durationSec": 3.6,
+   "startSec": 379.034,
+   "durationSec": 3.85,
    "text": "10トンの柱を切り出して立てている。"
   },
   {
-   "startSec": 377.44,
-   "durationSec": 4.0,
+   "startSec": 382.884,
+   "durationSec": 4.064,
    "text": "つまり「文明より古い」は当たっている。"
   },
   {
-   "startSec": 381.44,
-   "durationSec": 4.24,
+   "startSec": 386.948,
+   "durationSec": 3.422,
    "text": "ただし、言われ方とは意味が違う。"
   },
   {
-   "startSec": 385.68,
-   "durationSec": 5.04,
+   "startSec": 390.37,
+   "durationSec": 4.706,
    "text": "失われた超古代文明があったという話ではない。"
   },
   {
-   "startSec": 390.72,
-   "durationSec": 1.36,
+   "startSec": 395.076,
+   "durationSec": 1.497,
    "text": "狩猟採集民が、"
   },
   {
-   "startSec": 392.08,
-   "durationSec": 4.04,
+   "startSec": 396.573,
+   "durationSec": 5.134,
    "text": "我々が思っていたより大規模な共同作業をしていた、"
   },
   {
-   "startSec": 396.12,
-   "durationSec": 1.24,
+   "startSec": 401.707,
+   "durationSec": 1.711,
    "text": "という話である。"
   },
   {
-   "startSec": 397.36,
-   "durationSec": 4.88,
+   "startSec": 403.418,
+   "durationSec": 3.422,
    "text": "そして発掘はまだ終わっていない。"
   },
   {
-   "startSec": 402.24,
-   "durationSec": 1.68,
+   "startSec": 406.841,
+   "durationSec": 2.567,
    "text": "地中レーダーの調査では、"
   },
   {
-   "startSec": 403.92,
-   "durationSec": 4.56,
+   "startSec": 409.408,
+   "durationSec": 4.706,
    "text": "囲いの多くが未発掘のまま残っているとされる。"
   },
   {
-   "startSec": 408.48,
-   "durationSec": 4.88,
+   "startSec": 414.113,
+   "durationSec": 4.92,
    "text": "地中レーダーで確認された円形の囲いは20ほど。"
   },
   {
-   "startSec": 413.36,
-   "durationSec": 3.92,
+   "startSec": 419.033,
+   "durationSec": 4.278,
    "text": "掘り出されているのはその一部にすぎない。"
   },
   {
-   "startSec": 417.28,
-   "durationSec": 1.28,
+   "startSec": 423.311,
+   "durationSec": 1.497,
    "text": "しかも囲いは、"
   },
   {
-   "startSec": 418.56,
-   "durationSec": 4.48,
+   "startSec": 424.808,
+   "durationSec": 4.492,
    "text": "使われなくなると意図的に埋め戻されていた。"
   },
   {
-   "startSec": 423.04,
-   "durationSec": 1.6,
+   "startSec": 429.3,
+   "durationSec": 2.139,
    "text": "埋め戻したからこそ、"
   },
   {
-   "startSec": 424.64,
-   "durationSec": 3.72,
+   "startSec": 431.439,
+   "durationSec": 3.636,
    "text": "1万1千年後に立ったまま出てきた。"
   },
   {
-   "startSec": 428.36,
-   "durationSec": 3.96,
+   "startSec": 435.076,
+   "durationSec": 3.85,
    "text": "大きな石を立てた例を、もう1つ見る。"
   },
   {
-   "startSec": 432.32,
-   "durationSec": 4.72,
+   "startSec": 438.926,
+   "durationSec": 3.209,
    "text": "今度は、石が歩いたという島だ。"
   },
   {
-   "startSec": 437.04,
-   "durationSec": 3.12,
+   "startSec": 442.134,
+   "durationSec": 2.353,
    "text": "南太平洋、ラパ・ヌイ。"
   },
   {
-   "startSec": 440.16,
-   "durationSec": 2.48,
+   "startSec": 444.487,
+   "durationSec": 2.139,
    "text": "イースター島である。"
   },
   {
-   "startSec": 442.64,
-   "durationSec": 2.08,
+   "startSec": 446.626,
+   "durationSec": 2.567,
    "text": "モアイは約900体ある。"
   },
   {
-   "startSec": 444.72,
-   "durationSec": 5.28,
+   "startSec": 449.193,
+   "durationSec": 4.278,
    "text": "平均で高さ4メートル、重さ12.5トン。"
   },
   {
-   "startSec": 450.0,
-   "durationSec": 4.16,
+   "startSec": 453.471,
+   "durationSec": 5.348,
    "text": "最大のものは「パロ」と呼ばれ、高さ約10メートル、"
   },
   {
-   "startSec": 454.16,
-   "durationSec": 2.107,
+   "startSec": 458.819,
+   "durationSec": 1.925,
    "text": "重さ82トンある。"
   },
   {
-   "startSec": 456.267,
-   "durationSec": 4.133,
+   "startSec": 460.744,
+   "durationSec": 3.636,
    "text": "これを、島の内陸にある採石場から、"
   },
   {
-   "startSec": 460.4,
-   "durationSec": 3.04,
+   "startSec": 464.38,
+   "durationSec": 2.995,
    "text": "海沿いの台座まで運んでいる。"
   },
   {
-   "startSec": 463.44,
-   "durationSec": 3.76,
+   "startSec": 467.375,
+   "durationSec": 2.781,
    "text": "距離は最長で18キロほど。"
   },
   {
-   "startSec": 467.2,
-   "durationSec": 3.44,
+   "startSec": 470.156,
+   "durationSec": 3.636,
    "text": "採石場はラノ・ララクという火口で、"
   },
   {
-   "startSec": 470.64,
-   "durationSec": 4.32,
+   "startSec": 473.792,
+   "durationSec": 4.064,
    "text": "900体のうち大半がここから出ている。"
   },
   {
-   "startSec": 474.96,
-   "durationSec": 1.48,
+   "startSec": 477.856,
+   "durationSec": 1.711,
    "text": "火口の内外には、"
   },
   {
-   "startSec": 476.44,
-   "durationSec": 4.04,
+   "startSec": 479.567,
+   "durationSec": 5.561,
    "text": "掘り出す途中で放棄されたモアイが約400体残っている"
   },
   {
-   "startSec": 480.48,
-   "durationSec": 0.48,
+   "startSec": 485.129,
+   "durationSec": 0.35,
    "text": "。"
   },
   {
-   "startSec": 480.96,
-   "durationSec": 4.56,
+   "startSec": 485.343,
+   "durationSec": 4.278,
    "text": "そして採石場から海岸へ向かう道の脇には、"
   },
   {
-   "startSec": 485.52,
-   "durationSec": 3.413,
+   "startSec": 489.621,
+   "durationSec": 4.278,
    "text": "運搬中に倒れたと見られるモアイが数十体、"
   },
   {
-   "startSec": 488.933,
-   "durationSec": 3.387,
+   "startSec": 493.899,
+   "durationSec": 2.353,
    "text": "そのまま転がっている。"
   },
   {
-   "startSec": 492.32,
-   "durationSec": 4.56,
+   "startSec": 496.252,
+   "durationSec": 5.134,
    "text": "島の言い伝えでは、モアイは歩いて行ったとされる。"
   },
   {
-   "startSec": 496.88,
-   "durationSec": 3.68,
+   "startSec": 501.385,
+   "durationSec": 5.348,
    "text": "長いあいだ、この言い伝えは比喩だと考えられていた。"
   },
   {
-   "startSec": 500.56,
-   "durationSec": 3.12,
+   "startSec": 506.733,
+   "durationSec": 3.422,
    "text": "丸太の上を転がしたのだろう、と。"
   },
   {
-   "startSec": 503.68,
-   "durationSec": 1.2,
+   "startSec": 510.155,
+   "durationSec": 1.283,
    "text": "2012年、"
   },
   {
-   "startSec": 504.88,
-   "durationSec": 3.6,
+   "startSec": 511.439,
+   "durationSec": 4.492,
    "text": "テリー・ハントとカール・リポが実験をした。"
   },
   {
-   "startSec": 508.48,
-   "durationSec": 4.88,
+   "startSec": 515.93,
+   "durationSec": 5.348,
    "text": "4.35トンのレプリカを作り、ロープを3本かけた。"
   },
   {
-   "startSec": 513.36,
-   "durationSec": 2.32,
+   "startSec": 521.278,
+   "durationSec": 1.925,
    "text": "左右と後ろである。"
   },
   {
-   "startSec": 515.68,
-   "durationSec": 4.08,
+   "startSec": 523.203,
+   "durationSec": 4.064,
    "text": "18人で、左右のロープを交互に引いた。"
   },
   {
-   "startSec": 519.76,
-   "durationSec": 3.76,
+   "startSec": 527.267,
+   "durationSec": 3.209,
    "text": "像が傾き、底面の縁で回転する。"
   },
   {
-   "startSec": 523.52,
-   "durationSec": 2.96,
+   "startSec": 530.476,
+   "durationSec": 2.567,
    "text": "人が歩くのと同じ動きだ。"
   },
   {
-   "startSec": 526.48,
-   "durationSec": 3.36,
+   "startSec": 533.043,
+   "durationSec": 3.422,
    "text": "100メートルを40分で進んだ。"
   },
   {
-   "startSec": 529.84,
-   "durationSec": 4.4,
+   "startSec": 536.465,
+   "durationSec": 3.85,
    "text": "丸太も、車輪も、家畜も使っていない。"
   },
   {
-   "startSec": 534.24,
-   "durationSec": 3.28,
+   "startSec": 540.315,
+   "durationSec": 2.567,
    "text": "なぜこれが成立するのか。"
   },
   {
-   "startSec": 537.52,
-   "durationSec": 1.44,
+   "startSec": 542.882,
+   "durationSec": 1.925,
    "text": "未完成のモアイと、"
   },
   {
-   "startSec": 538.96,
-   "durationSec": 4.56,
+   "startSec": 544.807,
+   "durationSec": 4.492,
    "text": "運搬中に倒れたモアイの形が違うからである。"
   },
   {
-   "startSec": 543.52,
-   "durationSec": 5.12,
+   "startSec": 549.299,
+   "durationSec": 5.134,
    "text": "運搬されていたモアイは、底面が前方に傾いていた。"
   },
   {
-   "startSec": 548.64,
-   "durationSec": 4.72,
+   "startSec": 554.433,
+   "durationSec": 4.92,
    "text": "立てる前に、わざと前のめりの形に作られている。"
   },
   {
-   "startSec": 553.36,
-   "durationSec": 1.56,
+   "startSec": 559.353,
+   "durationSec": 2.139,
    "text": "台座に据えるときに、"
   },
   {
-   "startSec": 554.92,
-   "durationSec": 5.08,
+   "startSec": 561.492,
+   "durationSec": 4.492,
    "text": "底面を削って垂直に直した痕跡も残っている。"
   },
   {
-   "startSec": 560.0,
-   "durationSec": 5.6,
+   "startSec": 565.983,
+   "durationSec": 5.561,
    "text": "2026年には、運搬に使えるロープの研究も出ている。"
   },
   {
-   "startSec": 565.6,
-   "durationSec": 4.32,
+   "startSec": 571.545,
+   "durationSec": 4.92,
    "text": "島に自生する植物の繊維を水に浸して処理すると、"
   },
   {
-   "startSec": 569.92,
-   "durationSec": 4.32,
+   "startSec": 576.465,
+   "durationSec": 4.064,
    "text": "引張強さが900メガパスカルを超える。"
   },
   {
-   "startSec": 574.24,
-   "durationSec": 3.92,
+   "startSec": 580.529,
+   "durationSec": 3.636,
    "text": "市販の麻やジュートに匹敵する値だ。"
   },
   {
-   "startSec": 578.16,
-   "durationSec": 2.32,
+   "startSec": 584.165,
+   "durationSec": 2.567,
    "text": "言い伝えは当たっていた。"
   },
   {
-   "startSec": 580.48,
-   "durationSec": 2.88,
+   "startSec": 586.732,
+   "durationSec": 2.353,
    "text": "ただし超能力ではない。"
   },
   {
-   "startSec": 583.36,
-   "durationSec": 3.68,
+   "startSec": 589.085,
+   "durationSec": 2.353,
    "text": "重心と摩擦の話である。"
   },
   {
-   "startSec": 587.04,
-   "durationSec": 3.52,
+   "startSec": 591.438,
+   "durationSec": 3.422,
    "text": "次は、運べないとされている石だ。"
   },
   {
-   "startSec": 590.56,
-   "durationSec": 3.2,
+   "startSec": 594.86,
+   "durationSec": 2.567,
    "text": "レバノン、バールベック。"
   },
   {
-   "startSec": 593.76,
-   "durationSec": 4.48,
+   "startSec": 597.427,
+   "durationSec": 5.348,
    "text": "ローマ時代の神殿の基礎に、3つの巨石が並んでいる。"
   },
   {
-   "startSec": 598.24,
-   "durationSec": 2.24,
+   "startSec": 602.775,
+   "durationSec": 2.353,
    "text": "トリリトンと呼ばれる。"
   },
   {
-   "startSec": 600.48,
-   "durationSec": 2.613,
+   "startSec": 605.127,
+   "durationSec": 2.995,
    "text": "1つあたり約800トンある。"
   },
   {
-   "startSec": 603.093,
-   "durationSec": 5.547,
+   "startSec": 608.122,
+   "durationSec": 5.134,
    "text": "この基礎の上に建っていたのがユピテル神殿である。"
   },
   {
-   "startSec": 608.64,
-   "durationSec": 5.04,
+   "startSec": 613.256,
+   "durationSec": 4.706,
    "text": "柱は高さ約20メートル、直径2.5メートル。"
   },
   {
-   "startSec": 613.68,
-   "durationSec": 4.02,
+   "startSec": 617.962,
+   "durationSec": 5.134,
    "text": "54本あったうち、今も立っているのは6本だけだ。"
   },
   {
-   "startSec": 617.7,
-   "durationSec": 5.02,
+   "startSec": 623.095,
+   "durationSec": 4.706,
    "text": "そして、そこから数百メートル離れた採石場に、"
   },
   {
-   "startSec": 622.72,
-   "durationSec": 2.24,
+   "startSec": 627.801,
+   "durationSec": 3.209,
    "text": "もっと大きな石が転がっている。"
   },
   {
-   "startSec": 624.96,
-   "durationSec": 4.8,
+   "startSec": 631.01,
+   "durationSec": 4.492,
    "text": "「南の石」と呼ばれるものが約1000トン。"
   },
   {
-   "startSec": 629.76,
-   "durationSec": 3.96,
+   "startSec": 635.501,
+   "durationSec": 4.278,
    "text": "2014年、ドイツ考古学研究所の調査で、"
   },
   {
-   "startSec": 633.72,
-   "durationSec": 2.68,
+   "startSec": 639.779,
+   "durationSec": 2.995,
    "text": "さらに大きな石が見つかった。"
   },
   {
-   "startSec": 636.4,
-   "durationSec": 3.68,
+   "startSec": 642.774,
+   "durationSec": 2.353,
    "text": "推定で約1650トン。"
   },
   {
-   "startSec": 640.08,
-   "durationSec": 3.44,
+   "startSec": 645.127,
+   "durationSec": 3.209,
    "text": "地面に半分埋まったままである。"
   },
   {
-   "startSec": 643.52,
-   "durationSec": 2.88,
+   "startSec": 648.336,
+   "durationSec": 2.567,
    "text": "語られている話はこうだ。"
   },
   {
-   "startSec": 646.4,
-   "durationSec": 3.12,
+   "startSec": 650.902,
+   "durationSec": 5.134,
    "text": "1000トンの石は、現代のクレーンでも吊れない。"
   },
   {
-   "startSec": 649.52,
-   "durationSec": 3.12,
+   "startSec": 656.036,
+   "durationSec": 2.353,
    "text": "当時運べたはずがない。"
   },
   {
-   "startSec": 652.64,
-   "durationSec": 2.4,
+   "startSec": 658.389,
+   "durationSec": 1.925,
    "text": "前半は事実に近い。"
   },
   {
-   "startSec": 655.04,
-   "durationSec": 2.88,
+   "startSec": 660.314,
+   "durationSec": 5.134,
    "text": "単体で1000トンを吊り上げる移動式クレーンは、"
   },
   {
-   "startSec": 657.92,
-   "durationSec": 2.16,
+   "startSec": 665.448,
+   "durationSec": 1.497,
    "text": "ごく限られる。"
   },
   {
-   "startSec": 660.08,
-   "durationSec": 4.08,
+   "startSec": 666.945,
+   "durationSec": 2.995,
    "text": "だが、話の立て方が逆である。"
   },
   {
-   "startSec": 664.16,
-   "durationSec": 2.36,
+   "startSec": 669.94,
+   "durationSec": 2.567,
    "text": "バールベックの採石場は、"
   },
   {
-   "startSec": 666.52,
-   "durationSec": 5.08,
+   "startSec": 672.506,
+   "durationSec": 5.561,
    "text": "1898年から1903年にかけてドイツの調査隊が発掘"
   },
   {
-   "startSec": 671.6,
-   "durationSec": 1.0,
+   "startSec": 678.068,
+   "durationSec": 1.07,
    "text": "して以来、"
   },
   {
-   "startSec": 672.6,
-   "durationSec": 2.6,
+   "startSec": 679.137,
+   "durationSec": 1.925,
    "text": "研究が続いている。"
   },
   {
-   "startSec": 675.2,
-   "durationSec": 3.2,
+   "startSec": 681.062,
+   "durationSec": 2.781,
    "text": "2015年と2023年に、"
   },
   {
-   "startSec": 678.4,
-   "durationSec": 4.96,
+   "startSec": 683.843,
+   "durationSec": 4.492,
    "text": "採石場そのものを扱った調査報告が出ている。"
   },
   {
-   "startSec": 683.36,
-   "durationSec": 4.32,
+   "startSec": 688.335,
+   "durationSec": 4.92,
    "text": "そこで分かっているのは、切り出しの手順である。"
   },
   {
-   "startSec": 687.68,
-   "durationSec": 5.12,
+   "startSec": 693.255,
+   "durationSec": 4.92,
    "text": "岩盤に溝を掘り、下面を少しずつ切り離していく。"
   },
   {
-   "startSec": 692.8,
-   "durationSec": 1.84,
+   "startSec": 698.175,
+   "durationSec": 1.925,
    "text": "石は完成した形で、"
   },
   {
-   "startSec": 694.64,
-   "durationSec": 3.92,
+   "startSec": 700.1,
+   "durationSec": 5.561,
    "text": "採石場から神殿へ向かって緩やかに下る地形の上に置かれ"
   },
   {
-   "startSec": 698.56,
-   "durationSec": 0.78,
+   "startSec": 705.661,
+   "durationSec": 0.856,
    "text": "ていた。"
   },
   {
-   "startSec": 699.34,
-   "durationSec": 3.7,
+   "startSec": 706.517,
+   "durationSec": 2.567,
    "text": "そして肝心なことがある。"
   },
   {
-   "startSec": 703.04,
-   "durationSec": 3.28,
+   "startSec": 709.084,
+   "durationSec": 4.064,
    "text": "1000トンの石も1650トンの石も、"
   },
   {
-   "startSec": 706.32,
-   "durationSec": 2.0,
+   "startSec": 713.148,
+   "durationSec": 1.711,
    "text": "運ばれていない。"
   },
   {
-   "startSec": 708.32,
-   "durationSec": 2.88,
+   "startSec": 714.859,
+   "durationSec": 2.139,
    "text": "採石場に残っている。"
   },
   {
-   "startSec": 711.2,
-   "durationSec": 4.24,
+   "startSec": 716.998,
+   "durationSec": 4.492,
    "text": "運ばれたのは800トンのトリリトンまでだ。"
   },
   {
-   "startSec": 715.44,
-   "durationSec": 4.0,
+   "startSec": 721.49,
+   "durationSec": 4.92,
    "text": "そこから先の石は、切り出したが動かさなかった。"
   },
   {
-   "startSec": 719.44,
-   "durationSec": 2.56,
+   "startSec": 726.41,
+   "durationSec": 2.567,
    "text": "あるいは動かせなかった。"
   },
   {
-   "startSec": 722.0,
-   "durationSec": 4.48,
+   "startSec": 728.976,
+   "durationSec": 4.92,
    "text": "つまり遺跡が示しているのは、限界の存在である。"
   },
   {
-   "startSec": 726.48,
-   "durationSec": 3.12,
+   "startSec": 733.896,
+   "durationSec": 2.781,
    "text": "当時の技術で運べる上限が、"
   },
   {
-   "startSec": 729.6,
-   "durationSec": 2.32,
+   "startSec": 736.677,
+   "durationSec": 4.492,
    "text": "800トンと1000トンのあいだにあった。"
   },
   {
-   "startSec": 731.92,
-   "durationSec": 5.36,
+   "startSec": 741.169,
+   "durationSec": 4.278,
    "text": "その境目が、採石場にそのまま残っている。"
   },
   {
-   "startSec": 737.28,
-   "durationSec": 3.04,
+   "startSec": 745.447,
+   "durationSec": 2.995,
    "text": "失われた技術の証拠ではない。"
   },
   {
-   "startSec": 740.32,
-   "durationSec": 3.36,
+   "startSec": 748.441,
+   "durationSec": 2.567,
    "text": "技術の限界の証拠である。"
   },
   {
-   "startSec": 743.68,
-   "durationSec": 3.04,
+   "startSec": 751.008,
+   "durationSec": 2.139,
    "text": "最後は、道具の話だ。"
   },
   {
-   "startSec": 746.72,
-   "durationSec": 4.8,
+   "startSec": 753.147,
+   "durationSec": 5.348,
    "text": "石の継ぎ目に、剃刀の刃も入らないという主張がある。"
   },
   {
-   "startSec": 751.52,
-   "durationSec": 1.28,
+   "startSec": 758.495,
+   "durationSec": 1.711,
    "text": "ペルー、クスコ。"
   },
   {
-   "startSec": 752.8,
-   "durationSec": 1.84,
+   "startSec": 760.206,
+   "durationSec": 2.567,
    "text": "サクサイワマンの城壁は、"
   },
   {
-   "startSec": 754.64,
-   "durationSec": 3.36,
+   "startSec": 762.773,
+   "durationSec": 3.422,
    "text": "多角形の石を隙間なく組んである。"
   },
   {
-   "startSec": 758.0,
-   "durationSec": 3.68,
+   "startSec": 766.195,
+   "durationSec": 2.567,
    "text": "最大の石で約120トン。"
   },
   {
-   "startSec": 761.68,
-   "durationSec": 1.92,
+   "startSec": 768.762,
+   "durationSec": 2.139,
    "text": "壁は3段の階段状に、"
   },
   {
-   "startSec": 763.6,
-   "durationSec": 3.92,
+   "startSec": 770.901,
+   "durationSec": 4.064,
    "text": "約400メートルにわたって続いている。"
   },
   {
-   "startSec": 767.52,
-   "durationSec": 3.2,
+   "startSec": 774.965,
+   "durationSec": 2.995,
    "text": "石の角は3つや4つではない。"
   },
   {
-   "startSec": 770.72,
-   "durationSec": 4.56,
+   "startSec": 777.96,
+   "durationSec": 3.85,
    "text": "10を超える角を持つ石も珍しくない。"
   },
   {
-   "startSec": 775.28,
-   "durationSec": 4.64,
+   "startSec": 781.81,
+   "durationSec": 5.134,
    "text": "継ぎ目に紙一枚入らない、という言い方で語られる。"
   },
   {
-   "startSec": 779.92,
-   "durationSec": 4.4,
+   "startSec": 786.944,
+   "durationSec": 3.422,
    "text": "現代の石工でも再現できない、と。"
   },
   {
-   "startSec": 784.32,
-   "durationSec": 3.307,
+   "startSec": 790.366,
+   "durationSec": 4.064,
    "text": "一次資料を探すと、ここで様子が変わる。"
   },
   {
-   "startSec": 787.627,
-   "durationSec": 5.333,
+   "startSec": 794.43,
+   "durationSec": 5.561,
    "text": "この主張を検証した査読論文が、ほとんど見つからない。"
   },
   {
-   "startSec": 792.96,
-   "durationSec": 4.4,
+   "startSec": 799.992,
+   "durationSec": 4.92,
    "text": "「剃刀の刃が通らない」という表現の出どころも、"
   },
   {
-   "startSec": 797.36,
-   "durationSec": 3.36,
+   "startSec": 804.911,
+   "durationSec": 2.353,
    "text": "学術的な計測ではない。"
   },
   {
-   "startSec": 800.72,
-   "durationSec": 3.92,
+   "startSec": 807.264,
+   "durationSec": 5.561,
    "text": "20世紀の旅行記や一般向けの書籍で繰り返されてきた言"
   },
   {
-   "startSec": 804.64,
-   "durationSec": 2.64,
+   "startSec": 812.826,
+   "durationSec": 1.497,
    "text": "い回しである。"
   },
   {
-   "startSec": 807.28,
-   "durationSec": 5.2,
+   "startSec": 814.323,
+   "durationSec": 5.134,
    "text": "実際の壁を見ると、隙間がない面と、ある面がある。"
   },
   {
-   "startSec": 812.48,
-   "durationSec": 3.04,
+   "startSec": 819.457,
+   "durationSec": 3.209,
    "text": "表から見える面はぴたりと合う。"
   },
   {
-   "startSec": 815.52,
-   "durationSec": 5.6,
+   "startSec": 822.665,
+   "durationSec": 4.92,
    "text": "だが内部や背面は、粗い石と土で埋められている。"
   },
   {
-   "startSec": 821.12,
-   "durationSec": 2.4,
+   "startSec": 827.585,
+   "durationSec": 1.711,
    "text": "どう作ったのか。"
   },
   {
-   "startSec": 823.52,
-   "durationSec": 4.453,
+   "startSec": 829.296,
+   "durationSec": 5.348,
    "text": "石を仮置きし、当たる場所に印を付け、下ろして削る。"
   },
   {
-   "startSec": 827.973,
-   "durationSec": 2.774,
+   "startSec": 834.644,
+   "durationSec": 2.353,
    "text": "また置いて、また削る。"
   },
   {
-   "startSec": 830.747,
-   "durationSec": 3.093,
+   "startSec": 836.997,
+   "durationSec": 1.711,
    "text": "これを繰り返す。"
   },
   {
-   "startSec": 833.84,
-   "durationSec": 2.64,
+   "startSec": 838.708,
+   "durationSec": 2.781,
    "text": "ハンマーは石と青銅である。"
   },
   {
-   "startSec": 836.48,
-   "durationSec": 2.88,
+   "startSec": 841.489,
+   "durationSec": 2.781,
    "text": "つまり特殊な技術ではない。"
   },
   {
-   "startSec": 839.36,
-   "durationSec": 3.44,
+   "startSec": 844.269,
+   "durationSec": 2.353,
    "text": "膨大な反復作業である。"
   },
   {
-   "startSec": 842.8,
-   "durationSec": 3.307,
+   "startSec": 846.622,
+   "durationSec": 4.278,
    "text": "石の表面に、叩いた痕が無数に残っている。"
   },
   {
-   "startSec": 846.107,
-   "durationSec": 3.633,
+   "startSec": 850.9,
+   "durationSec": 3.636,
    "text": "それが作り方をそのまま示している。"
   },
   {
-   "startSec": 849.74,
-   "durationSec": 5.54,
+   "startSec": 854.537,
+   "durationSec": 4.492,
    "text": "そして、この組み方には実用上の理由がある。"
   },
   {
-   "startSec": 855.28,
-   "durationSec": 5.2,
+   "startSec": 859.029,
+   "durationSec": 5.348,
    "text": "石が互いに噛み合っているため、揺れても崩れにくい。"
   },
   {
-   "startSec": 860.48,
-   "durationSec": 2.24,
+   "startSec": 864.376,
+   "durationSec": 2.353,
    "text": "窓や出入口を台形にし、"
   },
   {
-   "startSec": 862.72,
-   "durationSec": 5.28,
+   "startSec": 866.729,
+   "durationSec": 4.492,
    "text": "壁をわずかに内側へ傾ける作りも同じ目的だ。"
   },
   {
-   "startSec": 868.0,
-   "durationSec": 3.16,
+   "startSec": 871.221,
+   "durationSec": 3.85,
    "text": "1950年にクスコを襲った地震では、"
   },
   {
-   "startSec": 871.16,
-   "durationSec": 3.453,
+   "startSec": 875.071,
+   "durationSec": 4.492,
    "text": "植民地時代に建てられた建物が多数倒壊した。"
   },
   {
-   "startSec": 874.613,
-   "durationSec": 6.027,
+   "startSec": 879.563,
+   "durationSec": 5.348,
    "text": "その下から、インカの石組みがほぼ無傷で現れている。"
   },
   {
-   "startSec": 880.64,
-   "durationSec": 2.8,
+   "startSec": 884.911,
+   "durationSec": 1.283,
    "text": "5つ並べた。"
   },
   {
-   "startSec": 883.44,
-   "durationSec": 2.08,
+   "startSec": 886.194,
+   "durationSec": 2.567,
    "text": "ここで共通点を挙げたい。"
   },
   {
-   "startSec": 885.52,
-   "durationSec": 4.48,
+   "startSec": 888.761,
+   "durationSec": 3.636,
    "text": "当たっていた2つには、測定がある。"
   },
   {
-   "startSec": 890.0,
-   "durationSec": 3.12,
+   "startSec": 892.397,
+   "durationSec": 2.995,
    "text": "ストーンヘンジは岩石の組成。"
   },
   {
-   "startSec": 893.12,
-   "durationSec": 3.36,
+   "startSec": 895.392,
+   "durationSec": 3.209,
    "text": "ギョベクリ・テペは放射性炭素。"
   },
   {
-   "startSec": 896.48,
-   "durationSec": 3.36,
+   "startSec": 898.6,
+   "durationSec": 3.422,
    "text": "どちらも数字で確かめられている。"
   },
   {
-   "startSec": 899.84,
-   "durationSec": 4.56,
+   "startSec": 902.023,
+   "durationSec": 4.278,
    "text": "理由が違った2つには、実験と発掘がある。"
   },
   {
-   "startSec": 904.4,
-   "durationSec": 3.68,
+   "startSec": 906.301,
+   "durationSec": 3.422,
    "text": "モアイは4.35トンのレプリカ。"
   },
   {
-   "startSec": 908.08,
-   "durationSec": 3.44,
+   "startSec": 909.723,
+   "durationSec": 2.995,
    "text": "バールベックは採石場の調査。"
   },
   {
-   "startSec": 911.52,
-   "durationSec": 2.64,
+   "startSec": 912.718,
+   "durationSec": 2.353,
    "text": "手順が復元されている。"
   },
   {
-   "startSec": 914.16,
-   "durationSec": 4.4,
+   "startSec": 915.071,
+   "durationSec": 4.706,
    "text": "跡形もなくなった1つには、そのどちらもない。"
   },
   {
-   "startSec": 918.56,
-   "durationSec": 5.6,
+   "startSec": 919.777,
+   "durationSec": 5.348,
    "text": "剃刀の刃という表現だけが、本から本へ写されてきた。"
   },
   {
-   "startSec": 924.16,
-   "durationSec": 3.84,
+   "startSec": 925.124,
+   "durationSec": 3.85,
    "text": "巨石が謎になる条件は、重さではない。"
   },
   {
-   "startSec": 928.0,
-   "durationSec": 1.84,
+   "startSec": 928.974,
+   "durationSec": 2.139,
    "text": "重さの数字が語られ、"
   },
   {
-   "startSec": 929.84,
-   "durationSec": 4.08,
+   "startSec": 931.113,
+   "durationSec": 3.636,
    "text": "運んだ手順が語られないことである。"
   },
   {
-   "startSec": 933.92,
-   "durationSec": 2.72,
+   "startSec": 934.75,
+   "durationSec": 2.567,
    "text": "数字は一人歩きしやすい。"
   },
   {
-   "startSec": 936.64,
-   "durationSec": 4.0,
+   "startSec": 937.317,
+   "durationSec": 4.278,
    "text": "1000トンという語は誰でも覚えられる。"
   },
   {
-   "startSec": 940.64,
-   "durationSec": 5.04,
+   "startSec": 941.595,
+   "durationSec": 5.134,
    "text": "だが、溝を掘って下面を切り離す手順は覚えにくい。"
   },
   {
-   "startSec": 945.68,
-   "durationSec": 3.36,
+   "startSec": 946.728,
+   "durationSec": 2.567,
    "text": "覚えやすい方だけが残る。"
   },
   {
-   "startSec": 949.04,
-   "durationSec": 4.72,
+   "startSec": 949.295,
+   "durationSec": 5.348,
    "text": "ここで挙げた5つも、覚えやすいのは数字の方である。"
   },
   {
-   "startSec": 953.76,
-   "durationSec": 2.32,
+   "startSec": 954.643,
+   "durationSec": 1.283,
    "text": "250キロ。"
   },
   {
-   "startSec": 956.08,
-   "durationSec": 2.56,
+   "startSec": 955.926,
+   "durationSec": 1.283,
    "text": "1万1千年。"
   },
   {
-   "startSec": 958.64,
-   "durationSec": 2.48,
+   "startSec": 957.209,
+   "durationSec": 1.07,
    "text": "82トン。"
   },
   {
-   "startSec": 961.12,
-   "durationSec": 2.64,
+   "startSec": 958.279,
+   "durationSec": 1.497,
    "text": "1650トン。"
   },
   {
-   "startSec": 963.76,
-   "durationSec": 2.88,
+   "startSec": 959.776,
+   "durationSec": 1.283,
    "text": "120トン。"
   },
   {
-   "startSec": 966.64,
-   "durationSec": 5.44,
+   "startSec": 961.06,
+   "durationSec": 5.561,
    "text": "だが面白いのは、その数字がどう測られたかの側にある。"
   },
   {
-   "startSec": 972.08,
-   "durationSec": 4.56,
+   "startSec": 966.621,
+   "durationSec": 5.561,
    "text": "1958年に抜かれた石の芯が60年後に戻ってきたから"
   },
   {
-   "startSec": 976.64,
-   "durationSec": 0.4,
+   "startSec": 972.182,
+   "durationSec": 0.35,
    "text": "、"
   },
   {
-   "startSec": 976.72,
-   "durationSec": 2.32,
+   "startSec": 972.396,
+   "durationSec": 1.711,
    "text": "産地が分かった。"
   },
   {
-   "startSec": 979.04,
-   "durationSec": 3.76,
+   "startSec": 974.108,
+   "durationSec": 3.422,
    "text": "そういう話の方が、実際には多い。"
   },
   {
-   "startSec": 982.8,
-   "durationSec": 5.2,
+   "startSec": 977.53,
+   "durationSec": 5.348,
    "text": "次に巨石の話を見たとき、確かめる順番は1つでいい。"
   },
   {
-   "startSec": 988.0,
-   "durationSec": 4.72,
+   "startSec": 982.878,
+   "durationSec": 3.636,
    "text": "重さの次に、採石場がどこかを探す。"
   },
   {
-   "startSec": 992.72,
-   "durationSec": 3.68,
+   "startSec": 986.514,
+   "durationSec": 5.561,
    "text": "切り出した場所が分かっていれば、運んだ距離も手順も、"
   },
   {
-   "startSec": 996.4,
-   "durationSec": 3.12,
+   "startSec": 992.075,
+   "durationSec": 2.567,
    "text": "たいてい研究されている。"
   },
   {
-   "startSec": 999.52,
-   "durationSec": 2.24,
+   "startSec": 994.642,
+   "durationSec": 2.567,
    "text": "採石場の記録がない石は、"
   },
   {
-   "startSec": 1001.76,
-   "durationSec": 3.92,
+   "startSec": 997.209,
+   "durationSec": 3.422,
    "text": "重さの数字だけが残った石である。"
   },
   {
-   "startSec": 1005.68,
-   "durationSec": 3.6,
+   "startSec": 1000.631,
+   "durationSec": 5.561,
    "text": "ここで挙げた論文は、すべて概要欄にまとめてあります。"
   },
   {
-   "startSec": 1009.28,
-   "durationSec": 2.88,
+   "startSec": 1006.193,
+   "durationSec": 3.209,
    "text": "産地を特定した岩石学の研究も、"
   },
   {
-   "startSec": 1012.16,
-   "durationSec": 2.8,
+   "startSec": 1009.401,
+   "durationSec": 3.209,
    "text": "モアイを歩かせた実験の記録も、"
   },
   {
-   "startSec": 1014.96,
-   "durationSec": 4.24,
+   "startSec": 1012.61,
+   "durationSec": 4.92,
    "text": "誰でも読める形で公開されているものばかりです。"
   },
   {
-   "startSec": 1019.2,
-   "durationSec": 3.36,
+   "startSec": 1017.53,
+   "durationSec": 3.636,
    "text": "ぜひその目で確かめてみてください。"
   },
   {
-   "startSec": 1022.56,
-   "durationSec": 4.64,
+   "startSec": 1021.166,
+   "durationSec": 5.348,
    "text": "調べてほしい話があれば、コメントで教えてください。"
   },
   {
-   "startSec": 1027.2,
-   "durationSec": 3.467,
+   "startSec": 1026.513,
+   "durationSec": 4.92,
    "text": "チャンネル登録と高評価もよろしくお願いします。"
   },
   {
-   "startSec": 1030.667,
-   "durationSec": 2.773,
+   "startSec": 1031.433,
+   "durationSec": 2.567,
    "text": "それではまた次の動画で。"
   }
  ],
@@ -3729,243 +3729,513 @@
  "sourceLabels": [
   {
    "startSec": 0.0,
-   "durationSec": 8.013,
+   "durationSec": 8.016,
    "text": "garethwiscombe / CC BY 2.0"
   },
   {
-   "startSec": 8.013,
-   "durationSec": 16.026,
+   "startSec": 8.016,
+   "durationSec": 8.016,
    "text": "Lucas de Heere / Public domain"
   },
   {
-   "startSec": 24.038,
-   "durationSec": 16.026,
+   "startSec": 16.031,
+   "durationSec": 8.016,
+   "text": "garethwiscombe / CC BY 2.0"
+  },
+  {
+   "startSec": 24.047,
+   "durationSec": 8.016,
    "text": "Blaeu, J / Public domain"
   },
   {
-   "startSec": 40.064,
-   "durationSec": 32.052,
+   "startSec": 32.062,
+   "durationSec": 8.016,
+   "text": "Lucas de Heere / Public domain"
+  },
+  {
+   "startSec": 40.078,
+   "durationSec": 8.016,
    "text": "gpt-image-1 / AI生成"
   },
   {
-   "startSec": 72.114,
-   "durationSec": 16.026,
+   "startSec": 48.093,
+   "durationSec": 8.016,
+   "text": "Blaeu, J / Public domain"
+  },
+  {
+   "startSec": 56.109,
+   "durationSec": 16.032,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 72.14,
+   "durationSec": 8.016,
    "text": "John Constable / Public domain"
   },
   {
-   "startSec": 88.14,
-   "durationSec": 16.026,
+   "startSec": 80.155,
+   "durationSec": 16.032,
    "text": "gpt-image-1 / AI生成"
   },
   {
-   "startSec": 104.165,
-   "durationSec": 16.026,
+   "startSec": 96.186,
+   "durationSec": 8.016,
+   "text": "John Constable / Public domain"
+  },
+  {
+   "startSec": 104.202,
+   "durationSec": 8.016,
    "text": "Mavratti / Public domain"
   },
   {
-   "startSec": 120.191,
-   "durationSec": 16.026,
+   "startSec": 112.217,
+   "durationSec": 16.032,
    "text": "gpt-image-1 / AI生成"
   },
   {
-   "startSec": 136.216,
-   "durationSec": 16.026,
+   "startSec": 128.248,
+   "durationSec": 8.016,
+   "text": "Mavratti / Public domain"
+  },
+  {
+   "startSec": 136.264,
+   "durationSec": 8.016,
    "text": "Richmond times-dispatch / Public domain"
   },
   {
-   "startSec": 152.241,
-   "durationSec": 16.026,
+   "startSec": 144.279,
+   "durationSec": 8.016,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 152.295,
+   "durationSec": 8.016,
    "text": "Heikki Immonen / CC BY 3.0"
   },
   {
-   "startSec": 168.267,
-   "durationSec": 80.13,
+   "startSec": 160.31,
+   "durationSec": 8.016,
+   "text": "Richmond times-dispatch / Public domain"
+  },
+  {
+   "startSec": 168.326,
+   "durationSec": 8.016,
    "text": "gpt-image-1 / AI生成"
   },
   {
-   "startSec": 248.394,
-   "durationSec": 16.026,
+   "startSec": 176.341,
+   "durationSec": 8.016,
+   "text": "Heikki Immonen / CC BY 3.0"
+  },
+  {
+   "startSec": 184.357,
+   "durationSec": 64.128,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 248.481,
+   "durationSec": 8.016,
    "text": "Bernard Gagnon / CC BY-SA 3.0"
   },
   {
-   "startSec": 264.419,
-   "durationSec": 32.052,
+   "startSec": 256.496,
+   "durationSec": 8.016,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 264.512,
+   "durationSec": 8.016,
    "text": "Dosseman / CC BY-SA 4.0"
   },
   {
-   "startSec": 296.47,
-   "durationSec": 16.026,
+   "startSec": 272.527,
+   "durationSec": 8.016,
+   "text": "Bernard Gagnon / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 280.543,
+   "durationSec": 16.032,
+   "text": "Dosseman / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 296.574,
+   "durationSec": 8.016,
    "text": "Volker Höhfeld / CC BY-SA 4.0"
   },
   {
-   "startSec": 312.496,
-   "durationSec": 48.078,
-   "text": "gpt-image-1 / AI生成"
-  },
-  {
-   "startSec": 360.572,
-   "durationSec": 16.026,
-   "text": "Teomancimit / CC BY-SA 3.0"
-  },
-  {
-   "startSec": 376.597,
-   "durationSec": 16.026,
+   "startSec": 304.589,
+   "durationSec": 8.016,
    "text": "Dosseman / CC BY-SA 4.0"
   },
   {
-   "startSec": 392.623,
-   "durationSec": 32.052,
+   "startSec": 312.605,
+   "durationSec": 8.016,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 320.62,
+   "durationSec": 8.016,
+   "text": "Volker Höhfeld / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 328.636,
+   "durationSec": 32.064,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 360.698,
+   "durationSec": 8.016,
+   "text": "Teomancimit / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 368.713,
+   "durationSec": 8.016,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 376.729,
+   "durationSec": 8.016,
+   "text": "Dosseman / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 384.744,
+   "durationSec": 8.016,
+   "text": "Teomancimit / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 392.76,
+   "durationSec": 8.016,
    "text": "Beytullah eles / CC BY-SA 4.0"
   },
   {
-   "startSec": 424.673,
-   "durationSec": 16.026,
+   "startSec": 400.775,
+   "durationSec": 8.016,
+   "text": "Dosseman / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 408.791,
+   "durationSec": 16.032,
+   "text": "Beytullah eles / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 424.822,
+   "durationSec": 8.016,
    "text": "kallerna / CC BY-SA 4.0"
   },
   {
-   "startSec": 440.699,
-   "durationSec": 16.026,
+   "startSec": 432.837,
+   "durationSec": 8.016,
+   "text": "Beytullah eles / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 440.853,
+   "durationSec": 8.016,
    "text": "European Space Agency / CC BY-SA 3.0 igo"
   },
   {
-   "startSec": 456.724,
-   "durationSec": 16.026,
+   "startSec": 448.868,
+   "durationSec": 8.016,
+   "text": "kallerna / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 456.884,
+   "durationSec": 8.016,
    "text": "Bjørn Christian Tørrissen / CC BY-SA 3.0"
   },
   {
-   "startSec": 472.75,
-   "durationSec": 16.026,
+   "startSec": 464.899,
+   "durationSec": 8.016,
+   "text": "European Space Agency / CC BY-SA 3.0 igo"
+  },
+  {
+   "startSec": 472.915,
+   "durationSec": 8.016,
    "text": "Aurbina / Public domain"
   },
   {
-   "startSec": 488.775,
-   "durationSec": 16.026,
-   "text": "CC BY-SA 2.0"
-  },
-  {
-   "startSec": 504.801,
-   "durationSec": 40.065,
-   "text": "gpt-image-1 / AI生成"
-  },
-  {
-   "startSec": 544.864,
-   "durationSec": 16.026,
+   "startSec": 480.93,
+   "durationSec": 8.016,
    "text": "Bjørn Christian Tørrissen / CC BY-SA 3.0"
   },
   {
-   "startSec": 560.889,
-   "durationSec": 16.026,
+   "startSec": 488.946,
+   "durationSec": 8.016,
+   "text": "CC BY-SA 2.0"
+  },
+  {
+   "startSec": 496.961,
+   "durationSec": 8.016,
+   "text": "Aurbina / Public domain"
+  },
+  {
+   "startSec": 504.977,
+   "durationSec": 8.016,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 512.992,
+   "durationSec": 8.016,
+   "text": "CC BY-SA 2.0"
+  },
+  {
+   "startSec": 521.008,
+   "durationSec": 24.048,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 545.054,
+   "durationSec": 8.016,
+   "text": "Bjørn Christian Tørrissen / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 553.07,
+   "durationSec": 8.016,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 561.085,
+   "durationSec": 8.016,
    "text": "Amada44 / CC BY-SA 4.0"
   },
   {
-   "startSec": 576.915,
-   "durationSec": 16.026,
+   "startSec": 569.101,
+   "durationSec": 8.016,
+   "text": "Bjørn Christian Tørrissen / CC BY-SA 3.0"
+  },
+  {
+   "startSec": 577.116,
+   "durationSec": 8.016,
    "text": "CC0"
   },
   {
-   "startSec": 592.94,
-   "durationSec": 16.026,
+   "startSec": 585.132,
+   "durationSec": 8.016,
+   "text": "Amada44 / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 593.147,
+   "durationSec": 8.016,
    "text": "gpt-image-1 / AI生成"
   },
   {
-   "startSec": 608.966,
-   "durationSec": 16.026,
+   "startSec": 601.163,
+   "durationSec": 8.016,
+   "text": "CC0"
+  },
+  {
+   "startSec": 609.178,
+   "durationSec": 8.016,
    "text": "Unknown author / Public domain"
   },
   {
-   "startSec": 624.991,
-   "durationSec": 48.078,
+   "startSec": 617.194,
+   "durationSec": 16.032,
    "text": "gpt-image-1 / AI生成"
   },
   {
-   "startSec": 673.067,
-   "durationSec": 16.026,
+   "startSec": 633.225,
+   "durationSec": 8.016,
+   "text": "Unknown author / Public domain"
+  },
+  {
+   "startSec": 641.24,
+   "durationSec": 32.064,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 673.302,
+   "durationSec": 8.016,
    "text": "Joel Bellviure / CC BY-SA 4.0"
   },
   {
-   "startSec": 689.093,
-   "durationSec": 32.052,
+   "startSec": 681.318,
+   "durationSec": 16.032,
    "text": "gpt-image-1 / AI生成"
   },
   {
-   "startSec": 721.144,
-   "durationSec": 16.026,
+   "startSec": 697.349,
+   "durationSec": 8.016,
+   "text": "Joel Bellviure / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 705.364,
+   "durationSec": 16.032,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 721.395,
+   "durationSec": 8.016,
    "text": "Jfabrix101 / CC BY-SA 4.0"
   },
   {
-   "startSec": 737.169,
-   "durationSec": 16.026,
+   "startSec": 729.411,
+   "durationSec": 16.032,
    "text": "gpt-image-1 / AI生成"
   },
   {
-   "startSec": 753.194,
-   "durationSec": 16.026,
+   "startSec": 745.442,
+   "durationSec": 8.016,
+   "text": "Jfabrix101 / CC BY-SA 4.0"
+  },
+  {
+   "startSec": 753.457,
+   "durationSec": 8.016,
    "text": "Lodo from Moscow, Russia / CC BY-SA 2.0"
   },
   {
-   "startSec": 769.22,
-   "durationSec": 16.026,
+   "startSec": 761.473,
+   "durationSec": 16.032,
    "text": "gpt-image-1 / AI生成"
   },
   {
-   "startSec": 785.245,
-   "durationSec": 16.026,
+   "startSec": 777.504,
+   "durationSec": 8.016,
+   "text": "Lodo from Moscow, Russia / CC BY-SA 2.0"
+  },
+  {
+   "startSec": 785.519,
+   "durationSec": 8.016,
    "text": "Marsupium / CC BY 4.0"
   },
   {
-   "startSec": 801.271,
-   "durationSec": 16.026,
-   "text": "Vyacheslav Argenberg / CC BY 4.0"
-  },
-  {
-   "startSec": 817.296,
-   "durationSec": 16.026,
+   "startSec": 793.535,
+   "durationSec": 8.016,
    "text": "gpt-image-1 / AI生成"
   },
   {
-   "startSec": 833.322,
-   "durationSec": 16.026,
+   "startSec": 801.55,
+   "durationSec": 8.016,
    "text": "Vyacheslav Argenberg / CC BY 4.0"
   },
   {
-   "startSec": 849.347,
-   "durationSec": 32.052,
+   "startSec": 809.566,
+   "durationSec": 8.016,
+   "text": "Marsupium / CC BY 4.0"
+  },
+  {
+   "startSec": 817.581,
+   "durationSec": 8.016,
    "text": "gpt-image-1 / AI生成"
   },
   {
-   "startSec": 881.398,
-   "durationSec": 16.026,
+   "startSec": 825.597,
+   "durationSec": 16.032,
+   "text": "Vyacheslav Argenberg / CC BY 4.0"
+  },
+  {
+   "startSec": 841.628,
+   "durationSec": 16.032,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 857.659,
+   "durationSec": 8.016,
+   "text": "Vyacheslav Argenberg / CC BY 4.0"
+  },
+  {
+   "startSec": 865.674,
+   "durationSec": 16.032,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 881.705,
+   "durationSec": 8.016,
    "text": "Zhengan / CC BY-SA 4.0"
   },
   {
-   "startSec": 897.423,
-   "durationSec": 16.026,
+   "startSec": 889.721,
+   "durationSec": 8.016,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 897.736,
+   "durationSec": 8.016,
    "text": "Lodo from Moscow, Russia / CC BY-SA 2.0"
   },
   {
-   "startSec": 913.449,
-   "durationSec": 16.026,
+   "startSec": 905.752,
+   "durationSec": 8.016,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 913.767,
+   "durationSec": 8.016,
    "text": "Marsupium / CC BY 4.0"
   },
   {
-   "startSec": 929.474,
-   "durationSec": 64.104,
+   "startSec": 921.783,
+   "durationSec": 8.016,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 929.798,
+   "durationSec": 8.016,
    "text": "Vyacheslav Argenberg / CC BY 4.0"
   },
   {
-   "startSec": 993.576,
-   "durationSec": 16.026,
+   "startSec": 937.814,
+   "durationSec": 8.016,
+   "text": "Marsupium / CC BY 4.0"
+  },
+  {
+   "startSec": 945.829,
+   "durationSec": 8.016,
+   "text": "Vyacheslav Argenberg / CC BY 4.0"
+  },
+  {
+   "startSec": 953.845,
+   "durationSec": 8.016,
+   "text": "Marsupium / CC BY 4.0"
+  },
+  {
+   "startSec": 961.86,
+   "durationSec": 8.016,
+   "text": "Vyacheslav Argenberg / CC BY 4.0"
+  },
+  {
+   "startSec": 969.876,
+   "durationSec": 8.016,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 977.891,
+   "durationSec": 8.016,
+   "text": "Vyacheslav Argenberg / CC BY 4.0"
+  },
+  {
+   "startSec": 985.907,
+   "durationSec": 8.016,
+   "text": "gpt-image-1 / AI生成"
+  },
+  {
+   "startSec": 993.922,
+   "durationSec": 8.016,
    "text": "Heretiq / CC BY-SA 2.5"
   },
   {
-   "startSec": 1009.601,
-   "durationSec": 24.039,
+   "startSec": 1001.938,
+   "durationSec": 8.016,
    "text": "Major, Thomas, 1720-1799, engraver; Borra, Giovanni Battista, 1713-1770, artist / Public domain"
+  },
+  {
+   "startSec": 1009.953,
+   "durationSec": 8.016,
+   "text": "Heretiq / CC BY-SA 2.5"
+  },
+  {
+   "startSec": 1017.969,
+   "durationSec": 8.016,
+   "text": "Major, Thomas, 1720-1799, engraver; Borra, Giovanni Battista, 1713-1770, artist / Public domain"
+  },
+  {
+   "startSec": 1025.984,
+   "durationSec": 8.016,
+   "text": "Heretiq / CC BY-SA 2.5"
   }
  ],
  "quoteCards": [
   {
-   "startSec": 212.758,
+   "startSec": 212.832,
    "durationSec": 16.0,
    "zone": "right",
    "side": "right",
@@ -3973,7 +4243,7 @@
    "translation": "ただし、どう運んだかは決着していない"
   },
   {
-   "startSec": 312.829,
+   "startSec": 312.938,
    "durationSec": 16.0,
    "zone": "left",
    "side": "left",
@@ -3981,7 +4251,7 @@
    "translation": "ここは文明より古い。 年代を見る"
   },
   {
-   "startSec": 386.813,
+   "startSec": 386.948,
    "durationSec": 16.0,
    "zone": "right",
    "side": "right",
@@ -3989,7 +4259,7 @@
    "translation": "ただし、言われ方とは意味が違う"
   },
   {
-   "startSec": 586.527,
+   "startSec": 586.732,
    "durationSec": 16.0,
    "zone": "right",
    "side": "right",
@@ -3997,27 +4267,18 @@
    "translation": "ただし超能力ではない"
   },
   {
-   "startSec": 650.675,
-   "durationSec": 9.009,
+   "startSec": 650.902,
+   "durationSec": 9.012,
    "zone": "left",
    "side": "left",
    "heading": "語られている話はこうだ",
    "translation": "1000トンの石は、現代のクレーンでも吊れない。 当時運べたはずがない"
   }
  ],
- "chipStacks": [
-  {
-   "startSec": 120.598,
-   "durationSec": 16.0,
-   "items": [
-    "1本2トン",
-    "4トン"
-   ]
-  }
- ],
+ "chipStacks": [],
  "cardRows": [
   {
-   "startSec": 43.193,
+   "startSec": 43.208,
    "durationSec": 16.0,
    "caption": "この動画では、語られている5つを並べた",
    "cards": [
@@ -4044,7 +4305,7 @@
    ]
   },
   {
-   "startSec": 69.28,
+   "startSec": 69.304,
    "durationSec": 16.0,
    "caption": "ストーンヘンジには2種類の石がある",
    "cards": [
@@ -4059,7 +4320,7 @@
    ]
   },
   {
-   "startSec": 888.451,
+   "startSec": 888.761,
    "durationSec": 16.0,
    "caption": "当たっていた2つには、測定がある",
    "cards": [
@@ -4077,297 +4338,290 @@
  "documentCards": [],
  "stats": [
   {
-   "startSec": 7.27,
+   "startSec": 7.273,
    "durationSec": 16.0,
    "zone": "right",
    "value": "250キロ",
    "label": "ウェールズから250キロ"
   },
   {
-   "startSec": 11.119,
+   "startSec": 11.123,
    "durationSec": 16.0,
    "zone": "corner",
    "value": "5メートル",
    "label": "1万1千年前に立てられた高さ5メートル"
   },
   {
-   "startSec": 16.037,
+   "startSec": 16.043,
    "durationSec": 16.0,
    "zone": "left",
    "value": "80トン",
    "label": ""
   },
   {
-   "startSec": 79.971,
+   "startSec": 79.999,
    "durationSec": 16.0,
    "zone": "right",
    "value": "30トンを超える",
    "label": "最大のもので30トンを超える"
   },
   {
-   "startSec": 122.95,
+   "startSec": 122.993,
    "durationSec": 16.0,
    "zone": "left",
    "value": "80本ほど",
    "label": "もとは80本ほど"
   },
   {
-   "startSec": 130.648,
+   "startSec": 130.694,
    "durationSec": 16.0,
    "zone": "right",
    "value": "25キロほど",
    "label": "北へ25キロほど"
   },
   {
-   "startSec": 143.05,
+   "startSec": 143.1,
    "durationSec": 16.0,
    "zone": "corner",
    "value": "約250キロ",
    "label": "直線距離で約250キロ"
   },
   {
-   "startSec": 151.817,
+   "startSec": 151.87,
    "durationSec": 16.0,
    "zone": "left",
    "value": "12点",
    "label": "ブルーストーンの石器12点"
   },
   {
-   "startSec": 156.521,
+   "startSec": 156.576,
    "durationSec": 16.0,
    "zone": "right",
    "value": "11本",
    "label": "ストーンヘンジの石柱11本"
   },
   {
-   "startSec": 198.218,
+   "startSec": 198.287,
    "durationSec": 16.0,
    "zone": "corner",
    "value": "250キロ",
    "label": ""
   },
   {
-   "startSec": 208.267,
+   "startSec": 208.34,
    "durationSec": 16.0,
    "zone": "left",
    "value": "43本",
    "label": "分かっているだけで43本"
   },
   {
-   "startSec": 282.038,
+   "startSec": 282.136,
    "durationSec": 16.0,
    "zone": "right",
    "value": "5.5メートル",
    "label": "高さは最大で5.5メートル"
   },
   {
-   "startSec": 285.031,
-   "durationSec": 16.0,
-   "zone": "corner",
-   "value": "10トン",
-   "label": "重さは10トン"
-  },
-  {
-   "startSec": 358.588,
+   "startSec": 358.713,
    "durationSec": 16.0,
    "zone": "left",
    "value": "19世紀",
    "label": ""
   },
   {
-   "startSec": 378.901,
-   "durationSec": 7.512,
+   "startSec": 379.034,
+   "durationSec": 7.514,
    "zone": "right",
    "value": "10トン",
    "label": ""
   },
   {
-   "startSec": 449.036,
+   "startSec": 449.193,
    "durationSec": 16.0,
    "zone": "corner",
    "value": "4メートル",
    "label": "平均で高さ4メートル"
   },
   {
-   "startSec": 453.313,
+   "startSec": 453.471,
    "durationSec": 16.0,
    "zone": "left",
    "value": "約10メートル",
    "label": "高さ約10メートル"
   },
   {
-   "startSec": 458.659,
+   "startSec": 458.819,
    "durationSec": 16.0,
    "zone": "right",
    "value": "82トン",
    "label": "重さ82トン"
   },
   {
-   "startSec": 467.212,
+   "startSec": 467.375,
    "durationSec": 16.0,
    "zone": "corner",
    "value": "18キロほど",
    "label": "距離は最長で18キロほど"
   },
   {
-   "startSec": 515.75,
+   "startSec": 515.93,
    "durationSec": 16.0,
    "zone": "left",
    "value": "4.35トン",
    "label": ""
   },
   {
-   "startSec": 523.021,
+   "startSec": 523.203,
    "durationSec": 16.0,
    "zone": "right",
    "value": "18人",
    "label": ""
   },
   {
-   "startSec": 532.857,
+   "startSec": 533.043,
    "durationSec": 16.0,
    "zone": "corner",
    "value": "100メートル",
    "label": ""
   },
   {
-   "startSec": 604.916,
+   "startSec": 605.127,
    "durationSec": 16.0,
    "zone": "left",
    "value": "約800トン",
    "label": "1つあたり約800トン"
   },
   {
-   "startSec": 613.042,
+   "startSec": 613.256,
    "durationSec": 16.0,
    "zone": "right",
    "value": "約20メートル",
    "label": "柱は高さ約20メートル"
   },
   {
-   "startSec": 617.746,
+   "startSec": 617.962,
    "durationSec": 16.0,
    "zone": "corner",
    "value": "54本",
    "label": ""
   },
   {
-   "startSec": 630.789,
+   "startSec": 631.01,
    "durationSec": 16.0,
    "zone": "left",
    "value": "約1000トン",
    "label": "南の石」と呼ばれるものが約1000トン"
   },
   {
-   "startSec": 642.55,
+   "startSec": 642.774,
    "durationSec": 16.0,
    "zone": "right",
    "value": "約1650トン",
    "label": "推定で約1650トン"
   },
   {
-   "startSec": 650.675,
+   "startSec": 650.902,
    "durationSec": 16.0,
    "zone": "corner",
    "value": "1000トン",
    "label": ""
   },
   {
-   "startSec": 660.084,
+   "startSec": 660.314,
    "durationSec": 16.0,
    "zone": "left",
    "value": "1000トン",
    "label": "単体で1000トン"
   },
   {
-   "startSec": 708.836,
+   "startSec": 709.084,
    "durationSec": 16.0,
-   "zone": "right",
+   "zone": "corner",
    "value": "1000トン",
    "label": ""
   },
   {
-   "startSec": 716.748,
+   "startSec": 716.998,
    "durationSec": 16.0,
-   "zone": "corner",
+   "zone": "left",
    "value": "800トン",
    "label": "運ばれたのは800トン"
   },
   {
-   "startSec": 736.42,
+   "startSec": 736.677,
    "durationSec": 16.0,
-   "zone": "left",
+   "zone": "right",
    "value": "800トン",
    "label": ""
   },
   {
-   "startSec": 765.928,
+   "startSec": 766.195,
    "durationSec": 16.0,
-   "zone": "right",
+   "zone": "corner",
    "value": "約120トン",
    "label": "最大の石で約120トン"
   },
   {
-   "startSec": 770.632,
+   "startSec": 770.901,
    "durationSec": 16.0,
-   "zone": "corner",
+   "zone": "left",
    "value": "約400メートル",
    "label": ""
   },
   {
-   "startSec": 806.983,
+   "startSec": 807.264,
    "durationSec": 16.0,
-   "zone": "left",
+   "zone": "right",
    "value": "20世紀",
    "label": ""
   },
   {
-   "startSec": 905.985,
+   "startSec": 906.301,
    "durationSec": 16.0,
-   "zone": "right",
+   "zone": "corner",
    "value": "4.35トン",
    "label": "モアイは4.35トン"
   },
   {
-   "startSec": 936.989,
+   "startSec": 937.317,
    "durationSec": 16.0,
-   "zone": "corner",
+   "zone": "left",
    "value": "1000トン",
    "label": ""
   },
   {
-   "startSec": 954.309,
-   "durationSec": 4.732,
-   "zone": "left",
+   "startSec": 954.643,
+   "durationSec": 4.733,
+   "zone": "right",
    "value": "250キロ",
    "label": ""
   },
   {
-   "startSec": 956.875,
+   "startSec": 957.209,
    "durationSec": 16.0,
-   "zone": "right",
+   "zone": "corner",
    "value": "82トン",
    "label": ""
   },
   {
-   "startSec": 957.944,
+   "startSec": 958.279,
    "durationSec": 16.0,
-   "zone": "corner",
+   "zone": "left",
    "value": "1650トン",
    "label": ""
   },
   {
-   "startSec": 959.441,
+   "startSec": 959.776,
    "durationSec": 16.0,
-   "zone": "left",
+   "zone": "right",
    "value": "120トン",
    "label": ""
   }
  ],
  "portraits": [
   {
-   "startSec": 298.289,
-   "durationSec": 14.14,
+   "startSec": 298.393,
+   "durationSec": 14.145,
    "zone": "left",
    "name": "ドイツ",
    "role": "考古学者",
@@ -4377,8 +4631,8 @@
  "charts": [],
  "timelines": [
   {
-   "startSec": 672.272,
-   "durationSec": 8.153,
+   "startSec": 672.506,
+   "durationSec": 8.156,
    "zone": "lower",
    "marks": [
     {
@@ -4392,7 +4646,7 @@
    ]
   },
   {
-   "startSec": 680.825,
+   "startSec": 681.062,
    "durationSec": 16.0,
    "zone": "lower",
    "marks": [
@@ -4409,7 +4663,7 @@
  ],
  "glyphs": [
   {
-   "startSec": 453.313,
+   "startSec": 453.471,
    "durationSec": 16.0,
    "zone": "center",
    "glyph": "パロ",
@@ -4417,7 +4671,38 @@
   }
  ],
  "grids": [],
- "narration": "shots_megaliths/narration.mp3",
+ "rangeBars": [
+  {
+   "startSec": 120.64,
+   "durationSec": 16.0,
+   "zone": "corner",
+   "from": 0.3846,
+   "to": 0.7692,
+   "lowLabel": "2トン",
+   "highLabel": "4トン",
+   "caption": "1本2トンから4トン"
+  },
+  {
+   "startSec": 285.131,
+   "durationSec": 16.0,
+   "zone": "corner",
+   "from": 0.5128,
+   "to": 0.7692,
+   "lowLabel": "10トン",
+   "highLabel": "15トン",
+   "caption": "重さは10トンから15トン"
+  },
+  {
+   "startSec": 672.506,
+   "durationSec": 16.0,
+   "zone": "right",
+   "from": 0.7672,
+   "to": 0.7692,
+   "lowLabel": "1898年",
+   "highLabel": "1903年",
+   "caption": "1898年から1903年"
+  }
+ ],
  "bgm": "bgm.mp3",
  "bgmLoopSec": 157.048
 }

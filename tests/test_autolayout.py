@@ -176,3 +176,27 @@ def test_stat_label_is_dropped_when_it_repeats_the_value():
     stats = [c for c in classify([Line(0.0, 5.0, "高さ5メートルの石柱。")])
              if c.kind == "stat"]
     assert stats and stats[0].payload["label"] == "高さ5メートル"
+
+
+def test_range_is_shown_as_a_span_not_a_single_number():
+    """「10トンから15トン」を大書きの数字にすると幅が消え、確定値に見える。"""
+    cues = [c for c in classify([Line(0.0, 5.0, "重さは10トンから15トンほど。")])
+            if c.kind == "range"]
+    assert cues
+    p = cues[0].payload
+    assert p["low"] == "10トン" and p["high"] == "15トン"
+    assert 0 <= p["from"] < p["to"] <= 1
+
+
+def test_a_range_sentence_does_not_also_emit_number_cards():
+    """同じ数字が範囲バー・数値カード・字幕の3箇所に並ぶ。実測でそうなった。"""
+    kinds = {c.kind for c in classify([Line(0.0, 5.0, "1本2トンから4トン。")])}
+    assert "range" in kinds
+    assert "stat" not in kinds and "chips" not in kinds
+
+
+def test_a_backwards_range_is_ignored():
+    """上限が下限より小さい並びは範囲ではない。棒が裏返る。"""
+    cues = [c for c in classify([Line(0.0, 5.0, "15トンから10トンへ減った。")])
+            if c.kind == "range"]
+    assert not cues

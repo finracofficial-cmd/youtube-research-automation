@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import type { Chart, Glyph, Grid, Portrait, Stat, Timeline, Zone } from "../schema";
+import type { Chart, Glyph, Grid, Portrait, RangeBar as RangeBarType, Stat, Timeline, Zone } from "../schema";
 import { theme } from "../theme";
 
 /** ゾーンごとの置き場所。同じゾーンの部品は同時に出さない前提。 */
@@ -145,6 +145,54 @@ export const DataChart: React.FC<{ chart: Chart }> = ({ chart }) => {
 };
 
 /** 区切りのある横バー。active の区間だけ色を入れる。 */
+/** 幅のある量を、目盛りの上の区間として見せる。
+ *
+ * 「重さは10トンから15トン」のような、1つの数に定まらない量に使う。
+ * 大書きの数字にすると幅が消えて、確定値のように見えてしまう。
+ *
+ * 1系列なので凡例は置かない。区間の両端だけに値を添える（全点に数字を
+ * 振らない）。目盛りは控えめにして、区間そのものを読ませる。 */
+export const RangeBarCard: React.FC<{ range: RangeBarType }> = ({ range }) => {
+  const opacity = useFade(range.durationSec);
+  const p = useProgress(range.durationSec, 0.7);
+  const left = Math.min(range.from, range.to) * 100;
+  const width = Math.abs(range.to - range.from) * 100 * p;
+  return (
+    <AbsoluteFill style={{ ...zoneStyle(range.zone), opacity }}>
+      <div style={{ ...panel, padding: "26px 34px", minWidth: 380, maxWidth: 560 }}>
+        {range.caption ? (
+          <div style={{
+            fontFamily: theme.subtitleFontFamily, fontSize: 20,
+            color: "rgba(244,241,234,.62)", marginBottom: 18,
+          }}>
+            {range.caption}
+          </div>
+        ) : null}
+        {/* 目盛り。数値そのものではなく幅を読ませるので、線は細く暗く */}
+        <div style={{
+          position: "relative", height: 12, borderRadius: 6,
+          background: "rgba(244,241,234,.12)",
+        }}>
+          <div style={{
+            position: "absolute", left: `${left}%`, width: `${width}%`,
+            top: 0, bottom: 0, borderRadius: 6,
+            background: theme.accent,
+          }} />
+        </div>
+        <div style={{
+          display: "flex", justifyContent: "space-between", marginTop: 14,
+          fontFamily: theme.fontFamily, fontWeight: 900, fontSize: 34,
+          color: theme.text,
+        }}>
+          <span>{range.lowLabel}</span>
+          <span style={{ opacity: 0.55, fontSize: 24, alignSelf: "center" }}>〜</span>
+          <span>{range.highLabel}</span>
+        </div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 export const TimelineBar: React.FC<{ timeline: Timeline }> = ({ timeline }) => {
   const opacity = useFade(timeline.durationSec);
   const p = useProgress(timeline.durationSec, 1.0);

@@ -128,6 +128,19 @@ export const chartSchema = z.object({
 });
 
 /** 区切りのある横バー。年代の推移や工程の段階を示す。 */
+/** 「10トンから15トン」のような幅のある量。棒の上に区間として出す */
+export const rangeBarSchema = z.object({
+  startSec: z.number().min(0),
+  durationSec: z.number().positive(),
+  /** 目盛りの下端・上端に対する区間の位置（0〜1） */
+  from: z.number().min(0).max(1),
+  to: z.number().min(0).max(1),
+  lowLabel: z.string(),
+  highLabel: z.string(),
+  caption: z.string().optional(),
+  zone: zoneSchema.default("right"),
+});
+
 export const timelineSchema = z.object({
   startSec: z.number().min(0),
   durationSec: z.number().positive(),
@@ -178,6 +191,7 @@ export const documentarySchema = z.object({
   portraits: z.array(portraitSchema).default([]),
   charts: z.array(chartSchema).default([]),
   timelines: z.array(timelineSchema).default([]),
+  rangeBars: z.array(rangeBarSchema).default([]),
   glyphs: z.array(glyphSchema).default([]),
   grids: z.array(gridSchema).default([]),
   /** 背景の落とし込み。0 で素のまま、1 で真っ暗 */
@@ -199,5 +213,6 @@ export type Stat = z.infer<typeof statSchema>;
 export type Portrait = z.infer<typeof portraitSchema>;
 export type Chart = z.infer<typeof chartSchema>;
 export type Timeline = z.infer<typeof timelineSchema>;
+export type RangeBar = z.infer<typeof rangeBarSchema>;
 export type Glyph = z.infer<typeof glyphSchema>;
 export type Grid = z.infer<typeof gridSchema>;

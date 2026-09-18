@@ -21,6 +21,7 @@ const defaultProps: DocumentaryProps = {
   portraits: [],
   charts: [],
   timelines: [],
+  rangeBars: [],
   glyphs: [],
   grids: [],
   backgroundDim: 0.45,

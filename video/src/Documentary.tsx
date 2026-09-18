@@ -17,7 +17,8 @@ import {
   BackgroundPlate, CardRow, ChipStack, DocumentCard, QuoteCard, SourceLabel,
 } from "./components/Overlays";
 import {
-  DataChart, GlyphHero, MatrixGrid, PortraitCard, StatCallout, TimelineBar,
+  DataChart, GlyphHero, MatrixGrid, PortraitCard, RangeBarCard, StatCallout,
+  TimelineBar,
 } from "./components/Infographics";
 import { theme } from "./theme";
 
@@ -45,6 +46,7 @@ export const Documentary: React.FC<DocumentaryProps> = ({
   portraits,
   charts,
   timelines,
+  rangeBars,
   glyphs,
   grids,
   backgroundDim,
@@ -151,6 +153,12 @@ export const Documentary: React.FC<DocumentaryProps> = ({
       ))}
 
       {/* 強調テロップ */}
+      {rangeBars.map((range, i) => (
+        <Sequence key={`range-${i}`} from={secToFrames(range.startSec, fps)}
+          durationInFrames={secToFrames(range.durationSec, fps)}>
+          <RangeBarCard range={range} />
+        </Sequence>
+      ))}
       {telops.map((telop, i) => (
         <Sequence
           key={`telop-${i}`}

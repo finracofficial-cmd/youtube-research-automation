@@ -34,6 +34,13 @@ _PAPER = re.compile(
 _QUOTE_LEAD = re.compile(r"(主張|説明|話|結論|言い分|見方)は(こうだ|こうである|こうだった)[。]?$")
 _LIST_LEAD = re.compile(r"(?P<n>[0-9０-９一二三四五六七八九]+)\s*(つ|種類|点|件)[^。]{0,8}"
                         r"(に分かれる|を並べた|ある|を挙げ)")
+# 「10トンから15トン」のような幅のある量。大書きの数字にすると幅が消え、
+# 確定値のように見えてしまう。区間として出す。
+_RANGE = re.compile(
+    r"(?P<lo>[0-9０-９][0-9０-９,.]*)\s*(?P<u1>トン|メートル|キロ|センチ|個|本|枚|人|年|%|パーセント)?"
+    r"\s*(?:から|〜|～|-|–)\s*"
+    r"(?P<hi>[0-9０-９][0-9０-９,.]*)\s*(?P<u2>トン|メートル|キロ|センチ|個|本|枚|人|年|%|パーセント)")
+
 _CAVEAT = re.compile(r"^(ただし|とはいえ|もっとも)")
 # 留保があると予告するだけで中身を言っていない文。カードに出すと
 # 「ただし、と付け加えておきたい」がそのまま画面に載る。
@@ -132,6 +139,14 @@ def _is_trivial(value: str, unit: str) -> bool:
         return float(digits) <= _TRIVIAL_MAX
     except ValueError:
         return False
+
+
+def _to_float(text: str) -> float:
+    t = text.translate(str.maketrans("０１２３４５６７８９", "0123456789")).replace(",", "")
+    try:
+        return float(t)
+    except ValueError:
+        return 0.0
 
 
 def _to_int(text: str) -> int:
@@ -234,8 +249,27 @@ def classify(lines: list[Line]) -> list[Cue]:
             cues.append(Cue("glyph", start, min(dur, 4.0), "center",
                             {"glyph": m.group(1), "caption": _clip(text, 24)}))
 
+        ranged = False
+        m = _RANGE.search(text)
+        if m:
+            unit = m.group("u2") or m.group("u1") or ""
+            lo, hi = _to_float(m.group("lo")), _to_float(m.group("hi"))
+            if hi > lo > 0:
+                # 目盛りは下端0、上端を上限の1.3倍にして、区間を中ほどに置く
+                top = hi * 1.3
+                cues.append(Cue("range", start, dur,
+                                stat_zones[n_stat % len(stat_zones)], {
+                                    "from": lo / top, "to": hi / top,
+                                    "low": f"{m.group('lo')}{unit}",
+                                    "high": f"{m.group('hi')}{unit}",
+                                    "caption": _stat_label(text, m.start(), m.end())}))
+                n_stat += 1
+                ranged = True
+
+        # 範囲を出した文で数値カードも出すと、同じ数字が画面に3度並ぶ
+        # （範囲バー・数値カード・字幕）。実測でそうなった。
         m = _STAT.search(text)
-        if m and not _is_trivial(m.group("v"), m.group("u")):
+        if m and not ranged and not _is_trivial(m.group("v"), m.group("u")):
             pre = m.group("pre") or ""
             value = f"{pre}{m.group('v')}{m.group('u')}{m.group('post') or ''}"
             label = _stat_label(text, m.start(), m.end())
@@ -247,7 +281,7 @@ def classify(lines: list[Line]) -> list[Cue]:
                             {"value": value,
                              "label": label}))
             n_stat += 1
-        elif len(re.findall(r"[0-9０-９]+", text)) >= 3:
+        elif not ranged and len(re.findall(r"[0-9０-９]+", text)) >= 3:
             cues.append(Cue("chips", start, min(dur, 5.0),
                             stat_zones[n_stat % len(stat_zones)],
                             {"items": re.findall(r"[0-9０-９]+[^\s、。]{0,4}", text)[:3]}))
@@ -297,7 +331,7 @@ def to_props(cues: list[Cue], codes: list[str] | None = None) -> dict:
     out: dict[str, list] = {
         "quoteCards": [], "chipStacks": [], "cardRows": [], "documentCards": [],
         "stats": [], "portraits": [], "charts": [], "timelines": [], "glyphs": [], "grids": [],
-        "telops": [],
+        "telops": [], "rangeBars": [],
     }
     for cue in cues:
         base = {"startSec": round(cue.startSec, 3), "durationSec": round(cue.durationSec, 3)}
@@ -323,6 +357,11 @@ def to_props(cues: list[Cue], codes: list[str] | None = None) -> dict:
             out["cardRows"].append({**base, "caption": p["caption"], "cards": [
                 {"code": labels[i] if i < len(labels) else str(i + 1), "dimmed": False}
                 for i in range(n)]})
+        elif cue.kind == "range":
+            out["rangeBars"].append({**base, **z, "from": round(p["from"], 4),
+                                     "to": round(p["to"], 4),
+                                     "lowLabel": p["low"], "highLabel": p["high"],
+                                     "caption": p["caption"]})
         elif cue.kind == "stat":
             out["stats"].append({**base, **z, "value": p["value"], "label": p["label"]})
         elif cue.kind == "portrait":
