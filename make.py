@@ -15,8 +15,9 @@ import re
 import subprocess
 import sys
 import time
-import meter
 from pathlib import Path
+
+import meter
 
 ROOT = Path(__file__).resolve().parent
 
@@ -60,6 +61,7 @@ def main() -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
 
     began = time.time()
+    meter.share(ROOT / "out" / f".meter_{name}.jsonl")
     if not a.skip_assets:
         spec.parent.mkdir(parents=True, exist_ok=True)
         print("■ 1/4 台本から検索語を割り出す")

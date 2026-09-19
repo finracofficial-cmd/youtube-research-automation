@@ -17,9 +17,15 @@ from __future__ import annotations
 import json
 import os
 import re
+import sys
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
+
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # video/ から呼ばれる
+from meter import note_usage  # noqa: E402
 
 from autolayout import MAX_DURATION, MIN_DURATION, Cue, Line
 
@@ -155,6 +161,7 @@ def call(messages: list[dict], *, model: str = DEFAULT_MODEL, timeout: int = 180
         "Authorization": f"Bearer {key}", "Content-Type": "application/json"})
     try:
         payload = json.loads(urllib.request.urlopen(req, timeout=timeout).read())
+        note_usage("chat", model, payload)
     except urllib.error.HTTPError as exc:
         raise LLMUnavailable(f"HTTP {exc.code}: {exc.read()[:200]!r}") from exc
     return payload["choices"][0]["message"]["content"]

@@ -2,7 +2,11 @@
 
 推測で費用を語って外したことがあるので、数えた事実が出ることを確かめる。
 """
+import pathlib
+
 import meter
+
+ROOT = str(pathlib.Path(__file__).resolve().parent.parent)
 
 
 def setup_function():
@@ -49,3 +53,41 @@ def test_report_names_the_models_and_refuses_to_guess_money():
 
 def test_report_when_nothing_was_called():
     assert meter.report() == "APIの呼び出しは無し"
+
+
+def test_children_add_into_the_same_tally(tmp_path, monkeypatch):
+    """工程が別プロセスに分かれても、1回の制作は1つの表にまとまる。
+
+    build_props.py は make.py から subprocess で起動する。プロセス内に
+    貯めるだけだと、そこで数えた分が最後の集計に届かない。
+    """
+    import subprocess
+    import sys
+
+    sink = tmp_path / "run.jsonl"
+    monkeypatch.setattr(meter.os, "environ", dict(meter.os.environ))
+    meter.share(sink)
+
+    parent_env = dict(meter.os.environ)
+    subprocess.run(
+        [sys.executable, "-c",
+         "import meter; meter.note_usage('chat', 'gpt-4.1',"
+         " {'usage': {'prompt_tokens': 700, 'completion_tokens': 30}})"],
+        cwd=ROOT, env=parent_env, check=True)
+    meter.record("image", "gpt-image-1")
+
+    rows = {r["model"]: r for r in meter.tally()}
+    assert rows["gpt-4.1"] == {"kind": "chat", "model": "gpt-4.1",
+                               "calls": 1, "tokens": 730}
+    assert rows["gpt-image-1"]["calls"] == 1
+
+
+def test_a_half_written_line_is_skipped(tmp_path, monkeypatch):
+    monkeypatch.setattr(meter.os, "environ", dict(meter.os.environ))
+    sink = tmp_path / "run.jsonl"
+    meter.share(sink)
+    meter.record("chat", "gpt-4.1", tokens_in=100)
+    with open(sink, "a", encoding="utf-8") as fh:
+        fh.write('{"kind": "chat", "mod')  # 書き込みの途中を読んだ状態
+    rows = {r["model"]: r for r in meter.tally()}
+    assert rows["gpt-4.1"]["calls"] == 1

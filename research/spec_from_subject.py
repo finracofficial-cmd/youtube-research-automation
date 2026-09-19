@@ -22,6 +22,8 @@ from pathlib import Path
 
 import yaml
 
+from meter import note_usage
+
 API = "https://api.openai.com/v1/chat/completions"
 
 _SYSTEM = """You plan a Japanese documentary about a historical or
@@ -59,6 +61,7 @@ def build(subject: str, n_claims: int, *, model: str = "gpt-4.1",
     req = urllib.request.Request(API, data=body, headers=headers)
     try:
         d = json.loads(urllib.request.urlopen(req, timeout=timeout).read())
+        note_usage("chat", model, d)
     except urllib.error.HTTPError as exc:
         raise SystemExit(f"HTTP {exc.code}: {exc.read()[:200]!r}") from exc
     spec = json.loads(d["choices"][0]["message"]["content"])
