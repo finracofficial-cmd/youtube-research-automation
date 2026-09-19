@@ -132,6 +132,7 @@ jobs:
             out/${{ env.NAME }}.mp4
             out/${{ env.NAME }}_description.txt
             video/public/shots_${{ env.NAME }}/credits.txt
+            video/props_${{ env.NAME }}.json
           retention-days: 30
           if-no-files-found: warn
 
