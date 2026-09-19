@@ -91,3 +91,15 @@ def test_a_half_written_line_is_skipped(tmp_path, monkeypatch):
         fh.write('{"kind": "chat", "mod')  # 書き込みの途中を読んだ状態
     rows = {r["model"]: r for r in meter.tally()}
     assert rows["gpt-4.1"]["calls"] == 1
+
+
+def test_image_usage_uses_the_image_token_spelling():
+    """gpt-image-1 は input_tokens / output_tokens で返す。
+
+    実測: 1536x1024 の出力トークンは low 400 / medium 1568 / high 6208。
+    画質を渡さないと既定は high に倒れ、明細の大半をここが占める。
+    """
+    meter.note_usage("image", "gpt-image-1",
+                     {"usage": {"input_tokens": 65, "output_tokens": 6208}})
+    rows = {r["model"]: r for r in meter.tally()}
+    assert rows["gpt-image-1"]["tokens"] == 6273

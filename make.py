@@ -42,6 +42,9 @@ def main() -> int:
     ap.add_argument("--still", type=int, help="動画の代わりに指定フレームの静止画を出す")
     ap.add_argument("--generate-images", action="store_true",
                     help="同じ画が続く区間を生成画像で埋める（OPENAI_API_KEY が要る）")
+    ap.add_argument("--image-quality", default="medium",
+                    choices=["low", "medium", "high"],
+                    help="生成画像の画質。高いほど出力トークンが増え費用が上がる")
     ap.add_argument("--voice", help="ElevenLabs の voice_id。渡すと読み上げが入る"
                                     "（ELEVENLABS_API_KEY が要る）")
     ap.add_argument("--bgm", help="public/ からの相対パス")
@@ -83,7 +86,7 @@ def main() -> int:
         entries = json.loads(man.read_text(encoding="utf-8"))
         segs = split_script(script.read_text(encoding="utf-8"),
                             max((e.get("n_segments") or 0) for e in entries) or a.segments)
-        entries = fill(entries, segs, shots_path)
+        entries = fill(entries, segs, shots_path, quality=a.image_quality)
         man.write_text(json.dumps(entries, ensure_ascii=False, indent=1),
                        encoding="utf-8")
         # 生成が入ったらクレジットを作り直す（概要欄の申告が要る）

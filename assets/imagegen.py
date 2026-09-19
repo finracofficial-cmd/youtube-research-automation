@@ -24,7 +24,7 @@ from pathlib import Path
 
 from meter import note_usage
 
-from .generate import GenerationUnavailable, generate
+from .generate import DEFAULT_QUALITY, GenerationUnavailable, generate
 
 CHAT_URL = "https://api.openai.com/v1/chat/completions"
 PROMPT_MODEL = "gpt-4.1-mini"
@@ -124,7 +124,8 @@ def segments_needing_art(manifest: list[dict]) -> list[int]:
 
 
 def fill(manifest: list[dict], segments: list[str], out_dir: Path,
-         *, limit: int = 60, pause: float = 1.0) -> list[dict]:
+         *, limit: int = 60, pause: float = 1.0,
+         quality: str = DEFAULT_QUALITY) -> list[dict]:
     """引き継ぎで埋めていた区間に、生成した情景を入れる。
 
     manifest を書き換えて返す。生成に失敗した区間は引き継ぎのまま残す。
@@ -143,7 +144,7 @@ def fill(manifest: list[dict], segments: list[str], out_dir: Path,
             if not prompt:
                 continue
             dst = out_dir / f"gen{seg:03d}.png"
-            asset = generate(f"{prompt}\n\n{_STYLE}", dst)
+            asset = generate(f"{prompt}\n\n{_STYLE}", dst, quality=quality)
         except GenerationUnavailable as exc:
             print(f"  [{seg:03d}] 生成できず: {exc}")
             break
@@ -152,6 +153,7 @@ def fill(manifest: list[dict], segments: list[str], out_dir: Path,
             continue
         rec = asset.to_dict()
         rec.update({"file": dst.name, "segment": seg, "query": "(生成)",
+                    "quality": quality,
                     "needs_review": False, "carried": False, "generated": True,
                     "width": 1536, "height": 1024,
                     "n_segments": by_segment[seg].get("n_segments")})

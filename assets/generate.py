@@ -49,8 +49,16 @@ def available() -> bool:
                 or os.environ.get("OPENAI_VIA_PROXY"))
 
 
+# 画質を渡していなかった。既定は auto で、gpt-image-1 はこれを high に倒す。
+# 明細で "gpt-image-1 image, output" が $16.39 になっていた原因がこれ。
+# 背景として動かす画で、拡大縮小しながら字幕と図表を重ねる。最高画質の
+# 出力トークンを払う必要はない。
+DEFAULT_QUALITY = "medium"
+
+
 def generate(prompt: str, dst: Path, *, size: str = "1536x1024",
-             model: str = DEFAULT_MODEL, timeout: int = 180) -> Asset:
+             model: str = DEFAULT_MODEL, quality: str = DEFAULT_QUALITY,
+             timeout: int = 180) -> Asset:
     """1枚生成して保存し、生成物として印を付けた Asset を返す。"""
     key = os.environ.get("OPENAI_API_KEY")
     if not key and not os.environ.get("OPENAI_VIA_PROXY"):
@@ -63,6 +71,7 @@ def generate(prompt: str, dst: Path, *, size: str = "1536x1024",
         "model": model,
         "prompt": f"{prompt}\n\n{STYLE_GUARD}",
         "size": size,
+        "quality": quality,
         "n": 1,
     }).encode()
     # 鍵が無いときは見出しを付けずに出す。代理が付ける設定のときの経路。
