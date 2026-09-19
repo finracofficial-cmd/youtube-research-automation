@@ -162,10 +162,17 @@ def main() -> int:
     import publish
     data = json.loads(props.read_text(encoding="utf-8"))
     credits = ROOT / "video" / "public" / shots_dir / "credits.txt"
+    b = publish.brand()
+    subject = ""
+    if topic.exists():
+        import yaml
+        subject = (yaml.safe_load(topic.read_text(encoding="utf-8")) or {}).get("subject", "")
     desc = out.with_name(f"{name}_description.txt")
     desc.write_text(
         publish.build("", data.get("outline") or [],
-                      credits.read_text(encoding="utf-8") if credits.exists() else ""),
+                      credits.read_text(encoding="utf-8") if credits.exists() else "",
+                      lead=b.get("lead", ""),
+                      tags=publish.tags_for(subject, b.get("hashtags"))),
         encoding="utf-8")
     print(f"概要欄に貼る文 -> {desc}")
     return 0

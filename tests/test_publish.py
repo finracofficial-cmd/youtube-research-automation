@@ -54,3 +54,32 @@ def test_refresh_keeps_the_old_chapters_when_it_cannot_do_better():
     got = publish.refresh(props, "本文", [])
     assert got["chapters"] == [{"startSec": 152.0, "durationSec": 3.0,
                                 "label": "第1主張", "title": ""}]
+
+
+def test_the_topic_tag_comes_first():
+    """YouTubeは先頭3つを題名の上に出す。
+
+    看板のタグだけだと、どの動画も同じ3つが並ぶ。題材固有の語を先頭に置く。
+    """
+    got = publish.tags_for("オーパーツ", ["都市伝説", "一次資料"])
+    assert got[0] == "オーパーツ"
+
+
+def test_a_topic_already_in_the_brand_tags_is_not_repeated():
+    assert publish.tags_for("一次資料", ["都市伝説", "一次資料"]) \
+        == ["一次資料", "都市伝説"]
+
+
+def test_hashes_and_spaces_are_stripped_before_use():
+    assert publish.tags_for("#未 解決", ["#都市伝説"]) == ["未解決", "都市伝説"]
+
+
+def test_a_missing_brand_file_does_not_break_the_description(tmp_path):
+    """看板が無くても、目次と出典は出す。"""
+    assert publish.brand(tmp_path / "nope.yaml") == {}
+
+
+def test_the_real_brand_file_has_what_the_description_needs():
+    b = publish.brand()
+    assert b.get("name") and b.get("lead") and b.get("hashtags")
+    assert len(b["hashtags"]) >= 3

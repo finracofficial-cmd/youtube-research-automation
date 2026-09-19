@@ -18,6 +18,31 @@ import chapters as ch  # noqa: E402
 FOOTER = """\
 取り上げてほしい題材があれば、コメント欄でご提案ください。"""
 
+BRAND = ROOT / "brand.yaml"
+
+
+def brand(path: Path | None = None) -> dict:
+    """チャンネルの看板。無ければ空で通す（概要欄は目次と出典だけになる）。"""
+    path = path or BRAND
+    if not path.exists():
+        return {}
+    import yaml
+    return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+
+
+def tags_for(subject: str, brand_tags: list[str] | None) -> list[str]:
+    """題材固有のタグを先頭に、看板のタグを続ける。
+
+    YouTubeは先頭3つを題名の上に出す。固有名詞が先でないと、どの動画も
+    同じ3つが並ぶ。重複は落とし、順序は保つ。
+    """
+    out: list[str] = []
+    for t in [subject] + list(brand_tags or []):
+        t = (t or "").strip().lstrip("#").replace(" ", "")
+        if t and t not in out:
+            out.append(t)
+    return out
+
 
 def build(title: str, outline: list[dict], credits: str, *,
           lead: str = "", tags: list[str] | None = None) -> str:
