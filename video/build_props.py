@@ -15,6 +15,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import chapters as chapters_mod  # noqa: E402
 from autolayout import Line, build as build_overlays  # noqa: E402
 from autolayout import hold, schedule, to_props  # noqa: E402
 from script_engine.beats import get  # noqa: E402
@@ -196,7 +197,7 @@ def _for_time(pos: float, manifest: list[dict], n_seg: int) -> dict | None:
 def build(script: str, duration: float, kind: str, n_claims: int,
           shot_sec: float, narration: str | None, bgm: str | None,
           manifest: list[dict] | None = None, use_llm: bool = False,
-          shots_dir: str = "shots") -> dict:
+          shots_dir: str = "shots", claims: list | None = None) -> dict:
     lines = [w for s in split_sentences(script) for w in wrap(s)]
     total_chars = sum(len(l) for l in lines) or 1
 
@@ -212,16 +213,25 @@ def build(script: str, duration: float, kind: str, n_claims: int,
                           "text": line})
         t += dur
 
-    sheet = get(kind, n_claims=n_claims)
-    chapters, at = [], 0.0
-    for beat, sec in sheet.allocate(int(duration)):
-        # 幕・主張の頭にだけカードを出す。導入や締めには出さない
-        if beat.key.startswith(("act", "claim")):
-            chapters.append({
-                "startSec": round(at, 3), "durationSec": 3.0,
-                "label": beat.name, "title": "",
-            })
-        at += sec
+    # 章は、主張が実際に語られ始める時刻に置く。題材の主張が分かっている
+    # なら本文から探し当てる（chapters.locate）。尺を等分すると、画面の
+    # 「第2主張」が主張の途中で出る（実測で152秒ごとに並んでいた）。
+    marks = chapters_mod.locate(script, subtitles, claims or [])
+    if marks:
+        chapters = [{"startSec": c["startSec"], "durationSec": 3.0,
+                     "label": c["title"], "title": ""}
+                    for c in marks if c["startSec"] > 0]
+    else:
+        sheet = get(kind, n_claims=n_claims)
+        chapters, at = [], 0.0
+        for beat, sec in sheet.allocate(int(duration)):
+            # 幕・主張の頭にだけカードを出す。導入や締めには出さない
+            if beat.key.startswith(("act", "claim")):
+                chapters.append({
+                    "startSec": round(at, 3), "durationSec": 3.0,
+                    "label": beat.name, "title": "",
+                })
+            at += sec
 
     # 画は等間隔の枠。manifest があれば実ファイル名（拡張子つき）を使う
     manifest = manifest or []
@@ -260,6 +270,8 @@ def build(script: str, duration: float, kind: str, n_claims: int,
     props: dict = {
         "bgmVolume": 0.12, "backgroundDim": 0.5, "shots": shots, "telops": [],
         "subtitles": subtitles, "chapters": chapters,
+        # 概要欄に貼る章。画面のカードと違い、0秒の「はじめに」も要る
+        "outline": marks,
         "sourceLabels": source_labels(manifest, shots),
         **overlays,
     }
@@ -275,6 +287,14 @@ def build(script: str, duration: float, kind: str, n_claims: int,
     return props
 
 
+def load_claims(path: Path | None) -> list:
+    """題材の主張を読む。無ければ空。章は尺の等分に落ちる。"""
+    if not path or not path.exists():
+        return []
+    import yaml
+    return (yaml.safe_load(path.read_text(encoding="utf-8")) or {}).get("claims") or []
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("script")
@@ -286,12 +306,14 @@ def main() -> int:
     ap.add_argument("--bgm")
     ap.add_argument("--out", default="video/props.json")
     ap.add_argument("--manifest", help="assets fetch が出した manifest.json")
+    ap.add_argument("--topic", help="seeds/topics/<題材>.yaml。章の位置決めに使う")
     ap.add_argument("--llm", action="store_true",
                     help="オーバーレイ抽出にLLMを使う（OPENAI_API_KEY が要る）")
     a = ap.parse_args()
 
     props = build(Path(a.script).read_text(encoding="utf-8"), a.duration,
                   a.kind, a.claims, a.shot_sec, a.narration, a.bgm,
+                  claims=load_claims(Path(a.topic) if a.topic else None),
                   manifest=load_manifest(Path(a.manifest) if a.manifest else None),
                   use_llm=a.llm,
                   # 素材の置き場は manifest の場所から決める。決め打ちだと

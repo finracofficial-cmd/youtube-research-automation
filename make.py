@@ -22,6 +22,14 @@ import meter
 ROOT = Path(__file__).resolve().parent
 
 
+def _claims(topic: Path) -> list:
+    """題材の主張。章の位置決めに使う。"""
+    if not topic.exists():
+        return []
+    import yaml
+    return (yaml.safe_load(topic.read_text(encoding="utf-8")) or {}).get("claims") or []
+
+
 def run(cmd: list[str], *, cwd: Path = ROOT) -> None:
     print(f"\n$ {' '.join(cmd)}", flush=True)
     r = subprocess.run(cmd, cwd=cwd)
@@ -108,11 +116,16 @@ def main() -> int:
         print(f"  音声 {duration / 60:.1f}分 -> {mp3}")
 
     print("\n■ 3/4 部品を配置する")
+    topic = ROOT / "seeds" / "topics" / f"{name}.yaml"
     cmd = [sys.executable, "video/build_props.py", str(script),
            "--duration", str(duration), "--kind", a.kind,
            "--claims", str(a.claims),
            "--manifest", f"video/public/{shots_dir}/manifest.json",
            "--out", str(props)]
+    if topic.exists():
+        cmd += ["--topic", str(topic)]
+    else:
+        print(f"  主張の元データが無い: {topic}（章は尺の等分になる）")
     if narration:
         cmd += ["--narration", narration]
     if a.bgm:
@@ -124,9 +137,15 @@ def main() -> int:
         from assets.tts import retime
         data = json.loads(props.read_text(encoding="utf-8"))
         data["subtitles"] = retime(data["subtitles"], marks)
+        # 章も取り直す。字幕だけ直すと、画面のカードと概要欄の時刻が
+        # 概算のまま残り、読み上げとずれる
+        import publish
+        from video.chapters import render as render_chapters  # noqa: F401
+        data = publish.refresh(data, script.read_text(encoding="utf-8"),
+                               _claims(topic))
         props.write_text(json.dumps(data, ensure_ascii=False, indent=1),
                          encoding="utf-8")
-        print("  字幕を実際の発話に合わせ直した")
+        print(f"  字幕を実際の発話に合わせ直した（章 {len(data.get('outline') or [])}件）")
 
     print("\n■ 4/4 描画する（尺が長いと時間がかかる）")
     render = ["./render.sh", "still" if a.still else "render",
@@ -139,9 +158,16 @@ def main() -> int:
     mins = (time.time() - began) / 60
     print(f"\n完成 -> {out}  （{mins:.1f}分）")
     print(meter.report())
+    # 概要欄。章・出典・定型文を1つのファイルにまとめる
+    import publish
+    data = json.loads(props.read_text(encoding="utf-8"))
     credits = ROOT / "video" / "public" / shots_dir / "credits.txt"
-    if credits.exists():
-        print(f"概要欄に貼るクレジット -> {credits}")
+    desc = out.with_name(f"{name}_description.txt")
+    desc.write_text(
+        publish.build("", data.get("outline") or [],
+                      credits.read_text(encoding="utf-8") if credits.exists() else ""),
+        encoding="utf-8")
+    print(f"概要欄に貼る文 -> {desc}")
     return 0
 
 

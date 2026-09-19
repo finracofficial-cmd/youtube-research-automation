@@ -130,6 +130,7 @@ jobs:
           name: ${{ env.NAME }}-${{ github.run_number }}
           path: |
             out/${{ env.NAME }}.mp4
+            out/${{ env.NAME }}_description.txt
             video/public/shots_${{ env.NAME }}/credits.txt
           retention-days: 30
           if-no-files-found: warn
@@ -146,8 +147,11 @@ jobs:
             - 画像生成: `${{ inputs.generate_images }}`
             - BGM: `${{ inputs.bgm }}`
 
-            画像の出典は `credits.txt` にあります。生成画像が含まれる場合、
-            その旨も `credits.txt` に書かれています。概要欄に貼ってください。
+            **`<名前>_description.txt` をそのままYouTubeの概要欄に貼ってください。**
+            章の時刻（目次）と画像の出典が入っています。章は読み上げの実時間
+            から取っているので、動画と一致します。出典はCC BYの表示義務を
+            満たすために必要です。生成画像が含まれる場合、その申告も入ります。
           files: |
             out/${{ env.NAME }}.mp4
+            out/${{ env.NAME }}_description.txt
             video/public/shots_${{ env.NAME }}/credits.txt
