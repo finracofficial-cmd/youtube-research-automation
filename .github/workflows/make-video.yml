@@ -13,7 +13,10 @@ on:
       script:
         description: "台本のファイル。drafts/ を見て選ぶ"
         required: true
-        default: drafts/megaliths_v1.txt
+        # 既定は、題材の検討（Issue #1）で選ばれて書かせた台本にしておく。
+        # 別の題材が既定だと、欄をそのままにした実行が1時間半かけて
+        # 見たかったものと違う動画を作る。
+        default: drafts/oparts_approved.txt
       name:
         description: "出力名（空でよい。台本のファイル名から決まる）"
         required: false
