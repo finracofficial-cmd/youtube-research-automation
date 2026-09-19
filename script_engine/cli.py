@@ -8,6 +8,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+import meter
+
 from .render import Topic, build_prompt
 from .style import validate
 
@@ -114,6 +116,7 @@ def cmd_write(args) -> int:
     Path(args.out).write_text(text, encoding="utf-8")
     m = validate(text, args.duration)
     print(f"{len(text)}字 / 忠実度 {m.fidelity:.0%} -> {args.out}")
+    print(meter.report())
     if left:
         print("直しきれなかった点:")
         for n in left:

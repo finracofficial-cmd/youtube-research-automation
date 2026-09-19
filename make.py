@@ -15,6 +15,7 @@ import re
 import subprocess
 import sys
 import time
+import meter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -132,6 +133,7 @@ def main() -> int:
 
     mins = (time.time() - began) / 60
     print(f"\n完成 -> {out}  （{mins:.1f}分）")
+    print(meter.report())
     credits = ROOT / "video" / "public" / shots_dir / "credits.txt"
     if credits.exists():
         print(f"概要欄に貼るクレジット -> {credits}")

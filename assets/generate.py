@@ -20,6 +20,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from meter import note_usage
+
 from .sources import Asset
 
 API_URL = "https://api.openai.com/v1/images/generations"
@@ -70,6 +72,7 @@ def generate(prompt: str, dst: Path, *, size: str = "1536x1024",
     req = urllib.request.Request(API_URL, data=body, headers=headers)
     try:
         payload = json.loads(urllib.request.urlopen(req, timeout=timeout).read())
+        note_usage("image", model, payload)
     except urllib.error.HTTPError as exc:
         raise GenerationUnavailable(f"HTTP {exc.code}: {exc.read()[:200]!r}") from exc
 

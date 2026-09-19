@@ -22,6 +22,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from meter import note_usage
+
 from .generate import GenerationUnavailable, generate
 
 CHAT_URL = "https://api.openai.com/v1/chat/completions"
@@ -92,6 +94,7 @@ def _chat(text: str, look: str = "", *, timeout: int = 60) -> str | None:
         raise GenerationUnavailable(f"HTTP {exc.code}: {exc.read()[:200]!r}") from exc
     except Exception:  # noqa: BLE001
         return None
+    note_usage("chat", PROMPT_MODEL, d)
     out = (d.get("choices") or [{}])[0].get("message", {}).get("content", "")
     return out.strip() or None
 

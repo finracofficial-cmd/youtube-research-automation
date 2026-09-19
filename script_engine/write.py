@@ -16,6 +16,8 @@ import time
 import urllib.error
 import urllib.request
 
+from meter import note_usage
+
 from .tighten import tighten
 
 API = "https://api.openai.com/v1/chat/completions"
@@ -95,6 +97,7 @@ def _chat(messages: list[dict], model: str, *, timeout: int = 300) -> str:
         try:
             req = urllib.request.Request(API, data=body, headers=headers)
             d = json.loads(urllib.request.urlopen(req, timeout=timeout).read())
+            note_usage("chat", model, d)
             return (d["choices"][0]["message"]["content"] or "").strip()
         except urllib.error.HTTPError as exc:
             if exc.code in (429, 500, 502, 503) and a < 3:
