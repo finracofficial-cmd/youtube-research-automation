@@ -10,6 +10,7 @@ import json
 import shutil
 import subprocess
 import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -27,7 +28,7 @@ import yaml
 from .credits import build as build_credits
 from .credits import unlicensed
 from .sources import UA, Asset, search_all
-from .wikipage import Unreachable, entity_types, page_images
+from .wikipage import Unreachable, commons_videos, entity_types, page_images
 
 
 def mean_luma(path: Path) -> int | None:
@@ -75,12 +76,42 @@ def _sniff_ext(data: bytes) -> str:
 VIDEO_SUFFIX = (".webm", ".ogv", ".mp4")
 
 
+def _fetch_bytes(url: str, *, timeout: int, retries: int = 4) -> bytes | None:
+    """実体を落とす。429 と 503 は待って掛け直す。
+
+    upload.wikimedia.org は実体の連続取得を絞る。再試行が無かったので、
+    一度 429 を受けた時点でその候補を捨てていた。実測で動画が1本も
+    入らなかった原因がこれ。静止画より動画の方が重く、先に効いてくる。
+    """
+    delay = 2.0
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            return urllib.request.urlopen(req, timeout=timeout).read()
+        except urllib.error.HTTPError as exc:
+            if exc.code not in (429, 503) or attempt == retries - 1:
+                return None
+            # サーバが待ち時間を指定していればそれに従う
+            after = exc.headers.get("Retry-After") if exc.headers else None
+            try:
+                wait = float(after) if after else delay
+            except ValueError:
+                wait = delay
+            time.sleep(min(30.0, wait))
+            delay *= 2
+        except Exception:  # noqa: BLE001 - 落とせない候補は静かに飛ばして次へ
+            return None
+    return None
+
+
 def _download(asset: Asset, stem: Path) -> Path | None:
     """落とせたら、中身に合った拡張子を付けて保存し、そのパスを返す。"""
-    try:
-        req = urllib.request.Request(asset.url, headers={"User-Agent": UA})
-        data = urllib.request.urlopen(req, timeout=30).read()
-    except Exception:  # noqa: BLE001 - 落とせない候補は静かに飛ばして次へ
+    # 動画は数MBある。連続で掴むと絞られるので、先に間を置く
+    video = getattr(asset, "kind", "image") == "video"
+    if video:
+        time.sleep(1.5)
+    data = _fetch_bytes(asset.url, timeout=180 if video else 30)
+    if data is None:
         return None
     if len(data) < 5000:  # 実体のないプレースホルダを掴むことがある
         return None
@@ -106,6 +137,11 @@ def cmd_search(args) -> int:
         mark = "要表示" if a.needs_attribution else "　　　"
         print(f"  [{a.source:<7}] {mark} {a.license:<18} {a.title[:44]}")
     return 0
+
+
+# 1つの検索語から採る動画の数。多いと取得に時間がかかり、
+# 同じ映像が何度も出る。
+VIDEOS_PER_QUERY = 1
 
 
 def _candidates(queries: list[str], limit: int) -> tuple[list[Asset], str, bool, bool]:
@@ -135,6 +171,16 @@ def _candidates(queries: list[str], limit: int) -> tuple[list[Asset], str, bool,
             continue
         if got:
             from_articles += got
+            first = first or q
+        # 動画を先頭に置く。記事に貼られている動画はほとんど無いが、Commons の
+        # ファイル検索には在る（実測で記事経由は242点中1点、検索では10題材で8本）。
+        # 1カットでも動く画が入ると、静止画だけの区間との差が大きい。
+        try:
+            clips = commons_videos(q, limit=VIDEOS_PER_QUERY)
+        except Exception:  # noqa: BLE001 - 動画が取れなくても静止画で成立する
+            clips = []
+        if clips:
+            from_articles = clips + from_articles
             first = first or q
     # APIに届かなかっただけなら検索に落とさない。検索は語義を区別しないので、
     # 通信が詰まったぶんだけ題材と食い違う画が増える。空のまま返して

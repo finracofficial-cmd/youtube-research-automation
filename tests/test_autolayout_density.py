@@ -126,3 +126,31 @@ def test_cards_under_a_chapter_card_are_removed():
     got = ex.clear_for_chapters(props)
     assert [t["startSec"] for t in got["telops"]] == [200.0]
     assert len(got["subtitles"]) == 1   # 語りは続いている
+
+
+# ---- 数え上げ表示 ----
+
+def test_count_up_never_shows_a_different_unit_or_qualifier():
+    """「30トンを超える」の「以上」「を超える」を落とすと断定になる。
+
+    数だけ上げて、前後の語はそのまま置く。
+    """
+    import re
+    from pathlib import Path as _P
+
+    src = (_P(__file__).resolve().parents[1]
+           / "video/src/components/Infographics.tsx").read_text(encoding="utf-8")
+    # 実装は TS 側。ここでは正規表現が前後を保つ形になっていることを見る
+    m = re.search(r"const m = value\.match\((/.+?/s)\)", src)
+    assert m, "countUp の取り出しが見つからない"
+    assert "(\\D*)" in m.group(1) and "(.*)" in m.group(1)
+
+
+def test_a_telop_reveals_one_character_at_a_time():
+    """1本に35枚以上出る。同じ出方だと画面が止まって見える。"""
+    from pathlib import Path as _P
+
+    src = (_P(__file__).resolve().parents[1]
+           / "video/src/components/Telop.tsx").read_text(encoding="utf-8")
+    assert "Array.from(telop.text)" in src
+    assert "chars.map" in src

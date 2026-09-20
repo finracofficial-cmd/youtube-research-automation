@@ -21,12 +21,12 @@ from autolayout import Line, _RANGE, _STAT, _clip, _is_trivial, _to_float
 
 # パネル1枚の長さ。短いと読み切れず、長いと語りから浮く。
 PANEL_SEC = 9.0
-MIN_GAP_SEC = 55.0          # パネル同士の間隔。続けて出すと図解動画になる
-MAX_PANELS = 9
+MIN_GAP_SEC = 45.0          # パネル同士の間隔。続けて出すと図解動画になる
+MAX_PANELS = 12
 # 型ごとの上限。scale は候補が桁違いに多く（実測で37対9対2）、任せると
 # 全部棒グラフになる。対比を水増しして数を揃えるのは、資料が言っていない
 # ことを言わせることになるので、そちらはやらない。
-PER_KIND = 3
+PER_KIND = 4
 # 棒で並べて差が見える最小の比。これ未満は並べても読み取れない。
 MIN_RATIO = 1.5
 

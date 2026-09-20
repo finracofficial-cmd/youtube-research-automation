@@ -1,5 +1,13 @@
 import React from "react";
-import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import {
+  AbsoluteFill,
+  Img,
+  interpolate,
+  spring,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 import type { Chart, Glyph, Grid, Portrait, RangeBar as RangeBarType, Stat, Timeline, Zone } from "../schema";
 import { theme } from "../theme";
 
@@ -41,6 +49,24 @@ const useProgress = (durationSec: number, overSec = 1.1) => {
   });
 };
 
+/** 「約250キロ」のような値を、数だけ digit を上げながら出す。
+ *
+ * 文字を先頭から送るだけだと「2」「25」「250」が途中の値として読めて
+ * しまい、間違った数を一瞬見せることになる。数は0から目標値へ上げ、
+ * 前後の語（約・以上・単位）はそのまま置く。 */
+export const countUp = (value: string, p: number): string => {
+  const m = value.match(/^(\D*)([0-9０-９][0-9０-９,，.．]*)(.*)$/s);
+  if (!m) return value;
+  const [, pre, digits, post] = m;
+  const n = Number(digits.replace(/[,，]/g, "").replace(/[０-９]/g,
+    (d) => String("０１２３４５６７８９".indexOf(d))));
+  if (!Number.isFinite(n)) return value;
+  const dec = (digits.split(/[.．]/)[1] || "").length;
+  const at = n * Math.min(1, Math.max(0, p));
+  const text = dec ? at.toFixed(dec) : Math.round(at).toLocaleString("ja-JP");
+  return `${pre}${text}${post}`;
+};
+
 const panel: React.CSSProperties = {
   backgroundColor: "rgba(14,14,17,.82)",
   border: "1px solid rgba(244,241,234,.14)",
@@ -48,15 +74,27 @@ const panel: React.CSSProperties = {
 
 /** 大きな数値の単独提示。数字は末尾から繰り上がるように出す。 */
 export const StatCallout: React.FC<{ stat: Stat }> = ({ stat }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
   const opacity = useFade(stat.durationSec);
   const p = useProgress(stat.durationSec, 0.8);
-  const shown = stat.value.slice(0, Math.max(1, Math.ceil(stat.value.length * p)));
+  // 数の部分は桁を上げながら出す。文字送りだけだと「2」「25」「250」が
+  // 途中の値として読めてしまい、間違った数を一瞬見せることになる。
+  const shown = countUp(stat.value, p);
+  // 札そのものも、下からわずかに持ち上げて置く
+  const rise = spring({ frame, fps, config: { damping: 200, stiffness: 140 },
+                        durationInFrames: Math.round(fps * 0.4) });
+  const rule = interpolate(frame, [Math.round(fps * 0.25), Math.round(fps * 0.75)],
+                           [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   // 「40メートルを超える」のように、限定を含む値は長くなる。限定を削ると
   // 断定になってしまうので、削らずに字の方を詰める。
   const size = stat.value.length <= 5 ? 92 : stat.value.length <= 8 ? 66 : 46;
   return (
     <AbsoluteFill style={{ ...zoneStyle(stat.zone), opacity }}>
-      <div style={{ ...panel, padding: "26px 38px", minWidth: 320, maxWidth: 620 }}>
+      <div style={{
+        ...panel, padding: "26px 38px", minWidth: 320, maxWidth: 620,
+        transform: `translateY(${(1 - rise) * 16}px)`,
+      }}>
         {stat.label ? (
           <div style={{ fontFamily: theme.subtitleFontFamily, fontSize: 21, color: "rgba(244,241,234,.62)", marginBottom: 10 }}>
             {stat.label}
@@ -65,6 +103,11 @@ export const StatCallout: React.FC<{ stat: Stat }> = ({ stat }) => {
         <div style={{ fontFamily: theme.fontFamily, fontWeight: 900, fontSize: size, lineHeight: 1.1, color: theme.text }}>
           {shown}
         </div>
+        {/* 値の下に線を引く。引ききる動きが、置かれたことを示す */}
+        <div style={{
+          height: 2, marginTop: 14, width: `${rule * 100}%`,
+          backgroundColor: theme.accent, opacity: 0.85,
+        }} />
         {stat.note ? (
           <div style={{ fontFamily: theme.subtitleFontFamily, fontSize: 19, color: "rgba(244,241,234,.55)", marginTop: 12 }}>
             {stat.note}

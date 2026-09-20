@@ -360,8 +360,9 @@ def _looks_like_a_person(title: str) -> bool:
 
 # Commons に載っている動画。Chromium が再生できる形式だけ通す。
 VIDEO_EXT = (".webm", ".ogv", ".mp4")
-# 動画1本の上限。Commons には数百MBのものがあり、取得で実行時間を食う。
-MAX_VIDEO_BYTES = 60 * 1024 * 1024
+# 動画1本の上限。Commons には数百MBのものがある。実測で30秒の動画が58MBで、
+# これを8本入れると0.5GBになる。取得にも描画にも効いてくる。
+MAX_VIDEO_BYTES = 25 * 1024 * 1024
 # 1カット（既定8秒）に満たない動画は使わない。描画側に繰り返しが無く、
 # 足りない分は最後のコマで止まる。止まった動画は静止画より悪い。
 MIN_VIDEO_SEC = 8.0
@@ -395,6 +396,97 @@ def _video_seconds(info: dict) -> float:
             except (TypeError, ValueError):
                 return 0.0
     return 0.0
+
+
+# Wikimedia 自身の宣伝動画。どの検索語にも引っかかってくる。
+# 実測で「Knowledge belongs to all of us」「WP25 "Hello, World!"」が
+# バールベックやモアイの検索に混ざった。
+_PROMO = re.compile(
+    r"\bWP\d{2}\b|wikimedia\.org|wikipedia\b.*\b(anniversary|birthday)"
+    r"|knowledge belongs to all|wiki ?loves|wikimania|annual report"
+    r"|call for|fundraising|tutorial|screencast|how to edit",
+    re.I)
+
+# 人が喋っている映像。題材の解説に差し込むと、その人が語り手に見える。
+# 実測で「Viktor Pinchuk about Machu Picchu (in ru)」が通った。
+_TALKING = re.compile(
+    r"\babout\b|\binterview\b|\btalk\b|\blecture\b|\bspeech\b|\bpresentation\b"
+    r"|\bconference\b|\bpanel\b|\bQ&A\b|\(in [a-z]{2}\)|\bexplains?\b",
+    re.I)
+
+# 題材の場所で撮られただけの別物。名前に題材が入るので語では外せない。
+# 実測で「Aircraft ground handling at SCIP Easter Island LATAM」が通った。
+_OFFTOPIC = re.compile(
+    r"\baircraft\b|\bairport\b|\bairline\b|\blanding\b|\btakeoff\b"
+    r"|\bconcert\b|\bfestival\b|\bparade\b|\bmarathon\b|\bwedding\b"
+    r"|\bprotest\b|\bdemonstration\b|\bmatch\b|\bgame\b|\brally\b",
+    re.I)
+
+
+def commons_videos(term: str, *, limit: int = 4, want: int = 12,
+                   width: int = 1920) -> list[Asset]:
+    """題材の動画を Commons のファイル検索から探す。
+
+    記事に貼られている画像だけを見ていたとき、動画は古代遺跡系242点のうち
+    1点しか無かった。動画は記事に貼られないことが多いだけで、Commons には
+    ある（実測でストーンヘンジのドローン映像、1897年のピラミッド、
+    ナスカの地上絵）。
+
+    検索は語で引くので、別物が混ざる。題材の語がファイル名に入っている
+    ものだけを通す。それでも Wikimedia 自身の宣伝動画はどの語にも
+    引っかかるので、別に外す。
+    """
+    d = _get(COMMONS_API, {"action": "query", "list": "search", "srnamespace": 6,
+                           "srsearch": f"{term} filetype:video", "srlimit": want})
+    if d is None:
+        raise Unreachable(term)
+    names = [h["title"].removeprefix("File:")
+             for h in ((d.get("query") or {}).get("search") or [])]
+    # 題材の語を含むものだけ。含まない一致は別物を指している
+    keys = [w for w in re.split(r"[\s\-_]+", term) if len(w) >= 3]
+    names = [n for n in names
+             if not _PROMO.search(n)
+             and not _TALKING.search(n)
+             and not _OFFTOPIC.search(n)
+             and not _looks_like_a_person(n)
+             and any(k.lower() in n.lower() for k in keys)]
+    if not names:
+        return []
+
+    d = _get(COMMONS_API, {
+        "action": "query", "titles": "|".join("File:" + n for n in names[:20]),
+        "prop": "imageinfo",
+        "iiprop": "url|extmetadata|size|mediatype|metadata", "iiurlwidth": width,
+    })
+    if d is None:
+        raise Unreachable(term)
+    out: dict[str, Asset] = {}
+    for page in (((d.get("query") or {}).get("pages")) or {}).values():
+        info = (page.get("imageinfo") or [{}])[0]
+        meta = info.get("extmetadata", {})
+        lic = _clean(meta.get("LicenseShortName", {}).get("value"))
+        if not license_ok(lic):
+            continue
+        filename = page.get("title", "").removeprefix("File:")
+        if not is_video(filename):
+            continue
+        if int(info.get("size") or 0) > MAX_VIDEO_BYTES:
+            continue
+        length = _video_seconds(info)
+        if length and length < MIN_VIDEO_SEC:
+            continue
+        out[filename] = Asset(
+            source="commons", title=filename, kind="video",
+            durationSec=round(length, 3),
+            url=info.get("url") or "",
+            page_url=info.get("descriptionurl", ""),
+            license=lic,
+            author=_clean(meta.get("Artist", {}).get("value")) or "不明",
+            width=int(info.get("width") or 0),
+            height=int(info.get("height") or 0),
+        )
+    # 検索の順を保つ
+    return [out[n] for n in names if n in out][:limit]
 
 
 def page_images(en_title: str, *, limit: int = 6, width: int = 1920,
