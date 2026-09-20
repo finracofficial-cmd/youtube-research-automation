@@ -122,10 +122,12 @@ def test_the_screen_says_it_is_illustrative(tmp_path):
     shots = [{"src": "s/broll007.webm", "startSec": 0.0, "durationSec": 8.0},
              {"src": "s/003.jpg", "startSec": 8.0, "durationSec": 8.0}]
     got = source_labels(man, shots)
-    assert got[0]["text"].startswith("イメージ映像")
-    assert "Someone / CC BY 3.0" in got[0]["text"]
+    # 「出典 イメージ映像 …」と1本の文字列にすると「出典＝イメージ映像」と
+    # 読めて断りにならない。別の札として持たせる。
+    assert got[0]["illustrative"] is True
+    assert got[0]["text"] == "Someone / CC BY 3.0"
     # 題材そのものの画には付けない
-    assert not got[1]["text"].startswith("イメージ映像")
+    assert got[1]["illustrative"] is False
 
 
 def test_broll_terms_do_not_repeat_immediately():

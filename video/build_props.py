@@ -95,16 +95,17 @@ def source_labels(manifest: list[dict], shots: list[dict]) -> list[dict]:
             continue
         # 題材そのものではない映像。付けずに流すと、見た人はそれが題材だと
         # 受け取る。テレビが同じ理由で同じ断りを入れている。
-        if entry.get("illustrative"):
-            text = f"イメージ映像　{text}"
+        illustrative = bool(entry.get("illustrative"))
         # 同じ画が続く間は1枚の帯にまとめる。同じ文字が点滅しないように
-        if out and out[-1]["text"] == text and \
+        if out and out[-1]["text"] == text \
+                and out[-1]["illustrative"] == illustrative and \
                 abs(out[-1]["startSec"] + out[-1]["durationSec"] - shot["startSec"]) < 0.05:
             out[-1]["durationSec"] = round(
                 out[-1]["durationSec"] + shot["durationSec"], 3)
             continue
         out.append({"startSec": shot["startSec"],
-                    "durationSec": shot["durationSec"], "text": text})
+                    "durationSec": shot["durationSec"], "text": text,
+                    "illustrative": illustrative})
     return out
 
 
@@ -265,6 +266,12 @@ def build(script: str, duration: float, kind: str, n_claims: int,
         })
 
     _avoid_repeat(shots, manifest)
+    # 種別は src を入れ替えたあとに決め直す。先に決めると、_avoid_repeat が
+    # 差し替えた分がずれる（実測で 056.jpg が動画扱いになり、動画として
+    # 描くと黒い枠になる）。
+    for shot in shots:
+        shot["kind"] = ("video" if str(shot["src"]).lower()
+                        .endswith((".webm", ".ogv", ".mp4")) else "image")
 
     lines = [Line(**{k: s[k] for k in ("startSec", "durationSec", "text")})
              for s in subtitles]

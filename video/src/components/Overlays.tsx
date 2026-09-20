@@ -54,6 +54,20 @@ export const SourceLabel: React.FC<{ label: SourceLabelType }> = ({ label }) => 
         display: "flex", alignItems: "baseline", gap: 8,
         textShadow: theme.textShadow,
       }}>
+        {/* 題材そのものではない映像。「出典 イメージ映像 …」と続けると
+            「出典＝イメージ映像」と読めて断りにならないので、別の札にする。 */}
+        {label.illustrative ? (
+          <span style={{
+            fontFamily: theme.subtitleFontFamily,
+            fontSize: 14, letterSpacing: "0.1em",
+            color: "rgba(244,241,234,.82)",
+            border: "1px solid rgba(244,241,234,.45)",
+            padding: "2px 9px",
+            marginRight: 6,
+          }}>
+            イメージ映像
+          </span>
+        ) : null}
         <span style={{
           fontFamily: theme.subtitleFontFamily,
           fontSize: 13, letterSpacing: "0.08em",

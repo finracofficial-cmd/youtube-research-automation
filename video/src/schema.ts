@@ -55,6 +55,9 @@ export const chapterSchema = z.object({
 
 /** 画面左上に出しっぱなしにする出典表記。CC BY の表示義務もここで満たす。 */
 export const sourceLabelSchema = z.object({
+  /** 題材そのものではない映像。「出典 イメージ映像 …」と続けると
+   *  「出典＝イメージ映像」と読めて断りにならない。別の札にする。 */
+  illustrative: z.boolean().default(false),
   startSec: z.number().min(0),
   durationSec: z.number().positive(),
   text: z.string(),
