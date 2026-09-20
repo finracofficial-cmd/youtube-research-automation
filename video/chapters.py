@@ -89,6 +89,30 @@ def subject_of(claim, *, limit: int = 16) -> str:
     return head.rstrip("、。 ")
 
 
+def predicate_of(claim, *, limit: int = 16) -> str:
+    """主張の述部側から短い語を取る。主語が全部同じときに使う。"""
+    text = re.split(r"[。\n]", claim_text(claim).strip(), 1)[0]
+    text = _LEAD.sub("", text).strip()
+    m = re.search(r"(?:は|が|も)(.+)$", text)
+    body = m.group(1) if m else text
+    return title_of(body, limit=limit) or title_of(text, limit=limit)
+
+
+def card_labels(claims: list) -> list[str]:
+    """並べる札に入れる語。互いに違う語になるようにする。
+
+    主語だけ取ると、同じ題材の主張は全部同じ語になる。実測で
+    ヴォイニッチ手稿の5つが「ヴォイニッチ手稿／手稿の著者／手稿／
+    手稿に描かれている植物／ヴォイニッチ手稿」になり、同じ語が3つ並んだ。
+    札が5枚あっても中身が1つしか無いのと同じになる。
+    """
+    subjects = [subject_of(c) for c in claims]
+    if len(set(subjects)) == len(subjects):
+        return subjects
+    # 1つでも被ったら、全部を述部側に切り替える。混ぜると基準が読めない
+    return [predicate_of(c) for c in claims]
+
+
 def offsets(subtitles: list[dict]) -> tuple[str, list[tuple[int, float]]]:
     """字幕を繋いだ本文と、各字幕が本文の何文字目から始まるかを返す。"""
     text, marks, at = [], [], 0

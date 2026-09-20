@@ -107,3 +107,30 @@ def test_a_card_label_is_the_subject_not_a_truncated_sentence():
 def test_a_subject_with_no_topic_marker_still_gives_something():
     got = ch.subject_of("第1幕 地上絵の実体と作り方")
     assert got and len(got) <= 16 and "第1幕" not in got
+
+
+def test_card_labels_are_distinct_from_each_other():
+    """主語だけ取ると、同じ題材の主張は全部同じ語になる。
+
+    実測でヴォイニッチ手稿の5つが「ヴォイニッチ手稿／手稿の著者／手稿／
+    手稿に描かれている植物／ヴォイニッチ手稿」になり、同じ語が3つ並んだ。
+    札が5枚あっても中身が1つしか無いのと同じ。
+    """
+    claims = [
+        "ヴォイニッチ手稿は15世紀初頭に作られたとされている。",
+        "手稿の著者はロジャー・ベーコンであるという説がある。",
+        "手稿は未解読の自然言語で書かれている。",
+        "手稿に描かれている植物は実在する植物に基づいている。",
+        "ヴォイニッチ手稿は16世紀のプラハにあった。",
+    ]
+    got = ch.card_labels(claims)
+    assert len(set(got)) == len(got), got
+    assert all(g for g in got)
+
+
+def test_distinct_subjects_are_kept_as_they_are():
+    """被らないなら主語のままでよい。述部に寄せると回りくどくなる。"""
+    got = ch.card_labels(["モアイは歩いて運ばれた",
+                          "ギョベクリ・テペは文明より古い",
+                          "インカの石組みは剃刀の刃も通らない"])
+    assert got == ["モアイ", "ギョベクリ・テペ", "インカの石組み"]

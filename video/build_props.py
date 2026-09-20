@@ -277,7 +277,7 @@ def build(script: str, duration: float, kind: str, n_claims: int,
              for s in subtitles]
     codes = [str(i + 1) for i in range(9)]
     # 並べる札に入れる語。番号だけだと中身が空で未完成に見える。
-    card_labels = [chapters_mod.subject_of(c) for c in (claims or [])]
+    card_labels = chapters_mod.card_labels(claims or [])
     overlays, how = None, "正規表現抽出"
     if use_llm:
         got = overlays_from_llm(lines, duration, codes)
