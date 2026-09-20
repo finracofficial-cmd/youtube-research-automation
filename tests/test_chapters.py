@@ -88,3 +88,22 @@ def test_youtube_rules_are_enforced():
 
 def test_no_claims_means_no_chapters_rather_than_wrong_ones():
     assert ch.locate("本文", subs([(0.0, "本文")]), []) == []
+
+
+def test_a_card_label_is_the_subject_not_a_truncated_sentence():
+    """並べる札は番号だけだと中身が空で未完成に見える。
+
+    かといって題名の詰め方で短くすると語の途中で切れる。実測で
+    「バールベックの巨石は現代のクレーンでも運べない」が
+    「バールベックの巨石は現代のク」になった。主題の印の手前で切る。
+    """
+    assert ch.subject_of("バールベックの巨石は現代のクレーンでも運べない") \
+        == "バールベックの巨石"
+    assert ch.subject_of("ストーンヘンジの石は250キロ運ばれた") == "ストーンヘンジの石"
+    assert ch.subject_of("モアイは歩いて運ばれた") == "モアイ"
+    assert ch.subject_of({"ja": "ギョベクリ・テペは文明より古い"}) == "ギョベクリ・テペ"
+
+
+def test_a_subject_with_no_topic_marker_still_gives_something():
+    got = ch.subject_of("第1幕 地上絵の実体と作り方")
+    assert got and len(got) <= 16 and "第1幕" not in got

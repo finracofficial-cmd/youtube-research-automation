@@ -276,13 +276,16 @@ def build(script: str, duration: float, kind: str, n_claims: int,
     lines = [Line(**{k: s[k] for k in ("startSec", "durationSec", "text")})
              for s in subtitles]
     codes = [str(i + 1) for i in range(9)]
+    # 並べる札に入れる語。番号だけだと中身が空で未完成に見える。
+    card_labels = [chapters_mod.subject_of(c) for c in (claims or [])]
     overlays, how = None, "正規表現抽出"
     if use_llm:
         got = overlays_from_llm(lines, duration, codes)
         if got:
             overlays, how = got
     if overlays is None:
-        overlays = build_overlays(lines, codes=codes, duration=duration)
+        overlays = build_overlays(lines, codes=codes, duration=duration,
+                                  card_labels=card_labels)
     print(f"  抽出方法: {how}")
 
     props: dict = {

@@ -90,10 +90,16 @@ def main() -> int:
         raise SystemExit(f"--skip-assets だが検索語が無い: {spec}")
 
     shots_path = ROOT / "video" / "public" / shots_dir
+    manifest_path = shots_path / "manifest.json"
+    if (a.broll or a.generate_images) and not manifest_path.exists():
+        # --skip-assets と併用すると素材の目録が無い。落ちる前に断る
+        print(f"  素材の目録が無いので差し込みを飛ばす: {manifest_path}")
+        a.broll = a.generate_images = False
+
     if a.broll:
         print("\n■ 同じ画が続く区間にイメージ映像を入れる")
         from assets.imagegen import fill_broll
-        man = shots_path / "manifest.json"
+        man = manifest_path
         entries = json.loads(man.read_text(encoding="utf-8"))
         entries = fill_broll(entries, shots_path, limit=a.max_broll)
         man.write_text(json.dumps(entries, ensure_ascii=False, indent=1),
@@ -103,7 +109,7 @@ def main() -> int:
         print("\n■ 同じ画が続く区間を生成で埋める")
         from assets.imagegen import fill
         from assets.plan_shots import split_script
-        man = shots_path / "manifest.json"
+        man = manifest_path
         entries = json.loads(man.read_text(encoding="utf-8"))
         segs = split_script(script.read_text(encoding="utf-8"),
                             max((e.get("n_segments") or 0) for e in entries) or a.segments)

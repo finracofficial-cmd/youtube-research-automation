@@ -72,6 +72,23 @@ def title_of(claim: str, *, limit: int = 30) -> str:
     return cut
 
 
+def subject_of(claim, *, limit: int = 16) -> str:
+    """主張の主語だけを返す。並べる札に入れる短い語。
+
+    題名の詰め方（title_of）で短くすると語の途中で切れる。実測で
+    「バールベックの巨石は現代のクレーンでも運べない」が
+    「バールベックの巨石は現代のク」になった。主題の印（は・が・も）の
+    手前で切れば、語として成立する。
+    """
+    text = re.split(r"[。\n]", claim_text(claim).strip(), 1)[0]
+    text = _LEAD.sub("", text).strip()
+    m = re.search(r"^(.{2,%d}?)(?:は|が|も)(?=[^。]{2,})" % limit, text)
+    head = m.group(1) if m else text
+    if len(head) > limit:
+        head = title_of(head, limit=limit)
+    return head.rstrip("、。 ")
+
+
 def offsets(subtitles: list[dict]) -> tuple[str, list[tuple[int, float]]]:
     """字幕を繋いだ本文と、各字幕が本文の何文字目から始まるかを返す。"""
     text, marks, at = [], [], 0

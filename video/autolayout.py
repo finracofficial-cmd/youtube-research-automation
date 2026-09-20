@@ -362,7 +362,8 @@ def hold(cues: list[Cue], duration: float, max_hold: float = MAX_HOLD) -> list[C
     return cues
 
 
-def to_props(cues: list[Cue], codes: list[str] | None = None) -> dict:
+def to_props(cues: list[Cue], codes: list[str] | None = None,
+             card_labels: list[str] | None = None) -> dict:
     out: dict[str, list] = {
         "quoteCards": [], "chipStacks": [], "cardRows": [], "documentCards": [],
         "stats": [], "portraits": [], "charts": [], "timelines": [], "glyphs": [], "grids": [],
@@ -389,8 +390,14 @@ def to_props(cues: list[Cue], codes: list[str] | None = None) -> dict:
         elif cue.kind == "cardrow":
             n = p["count"]
             labels = (codes or [])[:n]
+            # 番号だけの札は中身が空で、未完成に見える。題材の主張が
+            # 分かっていれば語を入れる（実測で「1」「2」と番号だけの
+            # 黒い帯が並んでいた）。
+            words = (card_labels or [])[:n]
             out["cardRows"].append({**base, "caption": p["caption"], "cards": [
-                {"code": labels[i] if i < len(labels) else str(i + 1), "dimmed": False}
+                {"code": labels[i] if i < len(labels) else str(i + 1),
+                 "label": words[i] if i < len(words) else "",
+                 "dimmed": False}
                 for i in range(n)]})
         elif cue.kind == "range":
             out["rangeBars"].append({**base, **z, "from": round(p["from"], 4),
@@ -611,7 +618,8 @@ def coverage(cues: list[Cue], duration: float) -> float:
 
 
 def build(lines: list[Line], codes: list[str] | None = None,
-          duration: float | None = None) -> dict:
+          duration: float | None = None,
+          card_labels: list[str] | None = None) -> dict:
     total = duration or (lines[-1].startSec + lines[-1].durationSec if lines else 0.0)
     cues = cap_concurrent(hold(schedule(classify(lines)), total))
-    return to_props(fill_gaps(cues, lines, total), codes)
+    return to_props(fill_gaps(cues, lines, total), codes, card_labels)
