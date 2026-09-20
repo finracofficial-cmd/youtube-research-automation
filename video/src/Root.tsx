@@ -24,6 +24,7 @@ const defaultProps: DocumentaryProps = {
   rangeBars: [],
   glyphs: [],
   grids: [],
+  explainers: [],
   backgroundDim: 0.45,
 };
 

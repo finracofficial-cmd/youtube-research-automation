@@ -171,6 +171,32 @@ export const gridSchema = z.object({
   zone: zoneSchema.default("center"),
 });
 
+/** 画面いっぱいの解説パネル。素材の写真を隠し、これだけで語る区間。
+ *
+ * 参考chは、写真の上に札を載せるだけでなく、作図だけで構成された区間を
+ * 挟んでいる。こちらは全フレームが「写真＋札」で、その状態が無かった。 */
+export const explainerSchema = z.object({
+  startSec: z.number().min(0),
+  durationSec: z.number().positive(),
+  kind: z.enum(["contrast", "timeline", "scale"]),
+  heading: z.string(),
+  /** contrast: 言われていること / 資料が言っていること */
+  claim: z.string().optional(),
+  evidence: z.string().optional(),
+  /** timeline: 年と出来事 */
+  marks: z.array(z.object({
+    year: z.string(),
+    text: z.string().default(""),
+  })).default([]),
+  /** scale: 並べて比べる量。value は最大値に対する比 0〜1 */
+  bars: z.array(z.object({
+    label: z.string(),
+    value: z.number().min(0).max(1),
+    readout: z.string(),
+  })).default([]),
+  note: z.string().optional(),
+});
+
 export const documentarySchema = z.object({
   /** ナレーション音声。無い場合は無音で尺だけ確保する */
   narration: z.string().optional(),
@@ -194,6 +220,7 @@ export const documentarySchema = z.object({
   rangeBars: z.array(rangeBarSchema).default([]),
   glyphs: z.array(glyphSchema).default([]),
   grids: z.array(gridSchema).default([]),
+  explainers: z.array(explainerSchema).default([]),
   /** 背景の落とし込み。0 で素のまま、1 で真っ暗 */
   backgroundDim: z.number().min(0).max(1).default(0.45),
 });
@@ -216,3 +243,4 @@ export type Timeline = z.infer<typeof timelineSchema>;
 export type RangeBar = z.infer<typeof rangeBarSchema>;
 export type Glyph = z.infer<typeof glyphSchema>;
 export type Grid = z.infer<typeof gridSchema>;
+export type Explainer = z.infer<typeof explainerSchema>;

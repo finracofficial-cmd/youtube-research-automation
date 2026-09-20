@@ -16,6 +16,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import chapters as chapters_mod  # noqa: E402
+import explainers as explainers_mod  # noqa: E402
 from autolayout import Line, build as build_overlays  # noqa: E402
 from autolayout import hold, schedule, to_props  # noqa: E402
 from script_engine.beats import get  # noqa: E402
@@ -233,6 +234,11 @@ def build(script: str, duration: float, kind: str, n_claims: int,
                 })
             at += sec
 
+    # 作図だけで語る区間。素材を覆うので、重なる札はこのあと外す
+    panels = explainers_mod.plan(
+        [Line(s["startSec"], s["durationSec"], s["text"]) for s in subtitles],
+        duration)
+
     # 画は等間隔の枠。manifest があれば実ファイル名（拡張子つき）を使う
     manifest = manifest or []
     shots = []
@@ -270,11 +276,15 @@ def build(script: str, duration: float, kind: str, n_claims: int,
     props: dict = {
         "bgmVolume": 0.12, "backgroundDim": 0.5, "shots": shots, "telops": [],
         "subtitles": subtitles, "chapters": chapters,
+        "explainers": panels,
         # 概要欄に貼る章。画面のカードと違い、0秒の「はじめに」も要る
         "outline": marks,
         "sourceLabels": source_labels(manifest, shots),
         **overlays,
     }
+    # 解説パネルは素材を覆う。重なる札と出典ラベルをここで外す
+    props = explainers_mod.clear(props, panels)
+
     if narration:
         props["narration"] = narration
     if bgm:

@@ -12,6 +12,7 @@ import type { DocumentaryProps } from "./schema";
 import { KenBurns } from "./components/KenBurns";
 import { Telop } from "./components/Telop";
 import { Subtitle } from "./components/Subtitle";
+import { ExplainerPanel } from "./components/Explainer";
 import { ChapterCard } from "./components/ChapterCard";
 import {
   BackgroundPlate, CardRow, ChipStack, DocumentCard, QuoteCard, SourceLabel,
@@ -49,6 +50,7 @@ export const Documentary: React.FC<DocumentaryProps> = ({
   rangeBars,
   glyphs,
   grids,
+  explainers,
   backgroundDim,
 }) => {
   const { fps } = useVideoConfig();
@@ -130,6 +132,17 @@ export const Documentary: React.FC<DocumentaryProps> = ({
         <Sequence key={`tl-${i}`} from={secToFrames(t.startSec, fps)}
           durationInFrames={secToFrames(t.durationSec, fps)}>
           <TimelineBar timeline={t} />
+        </Sequence>
+      ))}
+
+      {/* 画面いっぱいの解説パネル。素材を不透明に覆い、これだけで語る。
+          札より後ろに置くのは、Python側の抑止が漏れても覆い隠せるようにするため。
+          出典ラベルは Python 側でこの区間から外してある（写真が見えていない
+          のに帰属を出すと、出所の表示として誤りになる）。 */}
+      {explainers.map((e, i) => (
+        <Sequence key={`explainer-${i}`} from={secToFrames(e.startSec, fps)}
+          durationInFrames={secToFrames(e.durationSec, fps)}>
+          <ExplainerPanel explainer={e} />
         </Sequence>
       ))}
 

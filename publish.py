@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "video"))
 
 import chapters as ch  # noqa: E402
+import explainers as ex  # noqa: E402
 
 FOOTER = """\
 取り上げてほしい題材があれば、コメント欄でご提案ください。"""
@@ -66,6 +67,15 @@ def refresh(props: dict, script: str, claims: list) -> dict:
     build_props は字幕の時刻を字数から割った概算で作る。そのあと実際の
     発話に貼り直すので、章もそこで取り直さないと画面と概要欄がずれる。
     """
+    # パネルも引き直す。字幕の時刻が動いたので、置き場所も動く
+    panels = ex.plan(
+        [ex.Line(s["startSec"], s["durationSec"], s["text"])
+         for s in props.get("subtitles") or []],
+        max((s["startSec"] + s["durationSec"])
+            for s in props.get("subtitles") or [{"startSec": 0, "durationSec": 1}]))
+    props["explainers"] = panels
+    props = ex.clear(props, panels)
+
     outline = ch.locate(script, props.get("subtitles") or [], claims)
     if outline:
         props["outline"] = outline
