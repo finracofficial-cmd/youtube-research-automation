@@ -178,7 +178,7 @@ export const gridSchema = z.object({
 export const explainerSchema = z.object({
   startSec: z.number().min(0),
   durationSec: z.number().positive(),
-  kind: z.enum(["contrast", "timeline", "scale"]),
+  kind: z.enum(["contrast", "timeline", "scale", "model"]),
   heading: z.string(),
   /** contrast: 言われていること / 資料が言っていること */
   claim: z.string().optional(),
@@ -194,6 +194,19 @@ export const explainerSchema = z.object({
     value: z.number().min(0).max(1),
     readout: z.string(),
   })).default([]),
+  /** model: 寸法を入れた立体。参考chは "3D model · 146 m" と出典を添えて
+   *  自作の立体を出している。素材に無い画をここで作る。 */
+  shape: z.enum(["pyramid", "block", "column", "disc"]).default("block"),
+  dimension: z.object({
+    label: z.string(),
+    readout: z.string(),
+    /** 数え上げの到達値。単位はラベル側に持たせる */
+    value: z.number().default(0),
+  }).optional(),
+  /** 比較用の人。物の高さに対する背丈の比（0 なら置かない）。
+   *  固定の大きさで描くと縮尺の嘘になる。実測で5mの柱の横に、比率でいえば
+   *  0.9mにあたる人が立っていた。 */
+  humanRatio: z.number().min(0).max(1).default(0),
   note: z.string().optional(),
 });
 

@@ -181,6 +181,63 @@ def scale_at(lines: list[Line], i: int) -> dict | None:
     return {"kind": "scale", "heading": f"{unit}で並べる", "bars": bars}
 
 
+# 立体にできる形。台本に出てくる語から決める。
+_SHAPE = (
+    ("pyramid", re.compile(r"ピラミッド|角錐")),
+    ("column", re.compile(r"柱|石柱|オベリスク|塔|支柱|モアイ")),
+    ("disc", re.compile(r"円盤|円板|歯車|ディスク|皿")),
+    ("block", re.compile(r"石|岩|ブロック|直方体|箱|台座|壁")),
+)
+# 立体に入れる寸法。キロは入れない。実測で「250キロ運ばれた」から
+# 高さ250キロの石を立てようとした。あれは距離であって物の寸法ではない。
+_LENGTH = ("メートル", "センチ", "ミリ")
+# 物の寸法として上限。これを超える値は地形か距離で、立体に載らない。
+_MAX_METERS = 500.0
+# 比較に置く人の背丈（メートル）
+HUMAN_M = 1.7
+_DIM_LABEL = (("高さ", re.compile(r"高さ|標高|背丈")),
+              ("長さ", re.compile(r"長さ|全長")),
+              ("厚さ", re.compile(r"厚さ|厚み")),
+              ("直径", re.compile(r"直径|差し渡し")),
+              ("幅", re.compile(r"幅")))
+
+
+def model_at(lines: list[Line], i: int) -> dict | None:
+    """寸法の付いた立体を作る。
+
+    参考chは "3D model · 146 m" と出典を添えて自作の立体を出している。
+    Commons に動画はほぼ無く（実測で古代遺跡系242点中1点）、素材を探しても
+    この画は埋まらない。台本に寸法が書いてあるときだけ作る。
+    """
+    body = _text(lines[i])
+    shape = next((name for name, pat in _SHAPE if pat.search(body)), None)
+    if not shape:
+        return None
+    for m in _STAT.finditer(body):
+        u = m.group("u")
+        if u not in _LENGTH:
+            continue
+        value = _to_float(m.group("v"))
+        if value <= 0:
+            continue
+        # 寸法の語が無い数は、その物の大きさとは限らない。既定値を置かない
+        label = next((name for name, pat in _DIM_LABEL if pat.search(body)), "")
+        if not label:
+            continue
+        meters = value * {"メートル": 1.0, "センチ": 0.01, "ミリ": 0.001}[u]
+        if meters > _MAX_METERS:
+            continue
+        return {"kind": "model", "heading": "大きさを置いてみる", "shape": shape,
+                "dimension": {"label": label, "readout": f"{m.group('v')}{u}",
+                              "value": value},
+                # 人は物の高さに対する比で置く。固定の大きさで描くと
+                # 縮尺の嘘になる。比べる意味が無い大きさでは置かない。
+                "humanRatio": (round(HUMAN_M / meters, 4)
+                               if 2.0 <= meters <= 200.0 else 0.0),
+                "note": "台本の数値から起こした立体（実物の写しではない）"}
+    return None
+
+
 def plan(lines: list[Line], duration: float, *, panel_sec: float = PANEL_SEC,
          gap: float = MIN_GAP_SEC, limit: int = MAX_PANELS,
          per_kind: int = PER_KIND) -> list[dict]:
@@ -199,7 +256,7 @@ def plan(lines: list[Line], duration: float, *, panel_sec: float = PANEL_SEC,
             break
         # 少ない型から先に試す。直前と同じ型は最後に回す
         makers = [("contrast", contrast_at), ("timeline", timeline_at),
-                  ("scale", scale_at)]
+                  ("model", model_at), ("scale", scale_at)]
         makers.sort(key=lambda kv: (used.get(kv[0], 0),
                                     kv[0] == (out[-1]["kind"] if out else "")))
         for kind, maker in makers:

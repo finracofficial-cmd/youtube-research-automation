@@ -135,3 +135,47 @@ def test_cards_and_source_labels_under_a_panel_are_removed():
 def test_clearing_nothing_changes_nothing():
     props = {"stats": [{"startSec": 10.0, "durationSec": 6.0}]}
     assert ex.clear(dict(props), []) == props
+
+
+# ---- model（寸法つきの立体）----
+
+def test_a_stated_height_becomes_a_solid_with_a_dimension_line():
+    got = ex.model_at(lines("この石柱は高さ5メートルある。"), 0)
+    assert got["kind"] == "model" and got["shape"] == "column"
+    assert got["dimension"] == {"label": "高さ", "readout": "5メートル", "value": 5.0}
+
+
+def test_the_human_is_scaled_to_the_object_not_drawn_at_a_fixed_size():
+    """固定の大きさで描くと縮尺の嘘になる。
+
+    実測で5mの柱の横に、比率でいえば0.9mにあたる人が立っていた。
+    """
+    got = ex.model_at(lines("この石柱は高さ5メートルある。"), 0)
+    assert got["humanRatio"] == round(ex.HUMAN_M / 5.0, 4)
+    # 人と比べる意味が無い大きさでは置かない
+    assert ex.model_at(lines("この石は厚さ30センチある。"), 0)["humanRatio"] == 0.0
+
+
+def test_a_distance_is_not_a_dimension_of_the_object():
+    """実測で「250キロ運ばれた」から高さ250キロの石を立てようとした。"""
+    assert ex.model_at(lines("この石は250キロ運ばれた。"), 0) is None
+
+
+def test_a_number_with_no_dimension_word_is_not_a_size():
+    """寸法の語が無ければ、その数はその物の大きさとは限らない。
+
+    「石の近くに5メートルの溝がある」の5メートルは溝の話で、石ではない。
+    既定値を置かず、高さ・長さ・厚さ・幅・直径のどれかが書いてあるときだけ立てる。
+    """
+    assert ex.model_at(lines("この石の近くに5メートルの溝がある。"), 0) is None
+    assert ex.model_at(lines("石が5個あった。"), 0) is None
+    assert ex.model_at(lines("この石は高さ5メートルある。"), 0)["dimension"]["label"] == "高さ"
+
+
+def test_something_far_too_big_is_terrain_not_an_object():
+    assert ex.model_at(lines("この壁は長さ900メートルにわたる。"), 0) is None
+
+
+def test_the_panel_says_it_is_not_a_photograph():
+    got = ex.model_at(lines("この石柱は高さ5メートルある。"), 0)
+    assert "実物の写しではない" in got["note"]

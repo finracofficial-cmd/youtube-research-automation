@@ -222,6 +222,117 @@ const Scale: React.FC<{ e: ExplainerType; step: (i: number) => number }> = ({ e,
   );
 };
 
+/* 寸法を入れた立体。
+ *
+ * 参考chは "3D model · 146 m · lettering after the written accounts only" と
+ * 出典を添えて自作の立体を出している。Commons に動画はほぼ無く（実測で
+ * 古代遺跡系242点中1点）、素材を探しても埋まらない。ここで作る。
+ *
+ * 地は明るい灰。参考chも立体だけ明るい背景に置いていて、写真の区間と
+ * 見分けがつく。「これは資料ではなく、こちらで作った図」という合図になる。 */
+const STUDIO = "#c9cdc8";
+const SOLID = "#e8eae6";
+const SOLID_DARK = "#b9bdb8";
+
+const Silhouette: React.FC<{ h: number; x: number }> = ({ h, x }) => (
+  <g transform={`translate(${x}, ${560 - h}) scale(${h / 100})`} opacity={0.55}>
+    <circle cx={0} cy={12} r={11} fill="#5c6160" />
+    <rect x={-9} y={26} width={18} height={44} rx={6} fill="#5c6160" />
+    <rect x={-8} y={68} width={6} height={32} rx={3} fill="#5c6160" />
+    <rect x={2} y={68} width={6} height={32} rx={3} fill="#5c6160" />
+  </g>
+);
+
+const Model: React.FC<{ e: ExplainerType; step: (i: number) => number }> = ({ e, step }) => {
+  const grow = step(1);
+  const dim = step(2);
+  const count = step(3);
+  const H = 360 * grow;
+  const base = 560;
+  const cx = 420;
+  const target = e.dimension?.value ?? 0;
+  const shown = target
+    ? Math.round(target * Math.min(1, count) * 100) / 100
+    : 0;
+  const unit = (e.dimension?.readout ?? "").replace(/^[0-9.,]+/, "");
+
+  const body = () => {
+    switch (e.shape) {
+      case "pyramid":
+        return (
+          <>
+            <polygon points={`${cx},${base - H} ${cx - 250},${base} ${cx + 250},${base}`} fill={SOLID} />
+            <polygon points={`${cx},${base - H} ${cx + 250},${base} ${cx + 120},${base}`} fill={SOLID_DARK} />
+          </>
+        );
+      case "column":
+        return (
+          <>
+            <rect x={cx - 52} y={base - H} width={104} height={H} fill={SOLID} />
+            <rect x={cx + 28} y={base - H} width={24} height={H} fill={SOLID_DARK} />
+            <ellipse cx={cx} cy={base - H} rx={52} ry={14} fill="#f2f4f0" />
+          </>
+        );
+      case "disc":
+        return (
+          <>
+            <ellipse cx={cx} cy={base - H / 2} rx={210} ry={Math.max(10, H / 2)} fill={SOLID} />
+            <ellipse cx={cx} cy={base - H / 2 - 6} rx={210} ry={Math.max(8, H / 2 - 6)} fill="#f2f4f0" />
+          </>
+        );
+      default:
+        return (
+          <>
+            <rect x={cx - 170} y={base - H} width={340} height={H} fill={SOLID} />
+            <polygon points={`${cx - 170},${base - H} ${cx - 110},${base - H - 46} ${cx + 230},${base - H - 46} ${cx + 170},${base - H}`} fill="#f2f4f0" />
+            <polygon points={`${cx + 170},${base - H} ${cx + 230},${base - H - 46} ${cx + 230},${base - 46} ${cx + 170},${base}`} fill={SOLID_DARK} />
+          </>
+        );
+    }
+  };
+
+  return (
+    <div style={{ marginTop: 40 }}>
+      <svg viewBox="0 0 1100 620" style={{ width: "100%", height: 520 }}>
+        <rect x={0} y={0} width={1100} height={620} fill={STUDIO} />
+        <line x1={0} y1={base} x2={1100} y2={base} stroke="#a7aca6" strokeWidth={2} />
+        {body()}
+        {/* 人は物の高さに対する比で描く。固定値だと縮尺の嘘になる */}
+        {e.humanRatio > 0 && (
+          <Silhouette h={Math.max(14, H * e.humanRatio)} x={cx + 250} />
+        )}
+        {/* 寸法線。伸びきってから数字が上がる */}
+        <g opacity={dim} stroke="#3c4140" strokeWidth={2}>
+          <line x1={cx + 300} y1={base} x2={cx + 300} y2={base - H * dim} />
+          <line x1={cx + 288} y1={base} x2={cx + 312} y2={base} />
+          <line x1={cx + 288} y1={base - H} x2={cx + 312} y2={base - H} />
+        </g>
+        <text
+          x={cx + 330}
+          y={base - H / 2}
+          fill="#23262a"
+          fontFamily={theme.fontFamily}
+          fontSize={52}
+          opacity={count}
+        >
+          {shown.toLocaleString("ja-JP")}
+          <tspan fontSize={30}>{unit}</tspan>
+        </text>
+        <text
+          x={cx + 330}
+          y={base - H / 2 + 42}
+          fill="#4e5350"
+          fontFamily={theme.subtitleFontFamily}
+          fontSize={24}
+          opacity={count}
+        >
+          {e.dimension?.label ?? ""}
+        </text>
+      </svg>
+    </div>
+  );
+};
+
 export const ExplainerPanel: React.FC<{ explainer: ExplainerType }> = ({ explainer }) => {
   const fade = useFade(explainer.durationSec);
   const step = useStep(explainer.kind === "timeline" ? 0.4 : 0.6);
@@ -233,6 +344,7 @@ export const ExplainerPanel: React.FC<{ explainer: ExplainerType }> = ({ explain
         {explainer.kind === "contrast" && <Contrast e={explainer} step={step} />}
         {explainer.kind === "timeline" && <TimelineFull e={explainer} step={step} />}
         {explainer.kind === "scale" && <Scale e={explainer} step={step} />}
+        {explainer.kind === "model" && <Model e={explainer} step={step} />}
         {explainer.note && (
           <div
             style={{
