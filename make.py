@@ -198,6 +198,19 @@ def main() -> int:
                       tags=publish.tags_for(subject, b.get("hashtags"))),
         encoding="utf-8")
     print(f"概要欄に貼る文 -> {desc}")
+
+    # 題名の候補。選ぶのは人だが、毎回考え直すものではないので出しておく
+    if topic.exists():
+        import titles
+        import yaml as _yaml
+        spec = _yaml.safe_load(topic.read_text(encoding="utf-8")) or {}
+        body = titles.render(spec.get("subject") or name, spec.get("claims") or [],
+                             script.read_text(encoding="utf-8"))
+        title_path = out.with_name(f"{name}_titles.txt")
+        title_path.write_text(body + "\n", encoding="utf-8")
+        print()
+        print(body)
+        print(f"\n題名の候補 -> {title_path}")
     return 0
 
 

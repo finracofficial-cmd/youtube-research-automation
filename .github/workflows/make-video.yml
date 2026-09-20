@@ -136,6 +136,7 @@ jobs:
           path: |
             out/${{ env.NAME }}.mp4
             out/${{ env.NAME }}_description.txt
+            out/${{ env.NAME }}_titles.txt
             video/public/shots_${{ env.NAME }}/credits.txt
             video/props_${{ env.NAME }}.json
           retention-days: 30
@@ -160,4 +161,5 @@ jobs:
           files: |
             out/${{ env.NAME }}.mp4
             out/${{ env.NAME }}_description.txt
+            out/${{ env.NAME }}_titles.txt
             video/public/shots_${{ env.NAME }}/credits.txt
