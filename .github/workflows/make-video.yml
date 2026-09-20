@@ -29,8 +29,12 @@ on:
         description: 取り上げる主張の数
         required: false
         default: "5"
+      broll:
+        description: 繰り返す区間にCommonsのイメージ映像を入れる
+        type: boolean
+        default: true
       generate_images:
-        description: 繰り返している区間を生成画像で埋める
+        description: 残った繰り返しを生成画像で埋める
         type: boolean
         default: true
       bgm:
@@ -107,6 +111,7 @@ jobs:
           [ -n "${{ inputs.name }}" ] && args+=(--name "${{ inputs.name }}")
           [ -n "${{ inputs.voice }}" ] && args+=(--voice "${{ inputs.voice }}")
           [ -n "${{ inputs.bgm }}" ] && args+=(--bgm "${{ inputs.bgm }}")
+          [ "${{ inputs.broll }}" = "true" ] && args+=(--broll)
           [ "${{ inputs.generate_images }}" = "true" ] && args+=(--generate-images)
           python3 make.py "${{ inputs.script }}" "${args[@]}"
           # 後段（確認・Release）が使う名前を控える

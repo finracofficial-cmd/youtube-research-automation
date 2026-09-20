@@ -423,8 +423,24 @@ _OFFTOPIC = re.compile(
     re.I)
 
 
+def broll_videos(term: str, *, limit: int = 3, want: int = 12) -> list[Asset]:
+    """題材そのものではない、雰囲気の映像を探す。
+
+    題材固有の動画は数が足りない（実測で10題材に8本）。汎用の語なら
+    Commons に十分ある（「ancient ruins」「desert landscape」で各10件以上）。
+
+    ただし別の場所の映像を、題材を語っている間に流すことになる。見た人は
+    それが題材そのものだと受け取る。だから illustrative の印を付けて、
+    画面に「イメージ映像」と出す。テレビが同じ理由で同じことをしている。
+    """
+    got = commons_videos(term, limit=limit, want=want, require_term=False)
+    for a in got:
+        a.illustrative = True
+    return got
+
+
 def commons_videos(term: str, *, limit: int = 4, want: int = 12,
-                   width: int = 1920) -> list[Asset]:
+                   width: int = 1920, require_term: bool = True) -> list[Asset]:
     """題材の動画を Commons のファイル検索から探す。
 
     記事に貼られている画像だけを見ていたとき、動画は古代遺跡系242点のうち
@@ -449,7 +465,7 @@ def commons_videos(term: str, *, limit: int = 4, want: int = 12,
              and not _TALKING.search(n)
              and not _OFFTOPIC.search(n)
              and not _looks_like_a_person(n)
-             and any(k.lower() in n.lower() for k in keys)]
+             and (not require_term or any(k.lower() in n.lower() for k in keys))]
     if not names:
         return []
 

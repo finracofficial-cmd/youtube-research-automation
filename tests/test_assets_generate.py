@@ -95,3 +95,41 @@ def test_a_video_shot_is_marked_so_the_renderer_plays_it(tmp_path):
                    cwd=root, check=True, capture_output=True)
     shots = json.loads(out.read_text(encoding="utf-8"))["shots"]
     assert shots and all(s["kind"] == "video" for s in shots)
+
+
+# ---- イメージ映像 ----
+
+def test_broll_is_marked_as_illustrative():
+    """題材そのものではない映像。印が無いと、見た人は題材だと受け取る。"""
+    from assets.sources import Asset
+    a = Asset(source="commons", title="x.webm", url="", page_url="",
+              license="CC BY 3.0", author="Someone", kind="video")
+    assert a.illustrative is False
+    a.illustrative = True
+    assert a.to_dict()["illustrative"] is True
+
+
+def test_the_screen_says_it_is_illustrative(tmp_path):
+    """テレビが同じ理由で同じ断りを入れている。"""
+    import sys as _sys
+    from pathlib import Path as _P
+    _sys.path.insert(0, str(_P(__file__).resolve().parents[1] / "video"))
+    from build_props import source_labels
+
+    man = [{"file": "broll007.webm", "author": "Someone", "license": "CC BY 3.0",
+            "illustrative": True},
+           {"file": "003.jpg", "author": "Other", "license": "CC BY 2.0"}]
+    shots = [{"src": "s/broll007.webm", "startSec": 0.0, "durationSec": 8.0},
+             {"src": "s/003.jpg", "startSec": 8.0, "durationSec": 8.0}]
+    got = source_labels(man, shots)
+    assert got[0]["text"].startswith("イメージ映像")
+    assert "Someone / CC BY 3.0" in got[0]["text"]
+    # 題材そのものの画には付けない
+    assert not got[1]["text"].startswith("イメージ映像")
+
+
+def test_broll_terms_do_not_repeat_immediately():
+    """同じ映像が続くと、直そうとしていた「飽き」がそのまま残る。"""
+    from assets.imagegen import BROLL_TERMS
+    assert len(BROLL_TERMS) >= 8
+    assert len(set(BROLL_TERMS)) == len(BROLL_TERMS)

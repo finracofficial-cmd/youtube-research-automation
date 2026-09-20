@@ -123,6 +123,57 @@ def segments_needing_art(manifest: list[dict]) -> list[int]:
     return out
 
 
+# 雰囲気の映像を探す語。題材固有の動画は数が足りない（実測で10題材に8本）。
+# 汎用の語なら Commons に十分ある（12語で110件）。順に回して同じ映像が
+# 続かないようにする。
+BROLL_TERMS = (
+    "ancient ruins", "desert landscape", "night sky stars", "ocean waves",
+    "cave interior", "mountain fog", "sand dunes", "aerial landscape",
+    "excavation archaeology", "forest mist", "storm clouds", "river valley",
+)
+
+
+def fill_broll(manifest: list[dict], out_dir: Path, *, limit: int = 8,
+               pause: float = 1.2) -> list[dict]:
+    """引き継ぎで埋めている区間に、雰囲気の映像を入れる。
+
+    生成より先に試す。実写の方が「一次資料に当たる」看板と噛み合うし、
+    費用もかからない。題材そのものではないので「イメージ映像」と出る
+    （wikipage.broll_videos が印を付け、build_props が表示する）。
+    """
+    from .cli import _download
+    from .wikipage import broll_videos
+
+    want = segments_needing_art(manifest)[:limit]
+    if not want:
+        return manifest
+    by_segment = {e["segment"]: e for e in manifest}
+    made = 0
+    for seg in want:
+        term = BROLL_TERMS[made % len(BROLL_TERMS)]
+        try:
+            clips = broll_videos(term, limit=1)
+        except Exception as exc:  # noqa: BLE001 - 映像が無くても静止画で成立する
+            print(f"  [{seg:03d}] 映像を探せず: {exc}")
+            continue
+        if not clips:
+            continue
+        asset = clips[0]
+        got = _download(asset, out_dir / f"broll{seg:03d}")
+        if not got:
+            continue
+        rec = asset.to_dict()
+        rec.update({"file": got.name, "segment": seg, "query": f"(イメージ映像 {term})",
+                    "needs_review": False, "carried": False,
+                    "n_segments": by_segment[seg].get("n_segments")})
+        by_segment[seg] = rec
+        made += 1
+        print(f"  [{seg:03d}] イメージ映像 {got.name}  {asset.title[:44]}")
+        time.sleep(pause)
+    print(f"\n{made}本の映像で補った（繰り返していた {len(want)}区間のうち）")
+    return [by_segment[k] for k in sorted(by_segment)]
+
+
 def fill(manifest: list[dict], segments: list[str], out_dir: Path,
          *, limit: int = 60, pause: float = 1.0,
          quality: str = DEFAULT_QUALITY) -> list[dict]:

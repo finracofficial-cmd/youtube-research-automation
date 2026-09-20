@@ -50,6 +50,10 @@ def main() -> int:
     ap.add_argument("--still", type=int, help="動画の代わりに指定フレームの静止画を出す")
     ap.add_argument("--generate-images", action="store_true",
                     help="同じ画が続く区間を生成画像で埋める（OPENAI_API_KEY が要る）")
+    ap.add_argument("--broll", action="store_true",
+                    help="繰り返している区間にCommonsのイメージ映像を入れる")
+    ap.add_argument("--max-broll", type=int, default=8,
+                    help="入れるイメージ映像の本数")
     ap.add_argument("--image-quality", default="medium",
                     choices=["low", "medium", "high"],
                     help="生成画像の画質。高いほど出力トークンが増え費用が上がる")
@@ -86,6 +90,15 @@ def main() -> int:
         raise SystemExit(f"--skip-assets だが検索語が無い: {spec}")
 
     shots_path = ROOT / "video" / "public" / shots_dir
+    if a.broll:
+        print("\n■ 同じ画が続く区間にイメージ映像を入れる")
+        from assets.imagegen import fill_broll
+        man = shots_path / "manifest.json"
+        entries = json.loads(man.read_text(encoding="utf-8"))
+        entries = fill_broll(entries, shots_path, limit=a.max_broll)
+        man.write_text(json.dumps(entries, ensure_ascii=False, indent=1),
+                       encoding="utf-8")
+
     if a.generate_images:
         print("\n■ 同じ画が続く区間を生成で埋める")
         from assets.imagegen import fill

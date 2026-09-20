@@ -44,6 +44,9 @@ class Asset:
     # 構成すると参考chとの差が一番出るところになる。
     kind: str = "image"
     durationSec: float = 0.0
+    # 題材そのものではない雰囲気の映像。画面に「イメージ映像」と出す。
+    # 付けずに流すと、見た人はそれが題材そのものだと受け取る。
+    illustrative: bool = False
 
     def to_dict(self) -> dict:
         return asdict(self)

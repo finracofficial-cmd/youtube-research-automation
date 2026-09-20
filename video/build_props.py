@@ -93,6 +93,10 @@ def source_labels(manifest: list[dict], shots: list[dict]) -> list[dict]:
         text = f"{author} / {lic}".strip(" /") if author != "不明" else lic
         if not text:
             continue
+        # 題材そのものではない映像。付けずに流すと、見た人はそれが題材だと
+        # 受け取る。テレビが同じ理由で同じ断りを入れている。
+        if entry.get("illustrative"):
+            text = f"イメージ映像　{text}"
         # 同じ画が続く間は1枚の帯にまとめる。同じ文字が点滅しないように
         if out and out[-1]["text"] == text and \
                 abs(out[-1]["startSec"] + out[-1]["durationSec"] - shot["startSec"]) < 0.05:
