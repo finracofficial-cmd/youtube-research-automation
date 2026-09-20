@@ -16,8 +16,10 @@ import urllib.parse
 import urllib.request
 from dataclasses import dataclass, asdict
 
-CONTACT = "research@example.com"
-UA = f"youtube-research-automation/0.1 (research; contact: {CONTACT})"
+# Wikimedia は実在の連絡先を求める。research@example.com のような置き場所の
+# 文字列だと、APIは通っても実体の取得が403で弾かれる（実測で動画が落ちた）。
+CONTACT = "https://github.com/finracofficial-cmd/youtube-research-automation"
+UA = f"youtube-research-automation/0.1 ({CONTACT})"
 
 # 使ってよいライセンス。ここに無いものは落とす。
 ALLOWED = (

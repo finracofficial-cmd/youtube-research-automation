@@ -19,7 +19,10 @@ from pathlib import Path
 
 from .wikipage import entity_types, is_concrete, is_entity, is_meta
 
-UA = "youtube-research-automation/0.1 (research; contact: research@example.com)"
+# Wikimedia は実在の連絡先を求める。research@example.com のような
+# 置き場所の文字列だと、APIは通っても実体の取得が403で弾かれる
+# （実測で動画の取得が落ちた）。連絡先はリポジトリのURLにする。
+UA = "youtube-research-automation/0.1 (https://github.com/finracofficial-cmd/youtube-research-automation)"
 
 # 同じ語を何度も引き直さないための控え。題材を変えても語は重なるし、
 # 検索語の選び方を試すたびに全部引き直していては手数が合わない。

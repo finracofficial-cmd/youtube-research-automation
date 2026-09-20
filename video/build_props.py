@@ -248,10 +248,13 @@ def build(script: str, duration: float, kind: str, n_claims: int,
         entry = _for_time((start + duration / n / 2) / duration, manifest, n_seg)
         src = (f"{shots_dir}/{entry['file']}" if entry
                else f"{shots_dir}/{i:03d}.jpg")
+        # 動画は Img で指すと黒い枠になる。描画側で出し分けるので種別を渡す
+        video = src.lower().endswith((".webm", ".ogv", ".mp4"))
         shots.append({
             "startSec": round(start, 3),
             "durationSec": round(duration / n, 3),
             "src": src,
+            "kind": "video" if video else "image",
             "inset": _inset(entry),
             "from": {"scale": 1.0 if zoom_in else 1.18, "x": 0, "y": 0},
             "to": {"scale": 1.18 if zoom_in else 1.0, "x": 0.2 if zoom_in else -0.2, "y": 0},

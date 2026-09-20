@@ -20,7 +20,10 @@ import urllib.request
 
 from .sources import Asset, _clean, _filepath_url, license_ok
 
-UA = "youtube-research-automation/0.1 (research; contact: research@example.com)"
+# Wikimedia は実在の連絡先を求める。research@example.com のような
+# 置き場所の文字列だと、APIは通っても実体の取得が403で弾かれる
+# （実測で動画の取得が落ちた）。連絡先はリポジトリのURLにする。
+UA = "youtube-research-automation/0.1 (https://github.com/finracofficial-cmd/youtube-research-automation)"
 EN_API = "https://en.wikipedia.org/w/api.php"
 COMMONS_API = "https://commons.wikimedia.org/w/api.php"
 WD_API = "https://www.wikidata.org/w/api.php"
@@ -359,8 +362,9 @@ def _looks_like_a_person(title: str) -> bool:
 VIDEO_EXT = (".webm", ".ogv", ".mp4")
 # 動画1本の上限。Commons には数百MBのものがあり、取得で実行時間を食う。
 MAX_VIDEO_BYTES = 60 * 1024 * 1024
-# 短すぎる動画は1カットを埋められない
-MIN_VIDEO_SEC = 3.0
+# 1カット（既定8秒）に満たない動画は使わない。描画側に繰り返しが無く、
+# 足りない分は最後のコマで止まる。止まった動画は静止画より悪い。
+MIN_VIDEO_SEC = 8.0
 
 
 def is_video(title: str) -> bool:

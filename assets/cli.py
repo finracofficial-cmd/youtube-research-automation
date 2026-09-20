@@ -62,7 +62,17 @@ def _sniff_ext(data: bytes) -> str:
         return ".webp"
     if data[:6] in (b"GIF87a", b"GIF89a"):
         return ".gif"
+    # 動画。Commons の CC 動画はここを通る
+    if data[:4] == b"\x1aE\xdf\xa3":          # Matroska/WebM
+        return ".webm"
+    if data[:4] == b"OggS":                     # Ogg (Theora)
+        return ".ogv"
+    if data[4:8] == b"ftyp":                    # MP4
+        return ".mp4"
     return ""
+
+
+VIDEO_SUFFIX = (".webm", ".ogv", ".mp4")
 
 
 def _download(asset: Asset, stem: Path) -> Path | None:
@@ -80,6 +90,8 @@ def _download(asset: Asset, stem: Path) -> Path | None:
     dst = stem.with_suffix(ext)
     dst.write_bytes(data)
 
+    if dst.suffix.lower() in VIDEO_SUFFIX:
+        return dst  # 動画は1枚の平均輝度で測れない
     luma = mean_luma(dst)
     if luma is not None and luma < MIN_MEAN_LUMA:
         dst.unlink(missing_ok=True)  # 暗すぎる／透明。背景に使えない

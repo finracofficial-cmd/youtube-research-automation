@@ -1,12 +1,35 @@
 import React from "react";
-import { AbsoluteFill, Img, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import {
+  AbsoluteFill,
+  Img,
+  OffthreadVideo,
+  interpolate,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 import type { Shot } from "../schema";
 import { theme } from "../theme";
 
 /**
- * 静止画に緩やかな寄り引きを付ける。
+ * 素材に緩やかな寄り引きを付ける。
  * 素材が静止画中心の構成なので、ここが動きのほぼ全てになる。
+ *
+ * 動画の素材は Img では描けない（黒い枠になる）。OffthreadVideo に回し、
+ * 音は鳴らさない（ナレーションと混ざる）。繰り返しは持たないので、カットより
+ * 短い動画は最後のコマで止まる。取得側でカット長に満たない動画を外してある。
  */
+const Media: React.FC<{
+  kind: string;
+  src: string;
+  style: React.CSSProperties;
+}> = ({ kind, src, style }) =>
+  kind === "video" ? (
+    <OffthreadVideo src={src} style={style} muted />
+  ) : (
+    <Img src={src} style={style} />
+  );
+
+/** 1カット分の画。動画なら再生し、静止画なら寄り引きする。 */
 export const KenBurns: React.FC<{ shot: Shot; resolve: (s: string) => string }> = ({
   shot,
   resolve,
@@ -43,7 +66,8 @@ export const KenBurns: React.FC<{ shot: Shot; resolve: (s: string) => string }> 
           細長い窓のようになる。同じ画をぼかして敷き、色をつなげる。 */}
       {inset > 0 ? (
         <AbsoluteFill style={{ overflow: "hidden" }}>
-          <Img
+          <Media
+            kind={shot.kind}
             src={resolve(shot.src)}
             style={{
               width: "100%",
@@ -58,7 +82,8 @@ export const KenBurns: React.FC<{ shot: Shot; resolve: (s: string) => string }> 
       {/* AbsoluteFill は width:100% を持つ。left/right だけ指定すると
           幅が縮まず右へずれて溢れるので、width を auto に戻す。 */}
       <AbsoluteFill style={{ overflow: "hidden", left: pad, right: pad, width: "auto" }}>
-        <Img
+        <Media
+          kind={shot.kind}
           src={resolve(shot.src)}
           style={{
             width: "100%",

@@ -18,6 +18,8 @@ export const shotSchema = z.object({
   credit: z.string().optional(),
   /** 画を内側に嵌めて左右を落とす。縦長の資料や、話を切り替えるときに使う */
   inset: z.number().min(0).max(0.35).default(0),
+  /** "video" なら動画として再生する。Img で動画を指すと黒い枠になる。 */
+  kind: z.enum(["image", "video"]).default("image"),
 });
 
 export const telopSchema = z.object({
