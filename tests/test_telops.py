@@ -98,10 +98,15 @@ def test_fill_gaps_ignores_gaps_shorter_than_the_minimum():
 
 
 def test_fill_gaps_stops_at_the_reference_density():
-    """参考動画は67%で、9%は何も載っていない。埋めきると密度の方が外れる。"""
+    """参考chのストーリーボードを取って数え直した値で止める。
+
+    54コマ中51コマに札が出ていた（94%）。以前ここは67%で「参考動画の実測」
+    と書いてあったが、フレームを見ずに出した数字だった。何も載っていないのは
+    暗転などごく一部しかない。埋めきらないことだけは残す。
+    """
     lines = _lines(60, step=5.0)   # 300秒
     got = fill_gaps([], lines, 300.0)
-    assert coverage(got, 300.0) <= 0.70
+    assert 0.85 <= coverage(got, 300.0) <= 0.96
 
 
 def test_fill_gaps_does_not_repeat_a_word_back_to_back():
@@ -118,6 +123,7 @@ def test_phrase_rejects_words_cut_mid_token():
     実測で「比較的新しい」から「比較的新」が出た。
     """
     assert phrase("比較的新しい時代のものです。") is None
+    # 副詞の語幹。漢字2文字を受けるようにした副作用（実測で「非常」が出た）
     assert phrase("非常に興味深い結果でした。") is None
 
 

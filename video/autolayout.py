@@ -24,7 +24,11 @@ MAX_DURATION = 7.5
 MAX_CONCURRENT = 3      # 同時に出す部品の上限。これ以上は読めない
 ZONE_GAP = 0.4          # 同じゾーンを使い回すまでの最低間隔
 MAX_HOLD = 16.0         # 1つの部品を出しっぱなしにできる上限
-TARGET_COVERAGE = 0.67  # 参考動画の実測。埋めきらずここで止める
+# 参考chのストーリーボードを取って数え直した値。54コマ中51コマに札が出て
+# いた（ヴォイニッチ回4シート、ピラミッド回2シート）。
+# 以前ここは 0.67 で「参考動画の実測」と書いてあったが、フレームを見ずに
+# 出した数字だった。何も載っていないのは暗転などごく一部しかない。
+TARGET_COVERAGE = 0.94
 
 _DECLARATION = re.compile(r"当チャンネル")
 
@@ -294,18 +298,49 @@ def schedule(cues: list[Cue], max_concurrent: int = MAX_CONCURRENT) -> list[Cue]
 
     同じゾーンは同時に1つまで。違うゾーンなら同時に出す。
     画面全体で MAX_CONCURRENT を超えないようにする。
+
+    中央だけは例外で、他と同時に出さない。中央の部品は画面いっぱいに文字を
+    出すので、左右の札と重なる。実測で巨大な「パロ」が「約10メートル」と
+    「82トン」の上に乗っていた。
     """
     kept: list[Cue] = []
     zone_free: dict[str, float] = {}
     for cue in sorted(cues, key=lambda c: (c.startSec, c.kind)):
         if cue.startSec < zone_free.get(cue.zone, -1e9):
             continue
-        overlapping = sum(1 for k in kept if k.startSec < cue.endSec and cue.startSec < k.endSec)
-        if overlapping >= max_concurrent:
+        clash = [k for k in kept if k.startSec < cue.endSec and cue.startSec < k.endSec]
+        if len(clash) >= max_concurrent:
+            continue
+        if cue.zone == "center" and clash:
+            continue
+        if any(k.zone == "center" for k in clash):
             continue
         kept.append(cue)
         zone_free[cue.zone] = cue.endSec + ZONE_GAP
     return kept
+
+
+def cap_concurrent(cues: list[Cue], max_concurrent: int = MAX_CONCURRENT) -> list[Cue]:
+    """出しっぱなしで増えた重なりを、終わりを早めて上限に戻す。
+
+    hold() は同じゾーンの次の部品まで長さを伸ばすが、他のゾーンとの重なりを
+    見ていない。実測で4つが同時に出て、画面が埋まっていた。落とすのではなく
+    終わりを早める。落とすと、その語が一度も出ないことになる。
+    """
+    out = sorted(cues, key=lambda c: (c.startSec, c.zone))
+    for i, cue in enumerate(out):
+        for later in out[i + 1:]:
+            if later.startSec >= cue.endSec:
+                break
+            here = [k for k in out if k.startSec <= later.startSec < k.endSec]
+            over = len(here) - max_concurrent
+            exclusive = any(k.zone == "center" for k in here) and len(here) > 1
+            if over >= 0 or exclusive:
+                # 先に出ている方を、後から出る方の手前で切る
+                cue.durationSec = max(MIN_DURATION,
+                                      round(later.startSec - ZONE_GAP - cue.startSec, 3))
+                break
+    return out
 
 
 def hold(cues: list[Cue], duration: float, max_hold: float = MAX_HOLD) -> list[Cue]:
@@ -389,7 +424,10 @@ _PHRASE = re.compile(
     r"|((?:[ァ-ヶー]{2,}(?:・[ァ-ヶー]{2,})+|[ァ-ヶー]{3,})[一-龥]{2,6})"
     r"|([一-龥]{2,8}(?:文書|手稿|写本|遺跡|神殿|地上絵|王朝|帝国|事件|鉄柱|電池|地図))"
     r"|((?:[ァ-ヶー]{2,}(?:・[ァ-ヶー]{2,})+|[ァ-ヶー]{4,}))"
-    r"|([一-龥]{3,6})")
+    # 漢字2文字まで受ける。3文字以上に絞っていたら、語句が取れる行が30%
+    # しか無く、被覆率がそこで頭打ちになっていた（実測）。「人力」「石柱」
+    # 「論文」「氷河」のような2文字語が全部落ちていた。
+    r"|([一-龥]{2,6})")
 
 # どの台本にも出るので、出しても情報が増えない語
 _FLAT = {"可能性", "研究者", "専門家", "一次資料", "当チャンネル", "説明", "解説",
@@ -399,7 +437,22 @@ _FLAT = {"可能性", "研究者", "専門家", "一次資料", "当チャンネ
          # 単位。数から切り離して大書きしても何も言っていない
          "メートル", "センチ", "ミリ", "キロ", "グラム", "トン", "パーセント",
          "ボルト", "アンペア", "万年前", "個以上", "観光客", "研究チーム",
-         "チャンネル", "当チャンネル", "再利用", "動画"}
+         "チャンネル", "当チャンネル", "再利用", "動画",
+         # 位置・時点・程度だけを指す語。大書きしても何も言っていない。
+         # 漢字2文字を受けるようにしたら一気に出てきた（実測で「場所」
+         # 「最後」「近年」「内側」が大字で並んだ）。
+         "場所", "地点", "付近", "周辺", "内側", "外側", "上部", "下部",
+         "中央", "中心", "一部", "全体", "両側", "片側", "表面", "裏面",
+         "最後", "最初", "最大", "最小", "最新", "最古", "近年", "過去",
+         "以来", "当初", "今回", "今日", "現地", "現代", "後年", "前後",
+         "議論", "検証", "調査", "分析", "検討", "考察", "判断", "評価",
+         "候補", "対象", "手法", "方法", "方針", "形式", "種類", "程度",
+         "本物", "偽物", "数字", "数値", "値段", "名前", "呼称",
+         # 副詞の語幹。「非常に」「当然ながら」の頭だけを大書きしても
+         # 語になっていない。漢字2文字を受けた副作用（実測で「非常」）。
+         "非常", "相当", "結局", "当然", "絶対", "意外", "単純", "完全",
+         "極端", "明確", "正確", "十分", "若干", "多少", "一気", "同時",
+         "直接", "間接", "突然", "次第", "一応", "本来", "元来", "従来"}
 
 
 # 語句の直後に来てよい文字。これ以外が続くなら語の途中で切れている。
@@ -413,27 +466,54 @@ def _ends_cleanly(text: str, end: int) -> bool:
 
 
 def _starts_cleanly(text: str, start: int) -> bool:
-    """直前が数字なら、単位や助数詞を数から切り離した断片。
+    """語の途中から始まっていないか。
 
-    実測で「50万年前」から「万年前」、「30個以上」から「個以上」が出た。
-    語ではないので大書きしても意味を成さない。
+    直前が数字なら、単位や助数詞を数から切り離した断片になる。
+    直前が同じ字種（片仮名・漢字）なら、語の途中で切った断片になる。
+    実測で「高さ5メートルの石柱。」から「ートルの石柱」が出た。弾いた候補の
+    先を1文字進めて探し直すので、その位置から片仮名の途中で当たっていた。
     """
-    return start == 0 or not re.match(r"[0-9０-９]", text[start - 1])
+    if start == 0:
+        return True
+    prev, here = text[start - 1], text[start]
+    if re.match(r"[0-9０-９]", prev):
+        return False
+    for cls in (r"[ァ-ヶー]", r"[一-龥]"):
+        if re.match(cls, prev) and re.match(cls, here):
+            return False
+    return True
 
 
 def _phrases(text: str) -> list[str]:
-    """その行から取り出せる語句を全部返す。"""
-    out = []
-    for m in _PHRASE.finditer(text):
+    """その行から取り出せる語句を全部返す。
+
+    弾いた候補の範囲は、その先頭の1文字だけ進めてもう一度探す。finditer で
+    回すと、弾いた候補がその範囲を食い潰して中の良い語まで消える。実測で
+    「高さ5メートルの石柱。」から何も取れなかった。「メートルの石柱」が
+    先に当たり、数字始まりで弾かれ、「石柱」を見る機会が無くなっていた。
+    """
+    out: list[str] = []
+    at = 0
+    while at < len(text):
+        m = _PHRASE.search(text, at)
+        if not m:
+            break
         got = next((g for g in m.groups() if g), None)
-        if not got or got in _FLAT:
-            continue
-        if m.group(1) is None and not (
-                _ends_cleanly(text, m.end()) and _starts_cleanly(text, m.start())):
-            continue
-        if got in text:
+        ok = bool(got) and got not in _FLAT and got in text
+        if ok and m.group(1) is None:
+            ok = _ends_cleanly(text, m.end()) and _starts_cleanly(text, m.start())
+        if ok:
             out.append(got)
+            at = m.end()
+        else:
+            at = m.start() + 1
     return out
+
+
+def _best(text: str) -> str | None:
+    """その行で一番長い語句。freq を渡さないときの選び方。"""
+    got = _phrases(text)
+    return max(got, key=len) if got else None
 
 
 def phrase(text: str, freq: dict[str, int] | None = None) -> str | None:
@@ -448,16 +528,7 @@ def phrase(text: str, freq: dict[str, int] | None = None) -> str | None:
     if freq is not None:
         got = sorted(_phrases(text), key=lambda w: (freq.get(w, 0), -len(w)))
         return got[0] if got else None
-    best = None
-    for m in _PHRASE.finditer(text):
-        got = next((g for g in m.groups() if g), None)
-        if not got or got in _FLAT:
-            continue
-        # 鉤括弧以外は、語の切れ目で終わっているか確かめる
-        if m.group(1) is None and not _ends_cleanly(text, m.end()):
-            continue
-        if best is None or len(got) > len(best):
-            best = got
+    best = _best(text)
     if best is None or best not in text:  # 念のため。逐語でなければ出さない
         return None
     return best
@@ -469,7 +540,7 @@ def fill_gaps(cues: list[Cue], lines: list[Line], duration: float,
     """部品が何も無い時間帯に、語句テロップを置く。
 
     データ由来の部品は、台本に根拠となる値がある所にしか出せない。
-    そこだけ埋めた結果、被覆率は42%で頭打ちになった（参考は67%）。
+    そこだけ埋めた結果、被覆率は42%で頭打ちになった。参考chは実測94%。
     残りを埋めているのは、参考動画では語りの語句そのものの大字だった。
     逐語なので音声と矛盾せず、密度だけを上げられる。
     """
@@ -497,7 +568,7 @@ def fill_gaps(cues: list[Cue], lines: list[Line], duration: float,
         gaps.append((at, duration))
 
     out = list(cues)
-    # 参考動画は67%で、9%は何も載っていなかった。埋めきると密度が逆に外れる。
+    # 参考chは実測94%。何も載っていないのは暗転などごく一部だけだった。
     filled = coverage(cues, duration) * duration
     budget = max(0.0, target * duration - filled)
     for gs, ge in gaps:
@@ -542,5 +613,5 @@ def coverage(cues: list[Cue], duration: float) -> float:
 def build(lines: list[Line], codes: list[str] | None = None,
           duration: float | None = None) -> dict:
     total = duration or (lines[-1].startSec + lines[-1].durationSec if lines else 0.0)
-    cues = hold(schedule(classify(lines)), total)
+    cues = cap_concurrent(hold(schedule(classify(lines)), total))
     return to_props(fill_gaps(cues, lines, total), codes)
