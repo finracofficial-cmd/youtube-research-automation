@@ -29,11 +29,12 @@ def test_it_counts_what_the_script_actually_concluded():
     assert (down, up) == (4, 1)
 
 
-def test_the_first_candidate_carries_the_pattern_that_worked():
+def test_without_a_span_the_first_candidate_falls_back_to_the_question():
+    """期間が書いていない台本では、数字を作らない。"""
     got = titles.propose("ヴォイニッチ手稿", ["a", "b", "c", "d", "e"], CLOSING_MIXED)
     assert got[0].startswith("【どこまで分かっているのか】")
-    assert "ヴォイニッチ手稿" in got[0]        # 固有名詞は検索で拾われる
-    assert "1つ" in got[0] and "4つ" in got[0]  # 数字が入る
+    assert "ヴォイニッチ手稿" in got[0]   # 固有名詞は検索で拾われる
+    assert "年" not in got[0]            # 台本に無い期間を書かない
 
 
 def test_counts_are_not_claimed_when_the_script_does_not_conclude_them():
@@ -58,3 +59,50 @@ def test_every_candidate_names_the_subject():
 def test_the_report_shows_how_long_each_one_is():
     body = titles.render("巨石遺跡", ["a"], CLOSING_MIXED)
     assert "字（スマホは28字前後で切れる）" in body
+
+
+# ---- 当たった題が持っていた装置 ----
+
+VOYNICH_HEAD = """ヴォイニッチ手稿。
+240ページを超える謎の書物。
+
+本文は独自の文字体系で記されている。
+未解読のまま600年近く残っている。
+1912年に古書商ヴォイニッチが入手した。
+
+""" + CLOSING_MIXED
+
+
+def test_an_evaluative_word_is_taken_from_the_script():
+    """参考chの当たった題は「奇書」を付けていた。
+
+    評価語が1つあるだけで、題材の名前が「物」から「見るべきもの」になる。
+    """
+    assert titles.epithet(VOYNICH_HEAD) == "奇書"
+    assert titles.epithet("石の話をする。") == ""
+
+
+def test_a_calendar_year_is_not_a_span():
+    """実測で「1912年に発見され」から「1912年、誰も読めていない」が出た。
+
+    西暦を期間として出すと、題が事実と食い違う。期間の印を必須にする。
+    """
+    assert titles.span(VOYNICH_HEAD) == "600年"
+    assert titles.span("1912年に入手された。今も不明だ。") == ""
+
+
+def test_the_bracket_stays_short_enough_to_read():
+    """実測で括弧が51字の題が出た。"""
+    for t in titles.propose("ヴォイニッチ手稿", ["a"] * 5, VOYNICH_HEAD):
+        if not t.startswith("【"):
+            continue  # 3案目は括弧が末尾（分野名）なので対象外
+        assert len(t.split("】")[0]) <= 18, t
+
+
+def test_the_first_candidate_carries_all_four_devices():
+    """評価語・大きい数字・限界の問い・固有名詞。"""
+    got = titles.propose("ヴォイニッチ手稿", ["a"] * 5, VOYNICH_HEAD)[0]
+    assert "奇書" in got            # 評価語
+    assert "600年" in got           # 大きい数字
+    assert "読めていない" in got     # 限界の問い
+    assert "ヴォイニッチ手稿" in got  # 固有名詞

@@ -69,34 +69,99 @@ def fields(script: str, limit: int = 3, least: int = 2) -> list[str]:
             if len(pat.findall(script)) >= least][:limit]
 
 
+# 題材を一言で評する語。台本の冒頭に出ていればそれを使う。
+# 参考chの当たった題は「奇書」を付けていた。評価語が1つあるだけで、
+# 題材の名前が「物」から「見るべきもの」になる。
+_EPITHET = (
+    ("奇書", re.compile(r"奇書|謎の書物|書物")),
+    ("未解読の", re.compile(r"未解読")),
+    ("謎の", re.compile(r"謎|不可解|説明がつかない")),
+)
+
+# 期間。「未解読のまま600年近く」のような、題材が抱えている時間の長さ。
+# 参考chの当たった題は「解読の600年」で締めていた。
+#
+# 期間の印（近く・以上・間・前…）を必須にする。印が無い4桁は西暦で、
+# 期間ではない。実測で「1912年に発見され」から「1912年、誰も読めていない」
+# という題が出た。西暦を期間として出すと、題が事実と食い違う。
+_SPAN = re.compile(
+    r"([0-9０-９]{2,4})\s*年(?:近く|以上|間|余り|にわたって|もの間|前)"
+    r"(?=[^。]{0,20}(?:残|経|続|未解読|不明|解けて|読めて|分かって|わたって))")
+
+# 締めで一番強い否定。これが題の先頭に立つと、何が崩れたかが一目で分かる。
+_STRONG = re.compile(r"^(?P<head>[^、。]{2,22})(?:は|が)[^。]*?"
+                     r"(?P<verdict>根拠を失|ではなく|裏付(?:け)?が(?:ない|無い)"
+                     r"|確認されていない|実在するものではな)")
+
+
+def epithet(script: str) -> str:
+    head = "\n".join(script.splitlines()[:12])
+    for word, pat in _EPITHET:
+        if pat.search(head):
+            return word
+    return ""
+
+
+def span(script: str) -> str:
+    """台本が言っている期間のうち、一番長いもの。"""
+    got = [int(m.group(1).translate(str.maketrans("０１２３４５６７８９", "0123456789")))
+           for m in _SPAN.finditer(script)]
+    return f"{max(got)}年" if got else ""
+
+
+def strongest(script: str) -> tuple[str, str]:
+    """締めで一番はっきり否定されている主張。(主語, 何と分かったか)"""
+    for line in closing(script).splitlines():
+        m = _STRONG.search(line.strip())
+        if m:
+            return m.group("head"), m.group("verdict")
+    return "", ""
+
+
 def propose(subject: str, claims: list, script: str) -> list[str]:
     """題名の候補。上ほど参考chの当たった型に近い。"""
     n = len(claims)
     down, up = tally(script)
+    name = f"{epithet(script)}{subject}"
+    years = span(script)
     out: list[str] = []
 
-    # 1. 当たった型そのもの。括弧に知識の限界の問い、本体に固有名詞と数字
-    if down and up:
-        out.append(f"【どこまで分かっているのか】{subject}、残った{up}つと消えた{down}つ")
-    elif down:
-        out.append(f"【どこまで分かっているのか】{subject}、{down}つの通説が消えた日")
+    # 1. 当たった型。括弧に「その時間ずっと解けていない」、本体に評価語と
+    #    固有名詞、締めに残ったものの少なさ
+    if years and up:
+        out.append(f"【{years}、誰も読めていない】{name}に残った"
+                   + ("唯一の確かなこと" if up == 1 else f"{up}つの確かなこと"))
+    elif years:
+        out.append(f"【{years}、答えが出ていない】{name}はどこまで分かったのか")
     else:
-        out.append(f"【どこまで分かっているのか】{subject}、{n}つの通説を確かめる")
+        out.append(f"【どこまで分かっているのか】{name}、{n}つの通説を確かめる")
 
-    # 2. 問いを1つに絞る型。固有名詞は主張の主語から採る
-    import sys
-    from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).resolve().parent / "video"))
-    from chapters import subject_of
+    # 2. 一番はっきり崩れた話を先頭に立てる型
+    head, verdict = strongest(script)
+    # 括弧が長いと題として読めない。実測で51字の題が出た
+    if len(head) > 14:
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parent / "video"))
+        from chapters import subject_of
+        head = subject_of(head, limit=14)
+    lead = {"根拠を失": f"{head}は根拠を失った",
+            "ではなく": f"{head}は思われていたものではなかった",
+            "実在するものではな": f"{head}は実在しなかった",
+            "裏付が": f"{head}に裏付けはなかった",
+            "裏付けが": f"{head}に裏付けはなかった",
+            "確認されていない": f"{head}は確認されていない"}.get(verdict, "")
+    if lead and down:
+        out.append(f"【{lead}】{name}、{years or str(n) + 'つ'}で崩れた{down}つの通説")
+    elif lead:
+        out.append(f"【{lead}】{name}をもう一度確かめる")
+    else:
+        out.append(f"【一次資料で確かめる】{name}はどこまで本当か")
 
-    heads = [subject_of(c) for c in claims]
-    head = next((h for h in heads if h and h != subject), subject)
-    out.append(f"【一次資料で確かめる】{subject}、{head}はどこまで本当か")
-
-    # 3. このchの既存の型（なぜ〜のか【分野×分野】）
+    # 3. このchの既存の型（〜のか【分野×分野】）
     fs = fields(script)
     tail = f"【{'×'.join(fs)}】" if len(fs) >= 2 else "【論文と一次資料】"
-    out.append(f"{subject}の通説{n}つを一次資料で確かめた{tail}")
+    out.append(f"{name}は{'なぜ' if not years else years + 'も'}解けていないのか{tail}")
     return out
 
 
