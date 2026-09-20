@@ -306,10 +306,11 @@ def _file_names(en_title: str, limit: int = 40) -> list[str] | None:
         n = raw.replace("_", " ")
         if _JUNK.search(n):
             continue
-        # 読み上げ音声や動画が記事画像として並ぶ。実測で Moai の記事から
-        # En-moai.oga（記事の読み上げ）が素材として通った。
-        if n.lower().endswith((".ogg", ".oga", ".ogv", ".opus", ".flac", ".mp3",
-                               ".mp4", ".webm", ".mid", ".wav", ".pdf", ".djvu",
+        # 読み上げ音声が記事画像として並ぶ。実測で Moai の記事から
+        # En-moai.oga（記事の読み上げ）が素材として通った。音声と文書は
+        # 落とす。動画は素材として使うので残す（VIDEO_EXT）。
+        if n.lower().endswith((".ogg", ".oga", ".opus", ".flac", ".mp3",
+                               ".mid", ".wav", ".pdf", ".djvu",
                                ".stl", ".xcf")):
             continue
         out.append(n)
@@ -354,6 +355,18 @@ def _looks_like_a_person(title: str) -> bool:
     return bool(_PERSON.search(title))
 
 
+# Commons に載っている動画。Chromium が再生できる形式だけ通す。
+VIDEO_EXT = (".webm", ".ogv", ".mp4")
+# 動画1本の上限。Commons には数百MBのものがあり、取得で実行時間を食う。
+MAX_VIDEO_BYTES = 60 * 1024 * 1024
+# 短すぎる動画は1カットを埋められない
+MIN_VIDEO_SEC = 3.0
+
+
+def is_video(title: str) -> bool:
+    return title.lower().endswith(VIDEO_EXT)
+
+
 def _is_diagram(title: str) -> bool:
     """図解らしさ。名前に出ない図解もあるので拡張子も見る。
 
@@ -364,7 +377,20 @@ def _is_diagram(title: str) -> bool:
     """
     if _DIAGRAM.search(title):
         return True
+    if is_video(title):
+        return False  # 動画は図解ではない。むしろ先に使いたい
     return not title.lower().endswith((".jpg", ".jpeg", ".webp"))
+
+
+def _video_seconds(info: dict) -> float:
+    """動画の長さ。imageinfo の metadata に length が入る。"""
+    for item in info.get("metadata") or []:
+        if str(item.get("name", "")).lower() in ("length", "playtime_seconds"):
+            try:
+                return float(item.get("value") or 0)
+            except (TypeError, ValueError):
+                return 0.0
+    return 0.0
 
 
 def page_images(en_title: str, *, limit: int = 6, width: int = 1920,
@@ -383,7 +409,8 @@ def page_images(en_title: str, *, limit: int = 6, width: int = 1920,
     lead = _lead(en_title)
     d = _get(COMMONS_API, {
         "action": "query", "titles": "|".join("File:" + n for n in names[:40]),
-        "prop": "imageinfo", "iiprop": "url|extmetadata|size", "iiurlwidth": width,
+        "prop": "imageinfo",
+        "iiprop": "url|extmetadata|size|mediatype|metadata", "iiurlwidth": width,
     })
     if d is None:
         raise Unreachable(en_title)
@@ -401,9 +428,20 @@ def page_images(en_title: str, *, limit: int = 6, width: int = 1920,
             continue  # アイコン相当。全画面に引き伸ばすと破綻する
         if not people_ok and _looks_like_a_person(filename):
             continue
+        video = is_video(filename)
+        if video:
+            # 動画は縮小版ではなく実体を落とす。thumburl は1枚目の静止画。
+            if int(info.get("size") or 0) > MAX_VIDEO_BYTES:
+                continue
+            length = _video_seconds(info)
+            if length and length < MIN_VIDEO_SEC:
+                continue
         by_name[filename] = Asset(
             source="commons", title=filename,
-            url=info.get("thumburl") or _filepath_url(filename, width),
+            kind="video" if video else "image",
+            durationSec=round(_video_seconds(info), 3) if video else 0.0,
+            url=(info.get("url") if video
+                 else (info.get("thumburl") or _filepath_url(filename, width))),
             page_url=info.get("descriptionurl", ""),
             license=lic,
             author=_clean(meta.get("Artist", {}).get("value")) or "不明",

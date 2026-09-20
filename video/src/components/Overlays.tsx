@@ -33,26 +33,27 @@ export const SourceLabel: React.FC<{ label: SourceLabelType }> = ({ label }) => 
   const opacity = useFade(label.durationSec, 0.5, 0.5);
   return (
     <AbsoluteFill style={{ opacity }}>
-      {/* 画像の出典。何の文字列か分かるよう「出典」を添える。
-          添えないと、作者名とライセンス名だけが並んで暗号に見える
-          （実測で「よく分からない」という指摘を受けた）。
-          表示義務があるので消せない。控えめにして邪魔をしない形にする。 */}
+      {/* 画像の出典。表示義務があるので消せない。
+          参考chを実測したら、左下・極小・1行で、常時出ていた。こちらは
+          左上に置いていて、題材の写真と競っていた。位置と大きさを合わせる。
+          何の文字列か分かるよう「出典」は残す。添えないと作者名と
+          ライセンス名だけが並んで暗号に見える（実際に指摘を受けた）。 */}
       <div style={{
-        position: "absolute", left: 40, top: 32,
-        display: "flex", alignItems: "baseline", gap: 10,
+        position: "absolute", left: 40, bottom: 26,
+        display: "flex", alignItems: "baseline", gap: 8,
         textShadow: theme.textShadow,
       }}>
         <span style={{
           fontFamily: theme.subtitleFontFamily,
-          fontSize: 15, letterSpacing: "0.08em",
-          color: "rgba(244,241,234,.38)",
+          fontSize: 13, letterSpacing: "0.08em",
+          color: "rgba(244,241,234,.34)",
         }}>
           出典
         </span>
         <span style={{
           fontFamily: theme.subtitleFontFamily,
-          fontSize: 16, letterSpacing: "0.02em",
-          color: "rgba(244,241,234,.48)",
+          fontSize: 13, letterSpacing: "0.02em",
+          color: "rgba(244,241,234,.44)",
         }}>
           {label.text}
         </span>

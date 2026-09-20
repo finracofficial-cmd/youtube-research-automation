@@ -68,6 +68,15 @@ export const KenBurns: React.FC<{ shot: Shot; resolve: (s: string) => string }> 
           }}
         />
       </AbsoluteFill>
+      {/* 周辺減光。参考chは全カットで四隅が落ちていて、題材が中央に浮いて
+          見える。素のまま敷くと写真が画面の端まで届き、字幕と競う。 */}
+      <AbsoluteFill
+        style={{
+          background:
+            "radial-gradient(ellipse 78% 74% at 50% 46%, rgba(0,0,0,0) 38%, rgba(0,0,0,.72) 100%)",
+          pointerEvents: "none",
+        }}
+      />
       {shot.credit ? (
         <div
           style={{

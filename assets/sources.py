@@ -38,6 +38,10 @@ class Asset:
     author: str
     width: int = 0
     height: int = 0
+    # "image" か "video"。Commons には CC の動画があり、静止画だけで
+    # 構成すると参考chとの差が一番出るところになる。
+    kind: str = "image"
+    durationSec: float = 0.0
 
     def to_dict(self) -> dict:
         return asdict(self)
