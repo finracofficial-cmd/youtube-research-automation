@@ -190,12 +190,19 @@ def main() -> int:
     if topic.exists():
         import yaml
         subject = (yaml.safe_load(topic.read_text(encoding="utf-8")) or {}).get("subject", "")
+    # 台本の根拠にした資料。画像の出典とは別に載せる
+    src_path = topic.with_name(f"{topic.stem}_sources.json")
+    sources = (json.loads(src_path.read_text(encoding="utf-8"))
+               if src_path.exists() else [])
+    if not sources:
+        print(f"  情報の出典が無い: {src_path}（概要欄は画像の出典だけになる）")
     desc = out.with_name(f"{name}_description.txt")
     desc.write_text(
         publish.build("", data.get("outline") or [],
                       credits.read_text(encoding="utf-8") if credits.exists() else "",
                       lead=b.get("lead", ""),
-                      tags=publish.tags_for(subject, b.get("hashtags"))),
+                      tags=publish.tags_for(subject, b.get("hashtags")),
+                      sources=sources),
         encoding="utf-8")
     print(f"概要欄に貼る文 -> {desc}")
 

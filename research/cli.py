@@ -57,7 +57,19 @@ def cmd_pipeline(args) -> int:
     out = Path(args.out or f"drafts/prompt_{Path(args.spec).stem}.txt")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(prompt, encoding="utf-8")
+
+    # 出典は台本を書かせるためだけに使って捨てていた。概要欄に載せるので
+    # 題材の仕様の隣に残す。ここを残さないと、何を読んで書いたのかが
+    # 動画からも手元からも辿れなくなる。
+    spec_path = Path(args.spec)
+    kept = [{"kind": x.kind, "title": x.title, "year": x.year,
+             "venue": getattr(x, "venue", None), "identifier": x.identifier}
+            for x in d.all_sources[:30]]
+    src_path = spec_path.with_name(f"{spec_path.stem}_sources.json")
+    src_path.write_text(json.dumps(kept, ensure_ascii=False, indent=1),
+                        encoding="utf-8")
     print(f"出典 {len(cited)}件 / 数字入り記述 {len(facts)}件 -> {out}")
+    print(f"出典の一覧 -> {src_path}")
     return 0
 
 

@@ -115,3 +115,48 @@ def test_refresh_without_subtitles_changes_nothing():
                                          "value": "1", "label": "", "zone": "right"}]}
     got = publish.refresh(dict(props), "本文", [])
     assert got["stats"] == props["stats"]
+
+
+# ---- 情報の出典 ----
+
+def test_information_sources_are_listed_without_urls():
+    """画像の出典とは別。何を読んで書いたのかを載せる。
+
+    URLは載せない。読み上げるものでも押すものでもなく、行が長くなって
+    一覧性が落ちる。
+    """
+    got = publish.sources_block([
+        {"kind": "paper", "title": "The Radiocarbon Dating", "year": 2011,
+         "venue": "Radiocarbon", "identifier": "10.x/y"},
+        {"kind": "book", "title": "Quarried Away", "year": 2008},
+    ])
+    assert "【情報の出典】" in got
+    assert "2011 The Radiocarbon Dating（Radiocarbon／論文）" in got
+    assert "2008 Quarried Away（書籍）" in got
+    assert "http" not in got and "10.x/y" not in got
+
+
+def test_html_entities_in_titles_are_decoded():
+    """文献APIは題名を実体参照のまま返す（実測で E&amp;G）。"""
+    got = publish.sources_block([{"kind": "paper", "title": "A &amp; B", "year": 2024}])
+    assert "A & B" in got and "&amp;" not in got
+
+
+def test_the_same_paper_is_not_listed_twice():
+    got = publish.sources_block([{"kind": "paper", "title": "同じ題", "year": 2020},
+                                 {"kind": "paper", "title": "同じ題", "year": 2020}])
+    assert got.count("同じ題") == 1
+
+
+def test_no_sources_means_no_section_rather_than_an_empty_heading():
+    assert publish.sources_block([]) == ""
+    out = publish.build("", [], "【画像・資料の出典】\n・x — CC BY 4.0", sources=[])
+    assert "情報の出典" not in out
+    # 画像の出典は残す。CC BY は表示が条件なので落とせない
+    assert "CC BY 4.0" in out
+
+
+def test_information_sources_come_before_the_image_credits():
+    out = publish.build("", [], "【画像・資料の出典】\n・x — CC BY 4.0",
+                        sources=[{"kind": "paper", "title": "論文題", "year": 2020}])
+    assert out.index("情報の出典") < out.index("画像・資料の出典")
