@@ -133,7 +133,7 @@ BROLL_TERMS = (
 )
 
 
-def fill_broll(manifest: list[dict], out_dir: Path, *, limit: int = 8,
+def fill_broll(manifest: list[dict], out_dir: Path, *, limit: int = 24,
                pause: float = 1.2) -> list[dict]:
     """引き継ぎで埋めている区間に、雰囲気の映像を入れる。
 
@@ -149,16 +149,22 @@ def fill_broll(manifest: list[dict], out_dir: Path, *, limit: int = 8,
         return manifest
     by_segment = {e["segment"]: e for e in manifest}
     made = 0
+    used: set[str] = set()
+    cache: dict[str, list] = {}
     for seg in want:
         term = BROLL_TERMS[made % len(BROLL_TERMS)]
-        try:
-            clips = broll_videos(term, limit=1)
-        except Exception as exc:  # noqa: BLE001 - 映像が無くても静止画で成立する
-            print(f"  [{seg:03d}] 映像を探せず: {exc}")
-            continue
+        if term not in cache:
+            try:
+                # 語ごとに複数取る。1本だけだと語を一巡したあと同じ映像が戻る
+                cache[term] = broll_videos(term, limit=4)
+            except Exception as exc:  # noqa: BLE001 - 映像が無くても静止画で成立する
+                print(f"  [{seg:03d}] 映像を探せず: {exc}")
+                cache[term] = []
+        clips = [c for c in cache[term] if c.title not in used]
         if not clips:
             continue
         asset = clips[0]
+        used.add(asset.title)
         got = _download(asset, out_dir / f"broll{seg:03d}")
         if not got:
             continue

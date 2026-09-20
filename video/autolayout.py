@@ -185,6 +185,28 @@ def _window(lines: list[Line], i: int, n: int) -> tuple[float, float]:
     return start, max(MIN_DURATION, min(MAX_DURATION, span))
 
 
+def whole(lines: list[Line], i: int, limit: int = 6) -> str:
+    """i 行目から始まる文を、折り返しを繋ぎ直して返す。
+
+    字幕は画面幅で折ってあるので、1行は文の断片でしかない。断片をそのまま
+    カードの題に使うと、語の途中で切れた文字列が画面に出る。実測で
+    「2025年の論文では復号や展開のために複数のパラメー」が出た。
+    """
+    out = [lines[i].text]
+    if lines[i].text.rstrip().endswith(("。", "！", "？")):
+        return out[0]
+    for j in range(i + 1, min(i + limit, len(lines))):
+        out.append(lines[j].text)
+        if lines[j].text.rstrip().endswith(("。", "！", "？")):
+            break
+    return "".join(out)
+
+
+def starts_a_sentence(lines: list[Line], i: int) -> bool:
+    """その行が文の先頭かどうか。途中の断片から文を起こさないため。"""
+    return i == 0 or lines[i - 1].text.rstrip().endswith(("。", "！", "？"))
+
+
 def classify(lines: list[Line]) -> list[Cue]:
     """字幕列から候補キューを拾う。重なりはここでは気にしない。
 
@@ -201,15 +223,17 @@ def classify(lines: list[Line]) -> list[Cue]:
         start, dur = _window(lines, i, 2)
 
         m = _PAPER.search(text)
-        if m:
+        if m and starts_a_sentence(lines, i):
+            # 題は文まるごと。断片だと語の途中で切れた文字列が画面に出る
             cues.append(Cue("document", start, dur, "center", {
                 "venue": (m.group("venue") or m.group("venue2") or "").strip(),
-                "year": m.group("year") or "", "title": text.rstrip("。")}))
+                "year": m.group("year") or "",
+                "title": whole(lines, i).rstrip("。")}))
 
         if _QUOTE_LEAD.search(text) and i + 1 < len(lines):
             s2, d2 = _window(lines, i + 1, 2)
             cues.append(Cue("quote", s2, d2, "left", {
-                "heading": text.rstrip("。"),
+                "heading": whole(lines, i).rstrip("。"),
                 "translation": " ".join(l.text for l in lines[i+1:i+3]).rstrip("。")}))
 
         m = _LIST_LEAD.search(text)
@@ -217,11 +241,13 @@ def classify(lines: list[Line]) -> list[Cue]:
             n = _to_int(m.group("n"))
             if 2 <= n <= 9:
                 cues.append(Cue("cardrow", start, dur, "center",
-                                {"count": n, "caption": text.rstrip("。")}))
+                                {"count": n,
+                                 "caption": whole(lines, i).rstrip("。")}))
 
         # 留保の中身が書かれている文だけ出す。予告だけの文は飛ばす
         if _CAVEAT.search(text) and not _EMPTY_CAVEAT.search(text) and len(text) >= 8:
-            cues.append(Cue("caveat", start, dur, "right", {"text": text.rstrip("。")}))
+            cues.append(Cue("caveat", start, dur, "right",
+                            {"text": whole(lines, i).rstrip("。")}))
 
         m = _RATIO.search(text)
         if m:

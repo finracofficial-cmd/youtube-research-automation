@@ -61,12 +61,37 @@ def build(title: str, outline: list[dict], credits: str, *,
     return (f"{title}\n\n" if title else "") + "\n\n".join(parts) + "\n"
 
 
-def refresh(props: dict, script: str, claims: list) -> dict:
-    """読み上げに貼り直した字幕から、章を計算し直す。
+# 読み上げに貼り直したら作り直す札。build_props が字数割りの概算で置いた
+# ものなので、そのままだと語りと合わない。
+_TIMED = ("stats", "telops", "quoteCards", "chipStacks", "cardRows",
+          "documentCards", "portraits", "charts", "timelines", "rangeBars",
+          "glyphs", "grids")
+
+
+def refresh(props: dict, script: str, claims: list,
+            card_labels: list[str] | None = None) -> dict:
+    """読み上げに貼り直した字幕から、札と章を計算し直す。
 
     build_props は字幕の時刻を字数から割った概算で作る。そのあと実際の
-    発話に貼り直すので、章もそこで取り直さないと画面と概要欄がずれる。
+    発話に貼り直すのは字幕だけだったので、札はずっと概算の位置に残って
+    いた。語りと絵と文字が少しずつずれる原因がこれ。
+
+    ずらして合わせるのではなく、貼り直した字幕から作り直す。概算との差を
+    補間すると、文の途中に置かれた札が別の文に移ることがある。
     """
+    subs = props.get("subtitles") or []
+    # 札を作り直す。字幕の時刻が動いたので、貼る位置も動く
+    if subs:
+        sys.path.insert(0, str(ROOT / "video"))
+        from autolayout import Line as _L, build as _build
+        total = max(s["startSec"] + s["durationSec"] for s in subs)
+        rebuilt = _build([_L(s["startSec"], s["durationSec"], s["text"]) for s in subs],
+                         codes=[str(i + 1) for i in range(9)], duration=total,
+                         card_labels=card_labels or [])
+        for key in _TIMED:
+            if key in rebuilt:
+                props[key] = rebuilt[key]
+
     # パネルも引き直す。字幕の時刻が動いたので、置き場所も動く
     panels = ex.plan(
         [ex.Line(s["startSec"], s["durationSec"], s["text"])

@@ -52,7 +52,7 @@ def main() -> int:
                     help="同じ画が続く区間を生成画像で埋める（OPENAI_API_KEY が要る）")
     ap.add_argument("--broll", action="store_true",
                     help="繰り返している区間にCommonsのイメージ映像を入れる")
-    ap.add_argument("--max-broll", type=int, default=8,
+    ap.add_argument("--max-broll", type=int, default=24,
                     help="入れるイメージ映像の本数")
     ap.add_argument("--image-quality", default="medium",
                     choices=["low", "medium", "high"],
@@ -160,8 +160,12 @@ def main() -> int:
         # 概算のまま残り、読み上げとずれる
         import publish
         from video.chapters import render as render_chapters  # noqa: F401
+        claims_now = _claims(topic)
+        sys.path.insert(0, str(ROOT / "video"))
+        import chapters as _ch
         data = publish.refresh(data, script.read_text(encoding="utf-8"),
-                               _claims(topic))
+                               claims_now,
+                               card_labels=_ch.card_labels(claims_now))
         props.write_text(json.dumps(data, ensure_ascii=False, indent=1),
                          encoding="utf-8")
         print(f"  字幕を実際の発話に合わせ直した（章 {len(data.get('outline') or [])}件）")

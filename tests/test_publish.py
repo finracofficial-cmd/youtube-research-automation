@@ -88,3 +88,30 @@ def test_the_real_brand_file_has_what_the_description_needs():
     b = publish.brand()
     assert b.get("name") and b.get("lead") and b.get("hashtags")
     assert len(b["hashtags"]) >= 3
+
+
+def test_cards_are_rebuilt_from_the_real_speech_not_the_estimate():
+    """貼り直していたのは字幕だけで、札は字数割りの概算に残っていた。
+
+    実測で、数値札31枚のうち21枚が「その時に読まれていない数字」を
+    出していた。語りと絵と文字がずれて見える原因がこれ。
+    """
+    est = [{"startSec": 0.0, "durationSec": 10.0, "text": "石は250キロ運ばれた。"},
+           {"startSec": 10.0, "durationSec": 10.0, "text": "重さは30トンある。"}]
+    # 実際の発話は前半が速く、後半が遅かった
+    real = [{"startSec": 0.0, "durationSec": 4.0, "text": "石は250キロ運ばれた。"},
+            {"startSec": 4.0, "durationSec": 16.0, "text": "重さは30トンある。"}]
+    props = {"subtitles": list(real), "stats": [
+        {"startSec": 10.0, "durationSec": 6.0, "value": "30トン", "label": "", "zone": "right"}]}
+    got = publish.refresh(props, "石は250キロ運ばれた。\n\n重さは30トンある。", [])
+    # 30トンの札は、30トンが読まれている区間（4秒〜）に移っている
+    tons = [s for s in got["stats"] if "30" in s["value"]]
+    assert tons, got["stats"]
+    assert 3.0 <= tons[0]["startSec"] <= 8.0, tons[0]
+
+
+def test_refresh_without_subtitles_changes_nothing():
+    props = {"subtitles": [], "stats": [{"startSec": 5.0, "durationSec": 3.0,
+                                         "value": "1", "label": "", "zone": "right"}]}
+    got = publish.refresh(dict(props), "本文", [])
+    assert got["stats"] == props["stats"]
