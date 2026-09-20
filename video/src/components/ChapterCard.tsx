@@ -51,6 +51,36 @@ export const ChapterCard: React.FC<{ chapter: Chapter }> = ({ chapter }) => {
       >
         {chapter.title}
       </div>
+
+      {/* 進捗バー。参考chは画面下に位置を示すバーと「ここから最後の話」の
+          印を出していた。どこまで来たかが見えると、先を見る理由になる。 */}
+      {chapter.span > 0 && (
+        <div style={{ position: "absolute", left: "12%", right: "12%", bottom: 208 }}>
+          <div style={{ position: "relative", height: 4, background: "rgba(244,241,234,.16)" }}>
+            {/* ここまで来た分 */}
+            <div style={{
+              position: "absolute", left: 0, top: 0, bottom: 0,
+              width: `${chapter.progress * 100}%`,
+              background: "rgba(244,241,234,.42)",
+            }} />
+            {/* この章の区間 */}
+            <div style={{
+              position: "absolute", top: -3, bottom: -3,
+              left: `${chapter.progress * 100}%`,
+              width: `${Math.max(0.01, chapter.span) * 100 * line}%`,
+              background: theme.accent,
+            }} />
+          </div>
+          <div style={{
+            marginTop: 16, textAlign: "center",
+            fontFamily: theme.subtitleFontFamily, fontSize: 22,
+            letterSpacing: ".08em", color: "rgba(244,241,234,.5)",
+            opacity: line,
+          }}>
+            {chapter.last ? "ここから最後の話" : `全体の ${Math.round(chapter.progress * 100)}% 地点`}
+          </div>
+        </div>
+      )}
     </AbsoluteFill>
   );
 };

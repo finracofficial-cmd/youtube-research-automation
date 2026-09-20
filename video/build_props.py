@@ -219,9 +219,7 @@ def build(script: str, duration: float, kind: str, n_claims: int,
     # 「第2主張」が主張の途中で出る（実測で152秒ごとに並んでいた）。
     marks = chapters_mod.locate(script, subtitles, claims or [])
     if marks:
-        chapters = [{"startSec": c["startSec"], "durationSec": 3.0,
-                     "label": c["title"], "title": ""}
-                    for c in marks if c["startSec"] > 0]
+        chapters = chapters_mod.cards(marks, duration)
     else:
         sheet = get(kind, n_claims=n_claims)
         chapters, at = [], 0.0
@@ -284,6 +282,7 @@ def build(script: str, duration: float, kind: str, n_claims: int,
     }
     # 解説パネルは素材を覆う。重なる札と出典ラベルをここで外す
     props = explainers_mod.clear(props, panels)
+    props = explainers_mod.clear_for_chapters(props)
 
     if narration:
         props["narration"] = narration

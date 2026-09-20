@@ -109,30 +109,71 @@ export const PortraitCard: React.FC<{ portrait: Portrait }> = ({ portrait }) => 
 };
 
 /** 折れ線。系列は 0..1 で渡す。左から描き進む。 */
+/** 折れ線。1点ずつ増える。
+ *
+ * 1系列なので凡例は置かない（見出しが系列の名前になる）。線は細く、点は
+ * 見える大きさで、目盛りは控えめ。値は点が立つのに合わせて添える。
+ * 文字は文字の色で、系列の色は点と線だけが持つ。 */
 export const DataChart: React.FC<{ chart: Chart }> = ({ chart }) => {
   const opacity = useFade(chart.durationSec);
-  const p = useProgress(chart.durationSec, 1.4);
-  const W = 430, H = 210;
-  const pts = chart.series.map((v, i) => {
-    const x = (i / (chart.series.length - 1)) * W;
-    const y = H - v * H;
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  });
-  const visible = Math.max(2, Math.ceil(pts.length * p));
+  const p = useProgress(chart.durationSec, Math.min(2.4, chart.durationSec * 0.55));
+  const W = 470, H = 215, PAD = 26;
+  const n = chart.series.length;
+  const xy = chart.series.map((v, i) => ({
+    x: PAD + (i / Math.max(1, n - 1)) * (W - PAD * 2),
+    y: PAD + (1 - v) * (H - PAD * 2),
+  }));
+  // 何点目まで立っているか。線はその手前まで引く
+  const grown = p * (n - 1);
+  const upto = Math.floor(grown + 1e-6);
+  const frac = grown - upto;
+  const path = xy.slice(0, upto + 1).map((q) => `${q.x.toFixed(1)},${q.y.toFixed(1)}`);
+  if (upto < n - 1 && frac > 0) {
+    const a = xy[upto], b = xy[upto + 1];
+    path.push(`${(a.x + (b.x - a.x) * frac).toFixed(1)},${(a.y + (b.y - a.y) * frac).toFixed(1)}`);
+  }
   return (
     <AbsoluteFill style={{ ...zoneStyle(chart.zone), opacity }}>
       <div style={{ ...panel, padding: "24px 28px" }}>
         {chart.readout ? (
-          <div style={{ fontFamily: theme.fontFamily, fontWeight: 900, fontSize: 52, color: theme.text, marginBottom: 12 }}>
+          <div style={{ fontFamily: theme.fontFamily, fontSize: 30, color: theme.text, marginBottom: 14 }}>
             {chart.readout}
           </div>
         ) : null}
-        <svg width={W} height={H} style={{ display: "block" }}>
+        <svg width={W} height={H + 34} style={{ display: "block" }}>
+          {/* 目盛りは控えめに。読ませたいのは線の向き */}
           {[0.25, 0.5, 0.75].map((g) => (
-            <line key={g} x1={0} x2={W} y1={H * g} y2={H * g} stroke="rgba(244,241,234,.12)" strokeWidth={1} />
+            <line key={g} x1={PAD} x2={W - PAD} y1={PAD + (H - PAD * 2) * g}
+                  y2={PAD + (H - PAD * 2) * g}
+                  stroke="rgba(244,241,234,.10)" strokeWidth={1} />
           ))}
-          <polyline points={pts.slice(0, visible).join(" ")} fill="none"
-                    stroke={theme.accent} strokeWidth={3} />
+          <polyline points={path.join(" ")} fill="none" stroke={theme.accent}
+                    strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+          {xy.map((q, i) => {
+            if (i > upto) return null;
+            const pt = chart.points[i];
+            return (
+              <g key={i}>
+                {/* 地の色の輪。線と重なっても点が沈まない */}
+                <circle cx={q.x} cy={q.y} r={6} fill="#0e0e11" />
+                <circle cx={q.x} cy={q.y} r={4.5} fill={theme.accent} />
+                {pt?.readout ? (
+                  <text x={q.x} y={q.y - 14} textAnchor="middle"
+                        fill={theme.text} fontFamily={theme.subtitleFontFamily}
+                        fontSize={18}>
+                    {pt.readout}
+                  </text>
+                ) : null}
+                {pt?.label ? (
+                  <text x={q.x} y={H + 14} textAnchor="middle"
+                        fill="rgba(244,241,234,.55)"
+                        fontFamily={theme.subtitleFontFamily} fontSize={16}>
+                    {pt.label}
+                  </text>
+                ) : null}
+              </g>
+            );
+          })}
         </svg>
         {chart.caption ? (
           <div style={{ fontFamily: theme.subtitleFontFamily, fontSize: 19, color: "rgba(244,241,234,.6)", marginTop: 12 }}>

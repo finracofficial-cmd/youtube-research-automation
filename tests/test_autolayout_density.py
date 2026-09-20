@@ -76,3 +76,53 @@ def test_a_telop_is_always_verbatim_from_the_line():
     text = "サーセン石の産地も、近年になって特定された。"
     got = phrase(text)
     assert got is None or got in text
+
+
+# ---- 章カードの進捗 ----
+
+def test_a_chapter_card_knows_where_it_is_in_the_video():
+    """参考chは画面下に位置を示すバーと「ここから最後の話」の印を出していた。"""
+    import sys as _sys
+    from pathlib import Path as _P
+    _sys.path.insert(0, str(_P(__file__).resolve().parents[1] / "video"))
+    import chapters as ch
+
+    got = ch.cards([{"startSec": 0.0, "title": "はじめに"},
+                    {"startSec": 100.0, "title": "第一の話"},
+                    {"startSec": 500.0, "title": "まとめ"}], 1000.0)
+    # 0秒の「はじめに」は画面に出さない
+    assert [c["startSec"] for c in got] == [100.0, 500.0]
+    assert got[0]["progress"] == 0.1 and got[0]["span"] == 0.4
+    assert got[1]["last"] is True
+
+
+def test_the_big_line_is_the_title_and_the_small_one_is_the_label():
+    """入れ違えると大見出しが空になる。実測で章カードの中央が空白になった。"""
+    import sys as _sys
+    from pathlib import Path as _P
+    _sys.path.insert(0, str(_P(__file__).resolve().parents[1] / "video"))
+    import chapters as ch
+
+    got = ch.cards([{"startSec": 0.0, "title": "はじめに"},
+                    {"startSec": 60.0, "title": "モアイは歩いて運ばれた"},
+                    {"startSec": 900.0, "title": "まとめ"}], 1000.0)
+    assert got[0]["label"] == "第1章"
+    assert got[0]["title"] == "モアイは歩いて運ばれた"
+    # 締めは番号を振らない
+    assert got[1]["label"] == "まとめ" and got[1]["title"] == ""
+
+
+def test_cards_under_a_chapter_card_are_removed():
+    """章カードは画面を覆う。実測で「巨石」の大字が突き抜けていた。"""
+    import sys as _sys
+    from pathlib import Path as _P
+    _sys.path.insert(0, str(_P(__file__).resolve().parents[1] / "video"))
+    import explainers as ex
+
+    props = {"chapters": [{"startSec": 60.0, "durationSec": 3.0}],
+             "telops": [{"startSec": 61.0, "durationSec": 4.0},
+                        {"startSec": 200.0, "durationSec": 4.0}],
+             "subtitles": [{"startSec": 61.0, "durationSec": 2.0}]}
+    got = ex.clear_for_chapters(props)
+    assert [t["startSec"] for t in got["telops"]] == [200.0]
+    assert len(got["subtitles"]) == 1   # 語りは続いている

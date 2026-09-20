@@ -272,6 +272,28 @@ def plan(lines: list[Line], duration: float, *, panel_sec: float = PANEL_SEC,
     return out
 
 
+def clear_for_chapters(props: dict) -> dict:
+    """章カードに重なる札を外す。
+
+    章カードは画面を覆う。実測で「巨石」の大字が章カードを突き抜けていた。
+    字幕は残す（語りは続いている）。
+    """
+    spans = [(c["startSec"], c["startSec"] + c["durationSec"])
+             for c in props.get("chapters") or []]
+    if not spans:
+        return props
+    for key in ("stats", "quoteCards", "chipStacks", "cardRows", "documentCards",
+                "portraits", "charts", "timelines", "rangeBars", "glyphs", "grids",
+                "telops"):
+        props[key] = [
+            it for it in (props.get(key) or [])
+            if not any(_overlaps(it.get("startSec", 0.0),
+                                 it.get("startSec", 0.0) + it.get("durationSec", 0.0),
+                                 a, b) for a, b in spans)
+        ]
+    return props
+
+
 def clear(props: dict, panels: list[dict],
           keys: tuple[str, ...] = ("stats", "quoteCards", "chipStacks", "cardRows",
                                    "documentCards", "portraits", "charts",

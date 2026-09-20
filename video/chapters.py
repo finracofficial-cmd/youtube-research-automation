@@ -204,6 +204,35 @@ def _closing_at(flat: str, claims: list, *, after: int) -> int:
     return end + 1 if end >= 0 else tail
 
 
+def cards(outline: list[dict], duration: float) -> list[dict]:
+    """画面に出す章カード。0秒の「はじめに」は出さない。
+
+    進捗も一緒に持たせる。参考chは画面下に位置を示すバーと
+    「ここから最後の話」の印を出していた。どこまで来たかが見えると、
+    先を見る理由になる。
+    """
+    out = []
+    n = 0
+    for i, c in enumerate(outline):
+        if c["startSec"] <= 0:
+            continue
+        nxt = outline[i + 1]["startSec"] if i + 1 < len(outline) else duration
+        closing = c["title"] in ("まとめ", "おわりに")
+        if not closing:
+            n += 1
+        out.append({
+            "startSec": c["startSec"], "durationSec": 3.0,
+            # 小さく出るのが label、大きく出るのが title。入れ違えると
+            # 大見出しが空になる（実測で章カードの中央が空白になった）。
+            "label": "まとめ" if closing else f"第{n}章",
+            "title": "" if closing else c["title"],
+            "progress": round(min(1.0, c["startSec"] / max(duration, 1.0)), 4),
+            "span": round(max(0.0, min(1.0, (nxt - c["startSec"]) / max(duration, 1.0))), 4),
+            "last": i == len(outline) - 1,
+        })
+    return out
+
+
 def prune(chapters: list[dict], *, min_sec: float = MIN_CHAPTER_SEC) -> list[dict]:
     """YouTubeが章として認める形に整える。
 

@@ -44,7 +44,12 @@ def test_refresh_moves_chapters_onto_the_real_speech():
     assert [c["startSec"] for c in got["outline"]] == [0.0, 42.0, 99.0]
     # 画面のカードは0秒の「はじめに」を出さない
     assert [c["startSec"] for c in got["chapters"]] == [42.0, 99.0]
-    assert got["chapters"][0]["label"].startswith("モアイ")
+    # 小さく出るのが label、大きく出るのが title。入れ違えると大見出しが空になる
+    assert got["chapters"][0]["label"] == "第1章"
+    assert got["chapters"][0]["title"].startswith("モアイ")
+    # どこまで来たかを持たせる
+    assert 0 < got["chapters"][0]["progress"] < got["chapters"][1]["progress"]
+    assert got["chapters"][-1]["last"] is True
 
 
 def test_refresh_keeps_the_old_chapters_when_it_cannot_do_better():

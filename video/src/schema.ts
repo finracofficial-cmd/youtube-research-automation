@@ -42,6 +42,13 @@ export const chapterSchema = z.object({
   durationSec: z.number().positive().default(3),
   label: z.string(),
   title: z.string(),
+  /** 動画全体の中でこの章がどこか（0〜1）。章カードに進捗バーを出す。
+   *  参考chは画面下に位置を示すバーと「ここから最後の話」の印を出していた。 */
+  progress: z.number().min(0).max(1).default(0),
+  /** その章が全体のどれだけを占めるか（0〜1） */
+  span: z.number().min(0).max(1).default(0),
+  /** 最後の章だけ言い方を変える */
+  last: z.boolean().default(false),
 });
 
 /** 画面左上に出しっぱなしにする出典表記。CC BY の表示義務もここで満たす。 */
@@ -78,6 +85,9 @@ export const cardRowSchema = z.object({
     code: z.string(),
     label: z.string().optional(),
     dimmed: z.boolean().default(false),
+    /** 札の状態。参考chは研究者5人を並べて ✓ と ? を切り替えていた。
+     *  none は印なし。色だけで区別せず、記号と語で示す。 */
+    mark: z.enum(["none", "ok", "unknown", "no"]).default("none"),
   })).min(1),
   caption: z.string().optional(),
 });
@@ -122,6 +132,13 @@ export const chartSchema = z.object({
   startSec: z.number().min(0),
   durationSec: z.number().positive(),
   series: z.array(z.number().min(0).max(1)).min(2),
+  /** 各点の軸ラベルと読み値。1点ずつ増えながら値が添えられる。
+   *  参考chはピラミッド6基の写真を軸ラベルにして折れ線を1点ずつ伸ばしていた。
+   *  1系列なので凡例は置かない。見出しが系列の名前になる。 */
+  points: z.array(z.object({
+    label: z.string(),
+    readout: z.string().default(""),
+  })).default([]),
   readout: z.string().optional(),
   caption: z.string().optional(),
   zone: zoneSchema.default("right"),

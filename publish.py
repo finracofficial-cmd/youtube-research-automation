@@ -76,12 +76,15 @@ def refresh(props: dict, script: str, claims: list) -> dict:
     props["explainers"] = panels
     props = ex.clear(props, panels)
 
+    props = ex.clear_for_chapters(props)
+
     outline = ch.locate(script, props.get("subtitles") or [], claims)
     if outline:
         props["outline"] = outline
-        props["chapters"] = [{"startSec": c["startSec"], "durationSec": 3.0,
-                              "label": c["title"], "title": ""}
-                             for c in outline if c["startSec"] > 0]
+        props["chapters"] = ch.cards(
+            outline,
+            max((s["startSec"] + s["durationSec"])
+                for s in props.get("subtitles") or [{"startSec": 0, "durationSec": 1}]))
     return props
 
 

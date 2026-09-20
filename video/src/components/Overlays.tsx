@@ -10,6 +10,17 @@ import type {
 import { theme } from "../theme";
 
 /** 出てから消えるまでの不透明度。全オーバーレイで共通。 */
+/** i 番目の札が順に立ち上がる。まとめて出すと積み上がって見えない。 */
+const useStepIn = (durationSec: number, n: number) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const each = Math.min(0.42, Math.max(0.18, (durationSec * 0.45) / Math.max(1, n)));
+  return (i: number) =>
+    interpolate(frame, [Math.round(fps * (0.2 + i * each)),
+                        Math.round(fps * (0.2 + i * each + 0.32))], [0, 1],
+                { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+};
+
 const useFade = (durationSec: number, inSec = 0.35, outSec = 0.3) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -126,18 +137,43 @@ export const ChipStack: React.FC<{ stack: ChipStackType }> = ({ stack }) => {
 };
 
 /** 横並びのカード。dimmed は「今回は使わない」の意思表示。 */
+/* 印。色だけで区別せず、記号と語を添える。色覚に依らず読めるようにする。 */
+const MARK: Record<string, { sign: string; word: string; tone: string }> = {
+  ok: { sign: "✓", word: "確かめられた", tone: theme.text },
+  unknown: { sign: "?", word: "分かっていない", tone: "rgba(244,241,234,.55)" },
+  no: { sign: "×", word: "合わなかった", tone: theme.accent },
+};
+
 export const CardRow: React.FC<{ row: CardRowType }> = ({ row }) => {
   const opacity = useFade(row.durationSec);
+  const step = useStepIn(row.durationSec, row.cards.length);
   return (
     <AbsoluteFill style={{ opacity, alignItems: "center", justifyContent: "center" }}>
       <div style={{ width: "76%" }}>
         <div style={{ display: "flex", gap: 14 }}>
-          {row.cards.map((card, i) => (
+          {row.cards.map((card, i) => {
+            const at = step(i);
+            const mark = MARK[card.mark];
+            return (
             <div key={i} style={{
-              ...panel, flex: 1, padding: "18px 20px", opacity: card.dimmed ? 0.38 : 1,
+              ...panel, flex: 1, padding: "18px 20px",
+              opacity: (card.dimmed ? 0.38 : 1) * at,
+              transform: `translateY(${(1 - at) * 12}px)`,
             }}>
-              <div style={{ fontFamily: theme.subtitleFontFamily, fontSize: 40, fontWeight: 700, color: theme.text }}>
-                {card.code}
+              <div style={{
+                display: "flex", alignItems: "baseline", justifyContent: "space-between",
+              }}>
+                <span style={{ fontFamily: theme.subtitleFontFamily, fontSize: 40, fontWeight: 700, color: theme.text }}>
+                  {card.code}
+                </span>
+                {mark ? (
+                  <span style={{
+                    fontFamily: theme.subtitleFontFamily, fontSize: 30,
+                    color: mark.tone, marginLeft: 10,
+                  }}>
+                    {mark.sign}
+                  </span>
+                ) : null}
               </div>
               {card.label ? (
                 <div style={{
@@ -147,9 +183,18 @@ export const CardRow: React.FC<{ row: CardRowType }> = ({ row }) => {
                   {card.label}
                 </div>
               ) : null}
+              {mark ? (
+                <div style={{
+                  fontFamily: theme.subtitleFontFamily, fontSize: 15, marginTop: 6,
+                  color: mark.tone, opacity: 0.85,
+                }}>
+                  {mark.word}
+                </div>
+              ) : null}
               <div style={{ height: 3, marginTop: 16, backgroundColor: "rgba(244,241,234,.22)" }} />
             </div>
-          ))}
+            );
+          })}
         </div>
         {row.caption ? (
           <div style={{
