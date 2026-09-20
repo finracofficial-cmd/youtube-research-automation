@@ -20,11 +20,25 @@ from pathlib import Path
 _CHECKED = re.compile(r"^\s*[-*]\s*\[[xX]\]\s*\*\*(?P<name>[^*]+)\*\*")
 
 
+# 判定の並び。上から順に選びやすい所へ置く。
+_ORDER = {"狙う": 0, "条件付き": 1, "見送り": 2}
+
+
 def to_checklist(rows: list[dict], limit: int = 20) -> str:
-    """採点結果を、選べるチェックリストにする。"""
-    keep = [r for r in rows if r.get("verdict") == "狙う"][:limit]
-    if not keep:
-        keep = rows[:limit]
+    """採点結果を、選べるチェックリストにする。
+
+    「狙う」だけに絞っていたら、実測で39件中2件しか出なかった。--limit 20 は
+    絞ったあとに効くので無意味だった。判定は捨てる理由ではなく並べる順に
+    使い、上位 limit 件を全部出す。選ぶのは人なので、材料は見せる。
+    """
+    def rank(r: dict) -> tuple:
+        try:
+            score = -float(r.get("score") or 0)
+        except ValueError:
+            score = 0.0
+        return (_ORDER.get(r.get("verdict", ""), 3), score)
+
+    keep = sorted(rows, key=rank)[:limit]
 
     lines = [
         "作る題材を選んでください。チェックした題材だけ台本を書きます。",
@@ -46,14 +60,24 @@ def to_checklist(rows: list[dict], limit: int = 20) -> str:
                 return 0.0
 
         views = int(num("views_max"))
-        lines.append(f"- [ ] **{r['query']}**")
+        verdict = r.get("verdict") or ""
+        lines.append(f"- [ ] **{r['query']}**"
+                     + (f"　`{verdict}`" if verdict else ""))
         lines.append(
             f"  総合 {num('score'):.2f} ／ 需要 {num('demand'):.2f} ／ "
             f"空白 {num('gap'):.2f} ／ 時流 {num('trend'):.2f} ／ "
             f"最高再生 {views:,}")
         if r.get("reasons"):
             lines.append(f"  {r['reasons']}")
-    lines += ["", f"（候補 {len(rows)}件のうち上位 {len(keep)}件）"]
+    from collections import Counter
+    tally = Counter(r.get("verdict") or "?" for r in keep)
+    got = "／".join(f"{k} {v}件" for k, v in sorted(
+        tally.items(), key=lambda kv: _ORDER.get(kv[0], 3)))
+    lines += ["", f"（候補 {len(rows)}件のうち上位 {len(keep)}件：{got}）",
+              "",
+              "`狙う` は需要と空白がそろった題材、`条件付き` はどちらかが弱い題材、"
+              "`見送り` は採点が低い題材です。判定は目安なので、"
+              "作りたいものがあれば下の方からでも選んで構いません。"]
     return "\n".join(lines)
 
 

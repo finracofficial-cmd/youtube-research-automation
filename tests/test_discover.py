@@ -89,3 +89,34 @@ def test_unscored_topics_still_get_listed():
              "demand": "0.2", "gap": "0.0", "trend": "0.5",
              "views_max": "1000", "reasons": ""}]
     assert "見送り題材" in to_checklist(rows)
+
+
+def test_the_list_is_not_cut_short_by_the_verdict():
+    """判定で絞ると、選べる題材が2件しか出ない回がある。
+
+    実測で39件中「狙う」が2件、「条件付き」が2件、残り35件が「見送り」で、
+    Issueに2件しか並ばなかった。--limit 20 は絞ったあとに効くので
+    無意味だった。判定は並べる順に使い、上位 limit 件を全部出す。
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from topic_scout.review import checked_subjects, to_checklist
+
+    def row(name, verdict, score):
+        return {"query": name, "verdict": verdict, "score": str(score),
+                "demand": "0.8", "gap": "0.5", "trend": "0.6",
+                "views_max": "1000000", "reasons": ""}
+
+    rows = ([row("狙うA", "狙う", 0.56), row("狙うB", "狙う", 0.51)]
+            + [row(f"見送り{i}", "見送り", 0.3 - i * 0.01) for i in range(30)])
+    body = to_checklist(rows, limit=20)
+    assert body.count("- [ ] **") == 20
+    # 判定の順で並ぶ。狙うが先頭
+    assert body.index("狙うA") < body.index("狙うB") < body.index("見送り0")
+    # 判定は行に見えている。選ぶのは人なので材料は見せる
+    assert "`狙う`" in body and "`見送り`" in body
+    # 印を付けた分だけ読み取れる（判定の札が付いても拾える）
+    picked = body.replace("- [ ] **見送り3**", "- [x] **見送り3**")
+    assert checked_subjects(picked) == ["見送り3"]
