@@ -165,6 +165,39 @@ def propose(subject: str, claims: list, script: str) -> list[str]:
     return out
 
 
+def intro(subject: str, claims: list, script: str) -> str:
+    """概要欄の冒頭。YouTubeが「もっと見る」の前に出す2〜3行。
+
+    ここが一番読まれる場所なのに、どの動画でも同じ定型文を置いていた。
+    題名と同じ材料（評価語・期間・崩れた数）で、この動画が何を確かめて
+    何が残ったのかを書く。台本が結論していないことは書かない。
+    """
+    n = len(claims)
+    down, up = tally(script)
+    name = f"{epithet(script)}{subject}"
+    years = span(script)
+
+    head = f"未解読のまま{years}。" if years and epithet(script) == "奇書" else (
+        f"{years}、答えは出ていません。" if years else "")
+    lines = [
+        f"{head}{name}について広く語られている{n}つの説を、"
+        f"論文と一次資料で1つずつ確かめました。".lstrip("。"),
+    ]
+    if down and up:
+        lines.append("")
+        lines.append(f"残ったのは{up}つだけです。"
+                     f"何が崩れて何が残ったのかを、資料の名前を挙げながら順に見ていきます。")
+    elif down:
+        lines.append("")
+        lines.append(f"{down}つは資料と食い違いました。"
+                     "どこで食い違うのかを、資料の名前を挙げながら順に見ていきます。")
+    else:
+        lines.append("")
+        lines.append("どこまで分かっていて、どこから分かっていないのかを、"
+                     "資料の名前を挙げながら順に見ていきます。")
+    return "\n".join(lines)
+
+
 def render(subject: str, claims: list, script: str) -> str:
     got = propose(subject, claims, script)
     lines = ["── 題名の候補 ──"]

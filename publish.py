@@ -81,9 +81,15 @@ def sources_block(items: list[dict], *, limit: int = 30) -> str:
 
 def build(title: str, outline: list[dict], credits: str, *,
           lead: str = "", tags: list[str] | None = None,
-          sources: list[dict] | None = None) -> str:
-    """概要欄の全文。章 -> 情報の出典 -> 画像の出典 -> 定型文 の順。"""
+          sources: list[dict] | None = None, intro: str = "") -> str:
+    """概要欄の全文。冒頭 -> 定型文 -> 章 -> 情報の出典 -> 画像の出典 の順。
+
+    冒頭はこの動画に固有の2〜3行。YouTubeが「もっと見る」の前に出すのは
+    ここだけなので、どの動画でも同じ定型文を置いていたのを改める。
+    """
     parts: list[str] = []
+    if intro:
+        parts.append(intro.strip())
     if lead:
         parts.append(lead.strip())
     if outline:

@@ -106,3 +106,30 @@ def test_the_first_candidate_carries_all_four_devices():
     assert "600年" in got           # 大きい数字
     assert "読めていない" in got     # 限界の問い
     assert "ヴォイニッチ手稿" in got  # 固有名詞
+
+
+# ---- 概要欄の冒頭 ----
+
+def test_the_intro_is_specific_to_this_video():
+    """YouTubeが「もっと見る」の前に出すのはここだけ。
+
+    一番読まれる場所に、どの動画でも同じ定型文を置いていた。
+    """
+    got = titles.intro("ヴォイニッチ手稿", ["a"] * 5, VOYNICH_HEAD)
+    assert "600年" in got            # 題名と同じ材料
+    assert "奇書" in got
+    assert "5つ" in got              # 確かめた数
+    assert "残ったのは1つ" in got     # 何が残ったか
+
+
+def test_the_intro_does_not_claim_counts_the_script_did_not_conclude():
+    plain = "石の話。\n\nいろいろ調べた。\n\n締め。"
+    got = titles.intro("巨石遺跡", ["a", "b"], plain)
+    assert "残ったのは" not in got and "崩れ" not in got
+    assert "2つの説" in got
+
+
+def test_the_intro_comes_first_in_the_description():
+    out = __import__("publish").build(
+        "", [], "", lead="定型文です。", intro="この動画の話です。")
+    assert out.index("この動画の話です。") < out.index("定型文です。")

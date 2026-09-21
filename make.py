@@ -186,10 +186,14 @@ def main() -> int:
     data = json.loads(props.read_text(encoding="utf-8"))
     credits = ROOT / "video" / "public" / shots_dir / "credits.txt"
     b = publish.brand()
-    subject = ""
+    import titles as titles_mod
+    subject, claims_spec = "", []
+    script_text = script.read_text(encoding="utf-8")
     if topic.exists():
         import yaml
-        subject = (yaml.safe_load(topic.read_text(encoding="utf-8")) or {}).get("subject", "")
+        spec_now = yaml.safe_load(topic.read_text(encoding="utf-8")) or {}
+        subject = spec_now.get("subject", "")
+        claims_spec = spec_now.get("claims") or []
     # 台本の根拠にした資料。画像の出典とは別に載せる
     src_path = topic.with_name(f"{topic.stem}_sources.json")
     sources = (json.loads(src_path.read_text(encoding="utf-8"))
@@ -202,7 +206,9 @@ def main() -> int:
                       credits.read_text(encoding="utf-8") if credits.exists() else "",
                       lead=b.get("lead", ""),
                       tags=publish.tags_for(subject, b.get("hashtags")),
-                      sources=sources),
+                      sources=sources,
+                      intro=(titles_mod.intro(subject, claims_spec, script_text)
+                             if claims_spec else "")),
         encoding="utf-8")
     print(f"概要欄に貼る文 -> {desc}")
 
