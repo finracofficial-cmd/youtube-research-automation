@@ -42,10 +42,10 @@ def build(assets: list[Asset], *, ai_generated_note: str | None = None) -> str:
         ai_generated_note = (
             f"一部の画像はAI生成です（{len(generated)}点）。実写・実物ではありません。")
 
-    lines = ["【画像・資料の出典】", ""]
+    lines = ["■ 画像のクレジット", ""]
 
     if must:
-        lines += ["■ CC BY / CC BY-SA（表示が条件）"]
+        lines += ["● CC BY / CC BY-SA（表示が条件）"]
         for a in sorted(must, key=lambda x: x.author):
             lines.append(f"・{a.author} — {a.license}")
             lines.append(f"　{a.page_url}")
@@ -58,10 +58,10 @@ def build(assets: list[Asset], *, ai_generated_note: str | None = None) -> str:
              "nasa": "NASA"}.get(s, s) + f"（{n}点）"
             for s, n in by_source.most_common()
         )
-        lines += ["■ パブリックドメイン / CC0", f"　{where}", ""]
+        lines += ["● パブリックドメイン / CC0", f"　{where}", ""]
 
     if ai_generated_note:
-        lines += ["■ AI生成", f"　{ai_generated_note}", ""]
+        lines += ["● AI生成", f"　{ai_generated_note}", ""]
 
     return "\n".join(lines).rstrip() + "\n"
 

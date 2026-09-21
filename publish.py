@@ -48,40 +48,105 @@ def tags_for(subject: str, brand_tags: list[str] | None) -> list[str]:
 _KIND = {"paper": "論文", "book": "書籍", "report": "報告書",
          "dataset": "データ", "web": "資料"}
 
+RULE = "━" * 24
 
-def sources_block(items: list[dict], *, limit: int = 30) -> str:
+
+def _cite(x: dict) -> str:
+    """1件ぶんの書誌。著者は持っていないので、掲載誌と年で示す。"""
+    import html as _html
+    title = _html.unescape(x.get("title") or "").strip()
+    venue = _html.unescape(x.get("venue") or "").strip()
+    year = str(x.get("year") or "").strip()
+    kind = _KIND.get(x.get("kind") or "", "")
+    tail = "　".join(v for v in (venue, f"({year})" if year else "", kind) if v)
+    return f"{title}\n　{tail}".rstrip()
+
+
+def _link(x: dict) -> str:
+    """辿れる先。DOIがあればそれを優先する（URLより寿命が長い）。"""
+    ident = (x.get("identifier") or "").strip()
+    if ident.startswith("10."):
+        return f"https://doi.org/{ident}"
+    return (x.get("url") or "").strip()
+
+
+def sources_block(data, *, limit: int = 24, links: bool = True) -> str:
     """台本の根拠にした資料を並べる。
 
-    画像の出典とは別。こちらは「何を読んで書いたのか」で、動画の中身の
-    裏付けになる。URLは載せない（読み上げるものでも押すものでもなく、
-    行が長くなって一覧性が落ちる）。identifier があれば DOI として出す。
-    """
-    import html as _html
+    参考chの概要欄は、1件ごとに「何が分かるか」を先に日本語で書き、その下に
+    書誌とリンクを置いていた。書誌だけ並べると、読む側はどれが何の根拠なのか
+    分からない。主張ごとに束ねて、主張文をその見出しに使う。
 
-    lines: list[str] = []
+    リンクは載せる。台本の締めが「概要欄に一次資料のリンクを掲載しています」と
+    言っているので、外すと動画が嘘になる。DOIがあればそちらを使う。
+    """
+    if isinstance(data, list):           # 平らな旧形式
+        data = {"claims": [], "background": data}
+    claims = (data or {}).get("claims") or []
+    background = (data or {}).get("background") or []
+
+    lines: list[str] = ["■ 参考文献", ""]
     seen: set[str] = set()
-    for x in items:
-        # 文献APIは題名をHTMLの実体参照のまま返す（実測で E&amp;G）
-        title = _html.unescape(x.get("title") or "").strip()
-        if not title or title in seen:
+    bare: list[str] = []
+    n = 0
+    for c in claims:
+        got = [x for x in (c.get("sources") or [])
+               if (x.get("title") or "").strip()
+               and (x.get("title") or "").strip() not in seen]
+        if not got:
+            bare.append(str(c.get("ja") or "").rstrip("。"))
             continue
-        seen.add(title)
-        year = str(x.get("year") or "").strip()
-        kind = _KIND.get(x.get("kind") or "", "")
-        venue = _html.unescape(x.get("venue") or "").strip()
-        head = " ".join(v for v in (year, title) if v)
-        tail = "／".join(v for v in (venue, kind) if v)
-        lines.append(f"・{head}" + (f"（{tail}）" if tail else ""))
-        if len(lines) >= limit:
+        lines.append(f"・{str(c.get('ja') or '').rstrip('。')}")
+        for x in got[:3]:
+            seen.add((x.get("title") or "").strip())
+            lines.append("　" + _cite(x).replace("\n", "\n　"))
+            url = _link(x) if links else ""
+            if url:
+                lines.append(f"　{url}")
+            n += 1
+            if n >= limit:
+                break
+        level = (c.get("evidence_level") or "").strip()
+        if level.startswith("薄い"):
+            lines.append("　※この説を支える査読文献はわずかです")
+        lines.append("")
+        if n >= limit:
             break
-    if not lines:
-        return ""
-    return "【情報の出典】\n" + "\n".join(lines)
+
+    extra = []
+    for x in background:
+        t = (x.get("title") or "").strip()
+        if not t or t in seen:
+            continue
+        seen.add(t)
+        extra.append(x)
+        if len(extra) >= 4:
+            break
+    if extra and n < limit:
+        lines.append("・題材全体の背景")
+        for x in extra:
+            lines.append("　" + _cite(x).replace("\n", "\n　"))
+            url = _link(x) if links else ""
+            if url:
+                lines.append(f"　{url}")
+        lines.append("")
+
+    # 出典のつかなかった主張は、黙って消さずに残す。何が引けなかったかは
+    # この番組では中身そのものなので。ただし「文献が存在しない」とは書かない。
+    # 書けるのは「こちらの調べ方では出てこなかった」までで、検索が届かな
+    # かっただけの可能性を潰せていない。
+    if bare and (n or extra):
+        lines.append("・以下は動画内で触れていますが、今回の調査では")
+        lines.append("　裏づけになる査読文献にたどり着けませんでした")
+        for ja in bare[:4]:
+            lines.append(f"　・{ja}")
+        lines.append("")
+    return "\n".join(lines).rstrip() if n or extra else ""
 
 
 def build(title: str, outline: list[dict], credits: str, *,
           lead: str = "", tags: list[str] | None = None,
-          sources: list[dict] | None = None, intro: str = "") -> str:
+          sources=None, intro: str = "") -> str:
     """概要欄の全文。冒頭 -> 定型文 -> 章 -> 情報の出典 -> 画像の出典 の順。
 
     冒頭はこの動画に固有の2〜3行。YouTubeが「もっと見る」の前に出すのは
@@ -93,12 +158,12 @@ def build(title: str, outline: list[dict], credits: str, *,
     if lead:
         parts.append(lead.strip())
     if outline:
-        parts.append("── 目次 ──\n" + ch.render(outline))
-    block = sources_block(sources or [])
+        parts.append(f"{RULE}\n目次\n" + ch.render(outline) + f"\n{RULE}")
+    block = sources_block(sources or {})
     if block:
         parts.append(block)
     if credits.strip():
-        parts.append(credits.strip())
+        parts.append(RULE + "\n\n" + credits.strip())
     parts.append(FOOTER)
     if tags:
         parts.append(" ".join(t if t.startswith("#") else f"#{t}" for t in tags))

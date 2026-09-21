@@ -165,36 +165,60 @@ def propose(subject: str, claims: list, script: str) -> list[str]:
     return out
 
 
-def intro(subject: str, claims: list, script: str) -> str:
-    """概要欄の冒頭。YouTubeが「もっと見る」の前に出す2〜3行。
+def held_fact(script: str, limit: int = 30) -> str:
+    """締めで「分かった」と言い切っている中身。冒頭の逆説に使う。"""
+    for line in closing(script).splitlines():
+        line = line.strip()
+        if not line or _REFUTED.search(line) or not _HELD.search(line):
+            continue
+        body = re.sub(r"^(?:調べた結果|検証の結果|その結果)[、,]?", "", line)
+        body = re.sub(r"(?:と(?:分かった|判明した|確かめられた))。?$", "", body)
+        return body.rstrip("。 ")[:limit]
+    return ""
+
+
+def intro(subject: str, claims: list, script: str, duration_sec: float = 0.0) -> str:
+    """概要欄の冒頭。YouTubeが「もっと見る」の前に出す数行。
+
+    参考chの概要欄は4拍だった:
+      1 逆説の提示        600年のあいだ、誰も一文字も読めていない本があります
+      2 それでも分かっている事  それなのに、羊皮紙の年も、書いた人数も分かっています
+      3 方法と尺          一次資料だけで52分かけて辿りました
+      4 成果の予告        都市伝説で語られている内容のほとんどは否定されます
 
     ここが一番読まれる場所なのに、どの動画でも同じ定型文を置いていた。
-    題名と同じ材料（評価語・期間・崩れた数）で、この動画が何を確かめて
-    何が残ったのかを書く。台本が結論していないことは書かない。
+    台本が結論していないことは書かない。
     """
     n = len(claims)
     down, up = tally(script)
     name = f"{epithet(script)}{subject}"
     years = span(script)
+    held = held_fact(script)
+    mins = int(round(duration_sec / 60)) if duration_sec else 0
 
-    head = f"未解読のまま{years}。" if years and epithet(script) == "奇書" else (
-        f"{years}、答えは出ていません。" if years else "")
-    lines = [
-        f"{head}{name}について広く語られている{n}つの説を、"
-        f"論文と一次資料で1つずつ確かめました。".lstrip("。"),
-    ]
-    if down and up:
-        lines.append("")
-        lines.append(f"残ったのは{up}つだけです。"
-                     f"何が崩れて何が残ったのかを、資料の名前を挙げながら順に見ていきます。")
-    elif down:
-        lines.append("")
-        lines.append(f"{down}つは資料と食い違いました。"
-                     "どこで食い違うのかを、資料の名前を挙げながら順に見ていきます。")
+    lines: list[str] = []
+    # 1 逆説
+    if years:
+        lines.append(f"{years}のあいだ、答えの出ていない{name}があります。")
     else:
+        lines.append(f"{name}をめぐっては、いくつもの説が語られてきました。")
+    # 2 それでも分かっていること
+    if held:
+        lines.append(f"それでも、{held}ことは分かっています。")
+    # 3 方法と尺
+    how = "一次資料と論文だけで"
+    lines.append(f"何が分かっていて、何が分かっていないのか。"
+                 + (f"{how}{mins}分かけて辿りました。" if mins else f"{how}辿りました。"))
+    # 4 成果の予告。台本が結論を書いていなければ、数だけ言って結果は言わない。
+    # 説の数は題材の仕様から来るが、「いくつ崩れたか」は締めからしか取れない。
+    if n:
         lines.append("")
-        lines.append("どこまで分かっていて、どこから分かっていないのかを、"
-                     "資料の名前を挙げながら順に見ていきます。")
+        if down:
+            lines.append(f"見ていくと分かりますが、広く語られている{n}つの説のうち"
+                         f"{down}つは、資料と食い違います。")
+        else:
+            lines.append(f"広く語られている{n}つの説を、資料に当たって"
+                         f"一つずつ確かめています。")
     return "\n".join(lines)
 
 

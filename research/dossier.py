@@ -9,7 +9,8 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field, asdict
 
-from .sources import Source, archive_org, crossref, openalex, relevance_filter
+from .sources import (WEAK, Source, archive_org, crossref, openalex,
+                      relevance_filter)
 
 # 学術APIは英語が主。数字を含む主張だけを拾いたいので、年号単体は弾く。
 NUM_SENT = re.compile(r"[^.。]*\d[^.。]*[.。]")
@@ -108,16 +109,67 @@ def gather(query_en: str, *, papers: int = 30, books: int = 10,
     return found
 
 
+# クエリの骨組みに使うだけで、中身を指していない語。題材語を引いただけでは
+# 残ってしまう。実測で "botanical identification real plants" の主張に、
+# 言語統計の論文が identification / real の一致だけで通った。
+FILLER = {"identification", "identify", "real", "theory", "theories",
+          "evidence", "comparison", "origin", "origins", "case", "cases",
+          "method", "methods", "approach", "using", "based", "data",
+          "results", "overview", "problem", "question", "questions"}
+
+
+def _words(text: str) -> set[str]:
+    return {w.lower() for w in re.findall(r"[A-Za-z]{4,}", text or "")}
+
+
+def discriminators(claims: list[tuple[str, str]]) -> list[set[str]]:
+    """主張ごとに「その主張だけの語」を出す。
+
+    relevance_filter は題材の語で絞るので、同じ題材の論文なら何でも通る。
+    主張に紐づけるにはそれでは足りない。実測で「手稿の植物は実在の植物か」
+    という主張に、言語統計の論文が3本ぶら下がった。見出しにその主張文を
+    使う以上、これは概要欄が嘘をつくのと同じになる。
+
+    どの主張にも出てくる語（= 題材名）を引き、残りをその主張の語とする。
+    subject_en の書き方に依存しない（voynich の subject_en は
+    "botanical identification" を含んでいて、題材語として引くと
+    植物の主張から識別語が消える）。
+    """
+    sets = [_words(en) - WEAK - FILLER for _, en in claims]
+    if len(sets) < 2:
+        return [set() for _ in sets]
+    common = set.intersection(*sets)
+    return [s - common for s in sets]
+
+
+def on_topic(sources: list[Source], keys: set[str]) -> list[Source]:
+    """その主張の語をタイトルに持つものだけ残す。語が無ければ素通し。"""
+    if not keys:
+        return sources
+    return [s for s in sources
+            if any(k in (s.title or "").lower() for k in keys)]
+
+
 def build(subject: str, subject_en: str, claims: list[tuple[str, str]],
           exclude: tuple[str, ...] = ()) -> Dossier:
     """exclude には同名語の別分野を落とす語を渡す。
     実測で "Nazca" が地上絵とナスカプレート（地質学）で衝突した。"""
     d = Dossier(subject=subject, subject_en=subject_en)
     d.background = gather(subject_en, exclude=exclude)[:12]
-    for ja, en in claims:
+    seen = {(s.title or "").lower() for s in d.background}
+    spare: list[Source] = []
+    for (ja, en), keys in zip(claims, discriminators(claims)):
         found = gather(en, exclude=exclude)[:10]
-        d.claims.append(Claim(ja=ja, en=en, sources=found,
-                              numeric_facts=extract_numeric_facts(found)))
+        kept = on_topic(found, keys)
+        # 主張から外れたものは捨てずに背景へ。題材の資料ではあるので、
+        # 概要欄では「題材全体の背景」の側に並ぶ。
+        for s in found:
+            if s not in kept and (s.title or "").lower() not in seen:
+                seen.add((s.title or "").lower())
+                spare.append(s)
+        d.claims.append(Claim(ja=ja, en=en, sources=kept,
+                              numeric_facts=extract_numeric_facts(kept or found)))
+    d.background += spare
     return d
 
 

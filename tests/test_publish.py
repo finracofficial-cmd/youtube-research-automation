@@ -9,7 +9,7 @@ def test_chapters_sources_and_footer_are_all_present():
     out = publish.build(
         "題名", [{"startSec": 0.0, "title": "はじめに"},
                  {"startSec": 65.0, "title": "第1の主張"}],
-        "【画像・資料の出典】\n・Someone — CC BY 4.0")
+        "■ 画像のクレジット\n・Someone — CC BY 4.0")
     assert out.startswith("題名\n")
     assert "0:00 はじめに" in out and "1:05 第1の主張" in out
     assert "CC BY 4.0" in out
@@ -18,7 +18,7 @@ def test_chapters_sources_and_footer_are_all_present():
 
 def test_sources_survive_even_with_no_chapters():
     """章が取れなかったときに出典まで落とすとライセンス違反になる。"""
-    out = publish.build("", [], "【画像・資料の出典】\n・Someone — CC BY 4.0")
+    out = publish.build("", [], "■ 画像のクレジット\n・Someone — CC BY 4.0")
     assert "CC BY 4.0" in out
     assert "目次" not in out
 
@@ -119,21 +119,60 @@ def test_refresh_without_subtitles_changes_nothing():
 
 # ---- 情報の出典 ----
 
-def test_information_sources_are_listed_without_urls():
-    """画像の出典とは別。何を読んで書いたのかを載せる。
+def test_each_source_sits_under_the_claim_it_supports():
+    """参考chは1件ごとに「何が分かるか」を先に日本語で置いていた。
 
-    URLは載せない。読み上げるものでも押すものでもなく、行が長くなって
-    一覧性が落ちる。
+    書誌だけ並べても、読む側はどれが何の根拠なのか分からない。
     """
-    got = publish.sources_block([
+    got = publish.sources_block({"claims": [
+        {"ja": "巨石は現代の重機でも運べない。",
+         "sources": [{"kind": "paper", "title": "The Megalithic Quarry",
+                      "year": 2015, "venue": "JEMAHS",
+                      "identifier": "10.x/y"}]},
+    ]})
+    assert "■ 参考文献" in got
+    assert "・巨石は現代の重機でも運べない" in got   # 見出しは主張文。句点は落とす
+    assert got.index("巨石は現代の重機") < got.index("The Megalithic Quarry")
+    assert "JEMAHS　(2015)　論文" in got
+
+
+def test_sources_carry_a_link_because_the_script_promises_one():
+    """台本の締めが「概要欄に一次資料のリンクを掲載しています」と言う。
+
+    URLを外すと動画のほうが嘘になる。DOIがあればそちらを使う（生URLより
+    寿命が長い）。載せないという判断自体は links=False で残す。
+    """
+    src = {"claims": [{"ja": "主張。", "sources": [
         {"kind": "paper", "title": "The Radiocarbon Dating", "year": 2011,
-         "venue": "Radiocarbon", "identifier": "10.x/y"},
-        {"kind": "book", "title": "Quarried Away", "year": 2008},
-    ])
-    assert "【情報の出典】" in got
-    assert "2011 The Radiocarbon Dating（Radiocarbon／論文）" in got
-    assert "2008 Quarried Away（書籍）" in got
-    assert "http" not in got and "10.x/y" not in got
+         "venue": "Radiocarbon", "identifier": "10.x/y",
+         "url": "http://example.invalid/raw"}]}]}
+    assert "https://doi.org/10.x/y" in publish.sources_block(src)
+    assert "example.invalid" not in publish.sources_block(src)
+    assert "http" not in publish.sources_block(src, links=False)
+
+
+def test_a_claim_with_no_source_is_named_rather_than_dropped():
+    """引けなかったことは、この番組では中身そのもの。
+
+    ただし「文献が存在しない」とは書かない。書けるのは「この調べ方では
+    出てこなかった」までで、検索が届かなかっただけの可能性を潰せていない。
+    """
+    got = publish.sources_block({"claims": [
+        {"ja": "裏の取れた話。", "sources": [
+            {"kind": "paper", "title": "Solid Work", "year": 2015}]},
+        {"ja": "裏の取れなかった話。", "sources": []},
+    ]})
+    assert "・裏の取れなかった話" in got
+    assert "たどり着けませんでした" in got
+    assert "存在しません" not in got
+
+
+def test_a_thin_claim_says_so():
+    got = publish.sources_block({"claims": [
+        {"ja": "主張。", "evidence_level": "薄い（査読文献がわずか）",
+         "sources": [{"kind": "paper", "title": "Lone Paper", "year": 2015}]},
+    ]})
+    assert "※この説を支える査読文献はわずかです" in got
 
 
 def test_html_entities_in_titles_are_decoded():
@@ -143,6 +182,12 @@ def test_html_entities_in_titles_are_decoded():
 
 
 def test_the_same_paper_is_not_listed_twice():
+    """主張をまたいで同じ論文が出ることがある（2件目以降は落とす）。"""
+    got = publish.sources_block({"claims": [
+        {"ja": "主張1。", "sources": [{"kind": "paper", "title": "同じ題", "year": 2020}]},
+        {"ja": "主張2。", "sources": [{"kind": "paper", "title": "同じ題", "year": 2020}]},
+    ]})
+    assert got.count("同じ題") == 1
     got = publish.sources_block([{"kind": "paper", "title": "同じ題", "year": 2020},
                                  {"kind": "paper", "title": "同じ題", "year": 2020}])
     assert got.count("同じ題") == 1
@@ -150,13 +195,13 @@ def test_the_same_paper_is_not_listed_twice():
 
 def test_no_sources_means_no_section_rather_than_an_empty_heading():
     assert publish.sources_block([]) == ""
-    out = publish.build("", [], "【画像・資料の出典】\n・x — CC BY 4.0", sources=[])
-    assert "情報の出典" not in out
+    out = publish.build("", [], "■ 画像のクレジット\n・x — CC BY 4.0", sources=[])
+    assert "参考文献" not in out
     # 画像の出典は残す。CC BY は表示が条件なので落とせない
     assert "CC BY 4.0" in out
 
 
 def test_information_sources_come_before_the_image_credits():
-    out = publish.build("", [], "【画像・資料の出典】\n・x — CC BY 4.0",
+    out = publish.build("", [], "■ 画像のクレジット\n・x — CC BY 4.0",
                         sources=[{"kind": "paper", "title": "論文題", "year": 2020}])
-    assert out.index("情報の出典") < out.index("画像・資料の出典")
+    assert out.index("参考文献") < out.index("画像のクレジット")

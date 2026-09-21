@@ -115,18 +115,21 @@ def test_the_intro_is_specific_to_this_video():
 
     一番読まれる場所に、どの動画でも同じ定型文を置いていた。
     """
-    got = titles.intro("ヴォイニッチ手稿", ["a"] * 5, VOYNICH_HEAD)
-    assert "600年" in got            # 題名と同じ材料
+    got = titles.intro("ヴォイニッチ手稿", ["a"] * 5, VOYNICH_HEAD,
+                       duration_sec=15 * 60)
+    assert "600年" in got            # 題名と同じ材料 (1 逆説)
     assert "奇書" in got
-    assert "5つ" in got              # 確かめた数
-    assert "残ったのは1つ" in got     # 何が残ったか
+    assert "分かっています" in got    # (2 それでも分かっていること)
+    assert "15分" in got             # (3 方法と尺)
+    assert "5つ" in got              # (4 成果の予告) 確かめた数
 
 
 def test_the_intro_does_not_claim_counts_the_script_did_not_conclude():
     plain = "石の話。\n\nいろいろ調べた。\n\n締め。"
     got = titles.intro("巨石遺跡", ["a", "b"], plain)
     assert "残ったのは" not in got and "崩れ" not in got
-    assert "2つの説" in got
+    assert "食い違います" not in got   # 締めが結論していない
+    assert "2つの説" in got           # 説の数は仕様から来るので言ってよい
 
 
 def test_the_intro_comes_first_in_the_description():

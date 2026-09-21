@@ -207,7 +207,8 @@ def main() -> int:
                       lead=b.get("lead", ""),
                       tags=publish.tags_for(subject, b.get("hashtags")),
                       sources=sources,
-                      intro=(titles_mod.intro(subject, claims_spec, script_text)
+                      intro=(titles_mod.intro(subject, claims_spec, script_text,
+                                              duration_sec=duration)
                              if claims_spec else "")),
         encoding="utf-8")
     print(f"概要欄に貼る文 -> {desc}")

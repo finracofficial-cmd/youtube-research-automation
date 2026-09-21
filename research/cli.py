@@ -62,9 +62,19 @@ def cmd_pipeline(args) -> int:
     # 題材の仕様の隣に残す。ここを残さないと、何を読んで書いたのかが
     # 動画からも手元からも辿れなくなる。
     spec_path = Path(args.spec)
-    kept = [{"kind": x.kind, "title": x.title, "year": x.year,
-             "venue": getattr(x, "venue", None), "identifier": x.identifier}
-            for x in d.all_sources[:30]]
+    def rec(x):
+        return {"kind": x.kind, "title": x.title, "year": x.year,
+                "venue": getattr(x, "venue", None), "identifier": x.identifier,
+                "url": x.url, "open_access": getattr(x, "open_access", False)}
+
+    # 主張ごとに束ねる。概要欄では「何が分かるか」を先に書くので、
+    # どの主張の根拠なのかが要る。平らに並べるとそれが消える。
+    kept = {
+        "claims": [{"ja": c.ja, "sources": [rec(x) for x in c.sources[:6]],
+                    "evidence_level": getattr(c, "evidence_level", "")}
+                   for c in d.claims],
+        "background": [rec(x) for x in d.background[:8]],
+    }
     src_path = spec_path.with_name(f"{spec_path.stem}_sources.json")
     src_path.write_text(json.dumps(kept, ensure_ascii=False, indent=1),
                         encoding="utf-8")

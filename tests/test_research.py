@@ -1,6 +1,7 @@
 import pytest
 
-from research.dossier import Claim, extract_numeric_facts
+from research.dossier import (Claim, discriminators, extract_numeric_facts,
+                              on_topic)
 from research.sources import Source, relevance_filter, _deinvert
 
 
@@ -133,3 +134,48 @@ def test_script_names_are_readable_not_hashes():
                  {"subject_en": "The Antikythera Mechanism (Greece)"}):
         name = slug(spec)
         assert name.replace("-", "").isalnum(), name
+
+
+# ---- 主張への紐づけ ----
+
+def test_discriminators_drop_the_words_every_claim_shares():
+    """relevance_filter は題材の語で絞るので、同じ題材なら何でも通る。
+
+    主張に紐づけるにはそれでは足りない。全主張に出てくる語は題材名なので引く。
+    """
+    claims = [("", "Voynich manuscript radiocarbon dating parchment"),
+              ("", "Voynich manuscript Roger Bacon authorship"),
+              ("", "Voynich manuscript botanical plants")]
+    got = discriminators(claims)
+    for keys in got:
+        assert "voynich" not in keys and "manuscript" not in keys
+    assert "radiocarbon" in got[0] and "bacon" in got[1] and "plants" in got[2]
+
+
+def test_discriminators_drop_query_scaffolding():
+    """"identification" や "real" はクエリの骨組みで、中身を指していない。
+
+    実測で「手稿の植物は実在の植物か」という主張に、言語統計の論文3本が
+    identification / real の一致だけで通った。見出しにその主張文を使う以上、
+    これは概要欄が嘘をつくのと同じになる。
+    """
+    claims = [("", "Voynich manuscript botanical identification real plants"),
+              ("", "Voynich manuscript linguistic language analysis")]
+    keys = discriminators(claims)[0]
+    assert "identification" not in keys and "real" not in keys
+    assert "botanical" in keys and "plants" in keys
+
+
+def test_on_topic_drops_papers_that_only_match_the_subject():
+    got = on_topic(
+        [src("Botanical identification in the Voynich manuscript"),
+         src("Spectral analysis of the Voynich manuscript")],
+        {"botanical", "plants"})
+    assert [s.title for s in got] == [
+        "Botanical identification in the Voynich manuscript"]
+
+
+def test_on_topic_passes_everything_through_when_there_is_nothing_to_go_on():
+    """主張が1本しかなければ固有の語が出ない。そのときは絞らない。"""
+    items = [src("Anything at all")]
+    assert on_topic(items, set()) == items
