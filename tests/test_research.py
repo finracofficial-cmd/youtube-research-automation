@@ -179,3 +179,48 @@ def test_on_topic_passes_everything_through_when_there_is_nothing_to_go_on():
     """主張が1本しかなければ固有の語が出ない。そのときは絞らない。"""
     items = [src("Anything at all")]
     assert on_topic(items, set()) == items
+
+
+
+def test_previous_sources_are_kept_when_a_run_comes_back_thin(tmp_path):
+    """学術APIは日によって429で痩せる。実測で17件→4件。前回のぶんを主張ごとに足す。"""
+    import json
+    from research.cli import merge_previous
+    from research.dossier import Dossier
+
+    prev = {"claims": [{"ja": "主張A。", "sources": [
+                {"kind": "paper", "title": "Old Paper", "year": 1931, "identifier": "10.1/old", "authors": "Manly"},
+                {"kind": "paper", "title": "Same Paper", "year": 2001, "identifier": "10.1/same"}]}],
+            "background": [{"kind": "book", "title": "Old Book", "year": 1928, "identifier": "ark1"}]}
+    path = tmp_path / "x_sources.json"
+    path.write_text(json.dumps(prev), encoding="utf-8")
+    d = Dossier(subject="s", subject_en="s")
+    d.claims.append(Claim(ja="主張A。", en="a", sources=[src("Same Paper", year=2001)]))
+    d.claims[0].sources[0].identifier = "10.1/same"
+    added = merge_previous(d, path)
+    assert added == 2
+    titles = [s.title for s in d.claims[0].sources]
+    assert titles == ["Same Paper", "Old Paper"]          # 今回のが先、前回のが後。重複は足さない
+    assert d.claims[0].sources[1].authors == "Manly"
+    assert [b.title for b in d.background] == ["Old Book"]
+
+
+
+def test_authors_are_filled_from_crossref_for_doi_sources_without_one(monkeypatch):
+    """引き継いだ出典は著者を持っていないことがある。DOI があれば1件ずつ引く。"""
+    from research import cli as C
+    from research.dossier import Dossier
+
+    calls = []
+    def fake_get(url, **kw):
+        calls.append(url)
+        return {"message": {"author": [{"given": "John", "family": "Manly"}, {"family": "Other"}]}}
+    monkeypatch.setattr("research.http.get_json", fake_get)
+    d = Dossier(subject="s", subject_en="s")
+    a = src("With DOI"); a.identifier = "10.2307/2848508"
+    b = src("Already"); b.identifier = "10.1/x"; b.authors = "Someone"
+    c = src("No DOI"); c.identifier = "ark1"
+    d.claims.append(Claim(ja="主張。", en="q", sources=[a, b, c]))
+    assert C.enrich_authors(d) == 1
+    assert a.authors == "John Manlyら" and b.authors == "Someone" and c.authors == ""
+    assert calls == ["https://api.crossref.org/works/10.2307/2848508"]

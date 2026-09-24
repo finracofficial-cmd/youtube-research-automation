@@ -19,12 +19,15 @@ EN_API = "https://en.wikipedia.org/w/api.php"
 
 _PAREN = re.compile(r"（[^（）]*）|\([^()]*\)")
 _REF = re.compile(r"\[[^\]]*\]")
+_HEAD = re.compile(r"=+\s*[^=]+?\s*=+")   # == 概要 == のような節の見出し
 
 
 def _extract(api: str, title: str, *, chars: int) -> str:
+    # exintro（導入部だけ）にしない。日本語版の導入部は2文しかなく、見た目の
+    # 記述（「浴槽らしきものに浸かった女性の絵」）は「概要」の節にある（実測）
     d = get_json(api + "?" + q({
         "action": "query", "format": "json", "prop": "extracts",
-        "exintro": 1, "explaintext": 1, "redirects": 1,
+        "explaintext": 1, "redirects": 1,
         "exchars": chars, "titles": title}))
     pages = ((d or {}).get("query") or {}).get("pages") or {}
     for page in pages.values():
@@ -36,13 +39,13 @@ def _extract(api: str, title: str, *, chars: int) -> str:
 
 def clean(text: str) -> str:
     """読みの括弧と脚注の印を落とし、文ごとに改行する。"""
-    text = _REF.sub("", _PAREN.sub("", text))
+    text = _HEAD.sub(" ", _REF.sub("", _PAREN.sub("", text)))
     text = re.sub(r"\s+", " ", text).strip()
     sents = [s.strip() for s in re.split(r"(?<=[。])", text) if s.strip()]
     return "\n".join(sents)
 
 
-def lead(subject: str, subject_en: str = "", *, chars: int = 1600) -> str:
+def lead(subject: str, subject_en: str = "", *, chars: int = 1800) -> str:
     """題材の冒頭。日本語版が無ければ英語版。どちらも無ければ空。"""
     text = _extract(JA_API, subject, chars=chars)
     if not text and subject_en:

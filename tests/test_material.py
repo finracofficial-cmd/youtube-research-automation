@@ -28,9 +28,9 @@ def test_unknown_fields_are_left_out_of_the_brief():
 
 
 def test_wiki_lead_is_cleaned_into_sentences():
-    raw = "ヴォイニッチ手稿（ヴォイニッチしゅこう、英: Voynich manuscript）は、[1] 1912年に発見された。 全240ページ。"
+    raw = "ヴォイニッチ手稿（ヴォイニッチしゅこう、英: Voynich manuscript）は、[1] 1912年に発見された。 == 概要 == 全240ページ。"
     got = wiki.clean(raw)
-    assert "（" not in got and "[1]" not in got
+    assert "（" not in got and "[1]" not in got and "==" not in got
     assert got.splitlines() == ["ヴォイニッチ手稿は、 1912年に発見された。", "全240ページ。"]
 
 

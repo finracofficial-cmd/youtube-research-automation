@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import re
+import time
 from dataclasses import dataclass, field, asdict
 
 from .sources import (WEAK, Source, archive_org, crossref, openalex,
@@ -159,6 +160,7 @@ def build(subject: str, subject_en: str, claims: list[tuple[str, str]],
     seen = {(s.title or "").lower() for s in d.background}
     spare: list[Source] = []
     for (ja, en), keys in zip(claims, discriminators(claims)):
+        time.sleep(1.5)   # 続けて投げると429が連発する（実測）
         found = gather(en, exclude=exclude)[:10]
         kept = on_topic(found, keys)
         # 主張から外れたものは捨てずに背景へ。題材の資料ではあるので、

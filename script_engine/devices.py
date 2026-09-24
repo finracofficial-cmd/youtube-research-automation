@@ -256,6 +256,15 @@ def padding(sents: list[str], subject: str = "") -> list[str]:
                 out.append(f"列挙の穴埋め: 「{s[:24]}」")
         else:
             run = 0
+    # 同じ短文を穴埋めに使う形（「記録はない。」が1章に5回）。短文を求めると出る
+    counts: dict[str, int] = {}
+    for s in sents:
+        k = _norm(s)
+        if 4 <= len(k) <= 10:
+            counts[k] = counts.get(k, 0) + 1
+    for k, n in counts.items():
+        if n >= 3:
+            out.append(f"同じ短文の反復×{n}: 「{k}」")
     # 離れた繰り返しは回収（「奴隷なのか。協力的な国民だったのか。」を1章と
     # 9章で言う）なので数えない。8文以内の言い直しだけ水増しとみなす。
     # 短い文の反復（「査読誌には載っていない。」→次の文で広げる）は参考の

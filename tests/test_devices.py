@@ -114,3 +114,10 @@ def test_hook_is_accepted_at_the_start_of_the_next_chapter():
 def test_unsourced_numbers_lists_what_the_material_does_not_have():
     got = D.unsourced_numbers("1404年の羊皮紙。全長30センチ。4点を測った。", "1404年から1438年。")
     assert "30センチ" in got and "1404年" not in got and "4点" not in got
+
+
+def test_the_same_short_sentence_used_as_filler_is_padding():
+    """短文を求めると「記録はない。」を穴埋めに繰り返す（実測で1章に5回）。"""
+    sents = ["署名はない。", "記録はない。", "日付もない。", "記録はない。", "端が欠けている。", "記録はない。"]
+    assert any("同じ短文の反復" in x for x in D.padding(sents))
+    assert not any("同じ短文の反復" in x for x in D.padding(sents[:4]))

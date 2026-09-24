@@ -36,12 +36,85 @@ def cmd_dossier(args) -> int:
     return 0
 
 
+def merge_previous(d, path: Path) -> int:
+    """前回の出典の一覧を、今回の取材メモに合流させる。
+
+    学術APIは日によって429で痩せる。実測で同じ題材が17件→4件になり、
+    そのまま上書きすると、前に取れていた出典が消えた。主張ごとに、
+    今回無いものを前回から足す。戻り値は足した件数。
+    """
+    from .sources import Source
+
+    if not path.exists():
+        return 0
+    try:
+        prev = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return 0
+    if isinstance(prev, list):                    # 平らな旧形式
+        prev = {"claims": [], "background": prev}
+
+    def to_src(x: dict) -> Source:
+        return Source(kind=x.get("kind") or "paper", title=x.get("title") or "",
+                      year=x.get("year"), url=x.get("url") or "",
+                      identifier=x.get("identifier") or "",
+                      open_access=bool(x.get("open_access")), cited_by=0,
+                      venue=x.get("venue") or "", authors=x.get("authors") or "")
+
+    def key(x) -> str:
+        ident = (x.identifier if hasattr(x, "identifier") else x.get("identifier")) or ""
+        title = (x.title if hasattr(x, "title") else x.get("title")) or ""
+        return (ident or title).strip().lower()
+
+    added = 0
+    by_ja = {c.get("ja"): c for c in prev.get("claims") or []}
+    for c in d.claims:
+        have = {key(x) for x in c.sources}
+        for x in (by_ja.get(c.ja) or {}).get("sources") or []:
+            if key(x) and key(x) not in have:
+                c.sources.append(to_src(x)); have.add(key(x)); added += 1
+    have = {key(x) for x in d.background}
+    for x in prev.get("background") or []:
+        if key(x) and key(x) not in have:
+            d.background.append(to_src(x)); have.add(key(x)); added += 1
+    return added
+
+
+def enrich_authors(d, *, limit: int = 20) -> int:
+    """DOI はあるのに著者が無い出典に、Crossref から筆頭著者を足す。
+
+    前回から引き継いだ出典は著者を持っていないことがある（著者を取り始める
+    前に集めたもの）。参考chは人の名前で語るので、名前が無いと本文が
+    「1931年の論文」止まりになる。1件ずつ引くが、http のキャッシュに乗る。
+    """
+    from .http import get_json
+    from .sources import first_author
+
+    n = 0
+    for x in d.all_sources:
+        if n >= limit:
+            break
+        if x.authors or not x.identifier.startswith("10."):
+            continue
+        r = get_json("https://api.crossref.org/works/" + x.identifier, retries=1)
+        auth = ((r or {}).get("message") or {}).get("author") or []
+        x.authors = first_author([" ".join(v for v in (a.get("given"), a.get("family")) if v)
+                                  for a in auth])
+        n += 1
+    return n
+
+
 def cmd_pipeline(args) -> int:
     """調査 → 台本プロンプト。出典を渡さずに書かせないための一本道。"""
     from script_engine.render import Topic, build_prompt
 
     subject, subject_en, claims, spec = _load(Path(args.spec))
     d = build(subject, subject_en, claims, exclude=spec["_exclude"])
+    src_path = Path(args.spec).with_name(f"{Path(args.spec).stem}_sources.json")
+    kept_from_before = merge_previous(d, src_path)
+    if kept_from_before:
+        print(f"前回の出典を {kept_from_before}件 引き継いだ")
+    enrich_authors(d)
     # 著者名を先に出す。参考chは「フリードマンは」「高橋は」と人で語る。
     # 題名だけ渡すと「2026年の論文の著者は不明」と本文に書かれた（実測）
     cited = [f"{s.year or '----'} {(s.authors + ' ') if s.authors else ''}{s.title} {s.url}".strip()
@@ -67,7 +140,6 @@ def cmd_pipeline(args) -> int:
     # 出典は台本を書かせるためだけに使って捨てていた。概要欄に載せるので
     # 題材の仕様の隣に残す。ここを残さないと、何を読んで書いたのかが
     # 動画からも手元からも辿れなくなる。
-    spec_path = Path(args.spec)
     def rec(x):
         return {"kind": x.kind, "title": x.title, "year": x.year,
                 "venue": getattr(x, "venue", None), "identifier": x.identifier,
@@ -82,7 +154,6 @@ def cmd_pipeline(args) -> int:
                    for c in d.claims],
         "background": [rec(x) for x in d.background[:8]],
     }
-    src_path = spec_path.with_name(f"{spec_path.stem}_sources.json")
     src_path.write_text(json.dumps(kept, ensure_ascii=False, indent=1),
                         encoding="utf-8")
     print(f"出典 {len(cited)}件 / 数字入り記述 {len(facts)}件 -> {out}")
