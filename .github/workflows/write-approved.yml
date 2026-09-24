@@ -109,8 +109,8 @@ jobs:
               if [ -f "drafts/${name}_report.txt" ]; then
                 echo
                 echo '  ```'
-                sed -n '/^合格条件:/,/^  → /p' "drafts/${name}_report.txt" | sed 's/^/  /'
-                grep -E "^この資料で書けた尺|^資料に無い数字" "drafts/${name}_report.txt" | sed 's/^/  /'
+                sed -n '/合格条件:/,/^  → /p' "drafts/${name}_report.txt" | sed 's/^/  /'
+                grep -E "^尺:|^資料に無い数字" "drafts/${name}_report.txt" | sed 's/^/  /'
                 echo '  ```'
               fi
             done < /tmp/done.txt
