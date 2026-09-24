@@ -76,6 +76,7 @@ jobs:
               --out "out/prompt_${name}.txt" || continue
             python3 -m script_engine write "out/prompt_${name}.txt" \
               --spec "seeds/topics/${name}.yaml" \
+              --plans 1 --candidates 2 --rounds 1 \
               --out "drafts/${name}.txt" --duration "${{ inputs.duration }}" || true
             [ -f "drafts/${name}.txt" ] && echo "${name}|${subject}" >> /tmp/done.txt
           done < /tmp/subjects.txt

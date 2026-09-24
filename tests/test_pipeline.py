@@ -102,7 +102,7 @@ def test_run_planned_returns_measures_and_a_gate(tmp_path):
                        candidates=2, chat_factory=fac, log=lambda *a, **k: None)
     assert r.plans_tried == 2
     assert "〔" not in r.text                     # 根拠番号は剥がしてある
-    assert fac.calls >= 2 + 2 * 4                 # 設計図2本 + 塊4つ×候補2
+    assert 2 + 4 <= fac.calls <= 2 + 2 * 4        # 設計図2本 + 塊4つ（2本目は点が低いときだけ）
     m = PL.measures(r)
     assert set(m) >= {"chars", "private", "pivot", "unsourced_numbers", "gate_passed", "calls"}
     assert m["unsourced_numbers"] == 0
@@ -169,3 +169,44 @@ def test_fragments_like_tanbun_are_padding():
     from script_engine.devices import padding
     assert any(x.startswith("断片") for x in padding(["結論から言う。", "短文。", "短文。", "正しい。"]))
     assert not any(x.startswith("断片") for x in padding(["結論から言う。", "正しい。", "無い。"]))
+
+
+
+def test_only_the_relevant_facts_are_sent_to_a_chapter_with_original_numbers():
+    facts = ["1931 John Manly Roger Bacon and the Voynich MS https://doi.org/10.2307/2848508",
+             "1974 Robert Brumbaugh Botany and the Voynich Manuscript https://doi.org/10.2307/2851756",
+             "手稿の植物の絵は全体の7割を占める。"]
+    block = C.facts_for("手稿に描かれている植物は実在する植物に基づいている。Botany の指摘。", facts, limit=1)
+    assert "〔2〕 1974 Robert Brumbaugh" in block          # 関係する行が、通し番号のまま
+    assert "〔3〕 手稿の植物の絵" in block                   # 題材の記述は常に入る
+    assert "〔1〕" not in block                              # 関係の薄い出典は落ちる
+
+
+def test_a_second_candidate_is_written_only_when_the_first_scores_low(tmp_path):
+    """常に2本作ると章の呼び出しが倍になる。1本目が閾値を超えたら作らない。"""
+    spec = tmp_path / "m.yaml"
+    spec.write_text("subject: 巨石遺跡\nsubject_en: megalith\ngenre: 古代の謎\nclaims:\n- ja: a\n  en: a\n- ja: b\n  en: b\n",
+                    encoding="utf-8")
+    fac = FakeFactory()
+    r = PL.run_planned(MATERIAL, spec, duration_sec=120, model="fake", rounds=0, plans=1,
+                       candidates=2, chat_factory=fac, log=lambda *a, **k: None)
+    # 設計図1 + 冒頭1 + 章2（偽の章は結論・引き・出どころ・振り子が揃い閾値を超える）+ 着地（点が低く2本）
+    assert fac.calls <= 1 + 1 + 2 + 2
+    assert r.text
+
+
+def test_rate_notes_do_not_trigger_rewrites():
+    from script_engine.devices import Audit
+    p = P.validate(good_plan(2))
+    blocks = C.blocks_from_plan(p, subject="巨石遺跡", genre="古代の謎", claims=["a", "b"], duration_sec=900)
+    for b in blocks:
+        b.text = "文。"
+    a = Audit(minutes=15, per_min={}, chapters=[], plant=True, callback=True, opening_images=3,
+              opening_defeat=True, subject_free_run=9, unlanded=[], padding=[],
+              notes=["留保（ただし）が 0.00/分。参考は 0.19〜0.53/分",
+                     "文頭の反転（だが・しかし）が 1.40/分。参考は最大 0.53/分。否定の連打になっている",
+                     "前半に伏線（「この問いは最後の章で扱う」）が無い"])
+    C.route(blocks, a, ["話速 200字/分 が 320.0〜410.0 の外", "平均文長 28.0字 が 17.0〜26.0 の外"])
+    assert not any("留保" in n or "反転" in n or "話速" in n for b in blocks for n in b.notes)
+    assert any("伏線" in n for n in blocks[0].notes)
+    assert all(any("平均文長" in n for n in b.notes) for b in blocks[1:-1])

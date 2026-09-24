@@ -86,12 +86,42 @@ def facts_from_material(material: str) -> list[str]:
     return out
 
 
+_FACT_HEAD = ["## 使える事実（番号付き）",
+              "数字・年・人名を含む文の末尾に、根拠の番号を〔n〕で付ける（例:「1404年から1438年の値だった〔3〕」）。",
+              "番号を付けられない数字・年・人名は書かない。事実の題名（英語）は書かない。"]
+
+
 def facts_block(facts: list[str]) -> str:
-    lines = ["## 使える事実（番号付き）",
-             "数字・年・人名を含む文の末尾に、根拠の番号を〔n〕で付ける（例:「1404年から1438年の値だった〔3〕」）。",
-             "番号を付けられない数字・年・人名は書かない。事実の題名（英語）は書かない。"]
-    lines += [f"〔{i}〕 {f}" for i, f in enumerate(facts, 1)]
-    return "\n".join(lines)
+    return "\n".join(_FACT_HEAD + [f"〔{i}〕 {f}" for i, f in enumerate(facts, 1)])
+
+
+def _grams(text: str) -> set[str]:
+    t = re.sub(r"[\s、。「」『』（）()〔〕\[\]]", "", text)
+    words = set(w.lower() for w in re.findall(r"[A-Za-z]{4,}", text))
+    return {t[i:i + 2] for i in range(len(t) - 1)} | words
+
+
+def facts_for(brief: str, facts: list[str], *, limit: int = 14) -> str:
+    """章に関係する事実だけを、全体の通し番号のまま渡す。
+
+    全部渡すと1回 4,000〜5,000 トークンで、章ごと・候補ごと・直しごとに
+    かかる（1本 15万トークンの大半）。関係の薄い行は読まれもしない。
+    題材の記述（短い平文）は全部、出典と数字入り記述は章の指示との
+    重なりで上位だけ。番号を振り直さないので、〔n〕は章をまたいで同じ意味。
+    """
+    if not facts:
+        return ""
+    want = _grams(brief)
+    always, scored = [], []
+    for i, f in enumerate(facts, 1):
+        is_source = bool(re.match(r"^(\d{4}|----)\s", f)) or "http" in f or "[" in f
+        if not is_source:
+            always.append((i, f))                  # 題材の記述は常に入れる（短い）
+            continue
+        scored.append((len(want & _grams(f)), i, f))
+    scored.sort(key=lambda x: (-x[0], x[1]))
+    keep = sorted(always + [(i, f) for _, i, f in scored[:limit]], key=lambda x: x[0])
+    return "\n".join(_FACT_HEAD + [f"〔{i}〕 {f}" for i, f in keep])
 
 
 def uncited(text: str) -> list[str]:
@@ -373,17 +403,24 @@ def paragraph_index(blocks: list[Block], key: str) -> int | None:
     return None
 
 
+# 「これ以上は2本目を作らない」点。章は結論(2)+引き(2)+出どころ(1)+振り子(1) の7点満点で4点、
+# 冒頭は具体3つ+皆敗れた(2) で5点、着地は一般化の連続文で1.5点
+_ENOUGH = {"chapter": 4.0, "opening": 5.0, "closing": 1.5}
+
+
+def _score(b: Block, text: str, material: str, subject: str) -> float:
+    if b.key == "opening":
+        return opening_score(text)
+    if b.key == "closing":
+        return closing_score(text, subject)
+    return chapter_score(text, material=material, target_chars=b.target_chars, subject=subject)
+
+
 def _pick(b: Block, texts: list[str], *, material: str, subject: str) -> str:
     """候補の中から、装置の点がいちばん高いものを採る。"""
     if len(texts) == 1:
         return texts[0]
-    if b.key == "opening":
-        scorer = lambda t: opening_score(t)
-    elif b.key == "closing":
-        scorer = lambda t: closing_score(t, subject)
-    else:
-        scorer = lambda t: chapter_score(t, material=material, target_chars=b.target_chars, subject=subject)
-    return max(texts, key=scorer)
+    return max(texts, key=lambda t: _score(b, t, material, subject))
 
 
 def ensure_plant(text: str, planted: str) -> str:
@@ -460,13 +497,18 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
     """
     blocks = blocks_from_plan(p, subject=subject, genre=genre, claims=claims,
                               duration_sec=duration_sec, weights=weights)
-    facts = facts_block(facts_from_material(material)) if (cite and material) else ""
+    all_facts = facts_from_material(material) if (cite and material) else []
+    facts = facts_block(all_facts) if all_facts else ""
     tail = ""
     planted = str(p.planted_question.get("text") or "")
     answer = str(p.closing.get("callback") or "")
     for b in blocks:
-        f = facts if b.key.startswith("chapter") else ""
-        texts = [write_block(b, tail, chat, f) for _ in range(max(1, candidates))]
+        f = facts_for(b.brief, all_facts) if (all_facts and b.key.startswith("chapter")) else ""
+        # 候補は必要なときだけ。1本目が閾値を超えていれば2本目は作らない
+        # （常に2本作ると章の呼び出しが倍になる。bench では選択の効果は構造より小さかった）
+        texts = [write_block(b, tail, chat, f)]
+        while len(texts) < max(1, candidates) and _score(b, texts[-1], material, subject) < _ENOUGH.get(b.key[:7], 4.0):
+            texts.append(write_block(b, tail, chat, f))
         b.text = _pick(b, texts, material=material, subject=subject)
         b.text = _guarantee(b, p, planted, answer)
         tail = _tail(strip_cites(b.text))
@@ -483,7 +525,7 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
         loose = {b.key: devices.unsourced_numbers(strip_cites(b.text), material)
                  for b in blocks if material}
         loose_notes = [f"{k}: 資料に無い数字 " + "、".join(v) for k, v in loose.items() if v]
-        bare = {b.key: uncited(b.text) for b in blocks if facts and b.key.startswith("chapter")}
+        bare = {b.key: uncited(b.text) for b in blocks if all_facts and b.key.startswith("chapter")}
         bare_notes = [f"{k}: 根拠番号の無い数字の文 " + " / ".join(v[:3]) for k, v in bare.items() if v]
         left = list(audit.notes) + list(style.violations) + loose_notes + bare_notes
         if not left or r == rounds:
@@ -499,7 +541,7 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
         prev = ""
         for b in blocks:
             if b.notes:
-                f = facts if b.key.startswith("chapter") else ""
+                f = facts_for(b.brief, all_facts) if (all_facts and b.key.startswith("chapter")) else ""
                 b.text = rewrite_block(b, prev, chat, f)
                 b.text = _guarantee(b, p, planted, answer)
             prev = _tail(strip_cites(b.text))
@@ -509,6 +551,10 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
 # 全体の指摘をどの塊に渡すか。装置は住んでいる場所が決まっている
 _TO_OPENING = re.compile(r"冒頭|伏線")
 _TO_CLOSING = re.compile(r"回収|一般化")
+# 書き直しの引き金にしない指摘。率（私は・ただし・つまり・短文・逆接）は書き直しても
+# 揃わない（bench 実測）。話速と文の密度と数字の密度は資料の厚みで決まる。
+# これらで全章を書き直すと、1回の直しで章の呼び出しが5回増える。報告だけにする
+_REPORT_ONLY = re.compile(r"/分。参考は|文頭の反転|6字以下|話速|文の密度|数字 [0-9.]+個/分")
 
 
 def route(blocks: list[Block], audit: devices.Audit, style_notes: list[str]) -> None:
@@ -522,6 +568,8 @@ def route(blocks: list[Block], audit: devices.Audit, style_notes: list[str]) -> 
             by_para[idx].notes += notes
     chapters = [b for b in blocks if b.key.startswith("chapter")]
     for n in audit.global_notes + style_notes:
+        if _REPORT_ONLY.search(n):
+            continue
         if _TO_OPENING.search(n):
             blocks[0].notes.append(n)
         elif _TO_CLOSING.search(n):

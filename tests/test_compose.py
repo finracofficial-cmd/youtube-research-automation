@@ -69,12 +69,12 @@ def test_route_sends_opening_notes_to_the_opening_and_rates_to_chapters():
     a = Audit(minutes=15, per_min={}, chapters=[], plant=False, callback=True,
               opening_images=0, opening_defeat=True, subject_free_run=9, unlanded=[], padding=[],
               notes=["前半に伏線が無い", "留保（ただし）が 0.00/分。参考は 0.19〜0.53/分", "終盤に回収が無い"])
-    C.route(blocks, a, ["話速 200字/分 が 320〜410 の外"])
+    C.route(blocks, a, ["話速 200字/分 が 320〜410 の外", "平均文長 28.0字 が 17.0〜26.0 の外"])
     assert any("伏線" in n for n in blocks[0].notes)
     assert any("回収" in n for n in blocks[-1].notes)
-    assert all(any("留保" in n for n in b.notes) for b in blocks[1:-1])
-    assert all(any("話速" in n for n in b.notes) for b in blocks[1:-1])
-    assert not any("留保" in n for n in blocks[0].notes)
+    # 率と話速は書き直しの引き金にしない（報告だけ）。文長は章へ
+    assert not any("留保" in n or "話速" in n for b in blocks for n in b.notes)
+    assert all(any("平均文長" in n for n in b.notes) for b in blocks[1:-1])
 
 
 

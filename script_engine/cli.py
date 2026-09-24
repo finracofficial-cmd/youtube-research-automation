@@ -231,12 +231,13 @@ def main(argv=None) -> int:
     w.add_argument("--out", required=True)
     w.add_argument("--duration", type=float, default=900.0)
     w.add_argument("--model", default="gpt-4.1")
-    w.add_argument("--rounds", type=int, default=2,
-                   help="実測から外れていたときに直させる回数")
+    w.add_argument("--rounds", type=int, default=1,
+                   help="実測から外れていたときに直させる回数（嘘・構造・水増しだけが引き金）")
     w.add_argument("--spec", help="題材の仕様（seeds/topics/*.yaml）。渡すと設計図モード")
     w.add_argument("--kind", choices=["flagship", "bundle"], default="bundle")
-    w.add_argument("--plans", type=int, default=2, help="設計図を何本作って選ぶか")
-    w.add_argument("--candidates", type=int, default=2, help="塊ごとに候補を何本作って選ぶか")
+    w.add_argument("--plans", type=int, default=1, help="設計図を何本作って選ぶか")
+    w.add_argument("--candidates", type=int, default=2,
+                   help="塊ごとの候補の上限。1本目の点が低いときだけ2本目を作る")
     w.add_argument("--no-cite", action="store_true", help="資料を番号付きで渡さない（比較用）")
     w.set_defaults(func=cmd_write)
 
@@ -246,9 +247,9 @@ def main(argv=None) -> int:
     b.add_argument("--runs", type=int, default=3)
     b.add_argument("--duration", type=float, default=900.0)
     b.add_argument("--model", default="gpt-4.1")
-    b.add_argument("--rounds", type=int, default=2)
+    b.add_argument("--rounds", type=int, default=1)
     b.add_argument("--kind", choices=["flagship", "bundle"], default="bundle")
-    b.add_argument("--plans", type=int, default=2)
+    b.add_argument("--plans", type=int, default=1)
     b.add_argument("--candidates", type=int, default=2)
     b.add_argument("--no-cite", action="store_true", help="資料を番号付きで渡さない（比較用）")
     b.add_argument("--out", help="結果のJSON（隣に各本の本文も置く）")
