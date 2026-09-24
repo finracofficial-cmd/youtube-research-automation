@@ -104,6 +104,14 @@ jobs:
             while IFS='|' read -r name subject; do
               echo "- **${subject}** — \`drafts/${name}.txt\`"
               echo "  Make video の入力: script=\`drafts/${name}.txt\` / name=\`${name}\`"
+              # 合格条件と、人が確かめる数字。不合格なら動画にしない
+              if [ -f "drafts/${name}_report.txt" ]; then
+                echo
+                echo '  ```'
+                sed -n '/^合格条件:/,/^  → /p' "drafts/${name}_report.txt" | sed 's/^/  /'
+                grep -E "^この資料で書けた尺|^資料に無い数字" "drafts/${name}_report.txt" | sed 's/^/  /'
+                echo '  ```'
+              fi
             done < /tmp/done.txt
           } > /tmp/comment.md
           gh issue comment "${{ inputs.issue }}" --body-file /tmp/comment.md
