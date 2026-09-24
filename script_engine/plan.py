@@ -240,6 +240,42 @@ def strip_unsourced(plan: Plan, material: str) -> list[str]:
     return dropped
 
 
+_EVALUATIVE = re.compile(r"謎|奇妙|不思議|驚|美し|神秘|異様|恐ろし|衝撃")
+
+
+def score(plan: Plan, material: str, *, subject: str = "") -> float:
+    """設計図の良さを、資料への沿い方で点数にする。複数作って選ぶための物差し。
+
+    見るのは「資料にある事実で組めているか」だけ。文章の巧さは見ない
+    （それは書いたあとに devices が見る）。
+    """
+    pts = 0.0
+    for c in plan.chapters:
+        o = c.origin or {}
+        if any(str(o.get(k) or "").strip() not in ("", "不明") for k in ("who", "year")):
+            pts += 1.0                                  # 出どころが分かっている
+        pts += 0.5 * len(c.numbers)                     # 残った数字は資料にあるもの（strip 済み）
+        if c.narrator:
+            pts += 0.5                                  # 判断を置いている
+        if len(c.swings) >= 3:
+            pts += 0.5
+        ev = c.evidence or {}
+        if str(ev.get("year") or "").strip() not in ("", "不明"):
+            pts += 0.5
+    for img in (plan.opening.get("images") or [])[:3]:
+        img = str(img)
+        if not _EVALUATIVE.search(img):
+            pts += 1.0                                  # 評価語でなく物で書けている
+        if re.search(r"\d", img):
+            pts += 0.5
+    thesis = plan.thesis
+    if subject and subject in thesis:
+        pts -= 2.0                                      # 題材を離れていない
+    if re.search(r"ではない。|ではなく|で決まる|によって決まる", thesis):
+        pts += 1.0                                      # 仕組みを言う形
+    return pts
+
+
 def prompt(material: str, *, subject: str, claims: list[str], duration_sec: float,
            kind: str = "bundle") -> str:
     """設計図を書かせるプロンプト。material は research pipeline が出した

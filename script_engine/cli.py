@@ -150,75 +150,60 @@ def writable_minutes(n_chars: int, chars_per_min: float = 360.0) -> float:
 def _write_planned(args, material: str) -> int:
     import json
 
-    import yaml
-
     from . import plan as P
-    from .compose import compose
-    from .devices import report, unsourced_numbers
-    from .write import WriteFailed, chat_fn
-
-    spec = yaml.safe_load(Path(args.spec).read_text(encoding="utf-8"))
-    subject = spec["subject"]
-    genre = spec.get("genre", "未解決の謎")
-    claims = [c["ja"] for c in spec.get("claims", [])]
-    kind = args.kind
+    from .devices import report
+    from .pipeline import run_planned
+    from .write import WriteFailed
 
     try:
-        # 設計図。形が崩れていたら、指摘を付けて1回だけ書き直させる
-        ask = chat_fn(args.model, json_mode=True, temperature=0.5)
-        msgs = [{"role": "user", "content": P.prompt(material, subject=subject, claims=claims,
-                                                     duration_sec=args.duration, kind=kind)}]
-        raw = ask(msgs)
-        try:
-            plan = P.validate(P.parse(raw), n_claims=len(claims))
-        except P.PlanError as exc:
-            msgs += [{"role": "assistant", "content": raw},
-                     {"role": "user", "content": f"設計図に不備がある。直したJSONだけを出す。\n{exc}"}]
-            raw = ask(msgs)
-            plan = P.validate(P.parse(raw), n_claims=len(claims))
-        dropped = P.strip_unsourced(plan, material)
-        if dropped:
-            print("設計図から落とした数字（資料に無い）: " + "、".join(dropped))
-        plan_path = Path(args.out).with_name(Path(args.out).stem + "_plan.json")
-        plan_path.write_text(json.dumps(plan.raw, ensure_ascii=False, indent=1), encoding="utf-8")
-        print("設計図:")
-        for line in P.describe(plan):
-            print(f"  {line}")
-
-        # 章の尺は資料の厚みで配る。出典の一覧が隣にあれば、主張ごとの件数を重みにする
-        weights = None
-        src_path = Path(args.spec).with_name(Path(args.spec).stem + "_sources.json")
-        if src_path.exists():
-            srcs = json.loads(src_path.read_text(encoding="utf-8"))
-            by_ja = {c.get("ja"): len(c.get("sources") or []) for c in (srcs.get("claims") or [])}
-            weights = [float(by_ja.get(c, 0)) for c in claims]
-            print("章の重み（出典の数）: " + " / ".join(f"{int(w)}" for w in weights))
-        text, audit, left = compose(plan, subject=subject, genre=genre, claims=claims,
-                                    duration_sec=args.duration, chat=chat_fn(args.model),
-                                    rounds=args.rounds, kind=kind, material=material,
-                                    weights=weights)
+        r = run_planned(material, Path(args.spec), duration_sec=args.duration, model=args.model,
+                        rounds=args.rounds, kind=args.kind, plans=args.plans,
+                        candidates=args.candidates, cite=not args.no_cite)
     except (WriteFailed, P.PlanError) as exc:
         print(f"生成できなかった: {exc}")
         return 1
 
-    Path(args.out).write_text(text, encoding="utf-8")
-    m = validate(text, args.duration)
-    print(f"\n{len(text)}字 / 忠実度 {m.fidelity:.0%} -> {args.out}")
-    mins = writable_minutes(m.n_chars)
+    out = Path(args.out)
+    out.write_text(r.text, encoding="utf-8")
+    out.with_name(out.stem + "_plan.json").write_text(
+        json.dumps(r.plan.raw, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    lines = [f"{r.style.n_chars}字 / 忠実度 {r.style.fidelity:.0%} / 設計図{r.plans_tried}本 / "
+             f"呼び出し{r.calls}回 {r.tokens:,}トークン"]
+    mins = writable_minutes(r.style.n_chars)
     if mins < args.duration / 60 * 0.85:
-        print(f"この資料で書けた尺は約{mins:.0f}分（指定は{args.duration / 60:.0f}分）。"
-              "字数は埋めない。足りないのは文章ではなく調査なので、出典と数字入り記述を増やしてから書き直す")
-    for line in report(audit):
-        print(f"  {line}")
-    loose = unsourced_numbers(text, material)
-    if loose:
-        print("資料に無い数字（人が確かめる）: " + "、".join(loose[:12]))
+        lines.append(f"この資料で書けた尺は約{mins:.0f}分（指定は{args.duration / 60:.0f}分）。"
+                     "字数は埋めない。足りないのは文章ではなく調査なので、出典と数字入り記述を増やしてから書き直す")
+    lines.append("")
+    lines.append("合格条件:")
+    for k, v in r.gate.items():
+        lines.append(f"  {'○' if v else '×'} {k}")
+    lines.append(f"  → {'合格' if r.passed else '不合格（動画にしない）'}")
+    lines.append("")
+    lines += report(r.audit)
+    if r.loose:
+        lines.append("資料に無い数字（人が確かめる）: " + "、".join(r.loose[:12]))
+    if r.left:
+        lines.append("直しきれなかった点:")
+        lines += [f"  - {n}" for n in r.left]
+    text = "\n".join(lines)
+    print(text)
+    out.with_name(out.stem + "_report.txt").write_text(text + "\n", encoding="utf-8")
+    print(f"-> {out}")
     print(meter.report())
-    if left:
-        print("直しきれなかった点:")
-        for n in left:
-            print(f"  - {n}")
-    return 0 if m.ok else 1
+    return 0 if r.passed else 1
+
+
+def cmd_bench(args) -> int:
+    """同じ資料で何本か書かせて、数の幅を見る。"""
+    from .bench import run
+
+    out = Path(args.out) if args.out else None
+    run(Path(args.prompt), Path(args.spec), runs=args.runs, duration_sec=args.duration,
+        model=args.model, rounds=args.rounds, kind=args.kind, plans=args.plans,
+        candidates=args.candidates, out=out, cite=not args.no_cite)
+    print(meter.report())
+    return 0
 
 
 def main(argv=None) -> int:
@@ -251,7 +236,24 @@ def main(argv=None) -> int:
                    help="実測から外れていたときに直させる回数")
     w.add_argument("--spec", help="題材の仕様（seeds/topics/*.yaml）。渡すと設計図モード")
     w.add_argument("--kind", choices=["flagship", "bundle"], default="bundle")
+    w.add_argument("--plans", type=int, default=2, help="設計図を何本作って選ぶか")
+    w.add_argument("--candidates", type=int, default=2, help="塊ごとに候補を何本作って選ぶか")
+    w.add_argument("--no-cite", action="store_true", help="資料を番号付きで渡さない（比較用）")
     w.set_defaults(func=cmd_write)
+
+    b = sub.add_parser("bench", help="同じ資料で何本か書かせて、数の幅を見る")
+    b.add_argument("prompt")
+    b.add_argument("--spec", required=True)
+    b.add_argument("--runs", type=int, default=3)
+    b.add_argument("--duration", type=float, default=900.0)
+    b.add_argument("--model", default="gpt-4.1")
+    b.add_argument("--rounds", type=int, default=2)
+    b.add_argument("--kind", choices=["flagship", "bundle"], default="bundle")
+    b.add_argument("--plans", type=int, default=2)
+    b.add_argument("--candidates", type=int, default=2)
+    b.add_argument("--no-cite", action="store_true", help="資料を番号付きで渡さない（比較用）")
+    b.add_argument("--out", help="結果のJSON（隣に各本の本文も置く）")
+    b.set_defaults(func=cmd_bench)
 
     m = sub.add_parser("compare", help="複数の台本を参照動画と横並びで比べる")
     m.add_argument("drafts", nargs="+", help="path:duration の形で複数指定")

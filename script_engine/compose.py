@@ -64,6 +64,51 @@ def _opening_brief(p: planmod.Plan, subject: str, genre: str, claims: list[str])
     return "\n".join(lines)
 
 
+_CITE = re.compile(r"〔\s*\d+(?:\s*[,、]\s*\d+)*\s*〕")
+_DIGIT = re.compile(r"\d")
+
+
+def facts_from_material(material: str) -> list[str]:
+    """資料の中の、事実として使える行。出典の行と数字入り記述と題材の記述。
+    章を書かせるときに番号付きで渡す。番号が無いと、書き手は設計図に圧縮された
+    事実しか持たず、細部を作る（v4 実測: 「葉が7枚、茎が17センチ」）。"""
+    out: list[str] = []
+    in_wiki = False
+    for line in material.splitlines():
+        t = line.strip()
+        if t.startswith("## "):
+            in_wiki = "題材の記述" in t
+            continue
+        if t.startswith("- "):
+            out.append(t[2:].strip())
+        elif in_wiki and t and not t.startswith(("見た目", "出典と", "#")):
+            out.append(t)
+    return out
+
+
+def facts_block(facts: list[str]) -> str:
+    lines = ["## 使える事実（番号付き）",
+             "数字・年・人名を含む文の末尾に、根拠の番号を〔n〕で付ける（例:「1404年から1438年の値だった〔3〕」）。",
+             "番号を付けられない数字・年・人名は書かない。事実の題名（英語）は書かない。"]
+    lines += [f"〔{i}〕 {f}" for i, f in enumerate(facts, 1)]
+    return "\n".join(lines)
+
+
+def uncited(text: str) -> list[str]:
+    """数字を含むのに根拠番号の無い文。"""
+    out = []
+    for sent in re.split(r"(?<=[。？！])", text):
+        if _DIGIT.search(sent) and not _CITE.search(sent):
+            s_ = sent.strip()
+            if s_:
+                out.append(s_[:30])
+    return out
+
+
+def strip_cites(text: str) -> str:
+    return _CITE.sub("", text)
+
+
 def _known(*parts: str) -> str:
     """不明の項目は書かない。「不明」と渡すと本文に「著者は不明」と書かれる（実測）。"""
     return " / ".join(str(x) for x in parts if str(x or "").strip() and str(x).strip() != "不明")
@@ -222,13 +267,15 @@ def _fold(key: str, text: str) -> str:
     return thin_connectives(text)
 
 
-def write_block(b: Block, previous_tail: str, chat: Chat) -> str:
-    """1塊を書かせる。直前の塊の末尾を渡して、つなぎを合わせる。"""
+def write_block(b: Block, previous_tail: str, chat: Chat, facts: str = "") -> str:
+    """1塊を書かせる。直前の塊の末尾を渡して、つなぎを合わせる。
+    facts（番号付きの資料）を渡すと、数字の文に根拠番号を付けさせる。"""
     messages = [
         {"role": "system", "content": STYLE_SYSTEM + "\n\n" + _BLOCK_RULES},
         {"role": "user", "content":
          (f"直前の塊の末尾:\n{previous_tail}\n\n" if previous_tail else "")
          + b.brief
+         + (f"\n\n{facts}" if facts else "")
          + f"\n\n## 分量\n{b.target_chars:,}字まで。上限であって目標ではない。"
          "事実が尽きたら、そこで塊を終える。言い換え・要約・同じ結論の再掲で埋めない。"
          "1文に1つ、新しい事実か判断を置く。"},
@@ -236,12 +283,67 @@ def write_block(b: Block, previous_tail: str, chat: Chat) -> str:
     return _fold(b.key, tighten(clean(chat(messages))))
 
 
-def rewrite_block(b: Block, previous_tail: str, chat: Chat) -> str:
+def chapter_score(text: str, *, material: str, target_chars: int, subject: str = "") -> float:
+    """章の候補を選ぶ物差し。装置があるほど高く、嘘と水増しがあるほど低い。
+    人の好みではなく devices の検出を点にしただけ。"""
+    sents = devices.split_sentences(text.replace("\n", ""))
+    if not sents:
+        return -99.0
+    pts = 0.0
+    pts += 2.0 if any(devices.VERDICT.search(x) for x in sents[:10]) else 0.0
+    pts += 2.0 if devices._hooks_out(sents) else 0.0
+    pts += 1.0 if any(devices.YEAR.search(x) and (devices.ORIGIN.search(x) or devices.PERSON.search(x)
+                                                    or devices.PROVENANCE.search(x)) for x in sents) else 0.0
+    pts += 1.0 if devices._swings(sents) >= 2 else 0.0
+    pts += 0.5 if any(devices.PRIVATE.search(x) for x in sents) else 0.0
+    pts += 0.5 if any(devices.RESERVE.search(x) for x in sents) else 0.0
+    pts -= 1.0 * len(devices.padding(sents, subject))
+    pts -= 2.0 * len(devices.unsourced_numbers(text, material)) if material else 0.0
+    pts -= 1.0 * len(devices.unlanded_jargon(sents))
+    pts -= 1.0 * len(uncited(text)) if _CITE.search(text) or material else 0.0
+    n_chars = sum(len(x) for x in sents)
+    avg = n_chars / len(sents)
+    if not 17.0 <= avg <= 26.0:
+        pts -= 1.0
+    if n_chars > target_chars * 1.15:
+        pts -= 2.0
+    if n_chars < target_chars * 0.35:
+        pts -= 1.0
+    adv = sum(bool(devices.PIVOT.search(x)) for x in sents)
+    pts -= max(0, adv - 3) * 0.5
+    return pts
+
+
+def opening_score(text: str) -> float:
+    sents = devices.split_sentences(text.replace("\n", ""))
+    pts = float(sum(devices._is_noun_stop(x) for x in sents[:12]))
+    pts += 2.0 if any(devices.DEFEAT.search(x) for x in sents) else 0.0
+    pts += 2.0 if any(devices.PLANT.search(x) for x in sents) else 0.0
+    pts += 1.0 if any(devices.LAUNCH.search(x) for x in sents) else 0.0
+    return pts
+
+
+def closing_score(text: str, subject: str) -> float:
+    sents = devices.split_sentences(text.replace("\n", ""))
+    pts = 2.0 if any(devices.CALLBACK.search(x) for x in sents) else 0.0
+    run = best = 0
+    for x in sents:
+        if subject and subject in x:
+            run = 0
+        else:
+            run += 1
+            best = max(best, run)
+    pts += min(best, 8) * 0.25
+    pts += 1.0 if any(re.search(r"と分かった", x) for x in sents) else 0.0
+    return pts
+
+
+def rewrite_block(b: Block, previous_tail: str, chat: Chat, facts: str = "") -> str:
     messages = [
         {"role": "system", "content": STYLE_SYSTEM + "\n\n" + _BLOCK_RULES},
         {"role": "user", "content":
          (f"直前の塊の末尾:\n{previous_tail}\n\n" if previous_tail else "")
-         + b.brief},
+         + b.brief + (f"\n\n{facts}" if facts else "")},
         {"role": "assistant", "content": b.text},
         {"role": "user", "content":
          "この塊は参考動画の実測から外れている。内容と事実は変えず、指摘された点だけ"
@@ -252,7 +354,7 @@ def rewrite_block(b: Block, previous_tail: str, chat: Chat) -> str:
 
 
 def assemble(blocks: list[Block]) -> str:
-    return "\n\n".join(b.text.strip() for b in blocks if b.text.strip()) + "\n"
+    return "\n\n".join(strip_cites(b.text).strip() for b in blocks if b.text.strip()) + "\n"
 
 
 def _tail(text: str, n: int = 3) -> str:
@@ -272,21 +374,40 @@ def paragraph_index(blocks: list[Block], key: str) -> int | None:
     return None
 
 
+def _pick(b: Block, texts: list[str], *, material: str, subject: str) -> str:
+    """候補の中から、装置の点がいちばん高いものを採る。"""
+    if len(texts) == 1:
+        return texts[0]
+    if b.key == "opening":
+        scorer = lambda t: opening_score(t)
+    elif b.key == "closing":
+        scorer = lambda t: closing_score(t, subject)
+    else:
+        scorer = lambda t: chapter_score(t, material=material, target_chars=b.target_chars, subject=subject)
+    return max(texts, key=scorer)
+
+
 def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
             duration_sec: float, chat: Chat, rounds: int = 2,
             kind: str = "bundle", material: str = "",
-            weights: list[float] | None = None) -> tuple[str, devices.Audit, list[str]]:
+            weights: list[float] | None = None, candidates: int = 1,
+            cite: bool = True) -> tuple[str, devices.Audit, list[str]]:
     """設計図から台本を書き、監査して、外れた章だけ直す。
 
-    material を渡すと、資料に無い数字を章の指摘にして消させる。
+    material を渡すと、資料に無い数字を章の指摘にして消させる。cite なら
+    資料を番号付きで章に渡し、数字の文に根拠番号を付けさせる（採るときに剥がす）。
+    candidates が2以上なら塊ごとに候補を作り、装置の点で選ぶ。
     戻り値は (台本, 最後の監査, 残った指摘)。
     """
     blocks = blocks_from_plan(p, subject=subject, genre=genre, claims=claims,
                               duration_sec=duration_sec, weights=weights)
+    facts = facts_block(facts_from_material(material)) if (cite and material) else ""
     tail = ""
     for b in blocks:
-        b.text = write_block(b, tail, chat)
-        tail = _tail(b.text)
+        f = facts if b.key.startswith("chapter") else ""
+        texts = [write_block(b, tail, chat, f) for _ in range(max(1, candidates))]
+        b.text = _pick(b, texts, material=material, subject=subject)
+        tail = _tail(strip_cites(b.text))
 
     left: list[str] = []
     audit = None
@@ -297,10 +418,12 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
         audit = devices.audit(text, duration_sec, subject=subject, kind=kind,
                               chapter_blocks=chapter_idx or None)
         style = validate(text, duration_sec)
-        loose = {b.key: devices.unsourced_numbers(b.text, material)
-                 for b in blocks if material and b.key != "opening"}
+        loose = {b.key: devices.unsourced_numbers(strip_cites(b.text), material)
+                 for b in blocks if material}
         loose_notes = [f"{k}: 資料に無い数字 " + "、".join(v) for k, v in loose.items() if v]
-        left = list(audit.notes) + list(style.violations) + loose_notes
+        bare = {b.key: uncited(b.text) for b in blocks if facts and b.key.startswith("chapter")}
+        bare_notes = [f"{k}: 根拠番号の無い数字の文 " + " / ".join(v[:3]) for k, v in bare.items() if v]
+        left = list(audit.notes) + list(style.violations) + loose_notes + bare_notes
         if not left or r == rounds:
             break
         route(blocks, audit, list(style.violations))
@@ -308,11 +431,15 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
             if loose.get(b.key):
                 b.notes.append("資料に無い数字を消すか、資料にある数字に置き換える: "
                                + "、".join(loose[b.key]) + "。数字を作らない")
+            if bare.get(b.key):
+                b.notes.append("数字を含む文に根拠番号〔n〕が無い。番号を付けるか、その文を消す: "
+                               + " / ".join(bare[b.key][:3]))
         prev = ""
         for b in blocks:
             if b.notes:
-                b.text = rewrite_block(b, prev, chat)
-            prev = _tail(b.text)
+                f = facts if b.key.startswith("chapter") else ""
+                b.text = rewrite_block(b, prev, chat, f)
+            prev = _tail(strip_cites(b.text))
     return assemble(blocks), audit, left
 
 
