@@ -1,17 +1,49 @@
-# script_engine — 台本の骨組み（工程B の基盤）
+# script_engine — 台本の骨組みと、見続けさせる装置
 
 元チャンネル2本（ヴォイニッチ回52:39 / ピラミッド回37:52）の構造と文体を計測し、
 **題材非依存の骨**として抜き出したもの。題材を差し替えても同じ構造の台本が出る。
 
 ```bash
-# 台本生成プロンプトを組み立てる
-python -m script_engine prompt "巨石遺跡" --kind bundle --duration 1500 \
-  --claims "重すぎて現代技術でも運べない" "継ぎ目に紙一枚入らない" "天文と一致している" \
-  --sources "Nature 552, 386 (2017)"
+# 調査 → 台本プロンプト（資料入り）
+python -m research pipeline seeds/topics/voynich-manuscript.yaml --duration 900 --out out/prompt_voynich.txt
 
-# 書き上がった台本を実測プロファイルに照らす
-python -m script_engine check draft.txt --duration 1500
+# 設計図モードで書く（章ごとの仕掛けを先に決めてから、塊ごとに書く）
+python -m script_engine write out/prompt_voynich.txt --spec seeds/topics/voynich-manuscript.yaml \
+  --out drafts/voynich-manuscript.txt --duration 900
+
+# 書き上がった台本を実測プロファイルと装置のレンジに照らす
+python -m script_engine check drafts/voynich-manuscript.txt --duration 900 --subject ヴォイニッチ手稿
 ```
+
+## 2段で書く理由（2026-09-24）
+
+一気に書かせた台本は `check` に合格していたのに平板だった。参考2本の本文と
+並べて数えると、無いものがはっきりした（`analysis/retention_devices.md`）。
+
+| 装置 | 参考（/分） | うちの台本 |
+|---|---|---|
+| 語り手の判断（私は判断を保留する） | 0.03〜0.13 | **0** |
+| 留保（ただし） | 0.19〜0.53 | 0 |
+| 文頭の反転（だが・しかし） | 0.26〜0.53 | **1.40** |
+| 伏線→回収（1章で開いて最終章で拾う） | 有 | 無 |
+| 章頭で結論を先に言う | 6/9章 | 0/5章 |
+
+反転だけ参考の2.6倍。振り子ではなく否定の連打になっていた。字数を要求されて
+事実が足りないと「1点目が1404年。2点目が1438年」と列挙で埋める。
+
+```
+plan.py     設計図。章ごとに 結論／なぜ／出どころ／振り子（肯定→反転→留保）／
+            証拠／数字と断り／専門語の着地／語り手の判断／結論の範囲／次への引き。
+            伏線を開く章と、題材より大きい主題もここで決める。JSONで受け、形が崩れて
+            いれば1回だけ書き直させる
+compose.py  塊ごとに書く（冒頭 4.0% / 章 / 着地 11.5%）。監査の指摘は装置の
+            住んでいる塊へ配り（伏線→冒頭、回収→着地、率の不足→章）、その塊だけ直す
+devices.py  監査。上の表のレンジと、伏線・回収・章末の引き・水増しを見る。
+            tests/test_devices.py が参考2本を自身の監査に通している
+```
+
+語り手は**判断だけ**書く。「私は全部読んだ」は生成では捏造になるので、
+`plan.validate` が行為の形を落とす。
 
 ## 設計方針
 

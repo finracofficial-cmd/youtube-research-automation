@@ -90,12 +90,15 @@ class WriteFailed(RuntimeError):
     """鍵が無い、またはAPIが応答しない。"""
 
 
-def _chat(messages: list[dict], model: str, *, timeout: int = 300) -> str:
+def _chat(messages: list[dict], model: str, *, timeout: int = 300,
+          json_mode: bool = False, temperature: float = 0.8) -> str:
     key = os.environ.get("OPENAI_API_KEY")
     if not key and not os.environ.get("OPENAI_VIA_PROXY"):
         raise WriteFailed("OPENAI_API_KEY が未設定。環境変数で渡すこと")
-    body = json.dumps({"model": model, "messages": messages,
-                       "temperature": 0.8}).encode()
+    req_body = {"model": model, "messages": messages, "temperature": temperature}
+    if json_mode:
+        req_body["response_format"] = {"type": "json_object"}
+    body = json.dumps(req_body).encode()
     headers = {"Content-Type": "application/json"}
     if key:
         headers["Authorization"] = f"Bearer {key}"
@@ -111,6 +114,14 @@ def _chat(messages: list[dict], model: str, *, timeout: int = 300) -> str:
                 continue
             raise WriteFailed(f"HTTP {exc.code}: {exc.read()[:200]!r}") from exc
     raise WriteFailed("応答が得られなかった")
+
+
+def chat_fn(model: str = DEFAULT_MODEL, *, json_mode: bool = False,
+            temperature: float = 0.8):
+    """compose / plan に渡す chat(messages) -> str。"""
+    def chat(messages: list[dict]) -> str:
+        return _chat(messages, model, json_mode=json_mode, temperature=temperature)
+    return chat
 
 
 # 参照動画の実測の話速。必要な字数はここから決まる。

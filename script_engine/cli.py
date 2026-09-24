@@ -40,6 +40,17 @@ def cmd_check(args) -> int:
     print(f"\n参照動画への忠実度: {m.fidelity:.0%}")
     for line in m.fidelity_report():
         print(f"  {line}")
+
+    # 型に収まっていても、見続けられるかは別。装置を数える
+    from .devices import audit, report
+    a = audit(text, args.duration, subject=args.subject or "", kind=args.kind)
+    print("\n離脱対策の装置（参考2本の実測レンジ）:")
+    for line in report(a):
+        print(f"  {line}")
+    if a.notes:
+        print("  足りないもの:")
+        for n in a.notes:
+            print(f"    - {n}")
     if m.ok:
         print("\n合格")
         if m.fidelity < 0.85:
@@ -93,10 +104,16 @@ def cmd_compare(args) -> int:
 
 
 def cmd_write(args) -> int:
-    """プロンプトを渡して台本を書かせ、実測から外れていれば直させる。"""
+    """プロンプトを渡して台本を書かせ、実測から外れていれば直させる。
+
+    --spec を渡すと設計図モード。章ごとの仕掛け（結論先出し・振り子・伏線・
+    着地）を先に決めてから塊ごとに書く。渡さなければ従来の一気書き。
+    """
     from .write import WriteFailed, write
 
     prompt = Path(args.prompt).read_text(encoding="utf-8")
+    if args.spec:
+        return _write_planned(args, prompt)
 
     def checker(text: str) -> list[str]:
         m = validate(text, args.duration)
@@ -124,6 +141,64 @@ def cmd_write(args) -> int:
     return 0 if m.ok else 1
 
 
+def _write_planned(args, material: str) -> int:
+    import json
+
+    import yaml
+
+    from . import plan as P
+    from .compose import compose
+    from .devices import report, unsourced_numbers
+    from .write import WriteFailed, chat_fn
+
+    spec = yaml.safe_load(Path(args.spec).read_text(encoding="utf-8"))
+    subject = spec["subject"]
+    genre = spec.get("genre", "未解決の謎")
+    claims = [c["ja"] for c in spec.get("claims", [])]
+    kind = args.kind
+
+    try:
+        # 設計図。形が崩れていたら、指摘を付けて1回だけ書き直させる
+        ask = chat_fn(args.model, json_mode=True, temperature=0.5)
+        msgs = [{"role": "user", "content": P.prompt(material, subject=subject, claims=claims,
+                                                     duration_sec=args.duration, kind=kind)}]
+        raw = ask(msgs)
+        try:
+            plan = P.validate(P.parse(raw), n_claims=len(claims))
+        except P.PlanError as exc:
+            msgs += [{"role": "assistant", "content": raw},
+                     {"role": "user", "content": f"設計図に不備がある。直したJSONだけを出す。\n{exc}"}]
+            raw = ask(msgs)
+            plan = P.validate(P.parse(raw), n_claims=len(claims))
+        plan_path = Path(args.out).with_name(Path(args.out).stem + "_plan.json")
+        plan_path.write_text(json.dumps(plan.raw, ensure_ascii=False, indent=1), encoding="utf-8")
+        print("設計図:")
+        for line in P.describe(plan):
+            print(f"  {line}")
+
+        text, audit, left = compose(plan, subject=subject, genre=genre, claims=claims,
+                                    duration_sec=args.duration, chat=chat_fn(args.model),
+                                    rounds=args.rounds, kind=kind)
+    except (WriteFailed, P.PlanError) as exc:
+        print(f"生成できなかった: {exc}")
+        return 1
+
+    Path(args.out).write_text(text, encoding="utf-8")
+    m = validate(text, args.duration)
+    print(f"\n{len(text)}字 / 忠実度 {m.fidelity:.0%} -> {args.out}")
+    for line in report(audit):
+        print(f"  {line}")
+    loose = unsourced_numbers(text, material)
+    if loose:
+        print("資料に無い数字（人が確かめる）: " + "、".join(loose[:12]))
+    print(meter.report())
+    if left:
+        print("直しきれなかった点:")
+        for n in left:
+            print(f"  - {n}")
+    return 0 if m.ok else 1
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="script_engine")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -141,6 +216,8 @@ def main(argv=None) -> int:
     c = sub.add_parser("check", help="台本を実測プロファイルに照らす")
     c.add_argument("file")
     c.add_argument("--duration", type=int, required=True, help="尺（秒）")
+    c.add_argument("--subject", default="", help="題材名（一般化の判定に使う）")
+    c.add_argument("--kind", choices=["flagship", "bundle"], default="bundle")
     c.set_defaults(func=cmd_check)
 
     w = sub.add_parser("write", help="プロンプトから台本を書かせる")
@@ -150,6 +227,8 @@ def main(argv=None) -> int:
     w.add_argument("--model", default="gpt-4.1")
     w.add_argument("--rounds", type=int, default=2,
                    help="実測から外れていたときに直させる回数")
+    w.add_argument("--spec", help="題材の仕様（seeds/topics/*.yaml）。渡すと設計図モード")
+    w.add_argument("--kind", choices=["flagship", "bundle"], default="bundle")
     w.set_defaults(func=cmd_write)
 
     m = sub.add_parser("compare", help="複数の台本を参照動画と横並びで比べる")

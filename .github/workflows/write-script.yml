@@ -69,6 +69,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           python3 -m script_engine write "out/prompt_${{ inputs.name }}.txt" \
+            --spec "seeds/topics/${{ inputs.name }}.yaml" \
             --out "drafts/${{ inputs.name }}.txt" \
             --duration "${{ inputs.duration }}"
 
