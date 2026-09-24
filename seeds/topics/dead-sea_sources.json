@@ -1,0 +1,115 @@
+{
+ "claims": [
+  {
+   "ja": "死海文書はクムラン洞窟で発見されたユダヤ教の写本である。",
+   "sources": [
+    {
+     "kind": "book",
+     "title": "The Dead Sea scrolls at fifty : proceedings of the 1997 Society of Biblical Literature Qumran Section meetings",
+     "year": 1999,
+     "venue": "",
+     "identifier": "deadseascrollsat0000soci",
+     "url": "https://archive.org/details/deadseascrollsat0000soci",
+     "open_access": true,
+     "authors": ""
+    },
+    {
+     "kind": "paper",
+     "title": "The constituents of the ink from a Qumran inkwell: new prospects for provenancing the ink on the Dead Sea Scrolls",
+     "year": 2012,
+     "venue": "Journal of Archaeological Science",
+     "identifier": "10.1016/j.jas.2012.04.041",
+     "url": "https://doi.org/10.1016/j.jas.2012.04.041",
+     "open_access": true,
+     "authors": "Kaare Lund Rasmussenら"
+    },
+    {
+     "kind": "paper",
+     "title": "The Story of the Scrolls: The miraculous discovery and true significance of the Dead Sea Scrolls",
+     "year": 2010,
+     "venue": "Medical Entomology and Zoology",
+     "identifier": "",
+     "url": "http://ci.nii.ac.jp/ncid/BB0169976X",
+     "open_access": false,
+     "authors": "Géza Vermès"
+    }
+   ],
+   "evidence_level": "薄い（査読文献がわずか）→ 理由が違う側に置く候補"
+  },
+  {
+   "ja": "死海文書は紀元前3世紀から紀元後1世紀に書かれたものである。",
+   "sources": [
+    {
+     "kind": "paper",
+     "title": "The Effects of Possible Contamination on the Radiocarbon Dating of the Dead Sea Scrolls II: Empirical Methods to Remove Castor Oil and Suggestions for Redating",
+     "year": 2009,
+     "venue": "Radiocarbon",
+     "identifier": "10.1017/s0033822200034081",
+     "url": "https://doi.org/10.1017/s0033822200034081",
+     "open_access": true,
+     "authors": "Kaare Lund Rasmussenら"
+    }
+   ],
+   "evidence_level": "薄い（査読文献がわずか）→ 理由が違う側に置く候補"
+  },
+  {
+   "ja": "死海文書の多くはエッセネ派によって書かれたと考えられている。",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "死海文書には旧約聖書の中で最古の写本が含まれている。",
+   "sources": [
+    {
+     "kind": "paper",
+     "title": "Monotheism and the Language of Divine Plurality in the Hebrew Bible and the Dead Sea Scrolls",
+     "year": 2014,
+     "venue": "Tyndale Bulletin",
+     "identifier": "10.53751/001c.29367",
+     "url": "https://doi.org/10.53751/001c.29367",
+     "open_access": true,
+     "authors": "Michael S. Heiser"
+    },
+    {
+     "kind": "paper",
+     "title": "The Dead Sea Scrolls and the Origins of the Bible",
+     "year": 1999,
+     "venue": "",
+     "identifier": "10.1163/9789004677135",
+     "url": "https://doi.org/10.1163/9789004677135",
+     "open_access": false,
+     "authors": "Eugene Charles Ulrich"
+    }
+   ],
+   "evidence_level": "薄い（査読文献がわずか）→ 理由が違う側に置く候補"
+  },
+  {
+   "ja": "死海文書の発見は聖書研究とユダヤ教史に大きな影響を与えた。",
+   "sources": [
+    {
+     "kind": "book",
+     "title": "The impact of the Dead Sea scrolls",
+     "year": 2009,
+     "venue": "",
+     "identifier": "impactofdeadseas0000fitz",
+     "url": "https://archive.org/details/impactofdeadseas0000fitz",
+     "open_access": true,
+     "authors": ""
+    }
+   ],
+   "evidence_level": "文献なし（原典・書籍のみ）→ 跡形もなくなる側に置く候補"
+  }
+ ],
+ "background": [
+  {
+   "kind": "paper",
+   "title": "Artificial intelligence based writer identification generates new evidence for the unknown scribes of the Dead Sea Scrolls exemplified by the Great Isaiah Scroll (1QIsaa)",
+   "year": 2021,
+   "venue": "PLoS ONE",
+   "identifier": "10.1371/journal.pone.0249769",
+   "url": "https://doi.org/10.1371/journal.pone.0249769",
+   "open_access": true,
+   "authors": "Mladen Popovićら"
+  }
+ ]
+}
