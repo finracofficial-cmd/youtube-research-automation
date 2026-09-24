@@ -141,6 +141,12 @@ def cmd_write(args) -> int:
     return 0 if m.ok else 1
 
 
+def writable_minutes(n_chars: int, chars_per_min: float = 360.0) -> float:
+    """この字数を参考の話速で読むと何分か。字数を上限にしたので、資料が薄いと
+    台本は短く出る。足りないのは文章ではなく調査なので、そう言う。"""
+    return n_chars / chars_per_min
+
+
 def _write_planned(args, material: str) -> int:
     import json
 
@@ -198,6 +204,10 @@ def _write_planned(args, material: str) -> int:
     Path(args.out).write_text(text, encoding="utf-8")
     m = validate(text, args.duration)
     print(f"\n{len(text)}字 / 忠実度 {m.fidelity:.0%} -> {args.out}")
+    mins = writable_minutes(m.n_chars)
+    if mins < args.duration / 60 * 0.85:
+        print(f"この資料で書けた尺は約{mins:.0f}分（指定は{args.duration / 60:.0f}分）。"
+              "字数は埋めない。足りないのは文章ではなく調査なので、出典と数字入り記述を増やしてから書き直す")
     for line in report(audit):
         print(f"  {line}")
     loose = unsourced_numbers(text, material)

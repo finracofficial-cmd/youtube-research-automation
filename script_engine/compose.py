@@ -114,6 +114,7 @@ def _closing_brief(p: planmod.Plan, subject: str) -> str:
         gen,
         "### 回収（「〜と分かった」を反復し、最後に「だが〜は分かっていない」で落とす。"
         "章で言った事実だけを繰り返す。ここで新しい事実・年・数字を出さない）",
+        f"   最初に、1章で保留にした問い「{p.planted_question.get('text', '')}」に戻る: {cl.get('callback', '')}",
         found,
         f"   最後の一文: {cl.get('not_found', '')}",
         "   まだ分からないことを、分からないまま置く:",
