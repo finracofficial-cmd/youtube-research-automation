@@ -142,10 +142,27 @@ def test_plant_and_callback_are_guaranteed_even_if_the_writer_drops_them():
     assert "そもそも誰が運んだのか。この問いは最後の章で扱う。" in got
     assert got.index("最後の章で扱う") < got.index("私と共に")
     assert C.ensure_plant(got, "そもそも誰が運んだのか") == got        # 二重に入れない
-    closing = "一般化の話。\n\n1000トンあると分かった。\n\n条件。\n\nCTAです。"
-    got = C.ensure_callback(closing, "そもそも誰が運んだのか", "運んだ人の名は記録に無い。")
-    assert got.split("\n\n")[1].startswith("1章で保留にした問いだ。そもそも誰が運んだのか。運んだ人の名は記録に無い。")
+    last = "巨石は宇宙人が運んだ。\nそう語られている。\n出どころはある。"
+    got = C.ensure_callback(last, "そもそも誰が運んだのか", "運んだ人の名は記録に無い。")
+    assert got.startswith("1章で保留にした問いだ。そもそも誰が運んだのか。運んだ人の名は記録に無い。\n巨石は")
     assert C.ensure_callback(got, "そもそも誰が運んだのか", "x") == got
+
+
+def test_verdict_is_placed_after_the_claim_is_voiced_when_the_writer_skips_it():
+    """束ね型の章は「通説→結論→なぜ」。書き手は3本中 1〜3章しか守らない（bench 実測）。"""
+    ch = "巨石は現代の重機でも運べない。\nそう語られている。\n最大の石は1000トンある。\n石切り場に途中の石が残る。"
+    got = C.ensure_verdict(ch, "運べないのではなく、運ぶ理由が無い。")
+    assert got.splitlines()[2] == "結論から言う。運べないのではなく、運ぶ理由が無い。"
+    assert C.ensure_verdict(got, "運べないのではなく、運ぶ理由が無い。") == got   # 二重に置かない
+    already = "結論から言う。これは正しい。\n理由はこうだ。"
+    assert C.ensure_verdict(already, "x") == already
+
+
+def test_counted_units_with_single_digits_are_checked_against_the_material():
+    """「皇帝は1名だけ」と、数えていないものを数字にした。1桁でも数えた体の単位は見る。"""
+    from script_engine.devices import unsourced_numbers
+    assert "1名" in unsourced_numbers("所有者として伝えられる皇帝は1名だけである。", "資料には名前が無い。")
+    assert unsourced_numbers("3つの説がある。", "") == []                 # 言い回しの1桁は見ない
 
 
 def test_fragments_like_tanbun_are_padding():

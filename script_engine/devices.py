@@ -303,9 +303,11 @@ def unsourced_numbers(text: str, material: str) -> list[str]:
     人が最後に見るために列挙する。年と件数を粗く見るだけで、判定はしない。"""
     have = set(re.findall(r"\d+(?:\.\d+)?", material))
     out = []
-    for m in re.finditer(r"(紀元前)?(\d+(?:\.\d+)?)(年|人|点|枚|個|件|本|ページ|メートル|センチ|キロ|トン|%|パーセント|倍|回|種|語|世紀)", text):
+    for m in re.finditer(r"(紀元前)?(\d+(?:\.\d+)?)(年|人|名|点|枚|個|件|本|冊|通|ページ|メートル|センチ|キロ|トン|%|パーセント|倍|回|種|語|世紀)", text):
         num = m.group(2)
-        if num in have or len(num) == 1:
+        # 1桁は「1つ」「3段」のような言い回しに多いので見ないが、数えた体の単位
+        # （名・人・件・冊・通・回）は見る。「皇帝は1名だけ」と数えていないものを数字にした（実測）
+        if num in have or (len(num) == 1 and m.group(3) not in ("名", "人", "件", "冊", "通", "回")):
             continue
         tok = m.group(0)
         if tok not in out:
@@ -378,6 +380,11 @@ def audit(text: str, duration_sec: float, *, subject: str = "",
             run += 1
             best = max(best, run)
 
+    closing_pad = []
+    if chapter_blocks and chapter_blocks[-1] + 1 < len(blocks):
+        closing_sents = [s for b in blocks[chapter_blocks[-1] + 1:] for s in b]
+        closing_pad = [x for x in padding(closing_sents, subject) if x.startswith("言い直し")]
+
     a = Audit(minutes=minutes, per_min=per_min, chapters=chapters,
               plant=plant, callback=callback, opening_images=opening_images,
               opening_defeat=opening_defeat, subject_free_run=best,
@@ -409,6 +416,9 @@ def audit(text: str, duration_sec: float, *, subject: str = "",
     if best < 5:
         a.notes.append(f"終盤で題材を離れた一般化が短い（題材名の出ない連続文が {best}）。"
                        "題材を知らない人にも効く結論を5文以上つづける")
+    if len(closing_pad) >= 2:
+        a.notes.append("着地で同じ結論を言い直している: " + " / ".join(closing_pad[:3])
+                       + "。回収は「〜と分かった」を1回ずつ、決着していないことは最後に1回")
     # 章ごとの装置。参考も全章では踏んでいない（ピラミッド回で結論先出しは
     # 9章中5章）ので、半数を下回ったときだけ、無い章を名指しする。
     n_ch = len(chapters)

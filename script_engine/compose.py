@@ -159,7 +159,6 @@ def _closing_brief(p: planmod.Plan, subject: str) -> str:
         gen,
         "### 回収（「〜と分かった」を反復し、最後に「だが〜は分かっていない」で落とす。"
         "章で言った事実だけを繰り返す。ここで新しい事実・年・数字を出さない）",
-        f"   最初に、1章で保留にした問い「{p.planted_question.get('text', '')}」に戻る: {cl.get('callback', '')}",
         found,
         f"   最後の一文: {cl.get('not_found', '')}",
         "   まだ分からないことを、分からないまま置く:",
@@ -172,8 +171,9 @@ def _closing_brief(p: planmod.Plan, subject: str) -> str:
     ])
 
 
-NO_SOURCE_NOTE = ("※ この主張には当たれる一次資料が無い。埋めない。短く書き、"
-                  "「一次資料に当たれない」こと自体を結論にする。「記録は無い」を言い換えて"
+NO_SOURCE_NOTE = ("※ この主張には当たれる一次資料が無い。埋めない。短く書き、無いことを具体で言って"
+                  "結論にする（別の題材の例: 「宮廷の台帳にも、契約書にも、この本は出てこない」）。"
+                  "この注意書きの言葉をそのまま本文に写さない。「記録は無い」を言い換えて"
                   "繰り返さない（1回で足りる）。")
 
 
@@ -403,16 +403,47 @@ def ensure_plant(text: str, planted: str) -> str:
 
 
 def ensure_callback(text: str, planted: str, answer: str) -> str:
-    """着地に回収が無ければ、回収の段落（2段落目）の頭に置く。"""
+    """最終章に回収が無ければ、章の頭に置く（参考も最終章の頭で拾う。
+    ピラミッド回: 「1章で、三つの選択肢を並べた。」）。"""
     if not planted or any(devices.CALLBACK.search(x) for x in devices.split_sentences(text.replace("\n", ""))):
         return text
     line = f"1章で保留にした問いだ。{planted.rstrip('。？?')}。{answer.strip()}"
-    paras = [q for q in re.split(r"\n\s*\n", text.strip()) if q.strip()]
-    if len(paras) >= 2:
-        paras[1] = line + "\n" + paras[1]
-    else:
-        paras.insert(0, line)
-    return "\n\n".join(paras)
+    return line + "\n" + text.lstrip()
+
+
+def ensure_verdict(text: str, verdict_line: str) -> str:
+    """章の冒頭10文に結論が無ければ、通説を言わせた直後に置く。
+
+    束ね型の章は「通説→結論→なぜ」の順が型で、参考は9章中6章がそう。
+    書き手は3本中で 1〜3章しか守らない（bench 実測）。設計図の verdict_line は
+    形の検査を通っているので、機械的に置いてよい。"""
+    if not verdict_line.strip():
+        return text
+    sents = devices.split_sentences(text.replace("\n", ""))
+    if any(devices.VERDICT.search(x) for x in sents[:10]):
+        return text
+    lines = [l for l in text.splitlines() if l.strip()]
+    line = "結論から言う。" + verdict_line.strip().rstrip("。") + "。"
+    # 「そう語られている。」の直後。無ければ2文目
+    for i, l in enumerate(lines):
+        if re.search(r"そう語られて|そう言われて|語られてきた", l):
+            lines.insert(i + 1, line)
+            return "\n".join(lines)
+    lines.insert(min(1, len(lines)), line)
+    return "\n".join(lines)
+
+
+def _guarantee(b: Block, p: planmod.Plan, planted: str, answer: str) -> str:
+    """書き手が落としがちな装置を、塊ごとに機械的に置く。"""
+    if b.key == "opening":
+        return ensure_plant(b.text, planted)
+    if b.key.startswith("chapter"):
+        i = int(b.key[len("chapter"):]) - 1
+        text = ensure_verdict(b.text, p.chapters[i].verdict_line) if i < len(p.chapters) else b.text
+        if i == len(p.chapters) - 1:
+            text = ensure_callback(text, planted, answer)
+        return text
+    return b.text
 
 
 def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
@@ -437,10 +468,7 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
         f = facts if b.key.startswith("chapter") else ""
         texts = [write_block(b, tail, chat, f) for _ in range(max(1, candidates))]
         b.text = _pick(b, texts, material=material, subject=subject)
-        if b.key == "opening":
-            b.text = ensure_plant(b.text, planted)
-        elif b.key == "closing":
-            b.text = ensure_callback(b.text, planted, answer)
+        b.text = _guarantee(b, p, planted, answer)
         tail = _tail(strip_cites(b.text))
 
     left: list[str] = []
@@ -473,10 +501,7 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
             if b.notes:
                 f = facts if b.key.startswith("chapter") else ""
                 b.text = rewrite_block(b, prev, chat, f)
-                if b.key == "opening":
-                    b.text = ensure_plant(b.text, planted)
-                elif b.key == "closing":
-                    b.text = ensure_callback(b.text, planted, answer)
+                b.text = _guarantee(b, p, planted, answer)
             prev = _tail(strip_cites(b.text))
     return assemble(blocks), audit, left
 

@@ -30,7 +30,7 @@ def test_blocks_follow_the_plan_in_order():
     assert [b.key for b in blocks] == ["opening", "chapter1", "chapter2", "closing"]
     assert sum(b.target_chars for b in blocks) > 900 / 60 * 300
     assert "1章で保留にした問いだ" in blocks[2].brief      # 最終章が回収に入る
-    assert "1章で保留にした問い「そもそも誰が運んだのか」" in blocks[3].brief   # 着地でも答える
+    assert "1章で保留にした問い" not in blocks[3].brief     # 着地では繰り返さない（実測で二重になった）
     assert "最後の章で扱う" in blocks[1].brief             # 1章で伏線を開く
 
 
