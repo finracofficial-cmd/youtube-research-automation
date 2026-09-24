@@ -33,8 +33,11 @@ def test_facts_are_numbered_from_sources_numbers_and_description():
 
 
 def test_citation_markers_are_checked_then_stripped():
-    text = "最大の石は1000トンある〔3〕。\n継ぎ目に紙一枚入らない。\n石壁が3段ある。"
-    assert C.uncited(text) == ["石壁が3段ある。"]
+    text = "最大の石は1000トンある〔3〕。\n継ぎ目に紙一枚入らない。\n石壁が3枚ある。"
+    assert C.uncited(text) == ["石壁が3枚ある。"]
+    # 言い回しの数字と主張文の数字には番号を求めない（求めて章を無駄に書き直していた）
+    assert C.uncited("15世紀初頭という推定である。1章で保留にした問いだ。ルドルフ2世の元にあった。") == []
+    assert C.uncited("16世紀のプラハで1612年まで所有した。", claim="16世紀のプラハで皇帝の元にあった。") == ["16世紀のプラハで1612年まで所有した。"]
     assert "〔" not in C.strip_cites(text) and "1000トンある。" in C.strip_cites(text)
 
 

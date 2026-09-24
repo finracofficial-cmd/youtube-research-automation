@@ -101,7 +101,7 @@ def _grams(text: str) -> set[str]:
     return {t[i:i + 2] for i in range(len(t) - 1)} | words
 
 
-def facts_for(brief: str, facts: list[str], *, limit: int = 14) -> str:
+def facts_for(brief: str, facts: list[str], *, limit: int = 14, describe: int = 8) -> str:
     """章に関係する事実だけを、全体の通し番号のまま渡す。
 
     全部渡すと1回 4,000〜5,000 トークンで、章ごと・候補ごと・直しごとに
@@ -112,26 +112,34 @@ def facts_for(brief: str, facts: list[str], *, limit: int = 14) -> str:
     if not facts:
         return ""
     want = _grams(brief)
-    always, scored = [], []
+    desc, scored = [], []
     for i, f in enumerate(facts, 1):
         is_source = bool(re.match(r"^(\d{4}|----)\s", f)) or "http" in f or "[" in f
-        if not is_source:
-            always.append((i, f))                  # 題材の記述は常に入れる（短い）
-            continue
-        scored.append((len(want & _grams(f)), i, f))
+        (scored if is_source else desc).append((len(want & _grams(f)), i, f))
     scored.sort(key=lambda x: (-x[0], x[1]))
-    keep = sorted(always + [(i, f) for _, i, f in scored[:limit]], key=lambda x: x[0])
+    desc.sort(key=lambda x: (-x[0], x[1]))          # 題材の記述も、関係する上位だけ
+    keep = sorted([(i, f) for _, i, f in desc[:describe]] + [(i, f) for _, i, f in scored[:limit]],
+                  key=lambda x: x[0])
     return "\n".join(_FACT_HEAD + [f"〔{i}〕 {f}" for i, f in keep])
 
 
-def uncited(text: str) -> list[str]:
-    """数字を含むのに根拠番号の無い文。"""
+# 根拠番号を求めない数字: 世紀・章・世（ルドルフ2世）・つ・段・回目 のような言い回し。
+# 「15世紀初頭」「1章で保留にした問いだ」「ルドルフ2世」に番号を求めて、章を無駄に
+# 書き直していた（実測で1本 2回・約1万トークン）
+_NOT_A_FACT = re.compile(r"\d+(?:世紀|章|世|つ|段|回目|番目|人称|次|割)")
+
+
+def uncited(text: str, claim: str = "") -> list[str]:
+    """数字を含むのに根拠番号の無い文。主張文にある数字と言い回しの数字は除く。"""
+    known = set(re.findall(r"\d+", claim or ""))
     out = []
     for sent in re.split(r"(?<=[。？！])", text):
-        if _DIGIT.search(sent) and not _CITE.search(sent):
-            s_ = sent.strip()
-            if s_:
-                out.append(s_[:30])
+        if _CITE.search(sent):
+            continue
+        body = _NOT_A_FACT.sub("", sent)
+        nums = [n for n in re.findall(r"\d+", body) if n not in known]
+        if nums and sent.strip():
+            out.append(sent.strip()[:30])
     return out
 
 
@@ -470,6 +478,11 @@ def ensure_verdict(text: str, verdict_line: str) -> str:
     return "\n".join(lines)
 
 
+def _claim_of(b: Block, p: planmod.Plan) -> str:
+    i = int(b.key[len("chapter"):]) - 1 if b.key.startswith("chapter") else -1
+    return p.chapters[i].claim if 0 <= i < len(p.chapters) else ""
+
+
 def _guarantee(b: Block, p: planmod.Plan, planted: str, answer: str) -> str:
     """書き手が落としがちな装置を、塊ごとに機械的に置く。"""
     if b.key == "opening":
@@ -525,7 +538,8 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
         loose = {b.key: devices.unsourced_numbers(strip_cites(b.text), material)
                  for b in blocks if material}
         loose_notes = [f"{k}: 資料に無い数字 " + "、".join(v) for k, v in loose.items() if v]
-        bare = {b.key: uncited(b.text) for b in blocks if all_facts and b.key.startswith("chapter")}
+        bare = {b.key: uncited(b.text, _claim_of(b, p)) for b in blocks
+                if all_facts and b.key.startswith("chapter")}
         bare_notes = [f"{k}: 根拠番号の無い数字の文 " + " / ".join(v[:3]) for k, v in bare.items() if v]
         left = list(audit.notes) + list(style.violations) + loose_notes + bare_notes
         if not left or r == rounds:
