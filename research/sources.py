@@ -24,9 +24,18 @@ class Source:
     cited_by: int
     abstract: str = ""
     venue: str = ""
+    authors: str = ""   # 筆頭著者。参考chは人の名前で語る（フリードマン、高橋）
 
     def to_dict(self) -> dict:
         return asdict(self)
+
+
+def first_author(names: list[str]) -> str:
+    """筆頭著者だけ。2人以上なら「ら」を付ける。名前が無ければ空。"""
+    names = [n.strip() for n in names if n and n.strip()]
+    if not names:
+        return ""
+    return names[0] + ("ら" if len(names) > 1 else "")
 
 
 def _deinvert(idx: dict | None) -> str:
@@ -72,6 +81,8 @@ def openalex(query: str, limit: int = 25) -> list[Source]:
             cited_by=int(w.get("cited_by_count") or 0),
             abstract=_deinvert(w.get("abstract_inverted_index")),
             venue=src,
+            authors=first_author([((a.get("author") or {}).get("display_name") or "")
+                                  for a in (w.get("authorships") or [])]),
         ))
     return out
 
@@ -79,7 +90,7 @@ def openalex(query: str, limit: int = 25) -> list[Source]:
 def crossref(query: str, limit: int = 25) -> list[Source]:
     url = "https://api.crossref.org/works?" + q({
         "query.bibliographic": query, "rows": limit,
-        "select": "title,issued,DOI,container-title,is-referenced-by-count,abstract",
+        "select": "title,issued,DOI,container-title,is-referenced-by-count,abstract,author",
         "mailto": "research@example.com",
     })
     d = get_json(url)
@@ -97,6 +108,8 @@ def crossref(query: str, limit: int = 25) -> list[Source]:
             cited_by=int(it.get("is-referenced-by-count") or 0),
             abstract=re.sub(r"<[^>]+>", "", it.get("abstract") or ""),
             venue=" ".join(it.get("container-title") or []),
+            authors=first_author([" ".join(x for x in (a.get("given"), a.get("family")) if x)
+                                  for a in (it.get("author") or [])]),
         ))
     return out
 

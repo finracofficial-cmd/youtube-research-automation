@@ -83,7 +83,8 @@ _RULES: tuple[tuple[re.Pattern, str], ...] = (
     (re.compile(r"ており、"), "ている。"),
     (re.compile(r"であり、"), "である。"),
     (re.compile(r"ではあるが、"), "ではある。しかし"),
-    (re.compile(rf"({_TERMINAL})が、"), r"\1。しかし"),
+    # 文頭の「だが、」は接続詞なので切らない。切ると「だ。しかし」になる（実測）
+    (re.compile(rf"(?<=[^。！？\n])({_TERMINAL})が、"), r"\1。しかし"),
     (re.compile(rf"({_TERMINAL})ので、"), r"\1。そのため"),
     (re.compile(rf"({_TERMINAL})ため、"), r"\1。そのため"),
 )

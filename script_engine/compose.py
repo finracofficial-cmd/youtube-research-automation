@@ -64,6 +64,11 @@ def _opening_brief(p: planmod.Plan, subject: str, genre: str, claims: list[str])
     return "\n".join(lines)
 
 
+def _known(*parts: str) -> str:
+    """不明の項目は書かない。「不明」と渡すと本文に「著者は不明」と書かれる（実測）。"""
+    return " / ".join(str(x) for x in parts if str(x or "").strip() and str(x).strip() != "不明")
+
+
 def _chapter_brief(i: int, c: planmod.Chapter, n: int, p: planmod.Plan) -> str:
     swings = "\n".join(f"   {k+1}. [{s.get('stance')}] {s.get('fact')}" for k, s in enumerate(c.swings))
     numbers = "\n".join(f"   ・{x.get('value')} — 断り: {x.get('caveat', '')}" for x in c.numbers) or "   （無し）"
@@ -75,10 +80,12 @@ def _chapter_brief(i: int, c: planmod.Chapter, n: int, p: planmod.Plan) -> str:
         f"1. 通説を、通説の言葉でそのまま言う（「{c.claim}」「そう語られている。」）。",
         f"2. 結論を先に言う: {c.verdict_line}",
         f"3. なぜそう言えるか: {c.why}",
-        f"4. 誰が・何年に言い出したか: {c.origin.get('who', '不明')} / {c.origin.get('year', '不明')} / {c.origin.get('how', '')}",
+        "4. 誰が・何年に言い出したか: " + (
+            _known(c.origin.get('who', ''), c.origin.get('year', ''), c.origin.get('how', ''))
+            or "資料に無い。「誰が最初に言い出したかは、記録が見つかっていない」と正直に言う"),
         "5. 振り子。立場ごとに事実を置き、反転は「だが」で、留保は「ただし」で入れる:",
         swings,
-        f"6. 証拠（年・場所・誰・何）: {ev.get('year', '')} / {ev.get('where', '')} / {ev.get('who', '')} / {ev.get('what', '')}",
+        f"6. 証拠（年・場所・誰・何）: {_known(ev.get('year', ''), ev.get('where', ''), ev.get('who', ''), ev.get('what', ''))}",
         "7. 数字と、その数字への断り（「ただし、この数字には断りが要る」）:",
         numbers,
         "8. 専門語は出した5文以内に「つまり〜のようなものだ」で着地させる:",
@@ -137,7 +144,19 @@ def blocks_from_plan(p: planmod.Plan, *, subject: str, genre: str, claims: list[
 _BLOCK_RULES = """\
 この塊だけを書く。前後の塊は別に書くので、ここで全体を締めない。
 段落は空行で区切る。章は1つの段落にまとめる（着地だけ4段落）。
-指示の番号や見出しは書かない。読み上げる文だけを書く。"""
+指示の番号や見出しは書かない。読み上げる文だけを書く。
+6字以下の文（「記録はない。」「正しい。」「決まっていない。」）を、塊に3つ以上入れる。
+専門語を出したら、5文以内に「つまり〜のことだ」「〜のようなものだ」で日常語に着地させる。
+指示に無い項目は書かない。資料に著者名が無いなら「著者は不明」とは書かず、
+「2026年の論文」のように年と種別だけで指す。"""
+
+
+def _fold(key: str, text: str) -> str:
+    """章は1段落に畳む。指示しても段落を分けてくる（実測で第1章が7段落）。
+    段落=章として監査するので、ここで確実に畳む。冒頭と着地は段落のまま。"""
+    if not key.startswith("chapter"):
+        return text
+    return "\n".join(l for l in text.splitlines() if l.strip())
 
 
 def write_block(b: Block, previous_tail: str, chat: Chat) -> str:
@@ -150,7 +169,7 @@ def write_block(b: Block, previous_tail: str, chat: Chat) -> str:
          + f"\n\n## 分量\n約{b.target_chars:,}字。短く切った文を増やして届かせる。"
          "足りないときは、振り子の各段の事実をもう1文ずつ具体にする。"},
     ]
-    return tighten(clean(chat(messages)))
+    return _fold(b.key, tighten(clean(chat(messages))))
 
 
 def rewrite_block(b: Block, previous_tail: str, chat: Chat) -> str:
@@ -165,7 +184,7 @@ def rewrite_block(b: Block, previous_tail: str, chat: Chat) -> str:
          "直した全文を出す。\n\n" + "\n".join(f"- {n}" for n in b.notes)
          + f"\n\n約{b.target_chars:,}字を保つ。"},
     ]
-    return tighten(clean(chat(messages)))
+    return _fold(b.key, tighten(clean(chat(messages))))
 
 
 def assemble(blocks: list[Block]) -> str:

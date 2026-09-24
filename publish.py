@@ -58,7 +58,8 @@ def _cite(x: dict) -> str:
     venue = _html.unescape(x.get("venue") or "").strip()
     year = str(x.get("year") or "").strip()
     kind = _KIND.get(x.get("kind") or "", "")
-    tail = "　".join(v for v in (venue, f"({year})" if year else "", kind) if v)
+    authors = _html.unescape(x.get("authors") or "").strip()
+    tail = "　".join(v for v in (authors, venue, f"({year})" if year else "", kind) if v)
     return f"{title}\n　{tail}".rstrip()
 
 

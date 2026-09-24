@@ -42,7 +42,10 @@ def cmd_pipeline(args) -> int:
 
     subject, subject_en, claims, spec = _load(Path(args.spec))
     d = build(subject, subject_en, claims, exclude=spec["_exclude"])
-    cited = [f"{s.year or '----'} {s.title} {s.url}".strip() for s in d.all_sources[:30]]
+    # 著者名を先に出す。参考chは「フリードマンは」「高橋は」と人で語る。
+    # 題名だけ渡すと「2026年の論文の著者は不明」と本文に書かれた（実測）
+    cited = [f"{s.year or '----'} {(s.authors + ' ') if s.authors else ''}{s.title} {s.url}".strip()
+             for s in d.all_sources[:30]]
     facts = [f for c in d.claims for f in c.numeric_facts]
 
     topic = Topic(subject=subject, genre=spec.get("genre", "古代の謎"),
@@ -51,6 +54,9 @@ def cmd_pipeline(args) -> int:
     if facts:
         prompt += ("\n\n## 一次資料から拾った数字（可能な限りこれを使う）\n"
                    + "\n".join(f"- {f}" for f in facts))
+    # 見た目の具体と、説の出どころの手がかり。出典としては書かせない
+    from .wiki import lead, section
+    prompt += section(subject, lead(subject, subject_en))
     prompt += ("\n\n## 厳守\n"
                "上の出典リストに無いものを出典として書かない。"
                "裏が取れていない数字を出さない。")
@@ -65,7 +71,8 @@ def cmd_pipeline(args) -> int:
     def rec(x):
         return {"kind": x.kind, "title": x.title, "year": x.year,
                 "venue": getattr(x, "venue", None), "identifier": x.identifier,
-                "url": x.url, "open_access": getattr(x, "open_access", False)}
+                "url": x.url, "open_access": getattr(x, "open_access", False),
+                "authors": getattr(x, "authors", "")}
 
     # 主張ごとに束ねる。概要欄では「何が分かるか」を先に書くので、
     # どの主張の根拠なのかが要る。平らに並べるとそれが消える。
