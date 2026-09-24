@@ -88,11 +88,18 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "drafts/${{ inputs.name }}.txt" "seeds/topics/${{ inputs.name }}.yaml"
+          for f in "drafts/${{ inputs.name }}_report.txt" "drafts/${{ inputs.name }}_plan.json" \
+                   "seeds/topics/${{ inputs.name }}_sources.json"; do
+            [ -f "$f" ] && git add "$f"
+          done
           git diff --staged --quiet && exit 0
           git commit -m "台本を追加: ${{ inputs.subject }}"
           git pull --rebase --autostash
           git push
 
-      - name: 中身を表示する
+      - name: 中身と、Make video に入れる値を表示する
         if: always()
-        run: head -30 "drafts/${{ inputs.name }}.txt" || true
+        run: |
+          head -30 "drafts/${{ inputs.name }}.txt" || true
+          python3 -m script_engine.announce --name "${{ inputs.name }}" --subject "${{ inputs.subject }}" \
+            --repo "${{ github.repository }}" --branch "${{ github.ref_name }}" >> "$GITHUB_STEP_SUMMARY" || true

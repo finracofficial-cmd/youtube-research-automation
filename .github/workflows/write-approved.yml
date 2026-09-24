@@ -100,19 +100,14 @@ jobs:
         run: |
           [ -s /tmp/done.txt ] || exit 0
           {
-            echo "台本ができました。中身を見て、良ければ **Make video** で動画にしてください。"
+            echo "台本ができました。各題材の **Make video に入れる値** と、できたファイルのパスは以下です。"
             echo
             while IFS='|' read -r name subject; do
-              echo "- **${subject}** — \`drafts/${name}.txt\`"
-              echo "  Make video の入力: script=\`drafts/${name}.txt\` / name=\`${name}\`"
-              # 合格条件と、人が確かめる数字。不合格なら動画にしない
-              if [ -f "drafts/${name}_report.txt" ]; then
-                echo
-                echo '  ```'
-                sed -n '/合格条件:/,/^  → /p' "drafts/${name}_report.txt" | sed 's/^/  /'
-                grep -E "^尺:|^資料に無い数字" "drafts/${name}_report.txt" | sed 's/^/  /'
-                echo '  ```'
-              fi
+              python3 -m script_engine.announce --name "$name" --subject "$subject" \
+                --repo "${{ github.repository }}" --branch "${{ github.ref_name }}"
+              echo
             done < /tmp/done.txt
           } > /tmp/comment.md
           gh issue comment "${{ inputs.issue }}" --body-file /tmp/comment.md
+          # 実行ページの Summary にも同じものを出す（Issue を開かなくても分かる）
+          cat /tmp/comment.md >> "$GITHUB_STEP_SUMMARY"
