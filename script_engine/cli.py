@@ -170,15 +170,14 @@ def _write_planned(args, material: str) -> int:
 
     lines = [f"{r.style.n_chars}字 / 忠実度 {r.style.fidelity:.0%} / 設計図{r.plans_tried}本 / "
              f"呼び出し{r.calls}回 {r.tokens:,}トークン"]
-    mins = writable_minutes(r.style.n_chars)
-    if mins < args.duration / 60 * 0.85:
-        lines.append(f"この資料で書けた尺は約{mins:.0f}分（指定は{args.duration / 60:.0f}分）。"
-                     "字数は埋めない。足りないのは文章ではなく調査なので、出典と数字入り記述を増やしてから書き直す")
     lines.append("")
-    lines.append("合格条件:")
+    lines.append("品質の合格条件:")
     for k, v in r.gate.items():
         lines.append(f"  {'○' if v else '×'} {k}")
     lines.append(f"  → {'合格' if r.passed else '不合格（動画にしない）'}")
+    lines.append(f"尺: 約{r.minutes:.0f}分（指定 {args.duration / 60:.0f}分）→ "
+                 + ("足りている" if r.enough else
+                    "資料不足。字数は埋めない。出典と数字入り記述を増やしてから書き直す"))
     lines.append("")
     lines += report(r.audit)
     if r.loose:

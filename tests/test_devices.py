@@ -17,7 +17,8 @@ def from_transcript(path: Path) -> str:
     for l in path.read_text(encoding="utf-8").splitlines():
         m = re.match(r"^`\d\d:\d\d` (.*)$", l)
         if m:
-            cur.append(m.group(1))
+            # 〔?...〕 は自動字幕の聞き取りが確定しなかった印。本文ではない
+            cur.append(m.group(1).replace("〔?", "").replace("〕", ""))
         elif l.startswith("## "):
             if cur:
                 blocks.append("".join(cur))

@@ -69,7 +69,7 @@ ENUM_FILLER = re.compile(r"^(?:[0-9０-９]+|[一二三四五六七八九十])(?
 def _norm(s: str) -> str:
     # 語尾を先に落とす。助詞と同じ一括だと「である」の「で」が助詞として先に消え、
     # 「ある」が残って似ていない判定になる（実測で 0.64 < 0.72）。
-    s = re.sub(r"[、。「」『』\s]", "", s)
+    s = re.sub(r"[、。「」『』〔〕\s]", "", s)
     s = re.sub(r"(である|だった|であった|だ)$", "", s)
     return re.sub(r"[はがのもをにでと]", "", s)
 
@@ -116,7 +116,7 @@ REFERENCE_PER_MIN = {
     "reserve":  (0.19, 0.53),
     "pivot":    (0.26, 0.53),
     "landing":  (0.37, 0.49),
-    "short":    (0.78, 1.24),   # 6字以下の文。緩急
+    "short":    (0.65, 1.24),   # 6字以下の文。緩急（自動字幕の〔?〕印を外して測り直した値）
 }
 FLOOR = {k: v[0] * 0.8 for k, v in REFERENCE_PER_MIN.items()}
 CEIL_PIVOT = 0.53 * 1.5        # 反転がこれを超えると振り子でなく否定の連打
@@ -256,6 +256,16 @@ def padding(sents: list[str], subject: str = "") -> list[str]:
                 out.append(f"列挙の穴埋め: 「{s[:24]}」")
         else:
             run = 0
+    # 断片。指示の語をそのまま文にする（「短文。短文。」と書かれた。bench 実測）
+    # 参考にも「16年。」「ひりだ。」のような短い文はある。同じ断片が2回以上出るときだけ
+    frag_counts: dict[str, int] = {}
+    for s in sents:
+        k = _norm(s)
+        if 1 <= len(k) <= 2:
+            frag_counts[k] = frag_counts.get(k, 0) + 1
+    for k, n in frag_counts.items():
+        if n >= 2:
+            out.append(f"断片: 「{k}」×{n}")
     # 同じ短文を穴埋めに使う形（「記録はない。」が1章に5回）。短文を求めると出る
     counts: dict[str, int] = {}
     for s in sents:
@@ -410,8 +420,8 @@ def audit(text: str, duration_sec: float, *, subject: str = "",
         if c.n_sentences >= 15 and c.swings < 2:
             a.chapter_notes.setdefault(c.index, []).append(
                 f"立場の切り替わりが {c.swings} 回。肯定→反転→留保で少なくとも2回振る")
-        # 参考にも1章に1件程度はある（並列の反復）。3件からを水増しとみなす
-        if len(c.padding) >= 3:
+        # 参考にも1章に1件程度はある（並列の反復）。3件からを水増しとみなす。断片は1つで
+        if len(c.padding) >= 3 or any(x.startswith("断片") for x in c.padding):
             a.chapter_notes.setdefault(c.index, []).append("水増し: " + " / ".join(c.padding[:3]))
     if kind == "bundle" and n_ch:
         lacking = [c for c in chapters if not c.verdict_first]

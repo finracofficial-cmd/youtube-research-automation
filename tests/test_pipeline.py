@@ -117,6 +117,9 @@ def test_gate_fails_on_unsourced_numbers_or_missing_loop():
               opening_defeat=True, subject_free_run=6, unlanded=[], padding=[])
     style = analyze("これは文である。" * 40, 120)
     assert PL.gate("x", a, style, [])["資料に無い数字が無い"]
+    assert "文体が参考のレンジ内" not in PL.gate("x", a, style, [])   # 尺は品質の門に入れない
+    ok, mins = PL.enough_material(style, 900)
+    assert not ok and mins < 5
     assert not PL.gate("x", a, style, ["17センチ"])["資料に無い数字が無い"]
     a.callback = False
     assert not PL.gate("x", a, style, [])["伏線と回収がある"]
@@ -129,3 +132,23 @@ def test_bench_table_flags_unstable_metrics():
     lines = "\n".join(B.table(rows))
     assert "private" in lines and "← 不安定" in lines
     assert "不安定な指標: 1 /" in lines          # pivot と gate_passed は揃っている。calls は数えない
+
+
+
+def test_plant_and_callback_are_guaranteed_even_if_the_writer_drops_them():
+    """設計図には必ずあるのに、3本に1本は書き手が落とした（bench 実測）。機械的に置く。"""
+    opening = "巨石遺跡。\n1000トンの石がある。\n\nそれでは私と共に、巨石遺跡へと迫っていこう。"
+    got = C.ensure_plant(opening, "そもそも誰が運んだのか")
+    assert "そもそも誰が運んだのか。この問いは最後の章で扱う。" in got
+    assert got.index("最後の章で扱う") < got.index("私と共に")
+    assert C.ensure_plant(got, "そもそも誰が運んだのか") == got        # 二重に入れない
+    closing = "一般化の話。\n\n1000トンあると分かった。\n\n条件。\n\nCTAです。"
+    got = C.ensure_callback(closing, "そもそも誰が運んだのか", "運んだ人の名は記録に無い。")
+    assert got.split("\n\n")[1].startswith("1章で保留にした問いだ。そもそも誰が運んだのか。運んだ人の名は記録に無い。")
+    assert C.ensure_callback(got, "そもそも誰が運んだのか", "x") == got
+
+
+def test_fragments_like_tanbun_are_padding():
+    from script_engine.devices import padding
+    assert any(x.startswith("断片") for x in padding(["結論から言う。", "短文。", "短文。", "正しい。"]))
+    assert not any(x.startswith("断片") for x in padding(["結論から言う。", "正しい。", "無い。"]))

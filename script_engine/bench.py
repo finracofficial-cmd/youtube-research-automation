@@ -21,7 +21,7 @@ from .pipeline import Result, measures, run_planned
 # 参考2本の実測に対する目標。幅だけでなく、狙いに入っているかも見る
 TARGET = {
     "private": (0.03, 0.13), "reserve": (0.19, 0.53), "pivot": (0.0, 0.53),
-    "open": (0.42, 0.79), "landing": (0.37, 0.49), "short": (0.78, 1.24),
+    "open": (0.42, 0.79), "landing": (0.37, 0.49), "short": (0.65, 1.24),
     "avg_sentence_len": (17.0, 26.0), "chars_per_min": (320.0, 410.0),
     "unsourced_numbers": (0, 0), "padding_items": (0, 2),
 }

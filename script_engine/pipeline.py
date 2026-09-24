@@ -37,7 +37,9 @@ class Result:
     calls: int
     tokens: int
     seconds: float
-    gate: dict = field(default_factory=dict)   # 合格条件ごとの真偽
+    gate: dict = field(default_factory=dict)   # 品質の合格条件ごとの真偽
+    enough: bool = True                          # 指定の尺に資料が足りたか
+    minutes: float = 0.0                         # この資料で書けた尺
 
     @property
     def passed(self) -> bool:
@@ -95,31 +97,32 @@ def make_plan(material: str, *, subject: str, claims: list[str], duration_sec: f
     return best, made
 
 
-GATE_NOTES = {
-    "資料に無い数字が無い": "loose",
-    "伏線と回収がある": "loop",
-    "全章が引きで終わる": "hooks",
-    "半数以上の章が結論を先に言う": "verdict",
-    "水増しが無い": "padding",
-    "文体が参考のレンジ内": "style",
-}
-
-
 def gate(text: str, audit: Audit, style: Metrics, loose: list[str]) -> dict:
-    """合格条件。ここを通らない台本は動画にしない。
+    """品質の合格条件。ここを通らない台本は動画にしない。
 
     率の不足（ただしが少ない等）は指摘に留め、門にはしない。門にするのは
-    「嘘をつく」「途中で離脱される」に直結するものだけ。
+    「嘘をつく」「途中で離脱される」に直結するものだけ。尺（話速・文の密度）は
+    資料の厚みで決まるので、品質とは分けて enough_material で見る。
+    bench で3本とも門を落とした主因が話速だったが、それは資料が薄いという
+    別の事実で、台本の出来ではない。
     """
     ch = audit.chapters
+    long_ok = 17.0 <= style.avg_sentence_len <= 26.0
     return {
         "資料に無い数字が無い": not loose,
         "伏線と回収がある": audit.plant and audit.callback,
         "全章が引きで終わる": all(c.hooks_out for c in ch) if ch else False,
         "半数以上の章が結論を先に言う": (sum(c.verdict_first for c in ch) * 2 >= len(ch)) if ch else False,
-        "水増しが無い": not any(len(c.padding) >= 3 for c in ch),
-        "文体が参考のレンジ内": style.ok,
+        "水増しが無い": not any(len(c.padding) >= 3 or any(x.startswith("断片") for x in c.padding) for c in ch),
+        "1文の長さが参考のレンジ内": long_ok,
+        "常体で書けている": style.plain_form_ratio >= 0.8,
     }
+
+
+def enough_material(style: Metrics, duration_sec: float, chars_per_min: float = 360.0) -> tuple[bool, float]:
+    """指定の尺に対して、書けた字数が足りているか。足りなければ資料が薄い。"""
+    mins = style.n_chars / chars_per_min
+    return mins >= duration_sec / 60 * 0.85, mins
 
 
 def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: str,
@@ -151,6 +154,7 @@ def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: s
     r = Result(text=text, plan=plan, audit=audit, style=style, left=left, loose=loose,
                plans_tried=made, calls=c1 - c0, tokens=t1 - t0, seconds=time.time() - started)
     r.gate = gate(text, audit, style, loose)
+    r.enough, r.minutes = enough_material(style, duration_sec)
     return r
 
 
@@ -178,6 +182,7 @@ def measures(r: Result) -> dict:
         "unsourced_numbers": len(r.loose),
         "notes_left": len(r.left),
         "gate_passed": int(r.passed),
+        "enough_material": int(r.enough),
         "calls": r.calls,
         "tokens": r.tokens,
     }

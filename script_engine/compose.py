@@ -216,7 +216,6 @@ _BLOCK_RULES = """\
 この塊だけを書く。前後の塊は別に書くので、ここで全体を締めない。
 段落は空行で区切る。章は1つの段落にまとめる（着地だけ4段落）。
 指示の番号や見出しは書かない。読み上げる文だけを書く。
-体言止めや6字以下の文は、緩急のために使う。数を稼ぐために使わない。
 同じ意味の文を言い換えて繰り返さない。「記録はない」「証拠は無い」「決まっていない」は
 塊に1回ずつで足りる。同じ結論を章の中で3回言わない。
 専門語（統計・化学・年代測定の用語）を出したら、5文以内に「つまり〜のことだ」で日常語に
@@ -387,6 +386,35 @@ def _pick(b: Block, texts: list[str], *, material: str, subject: str) -> str:
     return max(texts, key=scorer)
 
 
+def ensure_plant(text: str, planted: str) -> str:
+    """冒頭に伏線が無ければ、出発の合図の直前に入れる。
+
+    設計図には必ずあるのに、3本に1本は書き手が落とす（bench 実測）。伏線と回収は
+    対で初めて効く装置なので、書き手の気分に任せず機械的に置く。"""
+    if not planted or any(devices.PLANT.search(x) for x in devices.split_sentences(text.replace("\n", ""))):
+        return text
+    line = f"{planted.rstrip('。？?')}。この問いは最後の章で扱う。"
+    paras = [q for q in re.split(r"\n\s*\n", text.strip()) if q.strip()]
+    for i, q in enumerate(paras):
+        if devices.LAUNCH.search(q):
+            paras.insert(i, line)
+            return "\n\n".join(paras)
+    return text.rstrip() + "\n\n" + line
+
+
+def ensure_callback(text: str, planted: str, answer: str) -> str:
+    """着地に回収が無ければ、回収の段落（2段落目）の頭に置く。"""
+    if not planted or any(devices.CALLBACK.search(x) for x in devices.split_sentences(text.replace("\n", ""))):
+        return text
+    line = f"1章で保留にした問いだ。{planted.rstrip('。？?')}。{answer.strip()}"
+    paras = [q for q in re.split(r"\n\s*\n", text.strip()) if q.strip()]
+    if len(paras) >= 2:
+        paras[1] = line + "\n" + paras[1]
+    else:
+        paras.insert(0, line)
+    return "\n\n".join(paras)
+
+
 def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
             duration_sec: float, chat: Chat, rounds: int = 2,
             kind: str = "bundle", material: str = "",
@@ -403,10 +431,16 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
                               duration_sec=duration_sec, weights=weights)
     facts = facts_block(facts_from_material(material)) if (cite and material) else ""
     tail = ""
+    planted = str(p.planted_question.get("text") or "")
+    answer = str(p.closing.get("callback") or "")
     for b in blocks:
         f = facts if b.key.startswith("chapter") else ""
         texts = [write_block(b, tail, chat, f) for _ in range(max(1, candidates))]
         b.text = _pick(b, texts, material=material, subject=subject)
+        if b.key == "opening":
+            b.text = ensure_plant(b.text, planted)
+        elif b.key == "closing":
+            b.text = ensure_callback(b.text, planted, answer)
         tail = _tail(strip_cites(b.text))
 
     left: list[str] = []
@@ -439,6 +473,10 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
             if b.notes:
                 f = facts if b.key.startswith("chapter") else ""
                 b.text = rewrite_block(b, prev, chat, f)
+                if b.key == "opening":
+                    b.text = ensure_plant(b.text, planted)
+                elif b.key == "closing":
+                    b.text = ensure_callback(b.text, planted, answer)
             prev = _tail(strip_cites(b.text))
     return assemble(blocks), audit, left
 
