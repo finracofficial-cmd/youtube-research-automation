@@ -170,15 +170,27 @@ def _write_planned(args, material: str) -> int:
                      {"role": "user", "content": f"設計図に不備がある。直したJSONだけを出す。\n{exc}"}]
             raw = ask(msgs)
             plan = P.validate(P.parse(raw), n_claims=len(claims))
+        dropped = P.strip_unsourced(plan, material)
+        if dropped:
+            print("設計図から落とした数字（資料に無い）: " + "、".join(dropped))
         plan_path = Path(args.out).with_name(Path(args.out).stem + "_plan.json")
         plan_path.write_text(json.dumps(plan.raw, ensure_ascii=False, indent=1), encoding="utf-8")
         print("設計図:")
         for line in P.describe(plan):
             print(f"  {line}")
 
+        # 章の尺は資料の厚みで配る。出典の一覧が隣にあれば、主張ごとの件数を重みにする
+        weights = None
+        src_path = Path(args.spec).with_name(Path(args.spec).stem + "_sources.json")
+        if src_path.exists():
+            srcs = json.loads(src_path.read_text(encoding="utf-8"))
+            by_ja = {c.get("ja"): len(c.get("sources") or []) for c in (srcs.get("claims") or [])}
+            weights = [float(by_ja.get(c, 0)) for c in claims]
+            print("章の重み（出典の数）: " + " / ".join(f"{int(w)}" for w in weights))
         text, audit, left = compose(plan, subject=subject, genre=genre, claims=claims,
                                     duration_sec=args.duration, chat=chat_fn(args.model),
-                                    rounds=args.rounds, kind=kind)
+                                    rounds=args.rounds, kind=kind, material=material,
+                                    weights=weights)
     except (WriteFailed, P.PlanError) as exc:
         print(f"生成できなかった: {exc}")
         return 1

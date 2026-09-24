@@ -220,6 +220,26 @@ def validate(d: dict, *, n_claims: int | None = None) -> Plan:
                 chapters=chapters, closing=closing, raw=d)
 
 
+def strip_unsourced(plan: Plan, material: str) -> list[str]:
+    """設計図の numbers から、資料に無い数字を落とす。落としたものを返す。
+
+    設計図の段階で作られた数字（「葉の数が7枚、茎の長さが17センチ」）は、
+    そのまま章の指示に入り、本文に書かれる（v4 実測）。指示に入る前に消す。
+    """
+    have = set(re.findall(r"\d+(?:\.\d+)?", material))
+    dropped: list[str] = []
+    for c in plan.chapters:
+        kept = []
+        for n in c.numbers:
+            nums = re.findall(r"\d+(?:\.\d+)?", str(n.get("value") or ""))
+            if nums and any(x not in have for x in nums if len(x) > 1):
+                dropped.append(str(n.get("value")))
+            else:
+                kept.append(n)
+        c.numbers = kept
+    return dropped
+
+
 def prompt(material: str, *, subject: str, claims: list[str], duration_sec: float,
            kind: str = "bundle") -> str:
     """設計図を書かせるプロンプト。material は research pipeline が出した

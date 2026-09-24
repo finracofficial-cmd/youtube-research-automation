@@ -28,7 +28,7 @@ Chat = Callable[[list[dict]], str]
 
 # 章ごとに書かせるときも、初稿は薄い。塊が小さいぶん一気書きより外れは
 # 小さいが、字数を言わないと短く切った文の分だけ全体が縮む。
-BLOCK_INFLATION = 1.25
+BLOCK_INFLATION = 1.1   # 1.25 だと 430字/分（上限410）まで膨らんだ（v4 実測）
 
 
 @dataclass
@@ -87,11 +87,11 @@ def _chapter_brief(i: int, c: planmod.Chapter, n: int, p: planmod.Plan) -> str:
         "5. 振り子。立場ごとに事実を置き、反転は「だが」で、留保は「ただし」で入れる:",
         swings,
         f"6. 証拠（年・場所・誰・何）: {_known(ev.get('year', ''), ev.get('where', ''), ev.get('who', ''), ev.get('what', ''))}",
-        "7. 数字と、その数字への断り（「ただし、この数字には断りが要る」）:",
+        "7. 数字と、その数字が何を示し何を示さないか（断り）。数字が無い章では断りの文も書かない:",
         numbers,
         "8. 専門語は出した5文以内に「つまり〜のようなものだ」で着地させる:",
         jargon,
-        f"9. 語り手の判断（行為は書かない）: {c.narrator or '（無し）'}",
+        f"9. 語り手の判断を1文（行為は書かない。「私は判断を保留する」「私はこの数字を疑う」）: {c.narrator or '章の結論に合わせて1文'}",
         f"10. 結論の範囲を限定する: {c.scope}",
         f"11. 最後の1〜2文で次章へ引く: {c.hook_out}",
     ]
@@ -126,19 +126,42 @@ def _closing_brief(p: planmod.Plan, subject: str) -> str:
     ])
 
 
+NO_SOURCE_NOTE = ("※ この主張には当たれる一次資料が無い。埋めない。短く書き、"
+                  "「一次資料に当たれない」こと自体を結論にする。「記録は無い」を言い換えて"
+                  "繰り返さない（1回で足りる）。")
+
+
+def chapter_shares(weights: list[float]) -> list[float]:
+    """章の尺を資料の厚みで配る。等分すると、資料の無い章を「記録は無い」の
+    言い換えで埋める（v4 実測: 第5章61文のうち十数文が同じ意味）。参考も章の長さは
+    47〜88文と揺れている。薄い章は平均の6割、厚い章は1.5倍まで。"""
+    if not weights:
+        return []
+    mean = sum(weights) / len(weights)
+    clipped = [min(max(w, mean * 0.6), mean * 1.5) for w in weights]
+    total = sum(clipped)
+    return [w / total for w in clipped]
+
+
 def blocks_from_plan(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
-                     duration_sec: float) -> list[Block]:
+                     duration_sec: float, weights: list[float] | None = None) -> list[Block]:
     """設計図を、書かせる塊の列にする。尺は参考の比率で配る。
 
     冒頭 4.0% / 着地 11.5% / 残りを章で割る（束ね型の実測）。
+    weights は章ごとの資料の厚み（出典の数など）。無ければ等分。
     """
     n = len(p.chapters)
     open_sec = duration_sec * 0.040
     close_sec = duration_sec * 0.115
     body = duration_sec - open_sec - close_sec
+    weights = list(weights) if weights and len(weights) == n else [1.0] * n
+    shares = chapter_shares([1.0 + w for w in weights])
     out = [Block("opening", _opening_brief(p, subject, genre, claims), _chars(open_sec))]
     for i, c in enumerate(p.chapters, 1):
-        out.append(Block(f"chapter{i}", _chapter_brief(i, c, n, p), _chars(body / n)))
+        brief = _chapter_brief(i, c, n, p)
+        if weights[i - 1] <= 0:
+            brief += "\n" + NO_SOURCE_NOTE
+        out.append(Block(f"chapter{i}", brief, _chars(body * shares[i - 1])))
     out.append(Block("closing", _closing_brief(p, subject), _chars(close_sec)))
     return out
 
@@ -159,12 +182,41 @@ _BLOCK_RULES = """\
 英語の人名は片仮名で書く（Manly → マンリー、Brumbaugh → ブラムボー）。読み上げるため。"""
 
 
+_ADVERSATIVE = re.compile(r"^(だが|しかし|ところが|それなのに|にもかかわらず)[、]?")
+_LANDING = re.compile(r"^(つまり|要するに)[、]?")
+
+
+def thin_connectives(text: str, *, keep_adversative: int = 3, keep_landing: int = 4) -> str:
+    """文頭の逆接と「つまり」を、章ごとに上限まで間引く。
+
+    書き直しを頼んでも減らない（v3 0.93/分、v4 1.00/分。参考は最大0.53）。
+    逆接の接続詞は省いても文は成立し、対比は残る。参考も「語はある。
+    意味が違う。」と接続詞なしで対比する。上限を超えたぶんは接続詞だけ落とす。
+    """
+    out = []
+    n_adv = n_land = 0
+    for sent in re.split(r"(?<=[。？！])", text):
+        m = _ADVERSATIVE.match(sent)
+        if m:
+            n_adv += 1
+            if n_adv > keep_adversative:
+                sent = sent[m.end():]
+        m = _LANDING.match(sent)
+        if m:
+            n_land += 1
+            if n_land > keep_landing:
+                sent = sent[m.end():]
+        out.append(sent)
+    return "".join(out)
+
+
 def _fold(key: str, text: str) -> str:
     """章は1段落に畳む。指示しても段落を分けてくる（実測で第1章が7段落）。
     段落=章として監査するので、ここで確実に畳む。冒頭と着地は段落のまま。"""
     if not key.startswith("chapter"):
         return text
-    return "\n".join(l for l in text.splitlines() if l.strip())
+    text = "\n".join(l for l in text.splitlines() if l.strip())
+    return thin_connectives(text)
 
 
 def write_block(b: Block, previous_tail: str, chat: Chat) -> str:
@@ -218,13 +270,15 @@ def paragraph_index(blocks: list[Block], key: str) -> int | None:
 
 def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
             duration_sec: float, chat: Chat, rounds: int = 2,
-            kind: str = "bundle") -> tuple[str, devices.Audit, list[str]]:
+            kind: str = "bundle", material: str = "",
+            weights: list[float] | None = None) -> tuple[str, devices.Audit, list[str]]:
     """設計図から台本を書き、監査して、外れた章だけ直す。
 
+    material を渡すと、資料に無い数字を章の指摘にして消させる。
     戻り値は (台本, 最後の監査, 残った指摘)。
     """
     blocks = blocks_from_plan(p, subject=subject, genre=genre, claims=claims,
-                              duration_sec=duration_sec)
+                              duration_sec=duration_sec, weights=weights)
     tail = ""
     for b in blocks:
         b.text = write_block(b, tail, chat)
@@ -239,10 +293,17 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
         audit = devices.audit(text, duration_sec, subject=subject, kind=kind,
                               chapter_blocks=chapter_idx or None)
         style = validate(text, duration_sec)
-        left = list(audit.notes) + list(style.violations)
+        loose = {b.key: devices.unsourced_numbers(b.text, material)
+                 for b in blocks if material and b.key != "opening"}
+        loose_notes = [f"{k}: 資料に無い数字 " + "、".join(v) for k, v in loose.items() if v]
+        left = list(audit.notes) + list(style.violations) + loose_notes
         if not left or r == rounds:
             break
         route(blocks, audit, list(style.violations))
+        for b in blocks:
+            if loose.get(b.key):
+                b.notes.append("資料に無い数字を消すか、資料にある数字に置き換える: "
+                               + "、".join(loose[b.key]) + "。数字を作らない")
         prev = ""
         for b in blocks:
             if b.notes:

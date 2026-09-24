@@ -74,3 +74,39 @@ def test_route_sends_opening_notes_to_the_opening_and_rates_to_chapters():
     assert all(any("留保" in n for n in b.notes) for b in blocks[1:-1])
     assert all(any("話速" in n for n in b.notes) for b in blocks[1:-1])
     assert not any("留保" in n for n in blocks[0].notes)
+
+
+
+def test_chapter_length_follows_the_material():
+    """等分すると資料の無い章を「記録は無い」の言い換えで埋める。厚みで配る。"""
+    shares = C.chapter_shares([1.0, 7.0, 1.0])
+    assert shares[1] > shares[0] == shares[2]
+    assert abs(sum(shares) - 1.0) < 1e-9
+    # 薄い章は平均の6割で止まり、厚い章は1.5倍で止まる
+    lo, hi = C.chapter_shares([0.0, 100.0])
+    assert abs(lo / hi - 0.6 / 1.5) < 1e-9
+
+
+def test_a_chapter_without_sources_is_told_not_to_pad():
+    p = P.validate(good_plan(2))
+    blocks = C.blocks_from_plan(p, subject="巨石遺跡", genre="古代の謎", claims=["a", "b"],
+                                duration_sec=900, weights=[3.0, 0.0])
+    assert C.NO_SOURCE_NOTE not in blocks[1].brief
+    assert C.NO_SOURCE_NOTE in blocks[2].brief
+    assert blocks[1].target_chars > blocks[2].target_chars
+
+
+def test_excess_adversatives_and_tsumari_are_thinned():
+    """書き直しでは減らない（v3 0.93/分、v4 1.00/分）。上限を超えた接続詞だけ落とす。"""
+    text = "".join(f"だが、事実{i}がある。" for i in range(5)) + "".join(f"つまり、要点{i}だ。" for i in range(6))
+    out = C.thin_connectives(text)
+    assert out.count("だが、") == 3 and out.count("つまり、") == 4
+    assert "事実4がある。" in out and "要点5だ。" in out      # 文は残る
+
+
+def test_unsourced_numbers_in_the_plan_are_dropped_before_writing():
+    p = P.validate(good_plan(1))
+    p.chapters[0].numbers = [{"value": "1000トン", "caveat": ""}, {"value": "葉が7枚で茎が17センチ", "caveat": ""}]
+    dropped = P.strip_unsourced(p, "最大の石は1000トンある。")
+    assert dropped == ["葉が7枚で茎が17センチ"]
+    assert [n["value"] for n in p.chapters[0].numbers] == ["1000トン"]
