@@ -102,18 +102,36 @@ def _chat(messages: list[dict], model: str, *, timeout: int = 300,
     headers = {"Content-Type": "application/json"}
     if key:
         headers["Authorization"] = f"Bearer {key}"
-    for a in range(4):
+    # 組織の上限は gpt-4.1 で 30,000 トークン/分（実測、429 の本文にあった）。
+    # 資料を番号付きで渡すと1回 4,000〜5,000 トークンなので、6〜7回で頭を打つ。
+    # 429 は「待てば通る」ので、本文の「try again in Ns」か Retry-After のぶん待って
+    # 粘る。4回・最長20秒では足りず、bench が途中で落ちた。
+    for a in range(8):
         try:
             req = urllib.request.Request(API, data=body, headers=headers)
             d = json.loads(urllib.request.urlopen(req, timeout=timeout).read())
             note_usage("chat", model, d)
             return (d["choices"][0]["message"]["content"] or "").strip()
         except urllib.error.HTTPError as exc:
-            if exc.code in (429, 500, 502, 503) and a < 3:
-                time.sleep(2 ** a * 5)
+            text = exc.read()[:400]
+            if exc.code in (429, 500, 502, 503) and a < 7:
+                time.sleep(_backoff(exc, text, a))
                 continue
-            raise WriteFailed(f"HTTP {exc.code}: {exc.read()[:200]!r}") from exc
+            raise WriteFailed(f"HTTP {exc.code}: {text[:200]!r}") from exc
     raise WriteFailed("応答が得られなかった")
+
+
+def _backoff(exc, text: bytes, attempt: int) -> float:
+    """待つ秒数。サーバーが言う数字があればそれに従い、無ければ指数で伸ばす。"""
+    wait = min(90.0, 2.0 ** attempt * 5)
+    ra = exc.headers.get("Retry-After") if getattr(exc, "headers", None) else None
+    if ra and str(ra).strip().replace(".", "", 1).isdigit():
+        wait = max(wait, float(ra))
+    m = re.search(rb"try again in ([0-9.]+)\s*(ms|s)", text)
+    if m:
+        hinted = float(m.group(1)) / (1000.0 if m.group(2) == b"ms" else 1.0)
+        wait = max(hinted + 1.0, min(wait, hinted * 3 + 1.0))
+    return wait
 
 
 def chat_fn(model: str = DEFAULT_MODEL, *, json_mode: bool = False,

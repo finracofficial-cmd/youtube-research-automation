@@ -165,3 +165,17 @@ def test_long_sentences_split_only_at_safe_joints():
     assert "。しかし" in got
     # 主語の印。短い文なのでそもそも触らない
     assert split_long("歯車が、回る。", 26) == "歯車が、回る。"
+
+
+
+def test_rate_limit_backoff_follows_the_servers_hint():
+    """組織の上限は 30,000 トークン/分。429 の本文にある「try again in Ns」に従って待つ。"""
+    import urllib.error
+    from script_engine.write import _backoff
+
+    exc = urllib.error.HTTPError("u", 429, "Too Many", {"Retry-After": "12"}, None)
+    assert _backoff(exc, b'{"message": "Please try again in 6.2s."}', 0) >= 7.0
+    assert _backoff(exc, b"", 0) == 12.0                    # Retry-After が無ければ指数
+    plain = urllib.error.HTTPError("u", 429, "Too Many", {}, None)
+    assert _backoff(plain, b"", 2) == 20.0
+    assert _backoff(plain, b"try again in 800ms", 0) >= 1.8
