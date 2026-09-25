@@ -26,33 +26,69 @@ from meter import note_usage
 
 API = "https://api.openai.com/v1/chat/completions"
 
-_SYSTEM = """You plan a Japanese documentary about a historical or
-archaeological subject.
+_SYSTEM = """You plan a Japanese documentary that takes the stories people tell
+about a historical or archaeological subject and checks them against
+primary sources, one by one, until only what survives is left.
 
 Return JSON only, shaped exactly like this:
 {"subject_en": "...", "genre": "...",
- "claims": [{"ja": "...", "en": "..."}, ...]}
+ "mystery": {"ja": "...", "candidates": ["...", "...", "..."]},
+ "claims": [{"ja": "...", "en": "...", "told_by": "...", "stakes": "..."}, ...]}
 
 - subject_en: English search terms for finding primary literature.
 - genre: a short Japanese label, e.g. 古代の謎 / 未解読文字 / 科学史.
-- claims: the specific popular claims the video will examine, one per entry.
-  - ja: the claim as it is popularly stated, in Japanese, one sentence.
-  - en: English keywords that would find the scholarly work on that claim.
-- Pick claims that primary sources can actually settle. Avoid claims that
-  are purely speculative, because the script must cite real work."""
+- mystery: THE question the audience keeps asking about this subject, as a
+  concrete yes/no or who/why question in Japanese (e.g. 「バチカンは死海文書を
+  隠したのか」, not 「なぜ謎が残るのか」). candidates: 2-4 possible answers,
+  short, mutually exclusive. The video eliminates them one by one.
+- claims: the stories being told right now, most-told first. Use the video
+  titles given (that is what the market says) before anything else.
+  - ja: the claim AS IT IS POPULARLY STATED, with its sensational framing kept
+    (「バチカンが死海文書を隠した」, not 「死海文書は非公開だった」).
+  - en: English keywords that find the scholarly work that can settle it.
+  - told_by: who tells it (YouTube解説 / 書籍 / 観光ガイド / ニュース / 教科書).
+  - stakes: one short Japanese sentence on why a viewer cares.
+- At least half of the claims must be 都市伝説・陰謀論・俗説 that primary
+  sources can overturn or cut down to size. The rest are 定説 people repeat
+  that have a twist when checked. Never list encyclopedia facts that nobody
+  disputes (発見場所, 年代, 分類) as claims.
+- Every claim must be settleable with real scholarly work; the script must
+  cite it."""
+
+
+def told_titles(subject: str, root: Path = Path(".")) -> list[str]:
+    """量産chが語っている話（動画タイトル）。無ければ空。
+
+    analysis/told_*.json（pick-topics が残す）を先に見て、無ければ
+    out/channel_titles.json（同じ環境で discover を回した直後）を見る。
+    """
+    from topic_scout.told import latest, told, told_for
+
+    path = latest(root / "analysis")
+    if path:
+        got = json.loads(path.read_text(encoding="utf-8")).get(subject) or []
+        if got:
+            return got
+    cache = root / "out" / "channel_titles.json"
+    if cache.exists():
+        return told_for([subject], cache).get(subject) or []
+    return []
 
 
 def build(subject: str, n_claims: int, *, model: str = "gpt-4.1",
-          timeout: int = 180) -> dict:
+          timeout: int = 180, told: list[str] | None = None) -> dict:
     key = os.environ.get("OPENAI_API_KEY")
     if not key and not os.environ.get("OPENAI_VIA_PROXY"):
         raise SystemExit("OPENAI_API_KEY が未設定。環境変数で渡すこと")
+    told = told if told is not None else told_titles(subject)
+    user = f"題材: {subject}\n主張の数: {n_claims}"
+    if told:
+        user += "\n\nいま語られている話（量産chの動画タイトル。多い順ではない）:\n" + "\n".join(f"- {t}" for t in told)
     body = json.dumps({
         "model": model,
         "response_format": {"type": "json_object"},
         "messages": [{"role": "system", "content": _SYSTEM},
-                     {"role": "user",
-                      "content": f"題材: {subject}\n主張の数: {n_claims}"}],
+                     {"role": "user", "content": user}],
         "temperature": 0.6,
     }).encode()
     headers = {"Content-Type": "application/json"}
@@ -66,13 +102,19 @@ def build(subject: str, n_claims: int, *, model: str = "gpt-4.1",
         raise SystemExit(f"HTTP {exc.code}: {exc.read()[:200]!r}") from exc
     spec = json.loads(d["choices"][0]["message"]["content"])
 
-    claims = [c for c in (spec.get("claims") or [])
-              if c.get("ja") and c.get("en")][:n_claims]
+    claims = [{"ja": c["ja"], "en": c["en"], "told_by": c.get("told_by", ""),
+               "stakes": c.get("stakes", "")}
+              for c in (spec.get("claims") or []) if c.get("ja") and c.get("en")][:n_claims]
     if not claims:
         raise SystemExit("主張が組めなかった。題材を具体的にして試す")
+    mystery = spec.get("mystery") or {}
+    cands = [str(x).strip() for x in (mystery.get("candidates") or []) if str(x).strip()][:4]
     return {"subject": subject,
             "subject_en": spec.get("subject_en") or subject,
             "genre": spec.get("genre") or "古代の謎",
+            "mystery": str(mystery.get("ja") or "").strip(),
+            "candidates": cands,
+            "told": told[:12],
             "claims": claims}
 
 

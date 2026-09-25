@@ -39,6 +39,12 @@ LANDING = re.compile(r"^つまり|^要するに|^言い換え|^要は|ような�
                      r"という粒子|という量|というもの|のことだ|のことである|のことで")
 RESET = re.compile(r"ここまでが|ここまでの|ここからが|ここから先")
 DEFEAT = re.compile(r"皆敗れ|全員が負け|誰も|誰一人|誰にも|決着していない|決まっていない|入れていない|分かっていない")
+# 考察の印。事実と考察を分ける
+SPEC_START = re.compile(r"ここからは資料に無い|私の考えだ")
+SPEC_END = re.compile(r"ここまでが考察")
+# 章末で残る候補を数える
+NARROW = re.compile(r"残る(のは|候補)|残った|消えた|潰れた|絞られ|絞れ|消える")
+
 # 伏線と回収
 PLANT = re.compile(r"後の章で|最後の章で|最後に扱う|後で扱う|あとで扱う|後ほど|保留にする|保留する|その話は後")
 CALLBACK = re.compile(r"章で保留|保留にした|冒頭で|冒頭に|最初に述べ|最初に言っ|先ほどの|さきほどの|冒頭の問い|1章で|序盤で")
@@ -148,6 +154,9 @@ class Audit:
     padding: list[str]
     notes: list[str] = field(default_factory=list)
     chapter_notes: dict[int, list[str]] = field(default_factory=dict)  # 塊番号 -> 指摘
+    speculation: bool = False          # 考察が印で囲まれている
+    speculation_loose: list[str] = field(default_factory=list)   # 考察の中の、資料に無い数字
+    narrowing: int = 0                 # 章末で残る候補を数えた章の数
 
     @property
     def global_notes(self) -> list[str]:
@@ -298,6 +307,21 @@ def _hooks_out(sents: list[str], nxt: list[str] | None = None) -> bool:
     return any(OPEN.search(t) or HOOK.search(t) for t in tail + head)
 
 
+def speculation_span(text: str) -> str:
+    """考察の区間（印の間）。無ければ空。"""
+    m0 = SPEC_START.search(text)
+    if not m0:
+        return ""
+    m1 = SPEC_END.search(text, m0.end())
+    return text[m0.start(): m1.end()] if m1 else ""
+
+
+def speculation_numbers(text: str, material: str) -> list[str]:
+    """考察の中で使った、資料に無い数字。考察でも数字は作らない。"""
+    span = speculation_span(text)
+    return unsourced_numbers(span, material) if span else []
+
+
 def unsourced_numbers(text: str, material: str) -> list[str]:
     """資料に無い数字。裏の取れていない数字を出さないのが番組の約束なので、
     人が最後に見るために列挙する。年と件数を粗く見るだけで、判定はしない。"""
@@ -316,7 +340,8 @@ def unsourced_numbers(text: str, material: str) -> list[str]:
 
 
 def audit(text: str, duration_sec: float, *, subject: str = "",
-          kind: str = "bundle", chapter_blocks: list[int] | None = None) -> Audit:
+          kind: str = "bundle", chapter_blocks: list[int] | None = None,
+          ours: bool = True) -> Audit:
     """台本を、参考2本から測った装置のレンジに照らす。
 
     chapter_blocks は本編の章にあたる塊の番号。無ければ、冒頭2塊と末尾4塊を
@@ -385,10 +410,14 @@ def audit(text: str, duration_sec: float, *, subject: str = "",
         closing_sents = [s for b in blocks[chapter_blocks[-1] + 1:] for s in b]
         closing_pad = [x for x in padding(closing_sents, subject) if x.startswith("言い直し")]
 
+    spec_span = speculation_span(text)
+    narrowing = sum(1 for i in chapter_blocks if any(NARROW.search(x) for x in blocks[i][-5:]))
+
     a = Audit(minutes=minutes, per_min=per_min, chapters=chapters,
               plant=plant, callback=callback, opening_images=opening_images,
               opening_defeat=opening_defeat, subject_free_run=best,
-              unlanded=unlanded_jargon(sents), padding=padding(sents, subject))
+              unlanded=unlanded_jargon(sents), padding=padding(sents, subject),
+              speculation=bool(spec_span), narrowing=narrowing)
 
     # ---- 指摘 ----
     names = {"open": "章末や節目の問い（では〜のか）", "private": "語り手の判断（私は〜と考える／判断を保留する）",
@@ -416,6 +445,12 @@ def audit(text: str, duration_sec: float, *, subject: str = "",
     if best < 5:
         a.notes.append(f"終盤で題材を離れた一般化が短い（題材名の出ない連続文が {best}）。"
                        "題材を知らない人にも効く結論を5文以上つづける")
+    # 考察の印と「残る候補」は自作台本の型。参考2本には無いので、参考には掛けない
+    if ours and not spec_span:
+        a.notes.append("考察が無い、または印で囲まれていない（「ここからは資料に無い。私の考えだ。」〜「ここまでが考察だ。」）")
+    if ours and chapters and narrowing * 2 < len(chapters):
+        a.notes.append(f"章末で残る候補を数えている章が {narrowing}/{len(chapters)}。"
+                       "「これでAは消えた。残るのはBとC」で締める")
     if len(closing_pad) >= 2:
         a.notes.append("着地で同じ結論を言い直している: " + " / ".join(closing_pad[:3])
                        + "。回収は「〜と分かった」を1回ずつ、決着していないことは最後に1回")

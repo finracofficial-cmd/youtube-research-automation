@@ -12,7 +12,7 @@ def _fake_chat(log):
         if "## 冒頭" in messages[1]["content"]:
             return "巨石遺跡。\n1000トンの石がある。\n継ぎ目に紙一枚入らない石壁。\n切り出し途中の巨石。\n誰も入っていない地下室。\n運び方は決まっていない。\nそれでは私と共に、巨石遺跡へと迫っていこう。"
         if "## 着地" in messages[1]["content"]:
-            return "一般化の話。\n\n回収の話。\n\n条件の話。\n\nCTAです。"
+            return "一般化の話。\n\n回収の話。\n\n事実はここまでだ。ここからは資料に無い。私の考えだ。運ぶ気が無かった。ここまでが考察だ。\n\n条件の話。\n\nCTAです。"
         # 章。直しの依頼には「ただし」を足して返す
         base = ("巨石は現代の重機でも運べない。そう語られている。結論から言う。運べないのではなく、運ぶ理由が無い。"
                 "最大の石は1000トンある。だが同じ石切り場に切り出し途中の石が残っている。"
@@ -40,7 +40,7 @@ def test_chapter_paragraphs_are_located_after_assembly():
     blocks[0].text = "冒頭。\n\n具体。\n\n合図。"
     blocks[1].text = "第1章。"
     blocks[2].text = "第2章。"
-    blocks[3].text = "一般化。\n\n回収。\n\n条件。\n\nCTA。"
+    blocks[3].text = "一般化。\n\n回収。\n\n考察。\n\n条件。\n\nCTA。"
     assert C.paragraph_index(blocks, "chapter1") == 3
     assert C.paragraph_index(blocks, "chapter2") == 4
     assert C.paragraph_index(blocks, "closing") == 5
@@ -109,7 +109,7 @@ def test_unsourced_numbers_in_the_plan_are_dropped_before_writing():
     p = P.validate(good_plan(1))
     p.chapters[0].numbers = [{"value": "1000トン", "caveat": ""}, {"value": "葉が7枚で茎が17センチ", "caveat": ""}]
     dropped = P.strip_unsourced(p, "最大の石は1000トンある。")
-    assert dropped == ["葉が7枚で茎が17センチ"]
+    assert dropped[0] == "葉が7枚で茎が17センチ"
     assert [n["value"] for n in p.chapters[0].numbers] == ["1000トン"]
 
 
@@ -119,3 +119,33 @@ def test_writable_minutes_reports_what_the_material_supported():
     from script_engine.cli import writable_minutes
     assert round(writable_minutes(3383)) == 9
     assert round(writable_minutes(5400)) == 15
+
+
+
+def test_speculation_is_wrapped_in_markers_or_built_from_the_plan():
+    sp = {"claim": "運ぶ気が無かったのだと思う", "reasons": ["坂の跡が無い", "切り出しが途中で止まっている"],
+          "weakness": "運搬の道具が出土すれば"}
+    closing = "一般化。\n\n回収。\n\n条件。\n\nCTAです。"
+    got = C.ensure_speculation(closing, sp)
+    paras = got.split("\n\n")
+    assert paras[2].startswith("事実はここまでだ。ここからは資料に無い。私の考えだ。")
+    assert paras[2].endswith("ここまでが考察だ。") and "ただし、運搬の道具が出土すればなら" in paras[2]
+    assert paras[3] == "条件。"
+    # 始まりの印だけ書かれていたら、閉じを足す
+    half = "一般化。\n\n回収。\n\nここからは資料に無い。私の考えだ。運ぶ気が無かった。\n\n条件。\n\nCTA。"
+    got = C.ensure_speculation(half, sp)
+    assert got.split("\n\n")[2].endswith("ここまでが考察だ。")
+    assert C.ensure_speculation(got, sp) == got
+
+
+def test_adjacent_duplicate_sentences_are_dropped():
+    text = "結論から言う。写本群である。\n写本群である。\n別の事実だ。"
+    assert C.dedupe_adjacent(text).count("写本群である。") == 1
+    far = "写本群である。" + "".join(f"第{i}の事実だ。" for i in range(4)) + "写本群である。"
+    assert C.dedupe_adjacent(far).count("写本群である。") == 2      # 離れた反復は残す
+
+
+def test_shot_hints_come_from_evidence_jargon_and_swings():
+    p = P.validate(good_plan(2))
+    hints = C.hints_for_shots(p)
+    assert len(hints) == 2 and "石切り場" in hints[0] and "層序" in hints[0]

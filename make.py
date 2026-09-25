@@ -85,11 +85,24 @@ def main() -> int:
 
     began = time.time()
     meter.share(ROOT / "out" / f".meter_{name}.jsonl")
+    # 設計図（Write approved が reports/ に残す）。あれば、章ごとの手がかりを
+    # 画の検索に渡し、図と考察のテロップを足す
+    sys.path.insert(0, str(ROOT / "video"))
+    import figures as figures_mod
+    plan_path = ROOT / "reports" / f"{name}_plan.json"
+    plan_data = figures_mod.load_plan(plan_path)
     if not a.skip_assets:
         spec.parent.mkdir(parents=True, exist_ok=True)
         print("■ 1/4 台本から検索語を割り出す")
-        run([sys.executable, "-m", "assets.plan_shots", str(script),
-             "--segments", str(a.segments), "--out", str(spec)])
+        cmd = [sys.executable, "-m", "assets.plan_shots", str(script),
+               "--segments", str(a.segments), "--out", str(spec)]
+        if plan_data:
+            hints_path = ROOT / "out" / f".hints_{name}.json"
+            hints_path.write_text(json.dumps(figures_mod.hints(plan_data), ensure_ascii=False),
+                                  encoding="utf-8")
+            cmd += ["--hints", str(hints_path)]
+            print(f"  設計図の手がかりを使う: {plan_path}")
+        run(cmd)
 
         print("\n■ 2/4 素材を集める")
         run([sys.executable, "-m", "assets", "fetch", str(spec),
@@ -174,6 +187,9 @@ def main() -> int:
         data = publish.refresh(data, script.read_text(encoding="utf-8"),
                                claims_now,
                                card_labels=_ch.card_labels(claims_now))
+        if plan_data:
+            n_fig, n_tel = figures_mod.inject(data, plan_data)
+            print(f"  設計図から図 {n_fig}枚・考察の印 {n_tel}枚を足した")
         props.write_text(json.dumps(data, ensure_ascii=False, indent=1),
                          encoding="utf-8")
         print(f"  字幕を実際の発話に合わせ直した（章 {len(data.get('outline') or [])}件）")

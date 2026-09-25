@@ -30,16 +30,44 @@ def split_script(text: str, n_segments: int) -> list[str]:
     return segs
 
 
+def with_hints(segs: list[str], hints: list[list[str]]) -> list[str]:
+    """章ごとの手がかり（証拠の場所・人・物）を、その章にあたる区間の文に足す。
+
+    台本が題材名ばかりだと検索語が1つに潰れて同じ画が続く（実測: 死海文書）。
+    章の位置は区間を等分して当てる。区間は字数で切っているので、章の長さが
+    多少違ってもおおむね合う。冒頭と着地のぶんは端の1割ずつ空ける。
+    """
+    if not hints or not segs:
+        return segs
+    n = len(segs)
+    lo, hi = int(n * 0.1), max(int(n * 0.1) + 1, int(n * 0.9))
+    body = max(1, hi - lo)
+    out = list(segs)
+    for k, words in enumerate(hints):
+        if not words:
+            continue
+        a = lo + body * k // len(hints)
+        b = lo + body * (k + 1) // len(hints)
+        for i in range(a, max(a + 1, b)):
+            if i < n:
+                out[i] = out[i] + "".join(f"{w}。" for w in words)
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("script")
     ap.add_argument("--segments", type=int, default=45, help="いくつの画で構成するか")
     ap.add_argument("--fallback", nargs="*", default=[],
                     help="語が取れなかった区間に使う検索語")
+    ap.add_argument("--hints", help="章ごとの検索の手がかり（JSON、list[list[str]]）")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
 
     segs = split_script(Path(a.script).read_text(encoding="utf-8"), a.segments)
+    if a.hints and Path(a.hints).exists():
+        import json
+        segs = with_hints(segs, json.loads(Path(a.hints).read_text(encoding="utf-8")))
     print(f"{len(segs)}区間に分割。Wikipediaで英訳中…")
     per = queries_for_segments(segs, per_segment=2)
 

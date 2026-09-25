@@ -20,18 +20,30 @@ def good_plan(n=2):
         "jargon": [{"term": "層序", "landing": "地層の重なり順"}],
         "narrator": "私はこの推定値を疑っている",
         "scope": "運べないとは言えない、というところまでだ",
+        "question": "巨石は本当に運べなかったのか",
+        "method": "石切り場に切り出し途中の石が残っているかを見ればいい",
+        "tests": "「人間には運べない」という候補",
+        "so_far": "これで「運べない」は消えた。残るのは「運ばなかった」と「別の場所で切った」",
+        "figure": {"kind": "scale", "heading": "石の重さ", "items": [{"label": "最大の石", "value": "1000トン"}, {"label": "普通の石", "value": "300トン"}]},
         "hook_out": "では、なぜ運ばなかったのか。",
     }
     return {
         "thesis": "分からないことは、分からない人が最初に書き残している",
-        "opening": {"images": ["継ぎ目に紙一枚入らない石壁", "切り出し途中で放置された巨石", "誰も入っていない地下室"],
-                    "defeat": "運び方は決まっていない", "map": "3つの説を順に確かめる"},
+        "mystery": "巨石は誰が、どうやって運んだのか",
+        "candidates": ["人間が坂で運んだ", "運ばなかった（その場で切った）", "人間ではない"],
+        "opening": {"paradox": "1000トンの石が、道の無い丘の上にある",
+                    "images": ["継ぎ目に紙一枚入らない石壁", "切り出し途中で放置された巨石", "誰も入っていない地下室"],
+                    "defeat": "運び方は決まっていない", "cheap_answers": ["技術が失われたから", "記録が燃えたから"],
+                    "map": "3つの説を順に確かめる"},
         "planted_question": {"text": "そもそも誰が運んだのか", "opened_in": 1},
         "chapters": [dict(ch) for _ in range(n)],
         "closing": {"generalization": ["a", "b", "c", "d", "e"], "callback": "回収",
+                    "answer": "残るのは「運ばなかった」だけだ",
                     "found": ["x"], "not_found": "だが誰が運んだかは分かっていない",
                     "open_questions": ["q"], "condition": "石切り場の記録が出れば",
-                    "opening_callback": "冒頭でこう述べた"},
+                    "opening_callback": "冒頭でこう述べた",
+                    "speculation": {"claim": "運ぶ気が無かったのだと思う", "reasons": ["坂の跡が無い", "切り出しが途中で止まっている"],
+                                    "weakness": "運搬の道具が出土すれば"}},
     }
 
 
@@ -90,3 +102,28 @@ def test_prompt_carries_the_material_and_the_order_rule():
     txt = P.prompt("## 資料\n- 2015 論文", subject="巨石遺跡", claims=["a", "b"],
                    duration_sec=900, kind="bundle")
     assert "2015 論文" in txt and "跡形もなくなるもの" in txt and "1. a" in txt
+
+
+
+def test_abstract_mysteries_and_missing_speculation_are_rejected():
+    d = good_plan()
+    d["mystery"] = "なぜ謎が今も残り続けるのか"
+    with pytest.raises(P.PlanError, match="抽象的"):
+        P.validate(d)
+    d = good_plan()
+    d["closing"]["speculation"]["reasons"] = ["一つだけ"]
+    with pytest.raises(P.PlanError, match="reasons"):
+        P.validate(d)
+    d = good_plan()
+    d["chapters"][0]["so_far"] = ""
+    with pytest.raises(P.PlanError, match="so_far"):
+        P.validate(d)
+
+
+def test_figures_with_unsourced_numbers_are_dropped():
+    p = P.validate(good_plan(1))
+    P.strip_unsourced(p, "最大の石は1000トンある。普通の石は300トンだ。")
+    assert p.chapters[0].figure["kind"] == "scale"
+    p2 = P.validate(good_plan(1))
+    P.strip_unsourced(p2, "最大の石は1000トンある。")
+    assert p2.chapters[0].figure == {}          # 2本に足りなくなった図は消える

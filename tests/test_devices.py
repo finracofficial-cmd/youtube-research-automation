@@ -32,7 +32,7 @@ def test_the_pyramid_video_passes_its_own_audit():
     """型の出どころが、その型の監査を通ること。投稿者の手動字幕なので本文は正確。
     ここが落ちたら閾値か検出のどちらかが壊れている。"""
     a = D.audit(from_transcript(PYRAMID), 2272, subject="ピラミッド", kind="bundle",
-                chapter_blocks=list(range(1, 10)))
+                chapter_blocks=list(range(1, 10)), ours=False)
     assert a.ok, a.notes
 
 
@@ -40,15 +40,15 @@ def test_the_voynich_video_passes_except_for_caption_artifacts():
     """自動字幕は文の切れ目が消える（冒頭の3つの具体が1文に潰れている）。
     それ以外は通ること。"""
     a = D.audit(from_transcript(VOYNICH), 3159, subject="ヴォイニッチ手稿", kind="flagship",
-                chapter_blocks=[1, 2, 3, 4])
+                chapter_blocks=[1, 2, 3, 4], ours=False)
     assert all("冒頭の体言止め" in n for n in a.notes), a.notes
 
 
 def test_reference_rates_are_the_documented_ones():
     """REFERENCE_PER_MIN は参考2本をこの検出器で測った値。検出器を変えたら測り直す。"""
-    p = D.audit(from_transcript(PYRAMID), 2272, subject="ピラミッド", chapter_blocks=list(range(1, 10)))
+    p = D.audit(from_transcript(PYRAMID), 2272, subject="ピラミッド", chapter_blocks=list(range(1, 10)), ours=False)
     v = D.audit(from_transcript(VOYNICH), 3159, subject="ヴォイニッチ手稿", kind="flagship",
-                chapter_blocks=[1, 2, 3, 4])
+                chapter_blocks=[1, 2, 3, 4], ours=False)
     for k, (lo, hi) in D.REFERENCE_PER_MIN.items():
         got = sorted([p.per_min[k], v.per_min[k]])
         assert got[0] == pytest.approx(lo, abs=0.02), (k, got)

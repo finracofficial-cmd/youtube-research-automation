@@ -68,6 +68,11 @@ jobs:
             --seeds out/candidates.csv \
             --limit "${{ inputs.limit || 60 }}" \
             --out "analysis/topics_$(date +%Y-%m-%d).csv"
+          # 題材ごとに「いま語られている話」（量産chのタイトル）を残す。
+          # Write approved が検証する主張をここから起こす
+          python3 -m topic_scout.told out/channel_titles.json \
+            --from-csv "analysis/topics_$(date +%Y-%m-%d).csv" \
+            --out "analysis/told_$(date +%Y-%m-%d).json" || true
 
       - name: 結果を書き戻す
         run: |

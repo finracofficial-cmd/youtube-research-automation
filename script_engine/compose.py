@@ -46,20 +46,27 @@ def _chars(sec: float) -> int:
 
 def _opening_brief(p: planmod.Plan, subject: str, genre: str, claims: list[str]) -> str:
     o = p.opening
+    cands = [c for c in p.candidates if c]
+    cheap = [str(x) for x in (o.get("cheap_answers") or []) if str(x).strip()]
     lines = [
         "## 冒頭（挨拶も自己紹介もしない。1文目から本題）",
-        f"1. 体言止めの一撃: 「{subject}。」で始め、次の1文で規模か年数を数字で言う。",
-        "2. 異様さの具体を3つ、体言止めで並べる（形容詞でなく、画で見せられる物）:",
+        f"1. 体言止めの一撃: 「{subject}。」",
+        f"2. 逆説を1文で: {o.get('paradox', '')}（成り立たないはずのことが成り立っている。数字か物で言う）",
+        "3. 異様さの具体を3つ、体言止めで並べる（形容詞でなく、画で見せられる物）:",
     ] + [f"   ・{x}" for x in (o.get("images") or [])[:3]] + [
-        f"3. 「挑んだ者は皆敗れた／決着していない」型の一文: {o.get('defeat', '')}",
-        f"4. チャンネル宣言（ほぼ固定文）: 「当チャンネルでは、こうした{genre}を、都市伝説として"
+        f"4. 「挑んだ者は皆敗れた／決着していない」型の一文: {o.get('defeat', '')}",
+        f"5. チャンネル宣言（ほぼ固定文）: 「当チャンネルでは、こうした{genre}を、都市伝説として"
         "語るのではなく、論文と一次資料からひも解いていく。」",
-        "5. 「いま語られている話には、最初に言い出した人がいる。その名前も、言った年も、記録に残っている。」",
-        "6. 凡庸な答えを先に潰す一文（「単に難しいからではない」型）。",
-        f"7. 全体の地図: {o.get('map', '')}",
-        "   主張は「当たっていたもの → 当たっているが理由が違うもの → 跡形もなくなるもの」の順だと宣言する。",
-        f"8. 伏線を開く: 「{p.planted_question.get('text', '')}」は最後の章で扱う、と先に言う。",
-        f"9. 出発の合図（固定文）: 「それでは私と共に、{subject}へと迫っていこう。」",
+        "6. 「いま語られている話には、最初に言い出した人がいる。その名前も、言った年も、記録に残っている。」",
+        f"7. 追う問いを一つだけ、はっきり言う: 「いま一番語られているのはこれだ。{p.mystery}」",
+        "8. 安易な答えを先に潰す（問いの直後に置く。何について言っているか分かる形で）:"
+        + "".join(f"\n   ・「単に{x.rstrip('。')}、というわけではない。」" for x in cheap[:2]),
+        (f"9. 答えの候補を全部見せる: 「答えは{len(cands)}つに絞れる。" + "。".join(cands) + "。一つずつ潰していく。」"
+         if len(cands) >= 2 else "9. （候補が無いので飛ばす）"),
+        "10. 全体の地図: 語られている話を、当たっていたもの → 理由が違うもの → 跡形もなくなるものの順に"
+        f"{len(claims)}つ確かめる、と言う。{o.get('map', '')}",
+        f"11. 伏線: 「{p.mystery or p.planted_question.get('text', '')}」の答えは最後の章で出す、と先に言う。",
+        f"12. 出発の合図（固定文）: 「それでは私と共に、{subject}へと迫っていこう。」",
         "", "検証する主張:"] + [f"  {i}. {c}" for i, c in enumerate(claims, 1)]
     return "\n".join(lines)
 
@@ -106,8 +113,8 @@ def facts_for(brief: str, facts: list[str], *, limit: int = 14, describe: int = 
 
     全部渡すと1回 4,000〜5,000 トークンで、章ごと・候補ごと・直しごとに
     かかる（1本 15万トークンの大半）。関係の薄い行は読まれもしない。
-    題材の記述（短い平文）は全部、出典と数字入り記述は章の指示との
-    重なりで上位だけ。番号を振り直さないので、〔n〕は章をまたいで同じ意味。
+    題材の記述（短い平文）と出典・数字入り記述は、章の指示との重なりで上位だけ。
+    番号を振り直さないので、〔n〕は章をまたいで同じ意味。
     """
     if not facts:
         return ""
@@ -160,47 +167,62 @@ def _chapter_brief(i: int, c: planmod.Chapter, n: int, p: planmod.Plan) -> str:
     ev = c.evidence or {}
     lines = [
         f"## 第{i}章（全{n}章）: {c.claim}",
-        "この順で書く。順番を入れ替えない。",
+        "この順で書く。順番を入れ替えない。事実を並べるだけにしない。文と文の理由を",
+        "「なぜか」「ならば」「つまり」「だとすれば」「ここで」でつなぐ。",
+        f"0. この章の問い: {c.question or c.claim}。大きな問い「{p.mystery}」のうち、{c.tests or '候補'}を試す。",
         f"1. 通説を、通説の言葉でそのまま言う（「{c.claim}」「そう語られている。」）。",
         f"2. 結論を先に言う: {c.verdict_line}",
-        f"3. なぜそう言えるか: {c.why}",
-        "4. 誰が・何年に言い出したか: " + (
+        f"3. 何を見れば決まるかを先に言う（「ならば、確かめられる。○○を見ればいい」）: {c.method or c.why}",
+        f"4. なぜそう言えるか: {c.why}",
+        "5. 誰が・何年に言い出したか: " + (
             _known(c.origin.get('who', ''), c.origin.get('year', ''), c.origin.get('how', ''))
             or "資料に無い。「誰が最初に言い出したかは、記録が見つかっていない」と正直に言う"),
-        "5. 振り子。立場ごとに事実を置き、反転は「だが」で、留保は「ただし」で入れる:",
+        "6. 振り子。立場ごとに事実を置き、反転は「だが」で、留保は「ただし」で入れる:",
         swings,
-        f"6. 証拠（年・場所・誰・何）: {_known(ev.get('year', ''), ev.get('where', ''), ev.get('who', ''), ev.get('what', ''))}",
-        "7. 数字と、その数字が何を示し何を示さないか（断り）。数字が無い章では断りの文も書かない:",
+        f"7. 証拠（年・場所・誰・何）: {_known(ev.get('year', ''), ev.get('where', ''), ev.get('who', ''), ev.get('what', ''))}",
+        "8. 数字と、その数字が何を示し何を示さないか（断り）。数字が無い章では断りの文も書かない:",
         numbers,
-        "8. 専門語は出した5文以内に「つまり〜のようなものだ」で着地させる:",
+        "9. 専門語は出した5文以内に「つまり〜のようなものだ」で着地させる:",
         jargon,
-        f"9. 語り手の判断（行為は書かない。判断が要る箇所に1文だけ）: {c.narrator or '（無ければ書かない）'}",
-        f"10. 結論の範囲を限定する: {c.scope}",
-        f"11. 最後の1〜2文で次章へ引く: {c.hook_out}",
+        f"10. 語り手の判断（行為は書かない。判断が要る箇所に1文だけ）: {c.narrator or '（無ければ書かない）'}",
+        f"11. 結論の範囲を限定する: {c.scope}",
+        f"12. 残る候補を数える（「これで○○は消えた。残るのは…」）: {c.so_far}",
+        f"13. 最後の1〜2文で次章へ引く: {c.hook_out}",
     ]
     if i == p.planted_question.get("opened_in", 1):
-        lines.append(f"※ この章のどこかで「{p.planted_question.get('text', '')}」を開き、"
+        lines.append(f"※ この章のどこかで「{p.mystery or p.planted_question.get('text', '')}」を開き、"
                      "「この問いは最後の章で扱う」と言って保留する。")
     if i == n:
-        lines.append(f"※ 最終章。冒頭で「1章で保留にした問いだ」と回収に入る: {p.closing.get('callback', '')}")
+        lines.append(f"※ 最終章。冒頭で「1章で保留にした問いだ」と回収に入る: {p.closing.get('callback', '')}"
+                     f"\n※ 答え: {p.closing.get('answer', '')}")
     return "\n".join(lines)
 
 
 def _closing_brief(p: planmod.Plan, subject: str) -> str:
     cl = p.closing
+    sp = cl.get("speculation") or {}
     gen = "\n".join(f"   ・{g}" for g in cl.get("generalization") or [])
     found = "\n".join(f"   ・{f}" for f in cl.get("found") or [])
     openq = "\n".join(f"   ・{q}" for q in cl.get("open_questions") or [])
+    reasons = "\n".join(f"   ・{r}" for r in (sp.get("reasons") or []))
     return "\n".join([
-        "## 着地（4つの塊を、空行で区切って順に書く）",
+        "## 着地（5つの塊を、空行で区切って順に書く）",
         f"### 一般化（題材名を出さずに5文以上つづける。主題: {p.thesis}）",
         gen,
         "### 回収（「〜と分かった」を反復し、最後に「だが〜は分かっていない」で落とす。"
         "章で言った事実だけを繰り返す。ここで新しい事実・年・数字を出さない）",
+        f"   答え（候補のどれが残ったか）: {cl.get('answer', '')}",
         found,
         f"   最後の一文: {cl.get('not_found', '')}",
         "   まだ分からないことを、分からないまま置く:",
         openq,
+        "### 考察（事実と分ける。印を付ける。数字を作らない）",
+        "   最初の文: 「事実はここまでだ。ここからは資料に無い。私の考えだ。」",
+        f"   考え: {sp.get('claim', '')}",
+        "   理由:",
+        reasons,
+        f"   崩れる条件: {sp.get('weakness', '')}",
+        "   最後の文: 「ここまでが考察だ。」",
         f"### 条件の提示（願望でなく条件）: {cl.get('condition', '')}",
         f"   そして冒頭に戻る: {cl.get('opening_callback', '')}",
         "### CTA（ここだけ敬体）",
@@ -225,6 +247,19 @@ def chapter_shares(weights: list[float]) -> list[float]:
     clipped = [min(max(w, mean * 0.6), mean * 1.5) for w in weights]
     total = sum(clipped)
     return [w / total for w in clipped]
+
+
+def hints_for_shots(p: planmod.Plan) -> list[list[str]]:
+    """章ごとの、画を探す手がかり。証拠の場所・人・物と専門語と具体の画。
+    台本が題材名ばかりだと検索語が1つに潰れて同じ画が続く（実測: 死海文書）。"""
+    out: list[list[str]] = []
+    for c in p.chapters:
+        ev = c.evidence or {}
+        h = [str(ev.get(k) or "") for k in ("where", "who", "what")]
+        h += [str(j.get("term") or "") for j in c.jargon]
+        h += [str(s.get("fact") or "")[:40] for s in c.swings[:2]]
+        out.append([x for x in h if x and x != "不明"])
+    return out
 
 
 def blocks_from_plan(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
@@ -252,7 +287,7 @@ def blocks_from_plan(p: planmod.Plan, *, subject: str, genre: str, claims: list[
 
 _BLOCK_RULES = """\
 この塊だけを書く。前後の塊は別に書くので、ここで全体を締めない。
-段落は空行で区切る。章は1つの段落にまとめる（着地だけ4段落）。
+段落は空行で区切る。章は1つの段落にまとめる（着地だけ5段落）。
 指示の番号や見出しは書かない。読み上げる文だけを書く。
 同じ意味の文を言い換えて繰り返さない。「記録はない」「証拠は無い」「決まっていない」は
 塊に1回ずつで足りる。同じ結論を章の中で3回言わない。
@@ -301,7 +336,7 @@ def _fold(key: str, text: str) -> str:
     if not key.startswith("chapter"):
         return text
     text = "\n".join(l for l in text.splitlines() if l.strip())
-    return thin_connectives(text)
+    return thin_connectives(dedupe_adjacent(text))
 
 
 def write_block(b: Block, previous_tail: str, chat: Chat, facts: str = "") -> str:
@@ -456,6 +491,53 @@ def ensure_callback(text: str, planted: str, answer: str) -> str:
     return line + "\n" + text.lstrip()
 
 
+def ensure_speculation(text: str, sp: dict) -> str:
+    """着地の考察を、印で囲まれた形にする。無ければ設計図から作って条件の段落の前に置く。
+
+    考察は視聴者が求める「解決」の代わりになる。事実と混ざると番組の約束が
+    崩れるので、印（ここからは資料に無い／ここまでが考察だ）で必ず囲む。"""
+    claim = str(sp.get("claim") or "").strip()
+    if not claim:
+        return text
+    if devices.SPEC_START.search(text):
+        if not devices.SPEC_END.search(text):
+            # 印の始まりがある段落の末尾に閉じを足す
+            paras = [q for q in re.split(r"\n\s*\n", text.strip()) if q.strip()]
+            for k, q in enumerate(paras):
+                if devices.SPEC_START.search(q):
+                    paras[k] = q.rstrip() + "\nここまでが考察だ。"
+                    break
+            return "\n\n".join(paras)
+        return text
+    reasons = [str(r).strip().rstrip("。") for r in (sp.get("reasons") or []) if str(r).strip()]
+    weak = str(sp.get("weakness") or "").strip().rstrip("。")
+    para = "\n".join(["事実はここまでだ。ここからは資料に無い。私の考えだ。",
+                      claim.rstrip("。") + "。"]
+                     + [f"{r}。" for r in reasons[:3]]
+                     + ([f"ただし、{weak}なら、この考えは崩れる。"] if weak else [])
+                     + ["ここまでが考察だ。"])
+    paras = [q for q in re.split(r"\n\s*\n", text.strip()) if q.strip()]
+    # 条件の段落（最後から2番目）の前。段落が少なければ末尾の1つ前
+    at = max(0, len(paras) - 2)
+    paras.insert(at, para)
+    return "\n\n".join(paras)
+
+
+def dedupe_adjacent(text: str, window: int = 3) -> str:
+    """直前3文と同じ文を落とす。「結論から言う。Xである。Xである。」と書いた（実測）。"""
+    out: list[str] = []
+    recent: list[str] = []
+    for sent in re.split(r"(?<=[。？！])", text):
+        key = devices._norm(sent)
+        if key and key in recent:
+            continue
+        out.append(sent)
+        if key:
+            recent.append(key)
+            recent = recent[-window:]
+    return "".join(out)
+
+
 def ensure_verdict(text: str, verdict_line: str) -> str:
     """章の冒頭10文に結論が無ければ、通説を言わせた直後に置く。
 
@@ -493,6 +575,8 @@ def _guarantee(b: Block, p: planmod.Plan, planted: str, answer: str) -> str:
         if i == len(p.chapters) - 1:
             text = ensure_callback(text, planted, answer)
         return text
+    if b.key == "closing":
+        return ensure_speculation(b.text, p.closing.get("speculation") or {})
     return b.text
 
 

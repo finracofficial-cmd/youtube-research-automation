@@ -21,7 +21,7 @@ import meter
 
 from . import plan as planmod
 from .compose import compose
-from .devices import Audit, unsourced_numbers
+from .devices import Audit, speculation_numbers as devices_spec_numbers, unsourced_numbers
 from .style import Metrics, validate
 
 
@@ -57,28 +57,41 @@ def _usage() -> tuple[int, int]:
 
 def load_spec(spec_path: Path) -> tuple[str, str, list[str], list[float] | None]:
     """題材名・ジャンル・主張・章の重み（出典の数）。"""
+    subject, genre, claims, weights, _ = load_spec_full(spec_path)
+    return subject, genre, claims, weights
+
+
+def load_spec_full(spec_path: Path) -> tuple[str, str, list[str], list[float] | None, dict]:
+    """load_spec に加えて、謎・候補・主張の付帯情報（語り手・視聴者が気にする理由）。"""
     spec = yaml.safe_load(spec_path.read_text(encoding="utf-8"))
     subject = spec["subject"]
     genre = spec.get("genre", "未解決の謎")
     claims = [c["ja"] for c in spec.get("claims", [])]
+    extra = {"mystery": str(spec.get("mystery") or "").strip(),
+             "candidates": [str(x) for x in (spec.get("candidates") or [])],
+             "claims_meta": [c for c in spec.get("claims", []) if isinstance(c, dict)]}
     weights = None
     src_path = spec_path.with_name(f"{spec_path.stem}_sources.json")
     if src_path.exists():
         srcs = json.loads(src_path.read_text(encoding="utf-8"))
         by_ja = {c.get("ja"): len(c.get("sources") or []) for c in (srcs.get("claims") or [])}
         weights = [float(by_ja.get(c, 0)) for c in claims]
-    return subject, genre, claims, weights
+    return subject, genre, claims, weights, extra
 
 
 def make_plan(material: str, *, subject: str, claims: list[str], duration_sec: float,
-              kind: str, ask: Callable[[list[dict]], str], tries: int = 1) -> tuple[planmod.Plan, int]:
+              kind: str, ask: Callable[[list[dict]], str], tries: int = 1,
+              extra: dict | None = None) -> tuple[planmod.Plan, int]:
     """設計図を tries 本作って、いちばん資料に沿ったものを採る。
 
     1本だと当たり外れがそのまま台本に乗る（実測: 出どころが全章不明の回と
     半分埋まる回があった）。形の検査に落ちたものは1回だけ直させる。
     """
+    extra = extra or {}
     prompt = planmod.prompt(material, subject=subject, claims=claims,
-                            duration_sec=duration_sec, kind=kind)
+                            duration_sec=duration_sec, kind=kind,
+                            mystery=extra.get("mystery", ""), candidates=extra.get("candidates"),
+                            claims_meta=extra.get("claims_meta"))
     best, best_score, made = None, None, 0
     for _ in range(max(1, tries)):
         msgs = [{"role": "user", "content": prompt}]
@@ -116,6 +129,7 @@ def gate(text: str, audit: Audit, style: Metrics, loose: list[str]) -> dict:
         "水増しが無い": not any(len(c.padding) >= 3 or any(x.startswith("断片") for x in c.padding) for c in ch),
         "1文の長さが参考のレンジ内": long_ok,
         "常体で書けている": style.plain_form_ratio >= 0.8,
+        "考察が事実と分かれている": audit.speculation and not audit.speculation_loose,
     }
 
 
@@ -131,13 +145,13 @@ def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: s
     """一本道。chat_factory(model, json_mode, temperature) -> chat。テストは偽物を渡す。"""
     from .write import chat_fn
     factory = chat_factory or chat_fn
-    subject, genre, claims, weights = load_spec(spec_path)
+    subject, genre, claims, weights, extra = load_spec_full(spec_path)
     c0, t0 = _usage()
     started = time.time()
 
     ask = factory(model, json_mode=True, temperature=0.5)
     plan, made = make_plan(material, subject=subject, claims=claims, duration_sec=duration_sec,
-                           kind=kind, ask=ask, tries=plans)
+                           kind=kind, ask=ask, tries=plans, extra=extra)
     log("設計図:")
     for line in planmod.describe(plan):
         log(f"  {line}")
@@ -150,6 +164,7 @@ def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: s
                                 weights=weights, candidates=candidates, cite=cite)
     style = validate(text, duration_sec)
     loose = unsourced_numbers(text, material)
+    audit.speculation_loose = devices_spec_numbers(text, material)
     c1, t1 = _usage()
     r = Result(text=text, plan=plan, audit=audit, style=style, left=left, loose=loose,
                plans_tried=made, calls=c1 - c0, tokens=t1 - t0, seconds=time.time() - started)
@@ -183,6 +198,8 @@ def measures(r: Result) -> dict:
         "notes_left": len(r.left),
         "gate_passed": int(r.passed),
         "enough_material": int(r.enough),
+        "speculation": int(bool(a.speculation)),
+        "narrowing": a.narrowing,
         "calls": r.calls,
         "tokens": r.tokens,
     }
