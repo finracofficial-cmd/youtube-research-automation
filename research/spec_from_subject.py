@@ -44,7 +44,12 @@ Return JSON only, shaped exactly like this:
 - claims: the stories being told right now, most-told first. Use the video
   titles given (that is what the market says) before anything else.
   - ja: the claim AS IT IS POPULARLY STATED, with its sensational framing kept
-    (「バチカンが死海文書を隠した」, not 「死海文書は非公開だった」).
+    (「バチカンが死海文書を隠した」, not 「死海文書は非公開だった」). It must be
+    ONE declarative Japanese sentence of at most 30 characters that ends in
+    a verb or noun (〜した／〜である／〜がある／〜だ). It is NOT a video title:
+    no 「徹底解説」「判明しました」「衝撃」「とは」, no ！ … ？ or brackets.
+    Rewrite titles into the claim they make: 「AIが暴いた死海文書の真実！聖書に
+    消えた記述はあったのか？」 → 「聖書から消えた記述が死海文書に残っている」.
   - en: English keywords that find the scholarly work that can settle it.
   - told_by: who tells it (YouTube解説 / 書籍 / 観光ガイド / ニュース / 教科書).
   - stakes: one short Japanese sentence on why a viewer cares.
@@ -75,22 +80,28 @@ def told_titles(subject: str, root: Path = Path(".")) -> list[str]:
     return []
 
 
-def build(subject: str, n_claims: int, *, model: str = "gpt-4.1",
-          timeout: int = 180, told: list[str] | None = None) -> dict:
+# 動画タイトルをそのまま主張にした（「バチカンが…キリストの秘密を徹底解説」）。
+# 主張は章の題や札にそのまま出るので、言い切りの一文でなければならない
+_TITLE_LIKE = re.compile(r"[！!…？?【】\[\]「」]|徹底解説|判明しました|判明した|衝撃|とは$|新事実|真実$|解説$")
+
+
+def claim_problems(ja: str) -> list[str]:
+    out = []
+    if _TITLE_LIKE.search(ja):
+        out.append("動画タイトルの言い回しが残っている")
+    if len(ja) > 34:
+        out.append(f"長い（{len(ja)}字。30字まで）")
+    if not re.search(r"(た|る|だ|である|がある|ない|いる|された|できる|できない)[。]?$", ja.rstrip("。")):
+        out.append("言い切りの文で終わっていない")
+    return out
+
+
+def _chat_json(messages: list[dict], *, model: str, timeout: int) -> dict:
     key = os.environ.get("OPENAI_API_KEY")
     if not key and not os.environ.get("OPENAI_VIA_PROXY"):
         raise SystemExit("OPENAI_API_KEY が未設定。環境変数で渡すこと")
-    told = told if told is not None else told_titles(subject)
-    user = f"題材: {subject}\n主張の数: {n_claims}"
-    if told:
-        user += "\n\nいま語られている話（量産chの動画タイトル。多い順ではない）:\n" + "\n".join(f"- {t}" for t in told)
-    body = json.dumps({
-        "model": model,
-        "response_format": {"type": "json_object"},
-        "messages": [{"role": "system", "content": _SYSTEM},
-                     {"role": "user", "content": user}],
-        "temperature": 0.6,
-    }).encode()
+    body = json.dumps({"model": model, "response_format": {"type": "json_object"},
+                       "messages": messages, "temperature": 0.6}).encode()
     headers = {"Content-Type": "application/json"}
     if key:
         headers["Authorization"] = f"Bearer {key}"
@@ -100,7 +111,27 @@ def build(subject: str, n_claims: int, *, model: str = "gpt-4.1",
         note_usage("chat", model, d)
     except urllib.error.HTTPError as exc:
         raise SystemExit(f"HTTP {exc.code}: {exc.read()[:200]!r}") from exc
-    spec = json.loads(d["choices"][0]["message"]["content"])
+    return json.loads(d["choices"][0]["message"]["content"])
+
+
+def build(subject: str, n_claims: int, *, model: str = "gpt-4.1",
+          timeout: int = 180, told: list[str] | None = None) -> dict:
+    told = told if told is not None else told_titles(subject)
+    user = f"題材: {subject}\n主張の数: {n_claims}"
+    if told:
+        user += "\n\nいま語られている話（量産chの動画タイトル。多い順ではない）:\n" + "\n".join(f"- {t}" for t in told)
+    messages = [{"role": "system", "content": _SYSTEM}, {"role": "user", "content": user}]
+    spec = _chat_json(messages, model=model, timeout=timeout)
+    # 主張がタイトルのままなら、1回だけ言い直させる
+    bad = {c.get("ja"): claim_problems(c.get("ja") or "") for c in (spec.get("claims") or [])}
+    bad = {k: v for k, v in bad.items() if v}
+    if bad:
+        messages += [{"role": "assistant", "content": json.dumps(spec, ensure_ascii=False)},
+                     {"role": "user", "content":
+                      "claims.ja が動画タイトルのままになっている。各主張を、その動画が主張している内容の"
+                      "言い切りの一文（30字まで、記号なし）に書き直したJSON全体を出す。\n"
+                      + "\n".join(f"- {k}: {', '.join(v)}" for k, v in bad.items())}]
+        spec = _chat_json(messages, model=model, timeout=timeout)
 
     claims = [{"ja": c["ja"], "en": c["en"], "told_by": c.get("told_by", ""),
                "stakes": c.get("stakes", "")}

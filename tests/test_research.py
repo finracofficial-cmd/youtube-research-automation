@@ -224,3 +224,13 @@ def test_authors_are_filled_from_crossref_for_doi_sources_without_one(monkeypatc
     assert C.enrich_authors(d) == 1
     assert a.authors == "John Manlyら" and b.authors == "Someone" and c.authors == ""
     assert calls == ["https://api.crossref.org/works/10.2307/2848508"]
+
+
+
+def test_title_like_claims_are_caught():
+    """主張は章の題や札にそのまま出る。動画タイトルの言い回しは通さない。"""
+    from research.spec_from_subject import claim_problems
+    assert claim_problems("バチカンが死海文書を隠したとされるキリストの秘密を徹底解説")
+    assert claim_problems("AIが暴いた死海文書の真実！聖書に消えた記述はあったのか？")
+    assert claim_problems("バチカンが死海文書を隠した") == []
+    assert claim_problems("聖書から消えた記述が死海文書に残っている") == []
