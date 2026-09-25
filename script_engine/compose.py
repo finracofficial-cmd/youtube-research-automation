@@ -308,7 +308,7 @@ _ADVERSATIVE = re.compile(r"^(だが|しかし|ところが|それなのに|に�
 _LANDING = re.compile(r"^(つまり|要するに)[、]?")
 
 
-def thin_connectives(text: str, *, keep_adversative: int = 3, keep_landing: int = 4) -> str:
+def thin_connectives(text: str, *, keep_adversative: int = 2, keep_landing: int = 4) -> str:
     """文頭の逆接と「つまり」を、章ごとに上限まで間引く。
 
     書き直しを頼んでも減らない（v3 0.93/分、v4 1.00/分。参考は最大0.53）。
@@ -318,17 +318,21 @@ def thin_connectives(text: str, *, keep_adversative: int = 3, keep_landing: int 
     out = []
     n_adv = n_land = 0
     for sent in re.split(r"(?<=[。？！])", text):
-        m = _ADVERSATIVE.match(sent)
+        # 章は1文1行に畳むので、2文目以降は改行から始まる。先頭の空白を外して見ないと
+        # 1文目にしか効かない（実測: 逆接が 1.40/分 から減らなかった）
+        lead = sent[: len(sent) - len(sent.lstrip())]
+        body = sent[len(lead):]
+        m = _ADVERSATIVE.match(body)
         if m:
             n_adv += 1
             if n_adv > keep_adversative:
-                sent = sent[m.end():]
-        m = _LANDING.match(sent)
+                body = body[m.end():]
+        m = _LANDING.match(body)
         if m:
             n_land += 1
             if n_land > keep_landing:
-                sent = sent[m.end():]
-        out.append(sent)
+                body = body[m.end():]
+        out.append(lead + body)
     return "".join(out)
 
 
@@ -530,6 +534,21 @@ def drop_invented_origins(text: str, c: planmod.Chapter) -> str:
 
 
 _QUESTION = re.compile(r"(のか|だろうか|か)[。？?]$")
+_COUNTING = re.compile(r"残る(のは|候補|答え)|残った候補|支える話|候補は(全て|すべて)|主要な候補")
+
+
+def ensure_so_far(text: str, so_far: str) -> str:
+    """章末の「残る答え」を、計算した文にそろえる。書き手の数え方は設計図とずれた
+    （本文「残るのは既知と偽造」、設計図「秘密・既知・偽造」）。書き手の数えた文は消し、
+    最後の問いの直前に計算した文を置く。"""
+    so_far = (so_far or "").strip()
+    if not so_far:
+        return text
+    sents = [x for x in _sents(text) if not _COUNTING.search(x)]
+    at = len(sents) - 1 if sents and _QUESTION.search(sents[-1]) else len(sents)
+    for part in reversed(_sents(so_far)):
+        sents.insert(at, part)
+    return "\n".join(sents)
 
 
 def ensure_hook(text: str, hook: str) -> str:
@@ -654,7 +673,9 @@ def _guarantee(b: Block, p: planmod.Plan, planted: str, answer: str) -> str:
             text = ensure_callback(text, planted, answer)
         else:
             text = ensure_hook(text, c.hook_out)
-        return text
+        text = ensure_so_far(text, c.so_far)
+        # 機械的に置いた結論と、書き手の同じ文が並ぶことがある（実測）
+        return dedupe_adjacent(text)
     if b.key == "closing":
         return ensure_speculation(b.text, p.closing.get("speculation") or {})
     return b.text

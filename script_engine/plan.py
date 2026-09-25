@@ -309,6 +309,84 @@ def validate(d: dict, *, n_claims: int | None = None) -> Plan:
                 mystery=mystery, candidates=candidates)
 
 
+_FALLS = ("跡形なし",)
+_VERDICT_SHORT = {"当たり": "当たり", "半分当たり": "理由が違う", "決まっていない": "分かっていない", "跡形なし": "跡形なし"}
+
+
+def _map_candidate(long: str, spec_cands: list[str], plan_cands: list[str]) -> str | None:
+    """仕様の候補（長い）を、設計図の候補（短く言い直したもの）に対応させる。
+    数が同じなら順番で、違えば文字2連の重なりで。"""
+    long = (long or "").strip()
+    if long in plan_cands:
+        return long
+    if long in spec_cands and len(spec_cands) == len(plan_cands):
+        return plan_cands[spec_cands.index(long)]
+    def grams(t: str) -> set[str]:
+        t = re.sub(r"[\s、。「」『』]", "", t)
+        return {t[i:i + 2] for i in range(len(t) - 1)}
+    g = grams(long)
+    best = max(plan_cands, key=lambda c: len(g & grams(c)), default=None)
+    return best if best and g & grams(best) else None
+
+
+def settle(plan: Plan, supports: dict[str, str], spec_candidates: list[str] | None = None) -> list[list[str]]:
+    """章ごとの残る答えを、判定と「支える答え」から計算して設計図に書き込む。
+
+    モデルに消させると判断がちぐはぐになった（死海文書: DNAの章で最も妥当な
+    「内容は既知と同じ」を消し、最後の答えが俗説の「秘密の記述がある」になった）。
+    判定は各章で安定して出ていて本文にも機械的に入るので、そこから数える。
+
+      答えは、それを支える話が全部確かめられて全部「跡形なし」になったら消える。
+      支える話が1つも無い答えは章では消えない。最後に何も残らなければ、支える話の
+      無い答え（ふつうは「何も無い」側）が残る。
+    戻り値は章ごとの残る答え。chapters[k].remaining / so_far と closing.answer を上書きする。
+    """
+    cands = list(plan.candidates)
+    if len(cands) < 2:
+        return []
+    spec_candidates = list(spec_candidates or [])
+    backs: dict[str, list[int]] = {c: [] for c in cands}
+    for k, ch in enumerate(plan.chapters):
+        target = _map_candidate(supports.get(ch.claim, ""), spec_candidates, cands)
+        if target:
+            backs[target].append(k)
+    fell = [ch.verdict in _FALLS for ch in plan.chapters]
+    rows: list[list[str]] = []
+    prev = list(cands)
+    for k, ch in enumerate(plan.chapters):
+        alive = [c for c in cands
+                 if not (backs[c] and all(j <= k for j in backs[c]) and all(fell[j] for j in backs[c]))]
+        target = next((c for c in cands if k in backs[c]), None)
+        gone = [c for c in prev if c not in alive]
+        if gone:
+            head = "これで" + "、".join(f"『{c}』" for c in gone) + "を支える話は、全て崩れた。"
+        elif target and fell[k]:
+            head = f"これで『{target}』を支える話が、1つ崩れた。"
+        elif target:
+            head = f"『{target}』を支える話は、{_VERDICT_SHORT.get(ch.verdict, ch.verdict)}として残った。"
+        else:
+            head = ""
+        ch.remaining = alive
+        ch.so_far = head + "残る答えは" + "、".join(f"『{c}』" for c in alive) + "だ。"
+        rows.append(alive)
+        prev = alive
+    final = rows[-1] if rows else []
+    standing = [c for c in final if backs[c] and not all(fell[j] for j in backs[c])]
+    if not standing:
+        standing = [c for c in final if not backs[c]] or final
+    plan.closing["answer"] = ("答えは『" + standing[0] + "』だ。" if len(standing) == 1 else
+                              "答えは一つに絞れない。残るのは" + "、".join(f"『{c}』" for c in standing) + "だ。")
+    if rows:
+        rows[-1] = standing
+        plan.chapters[-1].remaining = standing
+    for ch in plan.chapters:
+        for c in plan.raw.get("chapters") or []:
+            if c.get("claim") == ch.claim:
+                c["remaining"], c["so_far"] = ch.remaining, ch.so_far
+    plan.raw.setdefault("closing", {})["answer"] = plan.closing["answer"]
+    return rows
+
+
 def strip_unsourced(plan: Plan, material: str) -> list[str]:
     """設計図の numbers から、資料に無い数字を落とす。落としたものを返す。
 

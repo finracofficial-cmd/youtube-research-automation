@@ -1,12 +1,12 @@
 subject: 死海文書
-subject_en: Dead Sea Scrolls, Qumran, Vatican, AI analysis, biblical omissions, DNA
-  analysis, Messiah, hidden texts
-genre: 古代文書の謎
-mystery: バチカンは死海文書を隠したのか
+subject_en: Dead Sea Scrolls authorship authenticity hidden texts Messiah DNA AI analysis
+genre: 古代文書の真実
+mystery: 死海文書には、聖書にない秘密の記述や隠された情報が含まれているのか
 candidates:
-- バチカンが一部を隠した
-- 学者グループが独占した
-- 全て公開されている
+- 死海文書に聖書にない秘密の記述が含まれている
+- 死海文書は既知の聖書や歴史書と本質的に同じ内容である
+- 死海文書には偽造や現代的な改変の痕跡がある
+- 死海文書は特定の権力者によって意図的に隠蔽された
 told:
 - 死海文書最大の謎！バチカンが隠したとされるキリストの秘密を徹底解説
 - AIが暴いた死海文書の真実！聖書に消えた記述はあったのか？
@@ -20,30 +20,37 @@ told:
 - 死海文書に記された救世主の正体が判明しました…古代文書に隠された謎と禁断の真実
 claims:
 - ja: バチカンが死海文書を隠した
-  en: Vatican censorship Dead Sea Scrolls
-  told_by: YouTube解説
-  stakes: 歴史の真実が隠されている可能性がある。
-- ja: 聖書から消えた記述が死海文書に残っている
+  en: Vatican Dead Sea Scrolls concealment
+  told_by: YouTube解説 / 都市伝説本
+  stakes: 本当なら歴史的な陰謀や宗教的な秘密が明らかになる。
+  supports: 死海文書は特定の権力者によって意図的に隠蔽された
+- ja: 死海文書には聖書から消えた記述が残っている
   en: Dead Sea Scrolls missing Bible passages
-  told_by: YouTube解説
-  stakes: 聖書の内容や成立過程が大きく変わるかもしれない。
-- ja: 死海文書に不自然な痕跡がAIで発見された
-  en: AI analysis anomalies Dead Sea Scrolls
-  told_by: YouTube解説
-  stakes: 最新技術で歴史の常識が覆される期待がある。
-- ja: 死海文書のDNA解析で筆者が特定された
-  en: Dead Sea Scrolls DNA handwriting analysis authorship
-  told_by: ニュース
-  stakes: 死海文書の起源や作成者像が変わる可能性がある。
-- ja: 死海文書にキリストの秘密が記されている
-  en: Dead Sea Scrolls Jesus secret
-  told_by: YouTube解説
-  stakes: キリスト教の根本に関わる重大な情報かもしれない。
-- ja: クムラン共同体が死海文書を隠した
-  en: Qumran community hid Dead Sea Scrolls
-  told_by: 教科書
-  stakes: 文書の背景や歴史的意義の理解が深まる。
+  told_by: YouTube解説 / 書籍
+  stakes: 聖書の正典や宗教観が覆る可能性がある。
+  supports: 死海文書に聖書にない秘密の記述が含まれている
+- ja: AI解析で死海文書に不自然な痕跡が見つかった
+  en: AI analysis Dead Sea Scrolls anomalies forgery
+  told_by: YouTube解説 / ニュース
+  stakes: 文書の信憑性や歴史的価値が疑われる。
+  supports: 死海文書には偽造や現代的な改変の痕跡がある
+- ja: 死海文書のDNA解析で筆写者集団が特定された
+  en: Dead Sea Scrolls DNA analysis scribes provenance
+  told_by: YouTube解説 / ニュース / 論文
+  stakes: 文書の出自や執筆者集団の正体が明らかになる。
+  supports: 死海文書は既知の聖書や歴史書と本質的に同じ内容である
 - ja: 死海文書に救世主の正体が書かれている
   en: Dead Sea Scrolls Messiah identity
-  told_by: 書籍
-  stakes: 宗教観や歴史観に大きな影響を与える可能性がある。
+  told_by: YouTube解説 / 書籍
+  stakes: キリスト教・ユダヤ教の根本的な教義が揺らぐ。
+  supports: 死海文書に聖書にない秘密の記述が含まれている
+- ja: AIで死海文書の未解読部分が解明された
+  en: AI decipher Dead Sea Scrolls undeciphered texts
+  told_by: YouTube解説 / ニュース
+  stakes: 未知の知識や歴史的事実が判明するかもしれない。
+  supports: 死海文書に聖書にない秘密の記述が含まれている
+- ja: 死海文書を隠したのはクムラン共同体である
+  en: Dead Sea Scrolls Qumran community concealment
+  told_by: 書籍 / 教科書 / ガイド
+  stakes: 正統派ユダヤ教や初期キリスト教の歴史的背景が明らかになる。
+  supports: 死海文書は既知の聖書や歴史書と本質的に同じ内容である

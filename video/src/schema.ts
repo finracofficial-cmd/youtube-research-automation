@@ -92,7 +92,7 @@ export const cardRowSchema = z.object({
     dimmed: z.boolean().default(false),
     /** 札の状態。参考chは研究者5人を並べて ✓ と ? を切り替えていた。
      *  none は印なし。色だけで区別せず、記号と語で示す。 */
-    mark: z.enum(["none", "ok", "unknown", "no"]).default("none"),
+    mark: z.enum(["none", "ok", "partial", "unknown", "no"]).default("none"),
   })).min(1),
   caption: z.string().optional(),
 });

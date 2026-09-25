@@ -52,31 +52,26 @@ def test_hints_are_spread_over_the_body_segments():
 
 def _plan_with_board():
     return {"mystery": "死海文書に世に出せない秘密はあるか",
-            "candidates": ["秘密がある", "秘密は無い", "未読の部分にある"],
-            "chapters": [{"remaining": ["秘密は無い", "未読の部分にある"]},
-                         {"remaining": ["秘密は無い", "未読の部分にある"]},
-                         {"remaining": ["秘密は無い"]}]}
+            "candidates": ["秘密がある", "秘密は無い"],
+            "closing": {"answer": "答えは『秘密は無い』だ。"},
+            "chapters": [{"claim": "バチカンが死海文書を隠した", "verdict": "跡形なし", "remaining": ["秘密は無い"]},
+                         {"claim": "聖書から消えた記述が残っている", "verdict": "半分当たり", "remaining": ["秘密は無い"]},
+                         {"claim": "救世主の正体が書かれている", "verdict": "決まっていない", "remaining": ["秘密は無い"]}]}
 
 
-def test_candidate_board_opens_with_all_and_crosses_out_as_chapters_close():
-    subs = [{"startSec": 20, "durationSec": 3, "text": "答えは3つに絞れる。"},
-            {"startSec": 95, "durationSec": 3, "text": "これで一つ目は消えた。残るのは二つ。"},
-            {"startSec": 190, "durationSec": 3, "text": "残る候補は変わらない。"},
-            {"startSec": 290, "durationSec": 3, "text": "残るのは一つだけだ。"},
+def test_verdict_board_marks_each_claim_as_its_chapter_closes():
+    subs = [{"startSec": 20, "durationSec": 3, "text": "語られている話を、順に3つ確かめる。"},
+            {"startSec": 95, "durationSec": 3, "text": "残る答えは『秘密は無い』だ。"},
+            {"startSec": 190, "durationSec": 3, "text": "残る答えは『秘密は無い』だ。"},
+            {"startSec": 290, "durationSec": 3, "text": "残る答えは『秘密は無い』だ。"},
             {"startSec": 300, "durationSec": 20, "text": "着地。"}]
     outline = [{"startSec": 0}, {"startSec": 60}, {"startSec": 160}, {"startSec": 250}]
-    b = F.candidate_boards(_plan_with_board(), subs, outline)
-    assert [x["startSec"] for x in b] == [20.0, 95.0, 290.0]          # 変化の無い2章目は出さない
-    assert all(not c["dimmed"] for c in b[0]["cards"])                # 冒頭は全部
+    b = F.verdict_boards(_plan_with_board(), subs, outline)
+    assert [x["startSec"] for x in b] == [20.0, 95.0, 190.0, 290.0]
+    assert all(c["dimmed"] and "mark" not in c for c in b[0]["cards"])          # 冒頭は印なし
     assert [c.get("mark") for c in b[1]["cards"]] == ["no", None, None]
-    assert [c.get("mark") for c in b[2]["cards"]] == ["no", "ok", "no"] and b[2]["caption"] == "答え: 秘密は無い"
-
-
-def test_no_board_when_the_plan_counts_claims_instead_of_candidates():
-    plan = _plan_with_board()
-    plan["chapters"][1]["remaining"] = ["AI発見説", "DNA説"]
-    assert F.candidate_boards(plan, [{"startSec": 0, "durationSec": 1, "text": "答えは3つ"}],
-                              [{"startSec": 0}, {"startSec": 60}]) == []
+    assert [c.get("mark") for c in b[3]["cards"]] == ["no", "partial", "unknown"]
+    assert b[1]["caption"] == "残る答え: 秘密は無い" and b[3]["caption"] == "答えは『秘密は無い』だ。"
 
 
 def test_hints_drop_sentences_negations_and_paper_titles():
@@ -85,3 +80,13 @@ def test_hints_drop_sentences_negations_and_paper_titles():
                                        "what": "AIによる痕跡発見の記録は無い"},
                           "jargon": [{"term": "マソラ本文"}]}]}
     assert F.hints(plan) == [["Emanuel Tov", "マソラ本文"]]
+
+
+
+def test_board_labels_drop_the_shared_subject_name():
+    plan = {"chapters": [{"claim": "バチカンが死海文書を隠した"},
+                         {"claim": "死海文書には聖書から消えた記述が残っている"},
+                         {"claim": "死海文書を隠したのはクムラン共同体である"},
+                         {"claim": "AI解析で死海文書に不自然な痕跡が見つかった"}]}
+    assert F._labels(plan) == ["バチカンが隠した", "聖書から消えた記述が残っている",
+                               "隠したのはクムラン共同体", "AI解析で不自然な痕跡が見つかった"]

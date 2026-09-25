@@ -153,9 +153,11 @@ export const ChipStack: React.FC<{ stack: ChipStackType }> = ({ stack }) => {
 /** 横並びのカード。dimmed は「今回は使わない」の意思表示。 */
 /* 印。色だけで区別せず、記号と語を添える。色覚に依らず読めるようにする。 */
 const MARK: Record<string, { sign: string; word: string; tone: string }> = {
-  ok: { sign: "✓", word: "確かめられた", tone: theme.text },
+  ok: { sign: "✓", word: "当たり", tone: theme.text },
+  // 参考chの「当たっているが、言われている理由とは違う」
+  partial: { sign: "△", word: "理由が違う", tone: "rgba(244,241,234,.8)" },
   unknown: { sign: "?", word: "分かっていない", tone: "rgba(244,241,234,.55)" },
-  no: { sign: "×", word: "合わなかった", tone: theme.accent },
+  no: { sign: "×", word: "跡形なし", tone: theme.accent },
 };
 
 export const CardRow: React.FC<{ row: CardRowType }> = ({ row }) => {

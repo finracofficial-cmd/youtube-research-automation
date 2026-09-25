@@ -183,6 +183,9 @@ def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: s
     plan, made = make_plan(material, subject=subject, claims=claims, duration_sec=duration_sec,
                            kind=kind, ask=ask, tries=plans, extra=extra)
     plan.told = match_told(claims, extra.get("told") or [])
+    # 残る答えは判定から計算する（モデルに消させると本文とボードが食い違った）
+    supports = {m.get("ja"): m.get("supports", "") for m in extra.get("claims_meta") or []}
+    planmod.settle(plan, supports, extra.get("candidates"))
     log("設計図:")
     for line in planmod.describe(plan):
         log(f"  {line}")

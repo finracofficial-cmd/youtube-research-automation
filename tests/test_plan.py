@@ -153,3 +153,33 @@ def test_hooks_must_be_questions_and_candidates_short():
     d["candidates"] = ["死海文書に聖書にない秘密の記述が含まれている", "無い"]
     with pytest.raises(P.PlanError, match="長い"):
         P.validate(d)
+
+
+
+def test_settle_counts_remaining_answers_from_verdicts_not_from_the_model():
+    """モデルに消させると、最後の答えが動画の否定した俗説になった（死海文書）。"""
+    d = good_plan(3)
+    d["candidates"] = ["隠された秘密がある", "中身は既知と同じ", "偽造されている"]
+    claims = ["バチカンが隠した", "AIが偽造の痕跡を見つけた", "聖書から消えた記述が残る"]
+    verdicts = ["跡形なし", "跡形なし", "半分当たり"]
+    for c, cl, v in zip(d["chapters"], claims, verdicts):
+        c["claim"], c["verdict"], c["remaining"] = cl, v, list(d["candidates"])
+    p = P.validate(d)
+    supports = {"バチカンが隠した": "隠された秘密がある", "AIが偽造の痕跡を見つけた": "偽造されている",
+                "聖書から消えた記述が残る": "隠された秘密がある"}
+    rows = P.settle(p, supports)
+    assert rows[0] == ["隠された秘密がある", "中身は既知と同じ", "偽造されている"]   # 支えが1本残っている
+    assert rows[1] == ["隠された秘密がある", "中身は既知と同じ"]                    # 偽造は支えが全て崩れた
+    assert p.chapters[1].so_far.startswith("これで『偽造されている』を支える話は、全て崩れた。")
+    # 最後: 「秘密」は支えが半分当たりで残る。支えの無い「既知と同じ」より、支えのある答えを採る
+    assert p.closing["answer"] == "答えは『隠された秘密がある』だ。"
+
+
+def test_settle_falls_back_to_the_unsupported_answer_when_everything_falls():
+    d = good_plan(2)
+    d["candidates"] = ["秘密がある", "何も無い"]
+    for c, cl in zip(d["chapters"], ["A", "B"]):
+        c["claim"], c["verdict"], c["remaining"] = cl, "跡形なし", ["秘密がある", "何も無い"]
+    p = P.validate(d)
+    P.settle(p, {"A": "秘密がある", "B": "秘密がある"})
+    assert p.closing["answer"] == "答えは『何も無い』だ。"

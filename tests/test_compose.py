@@ -98,10 +98,10 @@ def test_a_chapter_without_sources_is_told_not_to_pad():
 
 
 def test_excess_adversatives_and_tsumari_are_thinned():
-    """書き直しでは減らない（v3 0.93/分、v4 1.00/分）。上限を超えた接続詞だけ落とす。"""
+    """書き直しでは減らない（v3 0.93/分、v4 1.00/分）。章2回を超えた接続詞だけ落とす。"""
     text = "".join(f"だが、事実{i}がある。" for i in range(5)) + "".join(f"つまり、要点{i}だ。" for i in range(6))
     out = C.thin_connectives(text)
-    assert out.count("だが、") == 3 and out.count("つまり、") == 4
+    assert out.count("だが、") == 2 and out.count("つまり、") == 4
     assert "事実4がある。" in out and "要点5だ。" in out      # 文は残る
 
 
@@ -199,3 +199,22 @@ def test_plant_goes_right_before_the_launch_sentence_in_a_one_paragraph_opening(
     got = C.ensure_plant(opening, "誰が運んだのか")
     lines = [x for x in got.splitlines() if x]
     assert lines[0] == "巨石遺跡。" and lines[-2] == "誰が運んだのか。この問いは最後の章で扱う。"
+
+
+
+def test_counting_sentences_are_replaced_by_the_computed_one_before_the_question():
+    text = ("証拠は無い。これで『権力者が隠蔽した』を支える話が1つ崩れた。残るのは他の候補である。"
+            "では、聖書にない記述はあるのか。")
+    got = C.ensure_so_far(text, "これで『権力者が隠蔽した』を支える話は、全て崩れた。残る答えは『秘密がある』『既知と同じ』だ。")
+    lines = [x for x in got.splitlines() if x]
+    assert "残るのは他の候補である。" not in got and "を支える話が1つ崩れた" not in got
+    assert lines[-3:] == ["これで『権力者が隠蔽した』を支える話は、全て崩れた。",
+                          "残る答えは『秘密がある』『既知と同じ』だ。", "では、聖書にない記述はあるのか。"]
+
+
+
+def test_connectives_are_thinned_on_every_line_not_just_the_first():
+    """章は1文1行。改行で始まる文に効いていなかった（逆接 1.40/分 のまま）。"""
+    text = "\n".join(f"だが、事実{i}がある。" for i in range(5))
+    out = C.thin_connectives(text)
+    assert out.count("だが、") == 2 and out.splitlines()[4] == "事実4がある。"

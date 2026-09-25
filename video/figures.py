@@ -134,70 +134,78 @@ def hints(plan: dict) -> list[list[str]]:
 
 
 BOARD_SEC = 6.0
-_NARROW = re.compile(r"残る(のは|候補)|残った|消えた|崩れた|絞られ|絞れ")
-_LISTED = re.compile(r"つに絞れる|候補は|答えは")
+_COUNT_LINE = re.compile(r"残る答え|残るのは|支える話")
+_LISTED = re.compile(r"つ確かめる|つに絞れる|順に[0-9０-９一二三四五六七八九]つ")
+MARK_OF = {"当たり": "ok", "半分当たり": "partial", "決まっていない": "unknown", "跡形なし": "no"}
 
 
-def _remaining_by_chapter(plan: dict) -> list[list[str]] | None:
-    """章ごとの残る候補。設計図の remaining が候補の文字列で揃っているときだけ使う。"""
-    cands = [str(x) for x in (plan.get("candidates") or [])]
-    rows = [[str(x) for x in (c.get("remaining") or [])] for c in (plan.get("chapters") or [])]
-    if len(cands) < 2 or not rows or not all(rows):
-        return None
-    if any(x not in cands for r in rows for x in r):
-        return None           # 主張の名前で数えている設計図は、ボードにしない（誤った表示になる）
-    return rows
+def _labels(plan: dict) -> list[str]:
+    """札に出す短い名前。全主張に共通する題材名（「死海文書に」など）を外す。
+
+    章カードの作り方（主語か述部を切り出す）だと「死海文書に」「死海文書を隠したの」の
+    ような切れ端になった（描いて確かめた）。札は幅が狭いので、主張の文から題材名だけ
+    抜いて、22字までにする。"""
+    claims = [str(c.get("claim") or "") for c in plan.get("chapters") or []]
+    words = {}
+    for c in claims:
+        for w in set(re.findall(r"[一-龥ァ-ヶー]{3,}", c)):
+            words[w] = words.get(w, 0) + 1
+    common = max(words, key=lambda w: (words[w], len(w)), default="")
+    out = []
+    for c in claims:
+        lab = c
+        if common and words.get(common, 0) * 2 >= len(claims):
+            lab = re.sub(re.escape(common) + r"(には|に|の|を|は|が|で)?", "", c)
+        lab = re.sub(r"(である|だ)。?$", "", lab).strip("、。 ")
+        out.append((lab if len(lab) >= 4 else c)[:22])
+    return out
 
 
-def _board(cands: list[str], remaining: list[str] | None, *, final: bool = False,
-           caption: str = "") -> dict:
-    codes = "ABCD"
-    cards = []
-    for i, c in enumerate(cands):
-        gone = remaining is not None and c not in remaining
-        card = {"code": codes[i] if i < len(codes) else str(i + 1), "label": c, "dimmed": gone}
-        if gone:
-            card["mark"] = "no"
-        elif final and remaining is not None:
-            card["mark"] = "ok"
-        cards.append(card)
-    return {"caption": caption, "cards": cards}
+def verdict_boards(plan: dict, subtitles: list[dict], outline: list[dict]) -> list[dict]:
+    """語られている話を並べ、章が終わるたびに判定の印を付けていく。
 
-
-def candidate_boards(plan: dict, subtitles: list[dict], outline: list[dict]) -> list[dict]:
-    """答えの候補を並べ札で出す。冒頭で全部、章の終わりで消えたものに×。
-
-    数字の無い題材でも候補は必ずあるので、図の出ない題材でも毎回出せる。
-    視聴者が「いま何が残っているか」を見失うと、章がばらばらの話に見える
-    （死海文書の初稿で言われた「すっと入ってこない」）。"""
-    cands = [str(x) for x in (plan.get("candidates") or [])]
-    rows = _remaining_by_chapter(plan)
-    if not rows or not subtitles:
+    参考chは「当たっていたもの → 理由が違うもの → 跡形もなくなるもの」の順に並べ、
+    研究者を並べた札で ✓ と ? を切り替えていた。判定は章ごとに設計図で決まっていて
+    本文にも機械的に入るので、画面と語りが食い違わない。下の帯に残る答えを出す。
+    （答えの候補を消していく札にしたら、モデルの消し方がちぐはぐで、最後に動画が
+    否定している俗説に ✓ が付いた。候補は計算で数え、帯の文字にだけ出す。）"""
+    chapters = plan.get("chapters") or []
+    if not chapters or not subtitles:
         return []
+    labels = _labels(plan)
+    marks = [MARK_OF.get(str(c.get("verdict") or ""), "unknown") for c in chapters]
     starts = [c["startSec"] for c in outline if c.get("startSec", 0) > 0]
     end = max(s["startSec"] + s["durationSec"] for s in subtitles)
+
+    def board(upto: int, caption: str) -> dict:
+        cards = []
+        for i, lab in enumerate(labels):
+            card = {"code": str(i + 1), "label": lab, "dimmed": i > upto}
+            if i <= upto:
+                card["mark"] = marks[i]
+            cards.append(card)
+        return {"caption": caption, "cards": cards}
+
     out = []
-    # 冒頭: 候補を並べる文が読まれる時刻
     first = starts[0] if starts else end
     for s in subtitles:
         if s["startSec"] < first and _LISTED.search(s.get("text") or ""):
             out.append({"startSec": round(s["startSec"], 3), "durationSec": BOARD_SEC,
-                        **_board(cands, None, caption=str(plan.get("mystery") or ""))})
+                        **board(-1, str(plan.get("mystery") or ""))})
             break
-    # 章の終わり: 章の中で最後に「残る／消えた」が読まれる時刻。消えた候補が変わった章だけ
-    prev = list(cands)
-    for k, rem in enumerate(rows):
+    for k, c in enumerate(chapters):
         if k >= len(starts):
             break
         a, b = starts[k], (starts[k + 1] if k + 1 < len(starts) else end)
-        hit = [s for s in subtitles if a <= s["startSec"] < b and _NARROW.search(s.get("text") or "")]
-        last = k == len(rows) - 1
-        if set(rem) != set(prev) or last:
-            at = hit[-1]["startSec"] if hit else max(a, b - BOARD_SEC - 1)
-            cap = "残るのは " + "、".join(rem) if not last else "答え: " + "、".join(rem)
-            out.append({"startSec": round(at, 3), "durationSec": BOARD_SEC,
-                        **_board(cands, rem, final=last, caption=cap)})
-        prev = rem
+        hit = [s for s in subtitles if a <= s["startSec"] < b and _COUNT_LINE.search(s.get("text") or "")]
+        at = hit[-1]["startSec"] if hit else max(a, b - BOARD_SEC - 1)
+        last = k == len(chapters) - 1
+        rem = [str(x) for x in (c.get("remaining") or [])]
+        if last:
+            cap = str((plan.get("closing") or {}).get("answer") or "")
+        else:
+            cap = ("残る答え: " + "／".join(rem)) if rem else ""
+        out.append({"startSec": round(at, 3), "durationSec": BOARD_SEC, **board(k, cap)})
     return out
 
 
@@ -218,7 +226,7 @@ def inject(props: dict, plan: dict) -> tuple[int, int, int]:
         props["explainers"] = sorted(keep + panels, key=lambda p: p["startSec"])
         props = ex.clear(props, panels)
 
-    boards = candidate_boards(plan, subs, outline)
+    boards = verdict_boards(plan, subs, outline)
     # 作図パネルと重なるボードは出さない（全画面の図の上に札が載る）
     spans = [(p["startSec"], p["startSec"] + p["durationSec"]) for p in props.get("explainers") or []]
     boards = [b for b in boards if not any(ex._overlaps(b["startSec"], b["startSec"] + b["durationSec"], x, y)
