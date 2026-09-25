@@ -1,14 +1,49 @@
 subject: 死海文書
-subject_en: Dead Sea Scrolls archaeology history origin translation
+subject_en: Dead Sea Scrolls, Qumran, Vatican, AI analysis, biblical omissions, DNA
+  analysis, Messiah, hidden texts
 genre: 古代文書の謎
+mystery: バチカンは死海文書を隠したのか
+candidates:
+- バチカンが一部を隠した
+- 学者グループが独占した
+- 全て公開されている
+told:
+- 死海文書最大の謎！バチカンが隠したとされるキリストの秘密を徹底解説
+- AIが暴いた死海文書の真実！聖書に消えた記述はあったのか？
+- 死海文書、予言よりヤバい謎があった！AIが見つけた不自然な痕跡
+- 衝撃！死海文書のDNAを解読して判明した驚きの結果と筆跡のAI分析でわかった新事実
+- 最新AIで死海文書の隠蔽された真実が判明しました…テレビでは放送できない歴史の異常現象と本当の意味、DNAが明かした驚くべき真実とは
+- 死海文書を隠したのは誰か？クムラン共同体をめぐる三つの仮説
+- 最新AI解析で解読された世界の古代文書…ヴォイニッチ手稿と死海文書から判明した衝撃の真実
+- 「歴史が書き換わるぞ…」世界中を震撼させた死海文書の内容。最新AIによる衝撃の解析結果とは
+- 未解読だったクムラン洞窟の死海文書が解読された。
+- 死海文書に記された救世主の正体が判明しました…古代文書に隠された謎と禁断の真実
 claims:
-- ja: 死海文書はクムラン洞窟で発見されたユダヤ教の写本である。
-  en: Dead Sea Scrolls Qumran caves Jewish manuscripts discovery
-- ja: 死海文書は紀元前3世紀から紀元後1世紀に書かれたものである。
-  en: Dead Sea Scrolls dating radiocarbon analysis 3rd century BCE 1st century CE
-- ja: 死海文書の多くはエッセネ派によって書かれたと考えられている。
-  en: Dead Sea Scrolls Essenes authorship Qumran community
-- ja: 死海文書には旧約聖書の中で最古の写本が含まれている。
-  en: Dead Sea Scrolls oldest biblical manuscripts Hebrew Bible
-- ja: 死海文書の発見は聖書研究とユダヤ教史に大きな影響を与えた。
-  en: Dead Sea Scrolls impact biblical studies Jewish history
+- ja: バチカンが死海文書を隠した
+  en: Vatican censorship Dead Sea Scrolls
+  told_by: YouTube解説
+  stakes: 歴史の真実が隠されている可能性がある。
+- ja: 聖書から消えた記述が死海文書に残っている
+  en: Dead Sea Scrolls missing Bible passages
+  told_by: YouTube解説
+  stakes: 聖書の内容や成立過程が大きく変わるかもしれない。
+- ja: 死海文書に不自然な痕跡がAIで発見された
+  en: AI analysis anomalies Dead Sea Scrolls
+  told_by: YouTube解説
+  stakes: 最新技術で歴史の常識が覆される期待がある。
+- ja: 死海文書のDNA解析で筆者が特定された
+  en: Dead Sea Scrolls DNA handwriting analysis authorship
+  told_by: ニュース
+  stakes: 死海文書の起源や作成者像が変わる可能性がある。
+- ja: 死海文書にキリストの秘密が記されている
+  en: Dead Sea Scrolls Jesus secret
+  told_by: YouTube解説
+  stakes: キリスト教の根本に関わる重大な情報かもしれない。
+- ja: クムラン共同体が死海文書を隠した
+  en: Qumran community hid Dead Sea Scrolls
+  told_by: 教科書
+  stakes: 文書の背景や歴史的意義の理解が深まる。
+- ja: 死海文書に救世主の正体が書かれている
+  en: Dead Sea Scrolls Messiah identity
+  told_by: 書籍
+  stakes: 宗教観や歴史観に大きな影響を与える可能性がある。

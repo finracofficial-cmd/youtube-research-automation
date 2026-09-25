@@ -1,75 +1,13 @@
 {
  "claims": [
   {
-   "ja": "死海文書はクムラン洞窟で発見されたユダヤ教の写本である。",
-   "sources": [
-    {
-     "kind": "book",
-     "title": "The Dead Sea scrolls at fifty : proceedings of the 1997 Society of Biblical Literature Qumran Section meetings",
-     "year": 1999,
-     "venue": "",
-     "identifier": "deadseascrollsat0000soci",
-     "url": "https://archive.org/details/deadseascrollsat0000soci",
-     "open_access": true,
-     "authors": ""
-    },
-    {
-     "kind": "paper",
-     "title": "The constituents of the ink from a Qumran inkwell: new prospects for provenancing the ink on the Dead Sea Scrolls",
-     "year": 2012,
-     "venue": "Journal of Archaeological Science",
-     "identifier": "10.1016/j.jas.2012.04.041",
-     "url": "https://doi.org/10.1016/j.jas.2012.04.041",
-     "open_access": true,
-     "authors": "Kaare Lund Rasmussenら"
-    },
-    {
-     "kind": "paper",
-     "title": "The Story of the Scrolls: The miraculous discovery and true significance of the Dead Sea Scrolls",
-     "year": 2010,
-     "venue": "Medical Entomology and Zoology",
-     "identifier": "",
-     "url": "http://ci.nii.ac.jp/ncid/BB0169976X",
-     "open_access": false,
-     "authors": "Géza Vermès"
-    }
-   ],
-   "evidence_level": "薄い（査読文献がわずか）→ 理由が違う側に置く候補"
-  },
-  {
-   "ja": "死海文書は紀元前3世紀から紀元後1世紀に書かれたものである。",
-   "sources": [
-    {
-     "kind": "paper",
-     "title": "The Effects of Possible Contamination on the Radiocarbon Dating of the Dead Sea Scrolls II: Empirical Methods to Remove Castor Oil and Suggestions for Redating",
-     "year": 2009,
-     "venue": "Radiocarbon",
-     "identifier": "10.1017/s0033822200034081",
-     "url": "https://doi.org/10.1017/s0033822200034081",
-     "open_access": true,
-     "authors": "Kaare Lund Rasmussenら"
-    }
-   ],
-   "evidence_level": "薄い（査読文献がわずか）→ 理由が違う側に置く候補"
-  },
-  {
-   "ja": "死海文書の多くはエッセネ派によって書かれたと考えられている。",
+   "ja": "バチカンが死海文書を隠した",
    "sources": [],
    "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
   },
   {
-   "ja": "死海文書には旧約聖書の中で最古の写本が含まれている。",
+   "ja": "聖書から消えた記述が死海文書に残っている",
    "sources": [
-    {
-     "kind": "paper",
-     "title": "Monotheism and the Language of Divine Plurality in the Hebrew Bible and the Dead Sea Scrolls",
-     "year": 2014,
-     "venue": "Tyndale Bulletin",
-     "identifier": "10.53751/001c.29367",
-     "url": "https://doi.org/10.53751/001c.29367",
-     "open_access": true,
-     "authors": "Michael S. Heiser"
-    },
     {
      "kind": "paper",
      "title": "The Dead Sea Scrolls and the Origins of the Bible",
@@ -78,38 +16,280 @@
      "identifier": "10.1163/9789004677135",
      "url": "https://doi.org/10.1163/9789004677135",
      "open_access": false,
-     "authors": "Eugene Charles Ulrich"
+     "authors": "Eugene Ulrich"
+    },
+    {
+     "kind": "paper",
+     "title": "History, Ideology and Bible Interpretation in the Dead Sea Scrolls",
+     "year": 2014,
+     "venue": "",
+     "identifier": "10.1628/978-3-16-152851-4",
+     "url": "https://doi.org/10.1628/978-3-16-152851-4",
+     "open_access": false,
+     "authors": "Devorah Dimant"
+    },
+    {
+     "kind": "paper",
+     "title": "The Dead Sea Scrolls and the Textual History of the Masoretic Bible",
+     "year": 2011,
+     "venue": "The Hebrew Bible in Light of the Dead Sea Scrolls",
+     "identifier": "10.13109/9783666535550.41",
+     "url": "https://doi.org/10.13109/9783666535550.41",
+     "open_access": false,
+     "authors": "Emanuel Tov"
     }
    ],
    "evidence_level": "薄い（査読文献がわずか）→ 理由が違う側に置く候補"
   },
   {
-   "ja": "死海文書の発見は聖書研究とユダヤ教史に大きな影響を与えた。",
+   "ja": "死海文書に不自然な痕跡がAIで発見された",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "死海文書のDNA解析で筆者が特定された",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "死海文書にキリストの秘密が記されている",
    "sources": [
     {
-     "kind": "book",
-     "title": "The impact of the Dead Sea scrolls",
-     "year": 2009,
+     "kind": "paper",
+     "title": "Jesus, Q, and the Dead Sea Scrolls",
+     "year": 2012,
      "venue": "",
-     "identifier": "impactofdeadseas0000fitz",
-     "url": "https://archive.org/details/impactofdeadseas0000fitz",
-     "open_access": true,
+     "identifier": "10.1628/978-3-16-152288-8",
+     "url": "https://doi.org/10.1628/978-3-16-152288-8",
+     "open_access": false,
+     "authors": "Simon J. Joseph"
+    },
+    {
+     "kind": "paper",
+     "title": "Crucifixion: Archaeology, Jesus, and the Dead Sea Scrolls",
+     "year": 1992,
+     "venue": "Jesus and the Dead Sea Scrolls",
+     "identifier": "10.5040/9780300287905.ch-010",
+     "url": "https://doi.org/10.5040/9780300287905.ch-010",
+     "open_access": false,
+     "authors": "Joe Ziasら"
+    },
+    {
+     "kind": "paper",
+     "title": "Jesus and the Dead Sea Scrolls",
+     "year": 1992,
+     "venue": "",
+     "identifier": "10.5040/9780300287905",
+     "url": "https://doi.org/10.5040/9780300287905",
+     "open_access": false,
+     "authors": ""
+    },
+    {
+     "kind": "paper",
+     "title": "The Secret of Time: Reconfiguring Wisdom in the Dead Sea Scrolls, by Arjen F. Bakker",
+     "year": 2025,
+     "venue": "Dead Sea Discoveries",
+     "identifier": "10.1163/15685179-tat00011",
+     "url": "https://doi.org/10.1163/15685179-tat00011",
+     "open_access": false,
+     "authors": "John Kampen"
+    },
+    {
+     "kind": "paper",
+     "title": "Jesus and the Dead Sea Scrolls",
+     "year": 2021,
+     "venue": "Jesus Library 2023",
+     "identifier": "10.5040/9781350893221.004",
+     "url": "https://doi.org/10.5040/9781350893221.004",
+     "open_access": false,
+     "authors": "Cecilia Wassén"
+    },
+    {
+     "kind": "paper",
+     "title": "Searching for the Real Jesus: Jesus, the Dead Sea Scrolls and Other Religious Themes; The Story of the Scrolls: The Miraculous Discovery and True Significance of the Dead Sea ScrollsVermesGeza\n                    <i>Searching for the Real Jesus: Jesus, the Dead Sea Scrolls and Other Religious Themes</i>\n                    SCMLondon, 2009, xi, 185, £14.99ISBN 978-0-334-04358-4VermesGeza\n                    <i>The Story of the Scrolls: The Miraculous Discovery and True Significance of the Dead Sea Scrolls</i>\n                    PenguinLondon, 2010, ix, 260, £9.99ISBN 978-0-141-04615-0",
+     "year": 2010,
+     "venue": "Journal of Jewish Studies",
+     "identifier": "10.18647/2987/jjs-2010",
+     "url": "https://doi.org/10.18647/2987/jjs-2010",
+     "open_access": false,
+     "authors": "Charlotte Hempel"
+    }
+   ],
+   "evidence_level": "厚い（査読文献が複数）→ 当たっている側に置く候補"
+  },
+  {
+   "ja": "クムラン共同体が死海文書を隠した",
+   "sources": [
+    {
+     "kind": "paper",
+     "title": "Wealth in the Dead Sea Scrolls and in the Qumran Community",
+     "year": 2002,
+     "venue": "",
+     "identifier": "10.1163/9789047400653",
+     "url": "https://doi.org/10.1163/9789047400653",
+     "open_access": false,
+     "authors": "Catherine Murphy"
+    },
+    {
+     "kind": "paper",
+     "title": "Beyond the Qumran Community: Social Organization in the Dead Sea Scrolls",
+     "year": 2009,
+     "venue": "Dead Sea Discoveries",
+     "identifier": "10.1163/156851709x473978",
+     "url": "https://doi.org/10.1163/156851709x473978",
+     "open_access": false,
+     "authors": "John J. Collins"
+    },
+    {
+     "kind": "paper",
+     "title": "A Brotherhood At Qumran? Metaphorical Familial Language In The Dead Sea Scrolls",
+     "year": 2009,
+     "venue": "Northern Lights on the Dead Sea Scrolls",
+     "identifier": "10.1163/ej.9789004171633.i-314.57",
+     "url": "https://doi.org/10.1163/ej.9789004171633.i-314.57",
+     "open_access": false,
+     "authors": "Jutta Jokirantaら"
+    },
+    {
+     "kind": "paper",
+     "title": "Appendix: Important Qumran Dead Sea Scrolls",
+     "year": 2002,
+     "venue": "Deciphering the Dead Sea Scrolls",
+     "identifier": "10.1002/9780470773468.app1",
+     "url": "https://doi.org/10.1002/9780470773468.app1",
+     "open_access": false,
+     "authors": ""
+    },
+    {
+     "kind": "paper",
+     "title": "THE PREHISTORY OF THE QUMRAN COMMUNITY",
+     "year": 1992,
+     "venue": "The Dead Sea Scrolls",
+     "identifier": "10.1163/9789004350113_013",
+     "url": "https://doi.org/10.1163/9789004350113_013",
+     "open_access": false,
+     "authors": "Philip R. Davies"
+    },
+    {
+     "kind": "paper",
+     "title": "The Aramaic Dead Sea Scrolls: Coherence and Context in the Library of Qumran",
+     "year": 2016,
+     "venue": "The Dead Sea Scrolls at Qumran and the Concept of a Library",
+     "identifier": "10.1163/9789004305069_014",
+     "url": "https://doi.org/10.1163/9789004305069_014",
+     "open_access": false,
+     "authors": "Daniel A. Machiela"
+    }
+   ],
+   "evidence_level": "厚い（査読文献が複数）→ 当たっている側に置く候補"
+  },
+  {
+   "ja": "死海文書に救世主の正体が書かれている",
+   "sources": [
+    {
+     "kind": "paper",
+     "title": "The Messiah before JesusThe Suffering Servant of the Dead Sea Scrolls",
+     "year": 2000,
+     "venue": "",
+     "identifier": "10.1525/california/9780520215924.001.0001",
+     "url": "https://doi.org/10.1525/california/9780520215924.001.0001",
+     "open_access": false,
+     "authors": "Israel Knohl"
+    },
+    {
+     "kind": "paper",
+     "title": "The Messiah before Jesus: The Suffering Servant of the Dead Sea Scrolls (review)",
+     "year": 2001,
+     "venue": "Hebrew Studies",
+     "identifier": "10.1353/hbr.2001.0042",
+     "url": "https://doi.org/10.1353/hbr.2001.0042",
+     "open_access": false,
      "authors": ""
     }
    ],
-   "evidence_level": "文献なし（原典・書籍のみ）→ 跡形もなくなる側に置く候補"
+   "evidence_level": "薄い（査読文献がわずか）→ 理由が違う側に置く候補"
   }
  ],
  "background": [
   {
    "kind": "paper",
-   "title": "Artificial intelligence based writer identification generates new evidence for the unknown scribes of the Dead Sea Scrolls exemplified by the Great Isaiah Scroll (1QIsaa)",
-   "year": 2021,
-   "venue": "PLoS ONE",
-   "identifier": "10.1371/journal.pone.0249769",
-   "url": "https://doi.org/10.1371/journal.pone.0249769",
-   "open_access": true,
-   "authors": "Mladen Popovićら"
+   "title": "The Dead Sea Scrolls Electronic Library Biblical Texts6Q7",
+   "year": null,
+   "venue": "Dead Sea Scrolls Electronic Library Biblical Texts",
+   "identifier": "10.1163/978900426492_dsselbt_dss_el_bt_6q7",
+   "url": "https://doi.org/10.1163/978900426492_dsselbt_dss_el_bt_6q7",
+   "open_access": false,
+   "authors": ""
+  },
+  {
+   "kind": "paper",
+   "title": "The Dead Sea Scrolls Electronic Library Biblical Texts4Q24",
+   "year": null,
+   "venue": "Dead Sea Scrolls Electronic Library Biblical Texts",
+   "identifier": "10.1163/978900426492_dsselbt_dss_el_bt_4q24",
+   "url": "https://doi.org/10.1163/978900426492_dsselbt_dss_el_bt_4q24",
+   "open_access": false,
+   "authors": ""
+  },
+  {
+   "kind": "paper",
+   "title": "The Dead Sea Scrolls Electronic Library Biblical TextsPAM43113",
+   "year": null,
+   "venue": "Dead Sea Scrolls Electronic Library Biblical Texts",
+   "identifier": "10.1163/978900426492_dsselbt_dss_el_bt_pam43113",
+   "url": "https://doi.org/10.1163/978900426492_dsselbt_dss_el_bt_pam43113",
+   "open_access": false,
+   "authors": ""
+  },
+  {
+   "kind": "paper",
+   "title": "The Dead Sea Scrolls Electronic Library Biblical Texts2Q6",
+   "year": null,
+   "venue": "Dead Sea Scrolls Electronic Library Biblical Texts",
+   "identifier": "10.1163/978900426492_dsselbt_dss_el_bt_2q6",
+   "url": "https://doi.org/10.1163/978900426492_dsselbt_dss_el_bt_2q6",
+   "open_access": false,
+   "authors": ""
+  },
+  {
+   "kind": "paper",
+   "title": "The Dead Sea Scrolls Electronic Library Biblical Texts5Q4",
+   "year": null,
+   "venue": "Dead Sea Scrolls Electronic Library Biblical Texts",
+   "identifier": "10.1163/978900426492_dsselbt_dss_el_bt_5q4",
+   "url": "https://doi.org/10.1163/978900426492_dsselbt_dss_el_bt_5q4",
+   "open_access": false,
+   "authors": ""
+  },
+  {
+   "kind": "paper",
+   "title": "The Dead Sea Scrolls Electronic Library Biblical Texts4Q118",
+   "year": null,
+   "venue": "Dead Sea Scrolls Electronic Library Biblical Texts",
+   "identifier": "10.1163/978900426492_dsselbt_dss_el_bt_4q118",
+   "url": "https://doi.org/10.1163/978900426492_dsselbt_dss_el_bt_4q118",
+   "open_access": false,
+   "authors": ""
+  },
+  {
+   "kind": "paper",
+   "title": "The Dead Sea Scrolls Electronic Library Biblical Texts4Q98d",
+   "year": null,
+   "venue": "Dead Sea Scrolls Electronic Library Biblical Texts",
+   "identifier": "10.1163/978900426492_dsselbt_dss_el_bt_4q98d",
+   "url": "https://doi.org/10.1163/978900426492_dsselbt_dss_el_bt_4q98d",
+   "open_access": false,
+   "authors": ""
+  },
+  {
+   "kind": "paper",
+   "title": "The Dead Sea Scrolls Electronic Library Biblical Texts4Q59",
+   "year": null,
+   "venue": "Dead Sea Scrolls Electronic Library Biblical Texts",
+   "identifier": "10.1163/978900426492_dsselbt_dss_el_bt_4q59",
+   "url": "https://doi.org/10.1163/978900426492_dsselbt_dss_el_bt_4q59",
+   "open_access": false,
+   "authors": ""
   }
  ]
 }
