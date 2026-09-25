@@ -23,7 +23,8 @@ def good_plan(n=2):
         "question": "巨石は本当に運べなかったのか",
         "method": "石切り場に切り出し途中の石が残っているかを見ればいい",
         "tests": "「人間には運べない」という候補",
-        "so_far": "これで「運べない」は消えた。残るのは「運ばなかった」と「別の場所で切った」",
+        "so_far": "これで「人間ではない」を支える話が崩れた。残るのは2つ",
+        "remaining": ["人間が坂で運んだ", "運ばなかった（その場で切った）"],
         "figure": {"kind": "scale", "heading": "石の重さ", "items": [{"label": "最大の石", "value": "1000トン"}, {"label": "普通の石", "value": "300トン"}]},
         "hook_out": "では、なぜ運ばなかったのか。",
     }
@@ -127,3 +128,17 @@ def test_figures_with_unsourced_numbers_are_dropped():
     p2 = P.validate(good_plan(1))
     P.strip_unsourced(p2, "最大の石は1000トンある。")
     assert p2.chapters[0].figure == {}          # 2本に足りなくなった図は消える
+
+
+
+def test_remaining_must_be_candidates_and_never_grow():
+    """死海文書の設計図は2章目から主張の名前（AI発見説・DNA説…）で数えていた。"""
+    d = good_plan(2)
+    d["chapters"][1]["remaining"] = ["AI発見説", "DNA説"]
+    with pytest.raises(P.PlanError, match="候補でないもの"):
+        P.validate(d)
+    d = good_plan(2)
+    d["chapters"][0]["remaining"] = ["人間が坂で運んだ"]
+    d["chapters"][1]["remaining"] = ["人間が坂で運んだ", "人間ではない"]
+    with pytest.raises(P.PlanError, match="増えている"):
+        P.validate(d)

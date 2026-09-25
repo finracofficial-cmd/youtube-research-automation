@@ -28,7 +28,7 @@ def test_panels_sit_after_each_chapter_start_and_clear_overlapping_cards():
              "subtitles": [{"startSec": 0, "durationSec": 400, "text": "x"}],
              "explainers": [], "stats": [{"startSec": 75, "durationSec": 5, "value": "1"}],
              "telops": []}
-    n_fig, n_tel = F.inject(props, plan)
+    n_fig, n_board, n_tel = F.inject(props, plan)
     assert n_fig == 1 and props["explainers"][0]["startSec"] == 72.0
     assert props["stats"] == []          # パネルに重なる札は外れる
 
@@ -47,3 +47,41 @@ def test_hints_are_spread_over_the_body_segments():
     got = with_hints(segs, [["クムラン洞窟"], ["放射性炭素"]])
     assert "クムラン洞窟" in "".join(got[1:5]) and "放射性炭素" in "".join(got[5:9])
     assert got[0] == "文0。" and got[9] == "文9。"        # 端は触らない
+
+
+
+def _plan_with_board():
+    return {"mystery": "死海文書に世に出せない秘密はあるか",
+            "candidates": ["秘密がある", "秘密は無い", "未読の部分にある"],
+            "chapters": [{"remaining": ["秘密は無い", "未読の部分にある"]},
+                         {"remaining": ["秘密は無い", "未読の部分にある"]},
+                         {"remaining": ["秘密は無い"]}]}
+
+
+def test_candidate_board_opens_with_all_and_crosses_out_as_chapters_close():
+    subs = [{"startSec": 20, "durationSec": 3, "text": "答えは3つに絞れる。"},
+            {"startSec": 95, "durationSec": 3, "text": "これで一つ目は消えた。残るのは二つ。"},
+            {"startSec": 190, "durationSec": 3, "text": "残る候補は変わらない。"},
+            {"startSec": 290, "durationSec": 3, "text": "残るのは一つだけだ。"},
+            {"startSec": 300, "durationSec": 20, "text": "着地。"}]
+    outline = [{"startSec": 0}, {"startSec": 60}, {"startSec": 160}, {"startSec": 250}]
+    b = F.candidate_boards(_plan_with_board(), subs, outline)
+    assert [x["startSec"] for x in b] == [20.0, 95.0, 290.0]          # 変化の無い2章目は出さない
+    assert all(not c["dimmed"] for c in b[0]["cards"])                # 冒頭は全部
+    assert [c.get("mark") for c in b[1]["cards"]] == ["no", None, None]
+    assert [c.get("mark") for c in b[2]["cards"]] == ["no", "ok", "no"] and b[2]["caption"] == "答え: 秘密は無い"
+
+
+def test_no_board_when_the_plan_counts_claims_instead_of_candidates():
+    plan = _plan_with_board()
+    plan["chapters"][1]["remaining"] = ["AI発見説", "DNA説"]
+    assert F.candidate_boards(plan, [{"startSec": 0, "durationSec": 1, "text": "答えは3つ"}],
+                              [{"startSec": 0}, {"startSec": 60}]) == []
+
+
+def test_hints_drop_sentences_negations_and_paper_titles():
+    plan = {"chapters": [{"evidence": {"who": "Emanuel Tov",
+                                       "where": "Emanuel Tov The Dead Sea Scrolls and the Textual History of the Masoretic Bible",
+                                       "what": "AIによる痕跡発見の記録は無い"},
+                          "jargon": [{"term": "マソラ本文"}]}]}
+    assert F.hints(plan) == [["Emanuel Tov", "マソラ本文"]]

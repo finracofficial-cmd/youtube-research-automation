@@ -69,7 +69,8 @@ def load_spec_full(spec_path: Path) -> tuple[str, str, list[str], list[float] | 
     claims = [c["ja"] for c in spec.get("claims", [])]
     extra = {"mystery": str(spec.get("mystery") or "").strip(),
              "candidates": [str(x) for x in (spec.get("candidates") or [])],
-             "claims_meta": [c for c in spec.get("claims", []) if isinstance(c, dict)]}
+             "claims_meta": [c for c in spec.get("claims", []) if isinstance(c, dict)],
+             "told": [str(x) for x in (spec.get("told") or [])]}
     weights = None
     src_path = spec_path.with_name(f"{spec_path.stem}_sources.json")
     if src_path.exists():
@@ -77,6 +78,19 @@ def load_spec_full(spec_path: Path) -> tuple[str, str, list[str], list[float] | 
         by_ja = {c.get("ja"): len(c.get("sources") or []) for c in (srcs.get("claims") or [])}
         weights = [float(by_ja.get(c, 0)) for c in claims]
     return subject, genre, claims, weights, extra
+
+
+def match_told(claims: list[str], told: list[str]) -> dict:
+    """主張ごとに、いちばん重なる動画タイトル。主張は told から起こしているので、
+    文字2連の重なりで元のタイトルに戻れる。重なりが薄ければ当てない。"""
+    from .compose import _grams
+    out = {}
+    for c in claims:
+        g = _grams(c)
+        best = max(told, key=lambda t: len(g & _grams(t)), default="")
+        if best and len(g & _grams(best)) >= max(3, len(g) // 4):
+            out[c] = best
+    return out
 
 
 def make_plan(material: str, *, subject: str, claims: list[str], duration_sec: float,
@@ -110,6 +124,21 @@ def make_plan(material: str, *, subject: str, claims: list[str], duration_sec: f
     return best, made
 
 
+def invented_origins(text: str, audit: Audit, plan: planmod.Plan) -> list[str]:
+    """設計図に出どころが無い章で、年代や媒体を付けて出どころを書いた文。
+
+    「2014年ごろからYouTubeやネット記事で広まった」と書いた（死海文書、4文）。
+    年は論文の発行年とたまたま一致して、数字の検査を抜けていた。"""
+    from .compose import origin_invented
+    from .devices import split_blocks
+    blocks = split_blocks(text)
+    out = []
+    for k, ch in enumerate(audit.chapters):
+        if k < len(plan.chapters) and ch.index < len(blocks):
+            out += origin_invented("".join(blocks[ch.index]), plan.chapters[k])
+    return out
+
+
 def gate(text: str, audit: Audit, style: Metrics, loose: list[str]) -> dict:
     """品質の合格条件。ここを通らない台本は動画にしない。
 
@@ -130,6 +159,7 @@ def gate(text: str, audit: Audit, style: Metrics, loose: list[str]) -> dict:
         "1文の長さが参考のレンジ内": long_ok,
         "常体で書けている": style.plain_form_ratio >= 0.8,
         "考察が事実と分かれている": audit.speculation and not audit.speculation_loose,
+        "資料に無い出どころが無い": not getattr(audit, "origin_invented", []),
     }
 
 
@@ -152,6 +182,7 @@ def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: s
     ask = factory(model, json_mode=True, temperature=0.5)
     plan, made = make_plan(material, subject=subject, claims=claims, duration_sec=duration_sec,
                            kind=kind, ask=ask, tries=plans, extra=extra)
+    plan.told = match_told(claims, extra.get("told") or [])
     log("設計図:")
     for line in planmod.describe(plan):
         log(f"  {line}")
@@ -165,6 +196,7 @@ def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: s
     style = validate(text, duration_sec)
     loose = unsourced_numbers(text, material)
     audit.speculation_loose = devices_spec_numbers(text, material)
+    audit.origin_invented = invented_origins(text, audit, plan)
     c1, t1 = _usage()
     r = Result(text=text, plan=plan, audit=audit, style=style, left=left, loose=loose,
                plans_tried=made, calls=c1 - c0, tokens=t1 - t0, seconds=time.time() - started)
@@ -200,6 +232,7 @@ def measures(r: Result) -> dict:
         "enough_material": int(r.enough),
         "speculation": int(bool(a.speculation)),
         "narrowing": a.narrowing,
+        "invented_origins": len(getattr(a, "origin_invented", []) or []),
         "calls": r.calls,
         "tokens": r.tokens,
     }

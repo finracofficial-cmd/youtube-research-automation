@@ -156,6 +156,7 @@ class Audit:
     chapter_notes: dict[int, list[str]] = field(default_factory=dict)  # 塊番号 -> 指摘
     speculation: bool = False          # 考察が印で囲まれている
     speculation_loose: list[str] = field(default_factory=list)   # 考察の中の、資料に無い数字
+    origin_invented: list[str] = field(default_factory=list)     # 資料に無い出どころ（年代・媒体の推測）
     narrowing: int = 0                 # 章末で残る候補を数えた章の数
 
     @property

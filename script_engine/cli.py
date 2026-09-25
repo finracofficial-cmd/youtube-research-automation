@@ -186,6 +186,8 @@ def _write_planned(args, material: str) -> int:
     lines += report(r.audit)
     if r.loose:
         lines.append("資料に無い数字（人が確かめる）: " + "、".join(r.loose[:12]))
+    if getattr(r.audit, "origin_invented", None):
+        lines.append("資料に無い出どころ: " + " / ".join(r.audit.origin_invented[:6]))
     if r.left:
         lines.append("直しきれなかった点:")
         lines += [f"  - {n}" for n in r.left]

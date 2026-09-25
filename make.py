@@ -188,8 +188,8 @@ def main() -> int:
                                claims_now,
                                card_labels=_ch.card_labels(claims_now))
         if plan_data:
-            n_fig, n_tel = figures_mod.inject(data, plan_data)
-            print(f"  設計図から図 {n_fig}枚・考察の印 {n_tel}枚を足した")
+            n_fig, n_board, n_tel = figures_mod.inject(data, plan_data)
+            print(f"  設計図から図 {n_fig}枚・候補ボード {n_board}枚・考察の印 {n_tel}枚を足した")
         props.write_text(json.dumps(data, ensure_ascii=False, indent=1),
                          encoding="utf-8")
         print(f"  字幕を実際の発話に合わせ直した（章 {len(data.get('outline') or [])}件）")

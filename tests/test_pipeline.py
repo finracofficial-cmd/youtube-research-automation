@@ -213,3 +213,23 @@ def test_rate_notes_do_not_trigger_rewrites():
     assert not any("留保" in n or "反転" in n or "話速" in n for b in blocks for n in b.notes)
     assert any("伏線" in n for n in blocks[0].notes)
     assert all(any("平均文長" in n for n in b.notes) for b in blocks[1:-1])
+
+
+
+def test_claims_are_matched_back_to_the_video_titles_they_came_from():
+    told = ["死海文書最大の謎！バチカンが隠したとされるキリストの秘密を徹底解説",
+            "死海文書に記された救世主の正体が判明しました…古代文書に隠された謎と禁断の真実"]
+    got = PL.match_told(["バチカンが死海文書を隠した", "死海文書に救世主の正体が書かれている", "月は石でできている"], told)
+    assert got["バチカンが死海文書を隠した"].startswith("死海文書最大の謎")
+    assert got["死海文書に救世主の正体が書かれている"].startswith("死海文書に記された救世主")
+    assert "月は石でできている" not in got
+
+
+def test_spec_links_every_claim_to_a_candidate():
+    from research.spec_from_subject import spec_problems
+    ok = {"mystery": {"ja": "秘密はあるか", "candidates": ["ある", "無い"]},
+          "claims": [{"ja": "バチカンが死海文書を隠した", "supports": "ある"}]}
+    assert spec_problems(ok) == []
+    bad = {"mystery": {"ja": "秘密はあるか", "candidates": ["ある", "無い"]},
+           "claims": [{"ja": "バチカンが死海文書を隠した", "supports": "DNA説"}]}
+    assert any("supports" in x for x in spec_problems(bad))

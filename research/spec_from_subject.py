@@ -33,14 +33,18 @@ primary sources, one by one, until only what survives is left.
 Return JSON only, shaped exactly like this:
 {"subject_en": "...", "genre": "...",
  "mystery": {"ja": "...", "candidates": ["...", "...", "..."]},
- "claims": [{"ja": "...", "en": "...", "told_by": "...", "stakes": "..."}, ...]}
+ "claims": [{"ja": "...", "en": "...", "told_by": "...", "stakes": "...", "supports": "..."}, ...]}
 
 - subject_en: English search terms for finding primary literature.
 - genre: a short Japanese label, e.g. 古代の謎 / 未解読文字 / 科学史.
-- mystery: THE question the audience keeps asking about this subject, as a
-  concrete yes/no or who/why question in Japanese (e.g. 「バチカンは死海文書を
-  隠したのか」, not 「なぜ謎が残るのか」). candidates: 2-4 possible answers,
-  short, mutually exclusive. The video eliminates them one by one.
+- mystery: ONE concrete question in Japanese that EVERY claim bears on. It is
+  the question the whole video answers, so a claim that has nothing to do with
+  it does not belong in this video. Not abstract (「なぜ謎が残るのか」 is not a
+  question). Good: 「死海文書には、世に出せない秘密が書かれているのか」 when the
+  claims are about hiding, missing Bible text, AI traces and the Messiah.
+  Bad: 「バチカンは死海文書を隠したのか」 for the same claims, because the DNA and
+  Messiah claims do not bear on who hid it.
+- candidates: 2-4 short, mutually exclusive answers to the mystery.
 - claims: the stories being told right now, most-told first. Use the video
   titles given (that is what the market says) before anything else.
   - ja: the claim AS IT IS POPULARLY STATED, with its sensational framing kept
@@ -53,6 +57,8 @@ Return JSON only, shaped exactly like this:
   - en: English keywords that find the scholarly work that can settle it.
   - told_by: who tells it (YouTube解説 / 書籍 / 観光ガイド / ニュース / 教科書).
   - stakes: one short Japanese sentence on why a viewer cares.
+  - supports: the candidate (copied exactly) this claim would support if it
+    were true. Every claim supports exactly one candidate.
 - At least half of the claims must be 都市伝説・陰謀論・俗説 that primary
   sources can overturn or cut down to size. The rest are 定説 people repeat
   that have a twist when checked. Never list encyclopedia facts that nobody
@@ -96,6 +102,21 @@ def claim_problems(ja: str) -> list[str]:
     return out
 
 
+def spec_problems(spec: dict) -> list[str]:
+    """主張の形と、謎・候補・支える候補のつながり。"""
+    out = []
+    for c in spec.get("claims") or []:
+        for pr in claim_problems(c.get("ja") or ""):
+            out.append(f"{c.get('ja')}: {pr}")
+    cands = [str(x).strip() for x in ((spec.get("mystery") or {}).get("candidates") or [])]
+    if len(cands) < 2:
+        out.append("mystery.candidates が2つ無い")
+    for c in spec.get("claims") or []:
+        if str(c.get("supports") or "").strip() not in cands:
+            out.append(f"{c.get('ja')}: supports が candidates のどれとも一致しない")
+    return out
+
+
 def _chat_json(messages: list[dict], *, model: str, timeout: int) -> dict:
     key = os.environ.get("OPENAI_API_KEY")
     if not key and not os.environ.get("OPENAI_VIA_PROXY"):
@@ -122,19 +143,18 @@ def build(subject: str, n_claims: int, *, model: str = "gpt-4.1",
         user += "\n\nいま語られている話（量産chの動画タイトル。多い順ではない）:\n" + "\n".join(f"- {t}" for t in told)
     messages = [{"role": "system", "content": _SYSTEM}, {"role": "user", "content": user}]
     spec = _chat_json(messages, model=model, timeout=timeout)
-    # 主張がタイトルのままなら、1回だけ言い直させる
-    bad = {c.get("ja"): claim_problems(c.get("ja") or "") for c in (spec.get("claims") or [])}
-    bad = {k: v for k, v in bad.items() if v}
+    # 主張がタイトルのまま、または謎・候補とつながっていなければ、1回だけ直させる
+    bad = spec_problems(spec)
     if bad:
         messages += [{"role": "assistant", "content": json.dumps(spec, ensure_ascii=False)},
                      {"role": "user", "content":
-                      "claims.ja が動画タイトルのままになっている。各主張を、その動画が主張している内容の"
-                      "言い切りの一文（30字まで、記号なし）に書き直したJSON全体を出す。\n"
-                      + "\n".join(f"- {k}: {', '.join(v)}" for k, v in bad.items())}]
+                      "次の点を直したJSON全体を出す。claims.ja は動画タイトルではなく言い切りの一文"
+                      "（30字まで、記号なし）。supports は candidates の文字列をそのまま写す。"
+                      "謎は全主張が関わる1つの問いにする。\n" + "\n".join(f"- {b}" for b in bad)}]
         spec = _chat_json(messages, model=model, timeout=timeout)
 
     claims = [{"ja": c["ja"], "en": c["en"], "told_by": c.get("told_by", ""),
-               "stakes": c.get("stakes", "")}
+               "stakes": c.get("stakes", ""), "supports": c.get("supports", "")}
               for c in (spec.get("claims") or []) if c.get("ja") and c.get("en")][:n_claims]
     if not claims:
         raise SystemExit("主張が組めなかった。題材を具体的にして試す")

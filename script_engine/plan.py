@@ -45,8 +45,9 @@ PLAN_INSTRUCTIONS = """\
 
 ## 物語の形（ここが無いと、事実の一覧になる。実測: 死海文書の台本は理解しづらかった）
 動画は1つの謎（mystery）を追う。冒頭で謎と、答えの候補（candidates）を全部見せる。
-各章は語られている話を1つ確かめ、章の終わりに「これで候補Xは消えた。残るのは…」と
-残る候補を数える（so_far）。最終章で答えを出す。答えが出なければ「出ない」と言い、
+各主張は、本当ならどれか1つの候補を支える（主張の「支える候補」）。各章は主張を1つ
+確かめ、崩れたらその候補の支えが1本減る。支えが全部崩れた候補は消える。章の終わりに
+残る候補を、候補の名前で数える（so_far と remaining）。主張の名前で数えない。最終章で答えを出す。答えが出なければ「出ない」と言い、
 そのうえで考察（speculation）を事実と分けて置く。視聴者は気になったものが解決する
 ことを求めている。考察は資料に無い私の考えで、理由と、崩れる条件を付ける。
 
@@ -63,7 +64,8 @@ PLAN_INSTRUCTIONS = """\
 - jargon は本文に出す専門語ごとに、日常の言い換えを1つ付ける。
 - mystery は視聴者が本当に気にしている具体的な問い（「バチカンは死海文書を隠したのか」）。
   「なぜ謎が残るのか」のような抽象は不可。planted_question は mystery と同じでよい。
-- candidates は互いに排他的な短い答え、2〜4個。各章の so_far は、その章のあとに残る候補。
+- candidates は互いに排他的な短い答え、2〜4個。各章の remaining は、その章のあとに残る
+  候補を candidates の文字列のまま並べる。前の章より増やさない。最終章の remaining が答え。
 - opening.paradox は、その題材で成り立たないはずのことが成り立っている一文
   （別の題材の例: 「600年間、誰も一文字も読めていない」「人もカメラも、まだ入っていない」）。
   数字か物で言う。評価語は使わない。
@@ -119,7 +121,8 @@ PLAN_INSTRUCTIONS = """\
       "jargon": [{"term": "専門語", "landing": "日常の言い換え"}],
       "narrator": "私は〜（判断のみ、無ければ空）",
       "scope": "結論の範囲を限定する一文",
-      "so_far": "この章のあとに残る候補（「これでAは消えた。残るのはBとC」）",
+      "so_far": "この章のあとに残る候補を候補の名前で（「これでAを支える話が1つ崩れた。残るのはBとC」）",
+      "remaining": ["この章のあとに残る候補（candidates の文字列をそのまま。前の章より増やさない）"],
       "figure": {"kind": "timeline|scale|none", "heading": "図の題", "items": [{"label": "...", "value": "数字と単位", "year": "年"}]},
       "hook_out": "次の章への引き（問い、または次の説をそのまま提示）"
     }
@@ -162,6 +165,7 @@ class Chapter:
     tests: str = ""
     so_far: str = ""
     figure: dict = field(default_factory=dict)
+    remaining: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -174,6 +178,7 @@ class Plan:
     raw: dict = field(default_factory=dict)
     mystery: str = ""
     candidates: list[str] = field(default_factory=list)
+    told: dict = field(default_factory=dict)      # 主張 -> いま語られている形（動画タイトル）
 
 
 def parse(text: str) -> dict:
@@ -220,6 +225,7 @@ def validate(d: dict, *, n_claims: int | None = None) -> Plan:
         problems.append("opening.paradox が無い")
 
     chapters: list[Chapter] = []
+    prev_rem = list(candidates)
     for i, c in enumerate(d.get("chapters") or [], 1):
         swings = [s for s in (c.get("swings") or []) if str(s.get("fact") or "").strip()]
         stances = [s.get("stance") for s in swings]
@@ -235,6 +241,13 @@ def validate(d: dict, *, n_claims: int | None = None) -> Plan:
             problems.append(f"第{i}章の so_far（残る候補）が無い")
         if not str(c.get("question") or "").strip():
             problems.append(f"第{i}章の question が無い")
+        rem = [str(x).strip() for x in (c.get("remaining") or [])]
+        if candidates and any(x not in candidates for x in rem):
+            problems.append(f"第{i}章の remaining に候補でないものがある（主張の名前で数えている）: "
+                            + "、".join(x for x in rem if x not in candidates)[:60])
+        if candidates and i > 1 and set(rem) - set(prev_rem):
+            problems.append(f"第{i}章の remaining が前の章より増えている")
+        prev_rem = rem if rem else prev_rem
         fig = c.get("figure") or {}
         if str(fig.get("kind") or "none") not in ("timeline", "scale", "none"):
             problems.append(f"第{i}章の figure.kind が timeline/scale/none でない")
@@ -261,7 +274,8 @@ def validate(d: dict, *, n_claims: int | None = None) -> Plan:
             method=str(c.get("method") or "").strip(),
             tests=str(c.get("tests") or "").strip(),
             so_far=str(c.get("so_far") or "").strip(),
-            figure=(c.get("figure") or {}) if str((c.get("figure") or {}).get("kind") or "none") != "none" else {}))
+            figure=(c.get("figure") or {}) if str((c.get("figure") or {}).get("kind") or "none") != "none" else {},
+            remaining=[str(x).strip() for x in (c.get("remaining") or []) if str(x).strip()]))
     if not chapters:
         problems.append("chapters が無い")
     if n_claims and len(chapters) != n_claims:
@@ -373,7 +387,8 @@ def prompt(material: str, *, subject: str, claims: list[str], duration_sec: floa
     for i, c in enumerate(claims, 1):
         m = meta.get(c) or {}
         extra = "　".join(x for x in (f"語り手: {m.get('told_by')}" if m.get("told_by") else "",
-                                    f"視聴者が気にする理由: {m.get('stakes')}" if m.get("stakes") else "") if x)
+                                    f"視聴者が気にする理由: {m.get('stakes')}" if m.get("stakes") else "",
+                                    f"本当なら支える候補: {m.get('supports')}" if m.get("supports") else "") if x)
         lines.append(f"{i}. {c}" + (f"（{extra}）" if extra else ""))
     if mystery:
         lines += ["", f"## 追う問い（題材の仕様から。これを mystery にする）", mystery]

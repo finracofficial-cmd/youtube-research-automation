@@ -176,8 +176,11 @@ def _chapter_brief(i: int, c: planmod.Chapter, n: int, p: planmod.Plan) -> str:
         f"4. なぜそう言えるか: {c.why}",
         "5. 誰が・何年に言い出したか: " + (
             _known(c.origin.get('who', ''), c.origin.get('year', ''), c.origin.get('how', ''))
-            or "資料に無い。「誰が最初に言い出したかは、記録が見つかっていない」と正直に言う。"
-               "年代・媒体（YouTube・ネット記事・書籍・テレビ）を推測して書かない"),
+            or ((f"資料に無い。代わりに、いま語られている形をそのまま示す: 「そのうちの一本は、"
+                 f"タイトルそのものがこうなっている。{p.told.get(c.claim)}」。"
+                 if p.told.get(c.claim) else "資料に無い。")
+                + "誰が最初に言い出したかは、記録が見つかっていない、と正直に言う。"
+                  "年・年代・媒体（YouTube・ネット記事・書籍・テレビ）で広まった時期を推測して書かない")),
         "6. 振り子。立場ごとに事実を置き、反転は「だが」で、留保は「ただし」で入れる:",
         swings,
         f"7. 証拠（年・場所・誰・何）: {_known(ev.get('year', ''), ev.get('where', ''), ev.get('who', ''), ev.get('what', ''))}",
@@ -187,7 +190,8 @@ def _chapter_brief(i: int, c: planmod.Chapter, n: int, p: planmod.Plan) -> str:
         jargon,
         f"10. 語り手の判断（行為は書かない。判断が要る箇所に1文だけ）: {c.narrator or '（無ければ書かない）'}",
         f"11. 結論の範囲を限定する: {c.scope}",
-        f"12. 残る候補を数える（「これで○○は消えた。残るのは…」）: {c.so_far}",
+        f"12. 残る候補を、候補の名前で数える（主張の名前で数えない）: {c.so_far}"
+        + (f"（残る候補: {'、'.join(c.remaining)}）" if c.remaining else ""),
         f"13. 最後の1〜2文で次章へ引く: {c.hook_out}",
     ]
     if i == n:

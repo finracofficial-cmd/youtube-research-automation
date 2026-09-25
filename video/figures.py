@@ -99,20 +99,110 @@ def speculation_telops(subtitles: list[dict]) -> list[dict]:
     return out
 
 
+_SENTENCE = re.compile(r"[。、]|無い|ない|記録|されている|された|分析$|検討$|関係")
+
+
+def _hint_ok(x: str) -> bool:
+    """画像の検索に使える語か。文・否定・論文の題名は落とす。
+
+    設計図の証拠欄には「AIによる痕跡発見の記録は無い」や英語の論文題名が入っていた。
+    そのまま検索語にすると、その語で画像は見つからないか、関係の無い画が出る。"""
+    x = x.strip()
+    if not x or x == "不明" or len(x) > 20:
+        return False
+    if _SENTENCE.search(x):
+        return False
+    latin = sum(c.isascii() and c.isalpha() for c in x)
+    return not (latin > 12 and " " in x and len(x.split()) > 3)   # 題名らしい長い英語
+
+
 def hints(plan: dict) -> list[list[str]]:
-    """章ごとの、画を探す手がかり。証拠の場所・人・物と専門語と振り子の事実。"""
+    """章ごとの、画を探す手がかり。証拠の場所・人・物と専門語。"""
     out: list[list[str]] = []
     for c in plan.get("chapters") or []:
         ev = c.get("evidence") or {}
-        h = [str(ev.get(k) or "") for k in ("where", "who", "what")]
+        h = [str(ev.get(k) or "") for k in ("who", "where", "what")]
         h += [str(j.get("term") or "") for j in (c.get("jargon") or [])]
-        h += [str(s.get("fact") or "")[:40] for s in (c.get("swings") or [])[:2]]
-        out.append([x for x in h if x and x != "不明"])
+        seen, keep = set(), []
+        for x in h:
+            x = x.strip()
+            if _hint_ok(x) and x not in seen:
+                seen.add(x)
+                keep.append(x)
+        out.append(keep)
     return out
 
 
-def inject(props: dict, plan: dict) -> tuple[int, int]:
-    """props に図と考察のテロップを足す。戻り値は (足した図の数, テロップの数)。"""
+BOARD_SEC = 6.0
+_NARROW = re.compile(r"残る(のは|候補)|残った|消えた|崩れた|絞られ|絞れ")
+_LISTED = re.compile(r"つに絞れる|候補は|答えは")
+
+
+def _remaining_by_chapter(plan: dict) -> list[list[str]] | None:
+    """章ごとの残る候補。設計図の remaining が候補の文字列で揃っているときだけ使う。"""
+    cands = [str(x) for x in (plan.get("candidates") or [])]
+    rows = [[str(x) for x in (c.get("remaining") or [])] for c in (plan.get("chapters") or [])]
+    if len(cands) < 2 or not rows or not all(rows):
+        return None
+    if any(x not in cands for r in rows for x in r):
+        return None           # 主張の名前で数えている設計図は、ボードにしない（誤った表示になる）
+    return rows
+
+
+def _board(cands: list[str], remaining: list[str] | None, *, final: bool = False,
+           caption: str = "") -> dict:
+    codes = "ABCD"
+    cards = []
+    for i, c in enumerate(cands):
+        gone = remaining is not None and c not in remaining
+        card = {"code": codes[i] if i < len(codes) else str(i + 1), "label": c, "dimmed": gone}
+        if gone:
+            card["mark"] = "no"
+        elif final and remaining is not None:
+            card["mark"] = "ok"
+        cards.append(card)
+    return {"caption": caption, "cards": cards}
+
+
+def candidate_boards(plan: dict, subtitles: list[dict], outline: list[dict]) -> list[dict]:
+    """答えの候補を並べ札で出す。冒頭で全部、章の終わりで消えたものに×。
+
+    数字の無い題材でも候補は必ずあるので、図の出ない題材でも毎回出せる。
+    視聴者が「いま何が残っているか」を見失うと、章がばらばらの話に見える
+    （死海文書の初稿で言われた「すっと入ってこない」）。"""
+    cands = [str(x) for x in (plan.get("candidates") or [])]
+    rows = _remaining_by_chapter(plan)
+    if not rows or not subtitles:
+        return []
+    starts = [c["startSec"] for c in outline if c.get("startSec", 0) > 0]
+    end = max(s["startSec"] + s["durationSec"] for s in subtitles)
+    out = []
+    # 冒頭: 候補を並べる文が読まれる時刻
+    first = starts[0] if starts else end
+    for s in subtitles:
+        if s["startSec"] < first and _LISTED.search(s.get("text") or ""):
+            out.append({"startSec": round(s["startSec"], 3), "durationSec": BOARD_SEC,
+                        **_board(cands, None, caption=str(plan.get("mystery") or ""))})
+            break
+    # 章の終わり: 章の中で最後に「残る／消えた」が読まれる時刻。消えた候補が変わった章だけ
+    prev = list(cands)
+    for k, rem in enumerate(rows):
+        if k >= len(starts):
+            break
+        a, b = starts[k], (starts[k + 1] if k + 1 < len(starts) else end)
+        hit = [s for s in subtitles if a <= s["startSec"] < b and _NARROW.search(s.get("text") or "")]
+        last = k == len(rows) - 1
+        if set(rem) != set(prev) or last:
+            at = hit[-1]["startSec"] if hit else max(a, b - BOARD_SEC - 1)
+            cap = "残るのは " + "、".join(rem) if not last else "答え: " + "、".join(rem)
+            out.append({"startSec": round(at, 3), "durationSec": BOARD_SEC,
+                        **_board(cands, rem, final=last, caption=cap)})
+        prev = rem
+    return out
+
+
+def inject(props: dict, plan: dict) -> tuple[int, int, int]:
+    """props に図・候補ボード・考察の印を足す。戻り値は (図, ボード, テロップ) の数。"""
     import explainers as ex  # video/ にある
 
     outline = props.get("outline") or []
@@ -127,7 +217,21 @@ def inject(props: dict, plan: dict) -> tuple[int, int]:
                                            for q in panels)]
         props["explainers"] = sorted(keep + panels, key=lambda p: p["startSec"])
         props = ex.clear(props, panels)
+
+    boards = candidate_boards(plan, subs, outline)
+    # 作図パネルと重なるボードは出さない（全画面の図の上に札が載る）
+    spans = [(p["startSec"], p["startSec"] + p["durationSec"]) for p in props.get("explainers") or []]
+    boards = [b for b in boards if not any(ex._overlaps(b["startSec"], b["startSec"] + b["durationSec"], x, y)
+                                           for x, y in spans)]
+    if boards:
+        # ボードの間は他の札を外す。並べ札が2つ重なると読めない
+        props = ex.clear(props, boards, keys=("stats", "quoteCards", "chipStacks", "cardRows",
+                                              "documentCards", "portraits", "charts", "timelines",
+                                              "rangeBars", "glyphs", "grids", "telops"))
+        props.setdefault("cardRows", []).extend(boards)
+        props["cardRows"].sort(key=lambda r: r["startSec"])
+
     telops = speculation_telops(subs)
     if telops:
         props.setdefault("telops", []).extend(telops)
-    return len(panels), len(telops)
+    return len(panels), len(boards), len(telops)
