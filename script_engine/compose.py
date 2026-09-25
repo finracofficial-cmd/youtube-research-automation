@@ -176,7 +176,8 @@ def _chapter_brief(i: int, c: planmod.Chapter, n: int, p: planmod.Plan) -> str:
         f"4. なぜそう言えるか: {c.why}",
         "5. 誰が・何年に言い出したか: " + (
             _known(c.origin.get('who', ''), c.origin.get('year', ''), c.origin.get('how', ''))
-            or "資料に無い。「誰が最初に言い出したかは、記録が見つかっていない」と正直に言う"),
+            or "資料に無い。「誰が最初に言い出したかは、記録が見つかっていない」と正直に言う。"
+               "年代・媒体（YouTube・ネット記事・書籍・テレビ）を推測して書かない"),
         "6. 振り子。立場ごとに事実を置き、反転は「だが」で、留保は「ただし」で入れる:",
         swings,
         f"7. 証拠（年・場所・誰・何）: {_known(ev.get('year', ''), ev.get('where', ''), ev.get('who', ''), ev.get('what', ''))}",
@@ -189,9 +190,6 @@ def _chapter_brief(i: int, c: planmod.Chapter, n: int, p: planmod.Plan) -> str:
         f"12. 残る候補を数える（「これで○○は消えた。残るのは…」）: {c.so_far}",
         f"13. 最後の1〜2文で次章へ引く: {c.hook_out}",
     ]
-    if i == p.planted_question.get("opened_in", 1):
-        lines.append(f"※ この章のどこかで「{p.mystery or p.planted_question.get('text', '')}」を開き、"
-                     "「この問いは最後の章で扱う」と言って保留する。")
     if i == n:
         lines.append(f"※ 最終章。冒頭で「1章で保留にした問いだ」と回収に入る: {p.closing.get('callback', '')}"
                      f"\n※ 答え: {p.closing.get('answer', '')}")
@@ -353,6 +351,21 @@ def write_block(b: Block, previous_tail: str, chat: Chat, facts: str = "") -> st
          "1文に1つ、新しい事実か判断を置く。"},
     ]
     return _fold(b.key, tighten(clean(chat(messages))))
+
+
+_ORIGIN_GUESS = re.compile(r"(\d{4}年代?|YouTube|ネット記事|SNS|テレビ|新聞|書籍|雑誌)[^。]{0,20}(広まっ|言い出し|始ま|由来|出所|発端)")
+
+
+def origin_invented(text: str, c: planmod.Chapter) -> list[str]:
+    """出どころが資料に無いのに、年代や媒体を付けて出どころを書いた文。
+
+    「バチカン隠蔽説は、2000年代のYouTubeやネット記事で広まった」と書いた（実測）。
+    資料には無い。数字の検査（unsourced_numbers）は年代の「2000年代」を拾えず、
+    媒体は数字ですらない。設計図の origin が空の章では、この形の文を指摘する。"""
+    o = c.origin or {}
+    if any(str(o.get(k) or "").strip() not in ("", "不明") for k in ("who", "year")):
+        return []
+    return [m.group(0)[:30] for m in _ORIGIN_GUESS.finditer(text.replace("\n", ""))]
 
 
 def chapter_score(text: str, *, material: str, target_chars: int, subject: str = "") -> float:
@@ -624,8 +637,11 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
         loose_notes = [f"{k}: 資料に無い数字 " + "、".join(v) for k, v in loose.items() if v]
         bare = {b.key: uncited(b.text, _claim_of(b, p)) for b in blocks
                 if all_facts and b.key.startswith("chapter")}
+        made_up = {b.key: origin_invented(b.text, p.chapters[int(b.key[7:]) - 1])
+                   for b in blocks if b.key.startswith("chapter") and int(b.key[7:]) - 1 < len(p.chapters)}
+        made_up_notes = [f"{k}: 資料に無い出どころ " + " / ".join(v) for k, v in made_up.items() if v]
         bare_notes = [f"{k}: 根拠番号の無い数字の文 " + " / ".join(v[:3]) for k, v in bare.items() if v]
-        left = list(audit.notes) + list(style.violations) + loose_notes + bare_notes
+        left = list(audit.notes) + list(style.violations) + loose_notes + bare_notes + made_up_notes
         if not left or r == rounds:
             break
         route(blocks, audit, list(style.violations))
@@ -636,6 +652,9 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
             if bare.get(b.key):
                 b.notes.append("数字を含む文に根拠番号〔n〕が無い。番号を付けるか、その文を消す: "
                                + " / ".join(bare[b.key][:3]))
+            if made_up.get(b.key):
+                b.notes.append("出どころ（年代・媒体）は資料に無い。消して「誰が最初に言い出したかは、"
+                               "記録が見つかっていない」にする: " + " / ".join(made_up[b.key][:2]))
         prev = ""
         for b in blocks:
             if b.notes:

@@ -31,7 +31,7 @@ def test_blocks_follow_the_plan_in_order():
     assert sum(b.target_chars for b in blocks) > 900 / 60 * 300
     assert "1章で保留にした問いだ" in blocks[2].brief      # 最終章が回収に入る
     assert "1章で保留にした問い" not in blocks[3].brief     # 着地では繰り返さない（実測で二重になった）
-    assert "最後の章で扱う" in blocks[1].brief             # 1章で伏線を開く
+    assert "最後の章で扱う" not in blocks[1].brief         # 伏線は冒頭で置く。章に書かせると次章の引きに付いた
 
 
 def test_chapter_paragraphs_are_located_after_assembly():
@@ -149,3 +149,15 @@ def test_shot_hints_come_from_evidence_jargon_and_swings():
     p = P.validate(good_plan(2))
     hints = C.hints_for_shots(p)
     assert len(hints) == 2 and "石切り場" in hints[0] and "層序" in hints[0]
+
+
+
+def test_invented_origins_are_flagged_when_the_plan_has_none():
+    """「2000年代のYouTubeやネット記事で広まった」と書いた。資料に無い。"""
+    p = P.validate(good_plan(1))
+    c = p.chapters[0]
+    c.origin = {"who": "不明", "year": "不明"}
+    got = C.origin_invented("バチカン隠蔽説は、2000年代のYouTubeやネット記事で広まった。証拠は無い。", c)
+    assert got and "2000年代" in got[0]
+    c.origin = {"who": "ベイジェント", "year": "1991"}
+    assert C.origin_invented("1991年の書籍で広まった。", c) == []
