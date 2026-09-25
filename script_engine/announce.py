@@ -15,8 +15,8 @@ from pathlib import Path
 
 FILES = (
     ("台本", "drafts/{name}.txt"),
-    ("判定", "drafts/{name}_report.txt"),
-    ("設計図", "drafts/{name}_plan.json"),
+    ("判定", "reports/{name}_report.txt"),
+    ("設計図", "reports/{name}_plan.json"),
     ("題材の仕様", "seeds/topics/{name}.yaml"),
     ("出典の一覧", "seeds/topics/{name}_sources.json"),
 )
@@ -47,6 +47,7 @@ def render(name: str, subject: str, *, repo: str, branch: str, root: Path | str 
              "| 欄 | 値 |", "|---|---|",
              f"| script | `drafts/{name}.txt` |",
              f"| name | `{name}` |", "",
+             "script は **drafts/ の台本だけ**。reports/ の判定や設計図を渡すと、それを読み上げる動画になる。", "",
              f"→ [Make video を実行する](https://github.com/{repo}/actions/workflows/make-video.yml)"
              "（Run workflow でブランチを選び、上の2つを貼る。他の欄はそのまま）", "",
              "**できたファイル**", "", "| | パス |", "|---|---|"]
@@ -54,7 +55,7 @@ def render(name: str, subject: str, *, repo: str, branch: str, root: Path | str 
         rel = tpl.format(name=name)
         if (root / rel).exists():
             lines.append(f"| {label} | [{rel}]({base}{rel}) |")
-    report = root / f"drafts/{name}_report.txt"
+    report = root / f"reports/{name}_report.txt"
     if report.exists():
         got = verdict_lines(report.read_text(encoding="utf-8"))
         if got:

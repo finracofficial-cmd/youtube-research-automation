@@ -67,6 +67,10 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      # 台本でないファイル（判定・設計図）を渡されたら、23分の描画に入る前に止める
+      - name: 台本かどうか確かめる
+        run: python3 -m script_engine.guard "${{ inputs.script }}"
+
       # 日本語のフォントが無いと、字幕もカードも豆腐（□）になる。
       # ランナーには入っていないので必ず入れる。実測で本編まるごと
       # 読めない状態で出来上がった。

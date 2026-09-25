@@ -66,6 +66,14 @@ def main() -> int:
     script = Path(a.script)
     if not script.exists():
         raise SystemExit(f"台本が無い: {script}")
+    # 判定ファイルを渡されて、それを読み上げる動画を23分かけて作った（#5）。
+    # 台本でなければここで止める
+    from script_engine.guard import candidates, problems
+    bad = problems(script)
+    if bad:
+        hint = "\n".join(f"  {c}" for c in candidates(script.parent))
+        raise SystemExit(f"これは台本ではない: {script}\n" + "\n".join(f"  - {b}" for b in bad)
+                         + (f"\n台本として通るファイル:\n{hint}" if hint else ""))
     # 出力名は台本のファイル名から決める。手で合わせる欄が2つあると、
     # 食い違ったまま1時間半かけて別の題材の動画ができる。
     name = a.name or re.sub(r"_v\d+$", "", script.stem)

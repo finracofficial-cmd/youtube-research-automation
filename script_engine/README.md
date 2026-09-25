@@ -87,7 +87,10 @@ python -m script_engine bench out/prompt_x.txt --spec seeds/topics/x.yaml --runs
 文長・水増し無し）は安定した。率（語り手・留保・逆接）は参考自身も2本で2〜3倍違うので、
 門にはせず指摘に留める。
 
-書き上がりは**合格条件**で門を閉める（`<name>_report.txt` に残る）。
+書き上がりは**合格条件**で門を閉める（`reports/<name>_report.txt` に残る。設計図は
+`reports/<name>_plan.json`）。**drafts/ には台本だけを置く。** 判定を台本の隣に置いたら
+Make video に判定を渡されて、それを読み上げる動画ができた（#5）。make.py と Make video の
+冒頭で `script_engine.guard` が台本でないファイルを弾く。
 率の不足は指摘に留め、門にするのは「嘘をつく」「途中で離脱される」に直結するものだけ。
 
 ```

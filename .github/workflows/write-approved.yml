@@ -15,9 +15,9 @@ on:
         required: false
         default: "900"
       claims:
-        description: 1本あたり取り上げる主張の数
+        description: 1本あたり取り上げる主張の数（5だと約11分。15分なら7）
         required: false
-        default: "5"
+        default: "7"
 
 permissions:
   contents: write
@@ -87,7 +87,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add drafts/ seeds/topics/
+          git add drafts/ reports/ seeds/topics/
           git diff --staged --quiet && { echo "書けた台本が無い"; exit 0; }
           git commit -m "選ばれた題材の台本を追加（Issue #${{ inputs.issue }}）"
           git pull --rebase --autostash

@@ -165,7 +165,11 @@ def _write_planned(args, material: str) -> int:
 
     out = Path(args.out)
     out.write_text(r.text, encoding="utf-8")
-    out.with_name(out.stem + "_plan.json").write_text(
+    # 判定と設計図は台本の隣に置かない。隣に置いたら Make video に判定を渡されて、
+    # 「品質の合格条件 ○ ○ ○」を読み上げる動画ができた（#5）
+    reports = out.parent.parent / "reports" if out.parent.name == "drafts" else out.parent / "reports"
+    reports.mkdir(parents=True, exist_ok=True)
+    (reports / (out.stem + "_plan.json")).write_text(
         json.dumps(r.plan.raw, ensure_ascii=False, indent=1), encoding="utf-8")
 
     lines = [f"{r.style.n_chars}字 / 忠実度 {r.style.fidelity:.0%} / 設計図{r.plans_tried}本 / "
@@ -187,8 +191,8 @@ def _write_planned(args, material: str) -> int:
         lines += [f"  - {n}" for n in r.left]
     text = "\n".join(lines)
     print(text)
-    out.with_name(out.stem + "_report.txt").write_text(text + "\n", encoding="utf-8")
-    print(f"-> {out}")
+    (reports / (out.stem + "_report.txt")).write_text(text + "\n", encoding="utf-8")
+    print(f"-> {out}（判定: {reports / (out.stem + '_report.txt')}）")
     print(meter.report())
     return 0 if r.passed else 1
 
