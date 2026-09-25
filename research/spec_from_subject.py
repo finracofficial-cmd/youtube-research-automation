@@ -44,7 +44,10 @@ Return JSON only, shaped exactly like this:
   claims are about hiding, missing Bible text, AI traces and the Messiah.
   Bad: 「バチカンは死海文書を隠したのか」 for the same claims, because the DNA and
   Messiah claims do not bear on who hid it.
-- candidates: 2-4 short, mutually exclusive answers to the mystery.
+- candidates: 2-4 mutually exclusive answers to the mystery, each at most 14
+  Japanese characters (they are read aloud in the opening). If the mystery is
+  a yes/no question, the candidates split yes / no / not-yet-known, e.g.
+  「ある（隠されている）」「無い（中身は既知）」「未読の部分にある」.
 - claims: the stories being told right now, most-told first. Use the video
   titles given (that is what the market says) before anything else.
   - ja: the claim AS IT IS POPULARLY STATED, with its sensational framing kept
@@ -111,6 +114,9 @@ def spec_problems(spec: dict) -> list[str]:
     cands = [str(x).strip() for x in ((spec.get("mystery") or {}).get("candidates") or [])]
     if len(cands) < 2:
         out.append("mystery.candidates が2つ無い")
+    for c in cands:
+        if len(c) > 16:
+            out.append(f"候補が長い（{len(c)}字。14字まで）: {c}")
     for c in spec.get("claims") or []:
         if str(c.get("supports") or "").strip() not in cands:
             out.append(f"{c.get('ja')}: supports が candidates のどれとも一致しない")

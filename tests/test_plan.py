@@ -142,3 +142,14 @@ def test_remaining_must_be_candidates_and_never_grow():
     d["chapters"][1]["remaining"] = ["人間が坂で運んだ", "人間ではない"]
     with pytest.raises(P.PlanError, match="増えている"):
         P.validate(d)
+
+
+def test_hooks_must_be_questions_and_candidates_short():
+    d = good_plan(2)
+    d["chapters"][0]["hook_out"] = "次は、なぜ運ばなかったのかを確かめる。"
+    with pytest.raises(P.PlanError, match="問いになっていない"):
+        P.validate(d)
+    d = good_plan(2)
+    d["candidates"] = ["死海文書に聖書にない秘密の記述が含まれている", "無い"]
+    with pytest.raises(P.PlanError, match="長い"):
+        P.validate(d)

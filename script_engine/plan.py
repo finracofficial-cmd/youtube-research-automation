@@ -64,7 +64,9 @@ PLAN_INSTRUCTIONS = """\
 - jargon は本文に出す専門語ごとに、日常の言い換えを1つ付ける。
 - mystery は視聴者が本当に気にしている具体的な問い（「バチカンは死海文書を隠したのか」）。
   「なぜ謎が残るのか」のような抽象は不可。planted_question は mystery と同じでよい。
-- candidates は互いに排他的な短い答え、2〜4個。各章の remaining は、その章のあとに残る
+- candidates は互いに排他的な短い答え、2〜4個、それぞれ16字まで（冒頭で読み上げる）。
+  題材の仕様の候補が長ければ、意味を変えずに短くする。例（別の題材）:
+  「人間が坂で運んだ」「その場で切った」「人間ではない」。各章の remaining は、その章のあとに残る
   候補を candidates の文字列のまま並べる。前の章より増やさない。最終章の remaining が答え。
 - opening.paradox は、その題材で成り立たないはずのことが成り立っている一文
   （別の題材の例: 「600年間、誰も一文字も読めていない」「人もカメラも、まだ入っていない」）。
@@ -124,7 +126,7 @@ PLAN_INSTRUCTIONS = """\
       "so_far": "この章のあとに残る候補を候補の名前で（「これでAを支える話が1つ崩れた。残るのはBとC」）",
       "remaining": ["この章のあとに残る候補（candidates の文字列をそのまま。前の章より増やさない）"],
       "figure": {"kind": "timeline|scale|none", "heading": "図の題", "items": [{"label": "...", "value": "数字と単位", "year": "年"}]},
-      "hook_out": "次の章への引き（問い、または次の説をそのまま提示）"
+      "hook_out": "次の章への引き。問いで書く（「では、〜なのか。」）"
     }
   ],
   "closing": {
@@ -221,6 +223,9 @@ def validate(d: dict, *, n_claims: int | None = None) -> Plan:
     candidates = [str(x).strip() for x in (d.get("candidates") or []) if str(x).strip()]
     if len(candidates) < 2:
         problems.append("candidates（答えの候補）が2つ無い")
+    long_c = [c for c in candidates if len(c) > 16]
+    if long_c:
+        problems.append("candidates が長い（冒頭で読み上げる。16字まで）: " + "、".join(long_c)[:80])
     if not str(opening.get("paradox") or "").strip():
         problems.append("opening.paradox が無い")
 
@@ -237,6 +242,8 @@ def validate(d: dict, *, n_claims: int | None = None) -> Plan:
             problems.append(f"第{i}章の verdict_line が無い")
         if not str(c.get("hook_out") or "").strip():
             problems.append(f"第{i}章の hook_out が無い")
+        elif i < len(d.get("chapters") or []) and not re.search(r"(のか|だろうか|か)[。？?]?$", str(c.get("hook_out")).strip()):
+            problems.append(f"第{i}章の hook_out が問いになっていない（「では、〜なのか。」で書く）")
         if not str(c.get("so_far") or "").strip():
             problems.append(f"第{i}章の so_far（残る候補）が無い")
         if not str(c.get("question") or "").strip():

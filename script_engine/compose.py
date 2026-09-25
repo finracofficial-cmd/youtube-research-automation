@@ -192,7 +192,7 @@ def _chapter_brief(i: int, c: planmod.Chapter, n: int, p: planmod.Plan) -> str:
         f"11. 結論の範囲を限定する: {c.scope}",
         f"12. 残る候補を、候補の名前で数える（主張の名前で数えない）: {c.so_far}"
         + (f"（残る候補: {'、'.join(c.remaining)}）" if c.remaining else ""),
-        f"13. 最後の1〜2文で次章へ引く: {c.hook_out}",
+        f"13. 最後の1文は次章の問いで終える（「では、〜なのか。」。平叙文で「次は〜を確かめる」としない）: {c.hook_out}",
     ]
     if i == n:
         lines.append(f"※ 最終章。冒頭で「1章で保留にした問いだ」と回収に入る: {p.closing.get('callback', '')}"
@@ -483,18 +483,81 @@ def _pick(b: Block, texts: list[str], *, material: str, subject: str) -> str:
     return max(texts, key=lambda t: _score(b, t, material, subject))
 
 
+def _sents(text: str) -> list[str]:
+    return [x for x in re.split(r"(?<=[。？！])", text.replace("\n", "")) if x.strip()]
+
+
+def _insert_after(text: str, pattern: re.Pattern, line: str, *, default: int = 1) -> str:
+    """pattern に当たる最初の文の直後に line を入れる。章は1行で返ってくることがある
+    ので、行ではなく文で数える（行で数えたら結論が章の最後に入った。実測）。"""
+    sents = _sents(text)
+    at = next((i + 1 for i, x in enumerate(sents) if pattern.search(x)), min(default, len(sents)))
+    sents.insert(at, line)
+    return "\n".join(sents)
+
+
+_VOICED = re.compile(r"そう語られて|そう言われて|語られてきた")
+
+
+def ensure_told(text: str, title: str) -> str:
+    """出どころが資料に無い章で、その主張の元になった動画タイトルを示す。
+
+    参考chのピラミッド回「そのうちの一本は、タイトルそのものがこうなっている。」と同じ手。
+    書き手の決まり（出典の題名を本文に書かない）がこの指示を打ち消すので、機械的に置く。"""
+    title = (title or "").strip()
+    if not title or "タイトルそのもの" in text:
+        return text
+    # 読み上げる形に。「！」「？」「…」で文が割れて、字幕が「「死海文書最大の謎！」になった
+    spoken = re.sub(r"[！!？?…]+", "、", title).strip("、 　「」") + "。"
+    line = "そのうちの一本は、タイトルそのものがこうなっている。\n" + spoken
+    return _insert_after(text, _VOICED, line)
+
+
+def drop_invented_origins(text: str, c: planmod.Chapter) -> str:
+    """設計図に出どころが無い章で、年代・媒体を付けた出どころの文を消す。
+    消したところに「記録が見つかっていない」が無ければ、1回だけ置く。"""
+    if not origin_invented(text, c):
+        return text
+    out, placed = [], "記録が見つかっていない" in text
+    for x in _sents(text):
+        if _ORIGIN_GUESS.search(x):
+            if not placed:
+                out.append("誰が最初に言い出したかは、記録が見つかっていない。")
+                placed = True
+            continue
+        out.append(x)
+    return "\n".join(out)
+
+
+_QUESTION = re.compile(r"(のか|だろうか|か)[。？?]$")
+
+
+def ensure_hook(text: str, hook: str) -> str:
+    """章の最後の2文に問いが無ければ、設計図の引き（問い）で締める。"""
+    hook = (hook or "").strip()
+    sents = _sents(text)
+    if not hook or not _QUESTION.search(hook) or any(_QUESTION.search(x) for x in sents[-2:]):
+        return text
+    return "\n".join(sents + [hook if hook.endswith(("。", "？", "?")) else hook + "。"])
+
+
 def ensure_plant(text: str, planted: str) -> str:
-    """冒頭に伏線が無ければ、出発の合図の直前に入れる。
+    """冒頭に伏線が無ければ、出発の合図の文の直前に入れる。
 
     設計図には必ずあるのに、3本に1本は書き手が落とす（bench 実測）。伏線と回収は
     対で初めて効く装置なので、書き手の気分に任せず機械的に置く。"""
-    if not planted or any(devices.PLANT.search(x) for x in devices.split_sentences(text.replace("\n", ""))):
+    if not planted or any(devices.PLANT.search(x) for x in _sents(text)):
         return text
     line = f"{planted.rstrip('。？?')}。この問いは最後の章で扱う。"
     paras = [q for q in re.split(r"\n\s*\n", text.strip()) if q.strip()]
     for i, q in enumerate(paras):
         if devices.LAUNCH.search(q):
-            paras.insert(i, line)
+            sents = _sents(q)
+            k = next(j for j, x in enumerate(sents) if devices.LAUNCH.search(x))
+            if k == 0:
+                paras.insert(i, line)
+            else:
+                paras[i] = "\n".join(sents[:k] + [line] + sents[k:])
             return "\n\n".join(paras)
     return text.rstrip() + "\n\n" + line
 
@@ -563,19 +626,10 @@ def ensure_verdict(text: str, verdict_line: str) -> str:
     形の検査を通っているので、機械的に置いてよい。"""
     if not verdict_line.strip():
         return text
-    sents = devices.split_sentences(text.replace("\n", ""))
-    if any(devices.VERDICT.search(x) for x in sents[:10]):
+    if any(devices.VERDICT.search(x) for x in _sents(text)[:10]):
         return text
-    lines = [l for l in text.splitlines() if l.strip()]
     line = "結論から言う。" + verdict_line.strip().rstrip("。") + "。"
-    # 「そう語られている。」の直後。無ければ2文目
-    for i, l in enumerate(lines):
-        if re.search(r"そう語られて|そう言われて|語られてきた", l):
-            lines.insert(i + 1, line)
-            return "\n".join(lines)
-    lines.insert(min(1, len(lines)), line)
-    return "\n".join(lines)
-
+    return _insert_after(text, _VOICED, line)
 
 def _claim_of(b: Block, p: planmod.Plan) -> str:
     i = int(b.key[len("chapter"):]) - 1 if b.key.startswith("chapter") else -1
@@ -588,9 +642,18 @@ def _guarantee(b: Block, p: planmod.Plan, planted: str, answer: str) -> str:
         return ensure_plant(b.text, planted)
     if b.key.startswith("chapter"):
         i = int(b.key[len("chapter"):]) - 1
-        text = ensure_verdict(b.text, p.chapters[i].verdict_line) if i < len(p.chapters) else b.text
+        if i >= len(p.chapters):
+            return b.text
+        c = p.chapters[i]
+        text = ensure_verdict(b.text, c.verdict_line)
+        o = c.origin or {}
+        if not any(str(o.get(k) or "").strip() not in ("", "不明") for k in ("who", "year")):
+            text = ensure_told(text, p.told.get(c.claim, ""))
+        text = drop_invented_origins(text, c)
         if i == len(p.chapters) - 1:
             text = ensure_callback(text, planted, answer)
+        else:
+            text = ensure_hook(text, c.hook_out)
         return text
     if b.key == "closing":
         return ensure_speculation(b.text, p.closing.get("speculation") or {})

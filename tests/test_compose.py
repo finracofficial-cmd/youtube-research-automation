@@ -161,3 +161,41 @@ def test_invented_origins_are_flagged_when_the_plan_has_none():
     assert got and "2000年代" in got[0]
     c.origin = {"who": "ベイジェント", "year": "1991"}
     assert C.origin_invented("1991年の書籍で広まった。", c) == []
+
+
+def test_verdict_goes_after_the_claim_even_when_the_chapter_is_one_line():
+    """章が1行で返ると、行で数える挿入は章の最後に結論を置いた（実測）。"""
+    one_line = "バチカンが死海文書を隠した。そう語られている。公開時期を見ればいい。記録は残る。"
+    got = C.ensure_verdict(one_line, "隠した証拠は無い。")
+    sents = [x for x in got.splitlines() if x]
+    assert sents[2] == "結論から言う。隠した証拠は無い。"
+
+
+def test_video_title_is_shown_after_the_claim_and_invented_origins_are_removed():
+    p = P.validate(good_plan(1))
+    c = p.chapters[0]
+    c.origin = {"who": "不明", "year": "不明"}
+    text = ("バチカンが死海文書を隠した。そう語られている。"
+            "この説は、2014年ごろからYouTubeやネット記事で広まったとされる。証拠は無い。")
+    got = C.ensure_told(text, "死海文書最大の謎！バチカンが隠したとされるキリストの秘密を徹底解説")
+    got = C.drop_invented_origins(got, c)
+    lines = [x for x in got.splitlines() if x]
+    assert lines[2] == "そのうちの一本は、タイトルそのものがこうなっている。"
+    assert lines[3] == "死海文書最大の謎、バチカンが隠したとされるキリストの秘密を徹底解説。"
+    assert "2014年ごろ" not in got and "誰が最初に言い出したかは、記録が見つかっていない。" in got
+    assert C.ensure_told(got, "x") == got                     # 二重に置かない
+
+
+def test_chapter_ends_on_the_planned_question_when_the_writer_ends_flat():
+    text = "証拠は無い。次は、聖書から消えた記述を確かめる。"
+    got = C.ensure_hook(text, "では、聖書から消えた記述は本当にあるのか。")
+    assert got.splitlines()[-1] == "では、聖書から消えた記述は本当にあるのか。"
+    already = "証拠は無い。では、聖書から消えた記述はあるのか。"
+    assert C.ensure_hook(already, "では、別の問いなのか。") == already
+
+
+def test_plant_goes_right_before_the_launch_sentence_in_a_one_paragraph_opening():
+    opening = "巨石遺跡。1000トンの石がある。それでは私と共に、巨石遺跡へと迫っていこう。"
+    got = C.ensure_plant(opening, "誰が運んだのか")
+    lines = [x for x in got.splitlines() if x]
+    assert lines[0] == "巨石遺跡。" and lines[-2] == "誰が運んだのか。この問いは最後の章で扱う。"
