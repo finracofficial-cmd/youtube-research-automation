@@ -11,7 +11,10 @@ ElevenLabs の with-timestamps を使うのはそのため。音声だけなら
 from __future__ import annotations
 
 import base64
+import datetime
+import hashlib
 import json
+import math
 import os
 import re
 import subprocess
@@ -27,6 +30,15 @@ API = "https://api.elevenlabs.io/v1"
 DEFAULT_MODEL = "eleven_v3"
 # 1回に送る長さ。長すぎると落ちるので文の切れ目で割る。
 CHUNK_CHARS = 1200
+# 1文字あたりのクレジット。v3 と multilingual_v2 は1、flash と turbo は0.5
+CREDITS_PER_CHAR = {"eleven_v3": 1.0, "eleven_multilingual_v2": 1.0,
+                    "eleven_flash_v2_5": 0.5, "eleven_turbo_v2_5": 0.5}
+VOICE_SETTINGS = {"stability": 0.45, "similarity_boost": 0.75,
+                  "style": 0.0, "use_speaker_boost": True}
+# 合成した塊の控え。Make video #8 は枠の残りが最後の塊に足りず落ち、それまでの
+# 約4,400クレジット分の音声を捨てた。控えておけば、枠を足して再実行したとき
+# 足りなかった塊だけ払えばよい
+CACHE = Path(os.environ.get("TTS_CACHE") or Path(__file__).resolve().parents[1] / ".cache" / "tts")
 
 
 class TTSUnavailable(RuntimeError):
@@ -87,12 +99,75 @@ def split(text: str, limit: int = CHUNK_CHARS) -> list[str]:
     return out
 
 
+def _key(chunk: str, voice_id: str, model: str) -> str:
+    raw = json.dumps([chunk, voice_id, model, VOICE_SETTINGS], ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:32]
+
+
+def _cached(chunk: str, voice_id: str, model: str) -> tuple[bytes, dict] | None:
+    k = _key(chunk, voice_id, model)
+    mp3, js = CACHE / f"{k}.mp3", CACHE / f"{k}.json"
+    if mp3.exists() and js.exists():
+        return mp3.read_bytes(), json.loads(js.read_text(encoding="utf-8"))
+    return None
+
+
+def _store(chunk: str, voice_id: str, model: str, audio: bytes, align: dict) -> None:
+    CACHE.mkdir(parents=True, exist_ok=True)
+    k = _key(chunk, voice_id, model)
+    (CACHE / f"{k}.mp3").write_bytes(audio)
+    (CACHE / f"{k}.json").write_text(json.dumps(align), encoding="utf-8")
+
+
+def needed_credits(script: str, voice_id: str, model: str = DEFAULT_MODEL) -> int:
+    """この台本を読み上げるのに要るクレジット。控えにある塊は数えない。"""
+    rate = CREDITS_PER_CHAR.get(model, 1.0)
+    return sum(math.ceil(len(c) * rate) for c in split(script) if _cached(c, voice_id, model) is None)
+
+
+def remaining_credits() -> tuple[int, str] | None:
+    """(残りのクレジット, 次に戻る日時)。聞けなければ None（鍵に権限が無いなど）。"""
+    try:
+        req = urllib.request.Request(f"{API}/user/subscription", headers=_headers())
+        d = json.loads(urllib.request.urlopen(req, timeout=30).read())
+    except (urllib.error.URLError, TTSUnavailable, ValueError, TimeoutError):
+        return None
+    limit, used = d.get("character_limit"), d.get("character_count")
+    if limit is None or used is None:
+        return None
+    reset = d.get("next_character_count_reset_unix")
+    when = (datetime.datetime.fromtimestamp(reset, datetime.timezone(datetime.timedelta(hours=9)))
+            .strftime("%Y-%m-%d %H:%M（日本時間）") if reset else "不明")
+    return int(limit) - int(used), when
+
+
+def preflight(script: str, voice_id: str, model: str = DEFAULT_MODEL) -> str:
+    """読み上げに要るクレジットが残っているかを、素材集めの前に確かめる。
+
+    足りないまま始めると、素材集めに数分かけたうえ、途中の塊まで払って最後の塊で
+    落ちる（#8: 残り226に対して326が要り、それまでの約4,400を捨てた）。
+    足りなければ TTSUnavailable。残りが聞けなければ確かめずに進む。"""
+    need = needed_credits(script, voice_id, model)
+    got = remaining_credits()
+    if got is None:
+        return f"読み上げに要るクレジット {need:,}（残りは確かめられなかった）"
+    left, when = got
+    if need > left:
+        raise TTSUnavailable(
+            f"ElevenLabs のクレジットが足りない。要るのは {need:,}、残りは {left:,}。"
+            f"次に戻るのは {when}。ElevenLabs の管理画面で上限を上げるか、戻るのを待ってから"
+            f"再実行する（合成済みの塊は控えてあるので、再実行では足りない分だけ使う）")
+    return f"読み上げに要るクレジット {need:,} / 残り {left:,}（次に戻るのは {when}）"
+
+
 def _speak(chunk: str, voice_id: str, model: str, *, retries: int = 4) -> tuple[bytes, dict]:
+    hit = _cached(chunk, voice_id, model)
+    if hit is not None:
+        return hit
     body = json.dumps({
         "text": chunk,
         "model_id": model,
-        "voice_settings": {"stability": 0.45, "similarity_boost": 0.75,
-                           "style": 0.0, "use_speaker_boost": True},
+        "voice_settings": VOICE_SETTINGS,
     }).encode()
     url = f"{API}/text-to-speech/{voice_id}/with-timestamps"
     for a in range(retries):
@@ -101,7 +176,9 @@ def _speak(chunk: str, voice_id: str, model: str, *, retries: int = 4) -> tuple[
             headers=_headers({"Content-Type": "application/json"}))
         try:
             d = json.loads(urllib.request.urlopen(req, timeout=180).read())
-            return base64.b64decode(d["audio_base64"]), d.get("alignment") or {}
+            audio, align = base64.b64decode(d["audio_base64"]), d.get("alignment") or {}
+            _store(chunk, voice_id, model, audio, align)
+            return audio, align
         except urllib.error.HTTPError as exc:
             if exc.code in (429, 500, 502, 503) and a < retries - 1:
                 time.sleep(2 ** a * 3)

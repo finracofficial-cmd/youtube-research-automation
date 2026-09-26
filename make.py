@@ -74,6 +74,15 @@ def main() -> int:
         hint = "\n".join(f"  {c}" for c in candidates(script.parent))
         raise SystemExit(f"これは台本ではない: {script}\n" + "\n".join(f"  - {b}" for b in bad)
                          + (f"\n台本として通るファイル:\n{hint}" if hint else ""))
+    # 読み上げのクレジットが足りるかを、素材集めの前に確かめる。足りないまま始めて、
+    # 素材集めの3分と、途中までの読み上げ約4,400クレジットを捨てた（#8）
+    if a.voice and not a.still:
+        from assets import tts as _tts
+        try:
+            print("■ " + _tts.preflight(script.read_text(encoding="utf-8"), a.voice,
+                                         a.tts_model or _tts.DEFAULT_MODEL))
+        except _tts.TTSUnavailable as exc:
+            raise SystemExit(f"読み上げを始められない: {exc}") from exc
     # 出力名は台本のファイル名から決める。手で合わせる欄が2つあると、
     # 食い違ったまま1時間半かけて別の題材の動画ができる。
     name = a.name or re.sub(r"_v\d+$", "", script.stem)

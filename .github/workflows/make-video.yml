@@ -106,6 +106,24 @@ jobs:
           ls -lh /tmp/smoke.png
           cd .. && python3 video/check_frame.py /tmp/smoke.png
 
+      # 出力名は先に決める。動画づくりの中で決めていたので、途中で落ちると
+      # 後段の名前が空になり、成果物が「-8」になった（#8）
+      - name: 出力名を決める
+        run: |
+          name="${{ inputs.name }}"
+          [ -n "$name" ] || name=$(basename "${{ inputs.script }}" .txt | sed 's/_v[0-9]*$//')
+          echo "NAME=$name" >> $GITHUB_ENV
+          echo "出力名: $name"
+
+      # 合成済みの読み上げの控え。クレジットが途中で尽きて落ちても、足して再実行すれば
+      # 足りなかった塊だけ払えばよい（#8 はそれまでの約4,400クレジット分を捨てた）
+      - name: 読み上げの控えを戻す
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/tts
+          key: tts-${{ github.run_id }}
+          restore-keys: tts-
+
       - name: 動画を作る
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -118,11 +136,14 @@ jobs:
           [ "${{ inputs.broll }}" = "true" ] && args+=(--broll)
           [ "${{ inputs.generate_images }}" = "true" ] && args+=(--generate-images)
           python3 make.py "${{ inputs.script }}" "${args[@]}"
-          # 後段（確認・Release）が使う名前を控える
-          name="${{ inputs.name }}"
-          [ -n "$name" ] || name=$(basename "${{ inputs.script }}" .txt | sed 's/_v[0-9]*$//')
-          echo "NAME=$name" >> $GITHUB_ENV
-          echo "出力名: $name"
+
+      # 落ちても控えは残す（成功したときだけ残す既定だと、途中まで払った分が消える）
+      - name: 読み上げの控えを残す
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/tts
+          key: tts-${{ github.run_id }}
 
       - name: 出来たものを確認する
         run: |
