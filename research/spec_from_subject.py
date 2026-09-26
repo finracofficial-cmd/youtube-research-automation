@@ -28,26 +28,24 @@ API = "https://api.openai.com/v1/chat/completions"
 
 _SYSTEM = """You plan a Japanese documentary that takes the stories people tell
 about a historical or archaeological subject and checks them against
-primary sources, one by one, until only what survives is left.
+primary sources, one by one. The viewer knows only the subject's name, so
+the video must stay easy to follow from start to finish.
 
 Return JSON only, shaped exactly like this:
-{"subject_en": "...", "genre": "...",
- "mystery": {"ja": "...", "candidates": ["...", "...", "..."]},
- "claims": [{"ja": "...", "en": "...", "told_by": "...", "stakes": "...", "supports": "..."}, ...]}
+{"subject_en": "...", "genre": "...", "mystery": "...",
+ "claims": [{"ja": "...", "en": "...", "told_by": "...", "stakes": "..."}, ...]}
 
-- subject_en: English search terms for finding primary literature.
+- subject_en: starts with the subject's English name as used on English
+  Wikipedia (e.g. "Dead Sea Scrolls"), followed by English search terms for
+  finding primary literature.
 - genre: a short Japanese label, e.g. 古代の謎 / 未解読文字 / 科学史.
-- mystery: ONE concrete question in Japanese that EVERY claim bears on. It is
-  the question the whole video answers, so a claim that has nothing to do with
-  it does not belong in this video. Not abstract (「なぜ謎が残るのか」 is not a
-  question). Good: 「死海文書には、世に出せない秘密が書かれているのか」 when the
-  claims are about hiding, missing Bible text, AI traces and the Messiah.
-  Bad: 「バチカンは死海文書を隠したのか」 for the same claims, because the DNA and
-  Messiah claims do not bear on who hid it.
-- candidates: 2-4 mutually exclusive answers to the mystery, each at most 14
-  Japanese characters (they are read aloud in the opening). If the mystery is
-  a yes/no question, the candidates split yes / no / not-yet-known, e.g.
-  「ある（隠されている）」「無い（中身は既知）」「未読の部分にある」.
+- mystery: ONE concrete question in plain spoken Japanese (at most 30
+  characters) that EVERY claim bears on, answerable with yes / no / not yet.
+  It is the question the whole video answers. Not abstract (「なぜ謎が残るのか」
+  is not a question). Good: 「死海文書には、キリスト教を揺るがす秘密が書かれているのか」
+  when the claims are about hiding, missing Bible text, AI findings and the
+  Messiah. Bad: 「バチカンは死海文書を隠したのか」 for the same claims, because the
+  Messiah claim does not bear on who hid it.
 - claims: the stories being told right now, most-told first. Use the video
   titles given (that is what the market says) before anything else.
   - ja: the claim AS IT IS POPULARLY STATED, with its sensational framing kept
@@ -60,8 +58,13 @@ Return JSON only, shaped exactly like this:
   - en: English keywords that find the scholarly work that can settle it.
   - told_by: who tells it (YouTube解説 / 書籍 / 観光ガイド / ニュース / 教科書).
   - stakes: one short Japanese sentence on why a viewer cares.
-  - supports: the candidate (copied exactly) this claim would support if it
-    were true. Every claim supports exactly one candidate.
+- Claims must not overlap. Two claims that would be settled by the same
+  evidence (two claims about AI analysis, two about the same book) are one
+  claim; merge them and pick another story. The viewer should never hear the
+  same finding in two chapters.
+- Do not use one word in two meanings across claims. 「隠した」 meaning
+  "covered up" in one claim and "stored in a cave" in another confuses the
+  viewer; say 「洞窟にしまった」 for the second.
 - At least half of the claims must be 都市伝説・陰謀論・俗説 that primary
   sources can overturn or cut down to size. The rest are 定説 people repeat
   that have a twist when checked. Never list encyclopedia facts that nobody
@@ -105,21 +108,40 @@ def claim_problems(ja: str) -> list[str]:
     return out
 
 
-def spec_problems(spec: dict) -> list[str]:
-    """主張の形と、謎・候補・支える候補のつながり。"""
+_KEY_TERM = re.compile(r"[A-Z]{2,}|[ァ-ヶー]{3,}")
+
+
+def overlapping(claims: list[str], subject: str = "") -> list[tuple[str, str, str]]:
+    """同じ方法・同じ固有名で決まりそうな主張の組。(語, 主張A, 主張B)。
+
+    死海文書の仕様は「AI解析で不自然な痕跡」と「AIで未解読部分が解明」を別の主張に
+    していて、2つの章に同じ事実（2021年のAI筆跡解析）が出た。聞き手には同じ話が
+    戻ってきたように聞こえる。略語（AI・DNA）と3字以上の片仮名（固有名）で見る。"""
     out = []
-    for c in spec.get("claims") or []:
-        for pr in claim_problems(c.get("ja") or ""):
-            out.append(f"{c.get('ja')}: {pr}")
-    cands = [str(x).strip() for x in ((spec.get("mystery") or {}).get("candidates") or [])]
-    if len(cands) < 2:
-        out.append("mystery.candidates が2つ無い")
-    for c in cands:
-        if len(c) > 16:
-            out.append(f"候補が長い（{len(c)}字。14字まで）: {c}")
-    for c in spec.get("claims") or []:
-        if str(c.get("supports") or "").strip() not in cands:
-            out.append(f"{c.get('ja')}: supports が candidates のどれとも一致しない")
+    terms = [set(_KEY_TERM.findall(c.replace(subject, ""))) if subject else set(_KEY_TERM.findall(c))
+             for c in claims]
+    for i in range(len(claims)):
+        for j in range(i + 1, len(claims)):
+            for t in sorted(terms[i] & terms[j]):
+                out.append((t, claims[i], claims[j]))
+    return out
+
+
+def spec_problems(spec: dict, subject: str = "") -> list[str]:
+    """主張の形、主張どうしの重なり、謎の形。"""
+    out = []
+    claims = [str(c.get("ja") or "") for c in spec.get("claims") or []]
+    for c in claims:
+        for pr in claim_problems(c):
+            out.append(f"{c}: {pr}")
+    for t, a, b in overlapping(claims, subject or str(spec.get("subject") or "")):
+        out.append(f"「{a}」と「{b}」が同じ「{t}」で重なっている。1つにまとめ、別の話を入れる")
+    mystery = spec.get("mystery")
+    mystery = str(mystery.get("ja") if isinstance(mystery, dict) else mystery or "").strip()
+    if not mystery:
+        out.append("mystery が無い")
+    elif len(mystery) > 36:
+        out.append(f"mystery が長い（{len(mystery)}字。30字まで）")
     return out
 
 
@@ -150,27 +172,27 @@ def build(subject: str, n_claims: int, *, model: str = "gpt-4.1",
     messages = [{"role": "system", "content": _SYSTEM}, {"role": "user", "content": user}]
     spec = _chat_json(messages, model=model, timeout=timeout)
     # 主張がタイトルのまま、または謎・候補とつながっていなければ、1回だけ直させる
-    bad = spec_problems(spec)
+    bad = spec_problems(spec, subject)
     if bad:
         messages += [{"role": "assistant", "content": json.dumps(spec, ensure_ascii=False)},
                      {"role": "user", "content":
                       "次の点を直したJSON全体を出す。claims.ja は動画タイトルではなく言い切りの一文"
-                      "（30字まで、記号なし）。supports は candidates の文字列をそのまま写す。"
-                      "謎は全主張が関わる1つの問いにする。\n" + "\n".join(f"- {b}" for b in bad)}]
+                      "（30字まで、記号なし）。主張どうしを重ねない。"
+                      "謎は全主張が関わる1つの問いを、話し言葉で30字までにする。\n"
+                      + "\n".join(f"- {b}" for b in bad)}]
         spec = _chat_json(messages, model=model, timeout=timeout)
 
     claims = [{"ja": c["ja"], "en": c["en"], "told_by": c.get("told_by", ""),
-               "stakes": c.get("stakes", ""), "supports": c.get("supports", "")}
+               "stakes": c.get("stakes", "")}
               for c in (spec.get("claims") or []) if c.get("ja") and c.get("en")][:n_claims]
     if not claims:
         raise SystemExit("主張が組めなかった。題材を具体的にして試す")
-    mystery = spec.get("mystery") or {}
-    cands = [str(x).strip() for x in (mystery.get("candidates") or []) if str(x).strip()][:4]
+    mystery = spec.get("mystery")
+    mystery = mystery.get("ja") if isinstance(mystery, dict) else mystery
     return {"subject": subject,
             "subject_en": spec.get("subject_en") or subject,
             "genre": spec.get("genre") or "古代の謎",
-            "mystery": str(mystery.get("ja") or "").strip(),
-            "candidates": cands,
+            "mystery": str(mystery or "").strip(),
             "told": told[:12],
             "claims": claims}
 

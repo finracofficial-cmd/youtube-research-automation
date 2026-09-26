@@ -34,83 +34,97 @@ PLAN_INSTRUCTIONS = """\
 ドキュメンタリーの構成作家です。台本を書く前に、設計図をJSONで作ります。
 
 設計図には事実を入れます。事実は下の資料にあるものだけを使い、資料に無い
-数字・人名・年は書きません。分からないことは "不明" と書きます。
+数字・人名・年は書きません。分からない項目は空文字にします（"不明" と書かない）。
 
-## 参考にする章の手順（ピラミッド回 第5章の分解）
-1 問い → 2 結論を先に言う → 3 なぜそう言えるか → 4 専門語は日常語に着地 →
-5 候補と留保（ただし） → 6 通説を通説の言葉で言わせる → 7 反転 →
-8 新しい証拠（年・場所・誰） → 9 数字と、その数字への断り →
-10 結論の範囲を限定（「答えが出た」ではなく「〜というところまで」）→
-11 次の章への引き（問い、または次の説をそのまま提示）
+## いちばん大事なこと: 初めて見る人が、話についていけること
+視聴者はこの題材を名前しか知らない。途中で「何の話？」「なぜその話になった？」と
+思った瞬間に離れる。だから順番を守る。
 
-## 物語の形（ここが無いと、事実の一覧になる。実測: 死海文書の台本は理解しづらかった）
-動画は1つの謎（mystery）を追う。冒頭で謎と、答えの候補（candidates）を全部見せる。
-各主張は、本当ならどれか1つの候補を支える（主張の「支える候補」）。各章は主張を1つ
-確かめ、崩れたらその候補の支えが1本減る。支えが全部崩れた候補は消える。章の終わりに
-残る候補を、候補の名前で数える（so_far と remaining）。主張の名前で数えない。最終章で答えを出す。答えが出なければ「出ない」と言い、
-そのうえで考察（speculation）を事実と分けて置く。視聴者は気になったものが解決する
-ことを求めている。考察は資料に無い私の考えで、理由と、崩れる条件を付ける。
+  1. それは何か        題材を一文で（いつ・どこで・何が）。そのあと、なぜ大事なのかを一文。
+  2. なぜ気になるのか   いま語られている話の例と、それらに共通する点（みんなが何を気にしているか）。
+  3. 問いを一つ         この動画が答える問い（mystery）を、視聴者の言葉で。
+  4. 基本（basics）     発見・中身・年代・その後。語られている話の元になった事実もここで出す。
+  5. 章                1章に1つの話。話を平たく言う → なぜそう語られるのか（元の事実）→
+                       結論 → どう確かめるか → 証拠 → この章で大きな問いについて分かったこと → 次の話への問い。
+  6. 着地               大きな問いに答える。答えられない部分は、分からないと言い、考察を事実と分けて置く。
 
-章の中は「問い → 何を見れば決まるか（method）→ 証拠 → 判定 → 残る候補」の順。
-事実を並べない。なぜそれを見るのか、それが分かると何が決まるのかを先に言う。
+どの文も、前の文から自然につながること。新しい語・人・場所は、出したその場で何かを言う。
+「隠した」のように二通りに読める語は、どちらの意味かを言う（隠蔽した／洞窟にしまった）。
+
+## 章の中の順番（ピラミッド回の章を分解したもの）
+話を言う → 元の事実 → 結論を先に（「結論から言う。これは正しい」）→ 何を見れば決まるか →
+証拠を振り子で（肯定 → 反転 → 留保）→ 数字と断り → 結論の範囲を限定 →
+大きな問いにとっての意味 → 次の章への問い
 
 ## 守ること
-- 語り手の行為を作らない。「私は全部読んだ」「1700件数えた」のような
-  行為は書かない。語り手が出るのは判断だけ（「私は判断を保留する」
-  「私はこの数字を疑っている」「私はこの説を採らない」）。
-- 各章の verdict は「当たり／半分当たり（理由が違う）／跡形なし／決まっていない」
-  のどれか。
+- 語り手の行為を作らない。「私は全部読んだ」「1700件数えた」のような行為は書かない。
+  語り手が出るのは判断だけ（「私は判断を保留する」「私はこの説を採らない」）。
+- 各章の verdict は「当たり／半分当たり（理由が違う）／跡形なし／決まっていない」のどれか。
 - swings は肯定→反転→留保の順で最低3つ。同じ立場を続けない。
-- jargon は本文に出す専門語ごとに、日常の言い換えを1つ付ける。
-- mystery は視聴者が本当に気にしている具体的な問い（「バチカンは死海文書を隠したのか」）。
-  「なぜ謎が残るのか」のような抽象は不可。planted_question は mystery と同じでよい。
-- candidates は互いに排他的な短い答え、2〜4個、それぞれ16字まで（冒頭で読み上げる）。
-  題材の仕様の候補が長ければ、意味を変えずに短くする。例（別の題材）:
-  「人間が坂で運んだ」「その場で切った」「人間ではない」。各章の remaining は、その章のあとに残る
-  候補を candidates の文字列のまま並べる。前の章より増やさない。最終章の remaining が答え。
-- opening.paradox は、その題材で成り立たないはずのことが成り立っている一文
-  （別の題材の例: 「600年間、誰も一文字も読めていない」「人もカメラも、まだ入っていない」）。
-  数字か物で言う。評価語は使わない。
-- opening.cheap_answers は、視聴者が思いつく安易な説明を2つ（「単に〜だから」）。冒頭で先に潰す。
-- 各章の question は「この章の問い」、method は「何を見れば決まるか」、tests は
-  「どの候補を試すか」、so_far は「残る候補」。
+- 章どうしで同じ事実を使い回さない。2つの章が同じ証拠で決まるなら、その事実は片方の章にだけ置く。
+- means は、その話を平たく言い直した一文と、本当なら何が言えるか
+  （別の題材の例: 「つまり、ピラミッドは墓ではなく、電気を作る施設だったということだ」）。
+- basis は、その話が語られるようになった元の事実。資料の「話の元」の節から取る
+  （別の題材の例: 「テスラは無線で電気を送る塔を実際に建てていた」）。資料に無ければ空。
+  元が分からないとき、本文で「誰が言い出したかは分からない」とは言わせない。黙って飛ばす。
+- bearing は、この章の結果が大きな問い（mystery）にとって何を意味するかを平たく一文
+  （別の題材の例: 「少なくとも、テスラがピラミッドについて何かを明かした、という線は消えた」）。
+- hook_out は次の章の話につながる問い（「では、〜なのか。」）。次の章の claim の中身を問いの形で予告する。
+- mystery は視聴者が本当に気にしている具体的な問い。「なぜ謎が残るのか」のような抽象は不可。
+  話し言葉で、はい／いいえで答えられる形がよい。
+- opening.curious は、語られている話に共通する点を一文で
+  （別の題材の例: 「どれも、ピラミッドは人間が建てたものではない、と言っている」）。
+- basics は資料の「題材の記述」から。発見（found）、中身（contents）、年代とその分かり方（dating）、
+  その後（after: 公開・管理・現在の場所）、話の元になった事実（seeds）。
+  専門語（terms）は、出すなら言い換えを付ける。
+- 人名は、話に欠かせない人だけ。1章に2人まで。役割で足りるなら名前を出さない（「発掘を率いた考古学者」）。
+- jargon は、中学生が知らない専門語だけ（1章に2つまで）。AI・DNA・隠蔽・救世主・断片のような
+  日常語は入れない。前の章や basics で説明した語は入れない。日常の言い換えを1つ付ける。
+- basics.terms は、基本の章の文に実際に出る語だけ、3つまで。あとの章で使う語をここで先回りして並べない
+  （並べると、何の話か分からないまま定義だけが続く）。
+- numbers は、その章の結論に関わる数字だけ。題材全体の数（写本の総数など）を章に入れない。
 - figure は、その章の資料の数字で描ける図。年が3つ以上なら timeline、同じ単位の量が
   2つ以上なら scale。無ければ kind を "none"。資料に無い数字を図にしない。
-- closing.answer は候補のどれが残ったか。残らなければ「残らない」と書く。
+- closing.answer は mystery への答えを一文で。はっきり言えるところまで言う。
+  not_found は答えとは別の「まだ分かっていないこと」。答えを言い直さない。
+- 設計図の文は常体（だ・である）で書く。敬体（です・ます）は使わない。
 - closing.speculation は資料に無い私の考え。claim と reasons（2つ以上）と weakness（崩れる条件）。
+  claim は「私は〜だと考える」と言い切れる一つの主張にする。「可能性がある」「かもしれない」で逃げない。
 - thesis は「なぜそうなるのか」への答えで、仕組みを言う一文。教訓や感想ではない。
-  参考の形: 「AIの限界は賢さではない。答え合わせができるかどうかで決まっている。」
-  題材名を含めない。
-- opening.images は、その物が実際にどう見えるか（色・形・数・場所）。
-  参考の形（別の題材の例）: 「人もカメラも入れていない空間」「真北を指す四つの面」。
-  「謎の文書」「奇妙な絵」のような評価語は使わない。資料に見た目の記述が
-  無ければ、資料にある数と物で書く。例をそのまま写さない。
-- origin は資料から分かる範囲で。分からなければ "不明" と書き、章では
-  「誰が最初に言い出したかは、記録が見つかっていない」と正直に言う。
+  参考の形: 「AIの限界は賢さではない。答え合わせができるかどうかで決まっている。」題材名を含めない。
+- origin（誰が・何年に言い出したか）は資料から分かる範囲で。分からなければ空。
 - closing.open_questions は「まだ分からないこと」を分からないまま置く。
+- 例の文をそのまま写さない。
 - 出力はJSONのみ。前後に文章を付けない。
 
 ## JSONの形
 {
   "thesis": "題材より大きい一文（題材名を含めない）",
-  "mystery": "視聴者が本当に気にしている具体的な問い",
-  "candidates": ["答えの候補A", "答えの候補B", "答えの候補C"],
+  "mystery": "この動画が答える問い（視聴者の言葉で）",
   "opening": {
-    "paradox": "成り立たないはずのことが成り立っている一文（数字か物で）",
-    "images": ["画で見せられる具体（体言止め）", "...", "..."],
-    "defeat": "挑んだ者は皆敗れた／決着していない、型の一文",
-    "cheap_answers": ["安易な説明1", "安易な説明2"],
+    "what": "題材が何なのかを一文（いつ・どこで・何が）",
+    "significance": "なぜ大事なのかを一文（数字か比較で）",
+    "curious": "語られている話に共通する点。みんなが何を気にしているか",
     "map": "何を何の順で確かめるか"
+  },
+  "basics": {
+    "found": "発見（いつ・どこで・誰が・どうやって）",
+    "contents": "中身（何が書かれているか、どう分けられるか）",
+    "dating": "いつのものか、それがどうして分かるか",
+    "after": "その後（公開・管理・いまどこにあるか）",
+    "seeds": ["語られている話の元になった事実"],
+    "terms": [{"term": "専門語", "landing": "日常の言い換え"}]
   },
   "planted_question": {"text": "最後まで保留する問い（mystery と同じでよい）", "opened_in": 1},
   "chapters": [
     {
       "claim": "語られている主張",
+      "means": "平たく言うと何か。本当なら何が言えるか",
+      "basis": "この話の元になった事実（資料にあるもの。無ければ空）",
       "question": "この章の問い",
       "method": "何を見れば決まるか",
-      "tests": "どの候補を試すか",
       "verdict": "当たり|半分当たり|跡形なし|決まっていない",
-      "verdict_line": "章の冒頭で言う結論の一文",
+      "verdict_line": "章の前半で言う結論の一文",
       "why": "なぜそう言えるかの一文",
       "origin": {"who": "最初に言い出した人", "year": "年", "how": "どう広まったか"},
       "swings": [
@@ -123,15 +137,14 @@ PLAN_INSTRUCTIONS = """\
       "jargon": [{"term": "専門語", "landing": "日常の言い換え"}],
       "narrator": "私は〜（判断のみ、無ければ空）",
       "scope": "結論の範囲を限定する一文",
-      "so_far": "この章のあとに残る候補を候補の名前で（「これでAを支える話が1つ崩れた。残るのはBとC」）",
-      "remaining": ["この章のあとに残る候補（candidates の文字列をそのまま。前の章より増やさない）"],
+      "bearing": "大きな問いにとって、この章で分かったこと（平たく一文）",
       "figure": {"kind": "timeline|scale|none", "heading": "図の題", "items": [{"label": "...", "value": "数字と単位", "year": "年"}]},
-      "hook_out": "次の章への引き。問いで書く（「では、〜なのか。」）"
+      "hook_out": "次の章の話への問い（「では、〜なのか。」）"
     }
   ],
   "closing": {
-    "generalization": ["題材を離れた文", "...", "...", "...", "..."],
-    "answer": "候補のどれが残ったか。残らなければ「残らない」",
+    "answer": "mystery への答えを一文で",
+    "generalization": ["題材を離れた文", "...", "..."],
     "callback": "planted_question への答え、または答えが出ない理由",
     "speculation": {"claim": "資料に無い私の考え", "reasons": ["理由1", "理由2"], "weakness": "この考察が崩れる条件"},
     "found": ["〜と分かった", "..."],
@@ -164,10 +177,10 @@ class Chapter:
     hook_out: str
     question: str = ""
     method: str = ""
-    tests: str = ""
-    so_far: str = ""
+    means: str = ""          # 平たく言うと何か
+    basis: str = ""          # 話の元になった事実
+    bearing: str = ""        # 大きな問いにとって、この章で分かったこと
     figure: dict = field(default_factory=dict)
-    remaining: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -179,8 +192,8 @@ class Plan:
     closing: dict
     raw: dict = field(default_factory=dict)
     mystery: str = ""
-    candidates: list[str] = field(default_factory=list)
-    told: dict = field(default_factory=dict)      # 主張 -> いま語られている形（動画タイトル）
+    basics: dict = field(default_factory=dict)
+    told: list[str] = field(default_factory=list)   # 冒頭で見せる、いま語られている形（動画タイトル）
 
 
 def parse(text: str) -> dict:
@@ -198,193 +211,129 @@ def parse(text: str) -> dict:
         raise PlanError(f"JSONとして読めない: {exc}") from exc
 
 
+# 説明しない語。「AIは人工知能のことだ」「救世主とは、救い主のことだ」と書いた（死海文書）。
+# 聞く側には分かりきっていて、説明の文が話の流れを切る
+EVERYDAY = {"AI", "人工知能", "DNA", "遺伝子", "隠蔽", "救世主", "断片", "聖書", "写本", "巻物",
+            "論文", "記録", "証拠", "陰謀", "陰謀論", "暗号", "解読", "宗教", "教会"}
+
+
+def plain_terms(items: list, *, limit: int) -> list[dict]:
+    """専門語の一覧から日常語を外し、limit 個までにする。"""
+    out = []
+    for j in items or []:
+        t = _s((j or {}).get("term"))
+        if t and t not in EVERYDAY:
+            out.append(j)
+    return out[:limit]
+
+
+def _s(x) -> str:
+    x = str(x or "").strip()
+    return "" if x == "不明" else x
+
+
 def validate(d: dict, *, n_claims: int | None = None) -> Plan:
     """形を確かめる。足りない章や振り子の無い章はここで落とす。
 
     書き始めてから足りないと分かると、章を全部書き直すことになる。
     """
     problems: list[str] = []
-    thesis = str(d.get("thesis") or "").strip()
+    thesis = _s(d.get("thesis"))
     if not thesis:
         problems.append("thesis が無い")
     opening = d.get("opening") or {}
-    if len([x for x in (opening.get("images") or []) if str(x).strip()]) < 3:
-        problems.append("opening.images が3つ無い")
-    if not str(opening.get("defeat") or "").strip():
-        problems.append("opening.defeat が無い")
+    for key, what in (("what", "題材が何なのか"), ("significance", "なぜ大事なのか"),
+                      ("curious", "語られている話に共通する点")):
+        if not _s(opening.get(key)):
+            problems.append(f"opening.{key}（{what}）が無い")
+    basics = d.get("basics") or {}
+    for key, what in (("found", "発見"), ("contents", "中身")):
+        if not _s(basics.get(key)):
+            problems.append(f"basics.{key}（{what}）が無い")
+    basics = {**basics, "terms": plain_terms(basics.get("terms") or [], limit=3)}
+    for t in basics.get("terms") or []:
+        if _s(t.get("term")) and not _s(t.get("landing")):
+            problems.append(f"basics の専門語「{t.get('term')}」に言い換えが無い")
     pq = d.get("planted_question") or {}
-    mystery = str(d.get("mystery") or pq.get("text") or "").strip()
+    mystery = _s(d.get("mystery") or pq.get("text"))
     if not mystery:
         problems.append("mystery（追う問い）が無い")
     if re.search(r"なぜ.*(謎|不明|分からない).*(残|続)", mystery):
         problems.append(f"mystery が抽象的（{mystery[:20]}）。具体的な問いにする")
-    if not str(pq.get("text") or "").strip():
+    if not _s(pq.get("text")):
         pq = {"text": mystery, "opened_in": 1}
-    candidates = [str(x).strip() for x in (d.get("candidates") or []) if str(x).strip()]
-    if len(candidates) < 2:
-        problems.append("candidates（答えの候補）が2つ無い")
-    long_c = [c for c in candidates if len(c) > 16]
-    if long_c:
-        problems.append("candidates が長い（冒頭で読み上げる。16字まで）: " + "、".join(long_c)[:80])
-    if not str(opening.get("paradox") or "").strip():
-        problems.append("opening.paradox が無い")
 
     chapters: list[Chapter] = []
-    prev_rem = list(candidates)
-    for i, c in enumerate(d.get("chapters") or [], 1):
-        swings = [s for s in (c.get("swings") or []) if str(s.get("fact") or "").strip()]
+    raw_chapters = d.get("chapters") or []
+    for i, c in enumerate(raw_chapters, 1):
+        swings = [s for s in (c.get("swings") or []) if _s(s.get("fact"))]
         stances = [s.get("stance") for s in swings]
         if len(swings) < 3:
             problems.append(f"第{i}章の swings が3つ無い")
         elif any(a == b for a, b in zip(stances, stances[1:])):
             problems.append(f"第{i}章の swings で同じ立場が続いている")
-        if not str(c.get("verdict_line") or "").strip():
-            problems.append(f"第{i}章の verdict_line が無い")
-        if not str(c.get("hook_out") or "").strip():
+        for key, what in (("verdict_line", "結論"), ("question", "章の問い"),
+                          ("means", "話を平たく言った一文"), ("bearing", "大きな問いにとっての意味")):
+            if not _s(c.get(key)):
+                problems.append(f"第{i}章の {key}（{what}）が無い")
+        if not _s(c.get("hook_out")):
             problems.append(f"第{i}章の hook_out が無い")
-        elif i < len(d.get("chapters") or []) and not re.search(r"(のか|だろうか|か)[。？?]?$", str(c.get("hook_out")).strip()):
+        elif i < len(raw_chapters) and not re.search(r"(のか|だろうか|か)[。？?]?$", _s(c.get("hook_out"))):
             problems.append(f"第{i}章の hook_out が問いになっていない（「では、〜なのか。」で書く）")
-        if not str(c.get("so_far") or "").strip():
-            problems.append(f"第{i}章の so_far（残る候補）が無い")
-        if not str(c.get("question") or "").strip():
-            problems.append(f"第{i}章の question が無い")
-        rem = [str(x).strip() for x in (c.get("remaining") or [])]
-        if candidates and any(x not in candidates for x in rem):
-            problems.append(f"第{i}章の remaining に候補でないものがある（主張の名前で数えている）: "
-                            + "、".join(x for x in rem if x not in candidates)[:60])
-        if candidates and i > 1 and set(rem) - set(prev_rem):
-            problems.append(f"第{i}章の remaining が前の章より増えている")
-        prev_rem = rem if rem else prev_rem
         fig = c.get("figure") or {}
         if str(fig.get("kind") or "none") not in ("timeline", "scale", "none"):
             problems.append(f"第{i}章の figure.kind が timeline/scale/none でない")
         for j in c.get("jargon") or []:
-            if str(j.get("term") or "").strip() and not str(j.get("landing") or "").strip():
+            if _s(j.get("term")) and not _s(j.get("landing")):
                 problems.append(f"第{i}章の専門語「{j.get('term')}」に言い換えが無い")
-        narrator = str(c.get("narrator") or "").strip()
+        narrator = _s(c.get("narrator"))
         if re.search(r"私[はもが].*?(読んだ|見た|数えた|測った|調べた|集めた|確認した|試した)", narrator):
             problems.append(f"第{i}章の narrator が行為になっている（判断だけにする）: {narrator[:30]}")
         chapters.append(Chapter(
-            claim=str(c.get("claim") or "").strip(),
-            verdict=str(c.get("verdict") or "").strip(),
-            verdict_line=str(c.get("verdict_line") or "").strip(),
-            why=str(c.get("why") or "").strip(),
-            origin=c.get("origin") or {},
+            claim=_s(c.get("claim")),
+            verdict=_s(c.get("verdict")),
+            verdict_line=_s(c.get("verdict_line")),
+            why=_s(c.get("why")),
+            origin={k: v for k, v in (c.get("origin") or {}).items() if _s(v)},
             swings=swings,
-            evidence=c.get("evidence") or {},
-            numbers=[n for n in (c.get("numbers") or []) if str(n.get("value") or "").strip()],
-            jargon=[j for j in (c.get("jargon") or []) if str(j.get("term") or "").strip()],
+            evidence={k: v for k, v in (c.get("evidence") or {}).items() if _s(v)},
+            numbers=[n for n in (c.get("numbers") or []) if _s(n.get("value"))],
+            jargon=plain_terms(c.get("jargon") or [], limit=2),
             narrator=narrator,
-            scope=str(c.get("scope") or "").strip(),
-            hook_out=str(c.get("hook_out") or "").strip(),
-            question=str(c.get("question") or "").strip(),
-            method=str(c.get("method") or "").strip(),
-            tests=str(c.get("tests") or "").strip(),
-            so_far=str(c.get("so_far") or "").strip(),
-            figure=(c.get("figure") or {}) if str((c.get("figure") or {}).get("kind") or "none") != "none" else {},
-            remaining=[str(x).strip() for x in (c.get("remaining") or []) if str(x).strip()]))
+            scope=_s(c.get("scope")),
+            hook_out=_s(c.get("hook_out")),
+            question=_s(c.get("question")),
+            method=_s(c.get("method")),
+            means=_s(c.get("means")),
+            basis=_s(c.get("basis")),
+            bearing=_s(c.get("bearing")),
+            figure=fig if str(fig.get("kind") or "none") != "none" else {}))
     if not chapters:
         problems.append("chapters が無い")
     if n_claims and len(chapters) != n_claims:
         problems.append(f"章が {len(chapters)} で主張の数 {n_claims} と違う")
 
     closing = d.get("closing") or {}
-    gen = [g for g in (closing.get("generalization") or []) if str(g).strip()]
-    if len(gen) < 5:
-        problems.append("closing.generalization が5文無い")
-    if any(re.search(r"[A-Za-z]{3,}", g) for g in gen) is False:
-        pass
-    for key in ("callback", "not_found", "condition", "opening_callback", "answer"):
-        if not str(closing.get(key) or "").strip():
+    # 「だが〜は分かっていない」に答えそのものを入れて繰り返した（死海文書）。同じなら空にする
+    nf, ans = _s(closing.get("not_found")), _s(closing.get("answer"))
+    if nf and ans and len(set(nf) & set(ans)) >= 0.8 * min(len(set(nf)), len(set(ans))):
+        closing = {**closing, "not_found": "（答えと同じなので書かない）"}
+    gen = [g for g in (closing.get("generalization") or []) if _s(g)]
+    if len(gen) < 3:
+        problems.append("closing.generalization が3文無い")
+    for key in ("answer", "callback", "not_found", "condition", "opening_callback"):
+        if not _s(closing.get(key)):
             problems.append(f"closing.{key} が無い")
     spec_ = closing.get("speculation") or {}
-    if not str(spec_.get("claim") or "").strip():
+    if not _s(spec_.get("claim")):
         problems.append("closing.speculation.claim（考察）が無い")
-    if len([r for r in (spec_.get("reasons") or []) if str(r).strip()]) < 2:
+    if len([r for r in (spec_.get("reasons") or []) if _s(r)]) < 2:
         problems.append("closing.speculation.reasons が2つ無い")
     if problems:
         raise PlanError("; ".join(problems))
     return Plan(thesis=thesis, opening=opening, planted_question=pq,
                 chapters=chapters, closing=closing, raw=d,
-                mystery=mystery, candidates=candidates)
-
-
-_FALLS = ("跡形なし",)
-_VERDICT_SHORT = {"当たり": "当たり", "半分当たり": "理由が違う", "決まっていない": "分かっていない", "跡形なし": "跡形なし"}
-
-
-def _map_candidate(long: str, spec_cands: list[str], plan_cands: list[str]) -> str | None:
-    """仕様の候補（長い）を、設計図の候補（短く言い直したもの）に対応させる。
-    数が同じなら順番で、違えば文字2連の重なりで。"""
-    long = (long or "").strip()
-    if long in plan_cands:
-        return long
-    if long in spec_cands and len(spec_cands) == len(plan_cands):
-        return plan_cands[spec_cands.index(long)]
-    def grams(t: str) -> set[str]:
-        t = re.sub(r"[\s、。「」『』]", "", t)
-        return {t[i:i + 2] for i in range(len(t) - 1)}
-    g = grams(long)
-    best = max(plan_cands, key=lambda c: len(g & grams(c)), default=None)
-    return best if best and g & grams(best) else None
-
-
-def settle(plan: Plan, supports: dict[str, str], spec_candidates: list[str] | None = None) -> list[list[str]]:
-    """章ごとの残る答えを、判定と「支える答え」から計算して設計図に書き込む。
-
-    モデルに消させると判断がちぐはぐになった（死海文書: DNAの章で最も妥当な
-    「内容は既知と同じ」を消し、最後の答えが俗説の「秘密の記述がある」になった）。
-    判定は各章で安定して出ていて本文にも機械的に入るので、そこから数える。
-
-      答えは、それを支える話が全部確かめられて全部「跡形なし」になったら消える。
-      支える話が1つも無い答えは章では消えない。最後に何も残らなければ、支える話の
-      無い答え（ふつうは「何も無い」側）が残る。
-    戻り値は章ごとの残る答え。chapters[k].remaining / so_far と closing.answer を上書きする。
-    """
-    cands = list(plan.candidates)
-    if len(cands) < 2:
-        return []
-    spec_candidates = list(spec_candidates or [])
-    backs: dict[str, list[int]] = {c: [] for c in cands}
-    for k, ch in enumerate(plan.chapters):
-        target = _map_candidate(supports.get(ch.claim, ""), spec_candidates, cands)
-        if target:
-            backs[target].append(k)
-    fell = [ch.verdict in _FALLS for ch in plan.chapters]
-    rows: list[list[str]] = []
-    prev = list(cands)
-    for k, ch in enumerate(plan.chapters):
-        alive = [c for c in cands
-                 if not (backs[c] and all(j <= k for j in backs[c]) and all(fell[j] for j in backs[c]))]
-        target = next((c for c in cands if k in backs[c]), None)
-        gone = [c for c in prev if c not in alive]
-        if gone:
-            head = "これで" + "、".join(f"『{c}』" for c in gone) + "を支える話は、全て崩れた。"
-        elif target and fell[k]:
-            head = f"これで『{target}』を支える話が、1つ崩れた。"
-        elif target:
-            head = f"『{target}』を支える話は、{_VERDICT_SHORT.get(ch.verdict, ch.verdict)}として残った。"
-        else:
-            head = ""
-        ch.remaining = alive
-        ch.so_far = head + "残る答えは" + "、".join(f"『{c}』" for c in alive) + "だ。"
-        rows.append(alive)
-        prev = alive
-    final = rows[-1] if rows else []
-    standing = [c for c in final if backs[c] and not all(fell[j] for j in backs[c])]
-    if not standing:
-        standing = [c for c in final if not backs[c]] or final
-    plan.closing["answer"] = ("答えは『" + standing[0] + "』だ。" if len(standing) == 1 else
-                              "答えは一つに絞れない。残るのは" + "、".join(f"『{c}』" for c in standing) + "だ。")
-    if rows:
-        rows[-1] = standing
-        plan.chapters[-1].remaining = standing
-    for ch in plan.chapters:
-        for c in plan.raw.get("chapters") or []:
-            if c.get("claim") == ch.claim:
-                c["remaining"], c["so_far"] = ch.remaining, ch.so_far
-    plan.raw.setdefault("closing", {})["answer"] = plan.closing["answer"]
-    return rows
+                mystery=mystery, basics=basics)
 
 
 def strip_unsourced(plan: Plan, material: str) -> list[str]:
@@ -418,34 +367,30 @@ def strip_unsourced(plan: Plan, material: str) -> list[str]:
     return dropped
 
 
-_EVALUATIVE = re.compile(r"謎|奇妙|不思議|驚|美し|神秘|異様|恐ろし|衝撃")
-
-
 def score(plan: Plan, material: str, *, subject: str = "") -> float:
     """設計図の良さを、資料への沿い方で点数にする。複数作って選ぶための物差し。
 
-    見るのは「資料にある事実で組めているか」だけ。文章の巧さは見ない
-    （それは書いたあとに devices が見る）。
+    見るのは「資料にある事実で組めているか」と「初見の人に要るものが揃っているか」
+    だけ。文章の巧さは見ない（それは書いたあとに見る）。
     """
     pts = 0.0
     for c in plan.chapters:
-        o = c.origin or {}
-        if any(str(o.get(k) or "").strip() not in ("", "不明") for k in ("who", "year")):
-            pts += 1.0                                  # 出どころが分かっている
+        if c.basis:
+            pts += 1.0                                  # 話の元が分かっている
+        if any(_s(c.origin.get(k)) for k in ("who", "year")):
+            pts += 0.5
         pts += 0.5 * len(c.numbers)                     # 残った数字は資料にあるもの（strip 済み）
         if c.narrator:
             pts += 0.5                                  # 判断を置いている
         if len(c.swings) >= 3:
             pts += 0.5
-        ev = c.evidence or {}
-        if str(ev.get("year") or "").strip() not in ("", "不明"):
+        if _s(c.evidence.get("year")):
             pts += 0.5
-    for img in (plan.opening.get("images") or [])[:3]:
-        img = str(img)
-        if not _EVALUATIVE.search(img):
-            pts += 1.0                                  # 評価語でなく物で書けている
-        if re.search(r"\d", img):
-            pts += 0.5
+    b = plan.basics
+    pts += sum(1.0 for k in ("found", "contents", "dating", "after") if _s(b.get(k)))
+    pts += min(2, len([x for x in b.get("seeds") or [] if _s(x)]))
+    if re.search(r"\d", str(plan.opening.get("significance") or "")):
+        pts += 0.5                                      # 大事さを数字か比較で言えている
     thesis = plan.thesis
     if subject and subject in thesis:
         pts -= 2.0                                      # 題材を離れていない
@@ -454,13 +399,31 @@ def score(plan: Plan, material: str, *, subject: str = "") -> float:
     return pts
 
 
+# 資料のファイル（research pipeline の出力）には、一気書き用の文体と構成の指示も入っている。
+# 構成は旧い型（「異様さの具体3つ」「謎の核」）で、設計図の型とぶつかる。設計図には事実だけ渡す
+_NOT_MATERIAL = ("## 文体", "## 構成", "## 出力形式", "## 検証する主張")
+
+
+def facts_only(material: str) -> str:
+    out, skip = [], False
+    for line in material.splitlines():
+        if line.startswith("## "):
+            skip = line.startswith(_NOT_MATERIAL)
+        elif line.startswith("# "):
+            continue                     # 題材・尺・形式は設計図のプロンプトが自分で言う
+        if not skip:
+            out.append(line)
+    return "\n".join(out)
+
+
 def prompt(material: str, *, subject: str, claims: list[str], duration_sec: float,
-           kind: str = "bundle", mystery: str = "", candidates: list[str] | None = None,
-           claims_meta: list[dict] | None = None) -> str:
+           kind: str = "bundle", mystery: str = "", claims_meta: list[dict] | None = None,
+           told: list[str] | None = None) -> str:
     """設計図を書かせるプロンプト。material は research pipeline が出した
-    資料入りのプロンプト（出典と数字入り記述が入っている）。"""
+    資料入りのプロンプト（出典と数字入り記述と題材の記述が入っている）。"""
     order = ("主張は信頼度の順に並べる: 当たっていたもの → 当たっているが理由が違うもの → "
              "跡形もなくなるもの。先に視聴者の信念を肯定してから反転させる。"
+             "ただし、前の章の結果から次の章の問いが自然に出る並びにする。"
              if kind == "bundle" else
              "章は時系列。後半の章ほど長くする。")
     lines = [PLAN_INSTRUCTIONS, "",
@@ -472,27 +435,28 @@ def prompt(material: str, *, subject: str, claims: list[str], duration_sec: floa
     for i, c in enumerate(claims, 1):
         m = meta.get(c) or {}
         extra = "　".join(x for x in (f"語り手: {m.get('told_by')}" if m.get("told_by") else "",
-                                    f"視聴者が気にする理由: {m.get('stakes')}" if m.get("stakes") else "",
-                                    f"本当なら支える候補: {m.get('supports')}" if m.get("supports") else "") if x)
+                                    f"視聴者が気にする理由: {m.get('stakes')}" if m.get("stakes") else "") if x)
         lines.append(f"{i}. {c}" + (f"（{extra}）" if extra else ""))
     if mystery:
-        lines += ["", f"## 追う問い（題材の仕様から。これを mystery にする）", mystery]
-        if candidates:
-            lines += ["答えの候補: " + " / ".join(candidates)]
-    lines += ["", "## 資料（事実はここにあるものだけ）", material.strip()]
+        lines += ["", "## 追う問い（題材の仕様から。これを mystery にする。話し言葉に直してよい）", mystery]
+    if told:
+        lines += ["", "## いま語られている形（動画のタイトル。opening.curious の手がかり）"]
+        lines += [f"- {t}" for t in told[:10]]
+    lines += ["", "## 資料（事実はここにあるものだけ）", facts_only(material).strip()]
     return "\n".join(lines)
 
 
 def describe(plan: Plan) -> list[str]:
     """人が設計図を一目で見るための要約。"""
     out = [f"主題: {plan.thesis}",
-           f"謎: {plan.mystery}  候補: {' / '.join(plan.candidates)}",
-           f"伏線: {plan.planted_question.get('text', '')}"]
+           f"問い: {plan.mystery}",
+           f"何なのか: {plan.opening.get('what', '')}",
+           f"なぜ気になるのか: {plan.opening.get('curious', '')}"]
     for i, c in enumerate(plan.chapters, 1):
         stances = "→".join(str(s.get("stance")) for s in c.swings)
         out.append(f"第{i}章 [{c.verdict}] {c.claim[:30]}  振り子 {stances}"
-                   f"  出どころ {c.origin.get('who', '不明')}/{c.origin.get('year', '不明')}")
-    out.append(f"回収: {plan.closing.get('callback', '')[:60]}")
+                   f"  元 {'有' if c.basis else '無'}")
+    out.append(f"答え: {plan.closing.get('answer', '')[:60]}")
     sp = plan.closing.get("speculation") or {}
     out.append(f"考察: {str(sp.get('claim', ''))[:60]}")
     return out

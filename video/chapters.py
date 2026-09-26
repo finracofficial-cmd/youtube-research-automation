@@ -35,7 +35,7 @@ _LEAD = re.compile(r"^(?:しかし|だが|ところが|一方|さらに|また|�
 _HANG = re.compile(r"(?:は|が|を|も|に|で|と|へ|や|の|から|より|まで|という)$")
 
 # 締めの合図。ここから先を「まとめ」にする。
-_CLOSING = ("今回扱った", "まとめると", "ここまで見てきた", "最後に",
+_CLOSING = ("冒頭の問いに戻る", "今回扱った", "まとめると", "ここまで見てきた", "最後に",
             "振り返る", "振り返ると", "改めて", "確かめる順番")
 
 # 主張を本文から探すための手掛かり。片仮名3字以上と漢字2字以上を拾う。
@@ -192,6 +192,17 @@ def find(claim: str, body: str, *, after: int = 0) -> int:
     return at
 
 
+def intro_at(claim: str, flat: str, *, after: int = 0) -> int:
+    """章の頭の「〜は、{主張}、という話だ。」の文の始まり。無ければ -1。
+
+    台本の章はこの文で始まるように機械的に置いてある。語の密度で探すと、
+    題材名を何度も言う基本の章（「〜とは何なのか」）に寄ることがある。"""
+    at = flat.find(claim.rstrip("。") + "、という話", after)
+    if at < 0:
+        return -1
+    return flat.rfind("。", 0, at) + 1
+
+
 def locate(script: str, subtitles: list, claims: list,
            *, intro_ratio: float = 0.04) -> list[dict]:
     """主張ごとに {startSec, title} を返す。"""
@@ -207,13 +218,19 @@ def locate(script: str, subtitles: list, claims: list,
         text = claim_text(claim)
         if not text:
             continue
-        pos = find(_flat(text), flat, after=skip)
+        pos = intro_at(_flat(text), flat, after=skip)
+        if pos < 0:
+            pos = find(_flat(text), flat, after=skip)
         if pos >= 0:
             found.append((pos, title_of(text)))
     # 台本は主張の順を入れ替えることがある。見つけた位置で並べ直す
     found.sort()
     # 同じ位置に寄った主張は、先に出た方だけ残す
     out = [{"startSec": 0.0, "title": "はじめに"}]
+    basics = basics_at(flat, before=found[0][0] if found else len(flat))
+    if basics:
+        pos, title = basics
+        out.append({"startSec": round(_at_char(marks, pos), 3), "title": title, "kind": "basics"})
     for pos, title in found:
         out.append({"startSec": round(_at_char(marks, pos), 3), "title": title})
 
@@ -224,6 +241,20 @@ def locate(script: str, subtitles: list, claims: list,
         if marks and marks[-1][1] - sec >= MIN_CLOSING_SEC:
             out.append({"startSec": round(sec, 3), "title": "まとめ"})
     return prune(out)
+
+
+_BASICS = re.compile(r"まず、?(.{1,20}?)とは何なのか")
+
+
+def basics_at(flat: str, *, before: int) -> tuple[int, str] | None:
+    """「まず、〜とは何なのか。」で始まる基本の章。(位置, 題) か None。
+
+    参考の旗艦回は第1幕を「この本は何なのか」に充てている。台本の基本の章は
+    この文で始まるように機械的に置いてあるので、ここを章の頭にする。"""
+    m = _BASICS.search(flat, 0, before)
+    if not m:
+        return None
+    return m.start(), f"{m.group(1)}とは何か"
 
 
 def _closing_at(flat: str, claims: list, *, after: int) -> int:

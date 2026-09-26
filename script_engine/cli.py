@@ -158,7 +158,8 @@ def _write_planned(args, material: str) -> int:
     try:
         r = run_planned(material, Path(args.spec), duration_sec=args.duration, model=args.model,
                         rounds=args.rounds, kind=args.kind, plans=args.plans,
-                        candidates=args.candidates, cite=not args.no_cite)
+                        candidates=args.candidates, cite=not args.no_cite,
+                        read=not getattr(args, "no_read", False))
     except (WriteFailed, P.PlanError) as exc:
         print(f"生成できなかった: {exc}")
         return 1
@@ -183,6 +184,9 @@ def _write_planned(args, material: str) -> int:
                  + ("足りている" if r.enough else
                     "資料不足。字数は埋めない。出典と数字入り記述を増やしてから書き直す"))
     lines.append("")
+    if getattr(r.audit, "reading", None) is not None:
+        lines += r.audit.reading.lines()
+        lines.append("")
     lines += report(r.audit)
     if r.loose:
         lines.append("資料に無い数字（人が確かめる）: " + "、".join(r.loose[:12]))
@@ -245,6 +249,8 @@ def main(argv=None) -> int:
     w.add_argument("--candidates", type=int, default=2,
                    help="塊ごとの候補の上限。1本目の点が低いときだけ2本目を作る")
     w.add_argument("--no-cite", action="store_true", help="資料を番号付きで渡さない（比較用）")
+    w.add_argument("--no-read", action="store_true",
+                   help="初見の視聴者として読ませる確認を飛ばす（呼び出し2回と直しを省く）")
     w.set_defaults(func=cmd_write)
 
     b = sub.add_parser("bench", help="同じ資料で何本か書かせて、数の幅を見る")

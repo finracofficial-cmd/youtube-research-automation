@@ -127,9 +127,12 @@ def cmd_pipeline(args) -> int:
     if facts:
         prompt += ("\n\n## 一次資料から拾った数字（可能な限りこれを使う）\n"
                    + "\n".join(f"- {f}" for f in facts))
-    # 見た目の具体と、説の出どころの手がかり。出典としては書かせない
-    from .wiki import lead, section
-    prompt += section(subject, lead(subject, subject_en))
+    # 題材が何なのかと、各主張の話の元（なぜそう語られるのか）。出典としては書かせない。
+    # 冒頭1,800字だけ渡していたときは、死海文書の「公開が40年遅れた」「1991年の本が
+    # バチカンの陰謀と言った」が資料に無く、台本が題材の説明も話の元も書けなかった
+    from .wiki import lead, material as wiki_material, section
+    prompt += (wiki_material(subject, subject_en, [(c.ja, c.en) for c in d.claims])
+               or section(subject, lead(subject, subject_en)))
     prompt += ("\n\n## 厳守\n"
                "上の出典リストに無いものを出典として書かない。"
                "裏が取れていない数字を出さない。")

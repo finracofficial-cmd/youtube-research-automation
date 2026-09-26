@@ -15,9 +15,9 @@ on:
         required: false
         default: "900"
       claims:
-        description: 1本あたり取り上げる主張の数（5だと約11分。15分なら7）
+        description: 1本あたり取り上げる主張の数（題材の説明の章が約1.5分入るので、15分なら6）
         required: false
-        default: "7"
+        default: "6"
 
 permissions:
   contents: write

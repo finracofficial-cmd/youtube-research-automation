@@ -52,26 +52,33 @@ def test_hints_are_spread_over_the_body_segments():
 
 def _plan_with_board():
     return {"mystery": "死海文書に世に出せない秘密はあるか",
-            "candidates": ["秘密がある", "秘密は無い"],
-            "closing": {"answer": "答えは『秘密は無い』だ。"},
-            "chapters": [{"claim": "バチカンが死海文書を隠した", "verdict": "跡形なし", "remaining": ["秘密は無い"]},
-                         {"claim": "聖書から消えた記述が残っている", "verdict": "半分当たり", "remaining": ["秘密は無い"]},
-                         {"claim": "救世主の正体が書かれている", "verdict": "決まっていない", "remaining": ["秘密は無い"]}]}
+            "closing": {"answer": "世に出せない秘密は書かれていない。"},
+            "chapters": [{"claim": "バチカンが死海文書を隠した", "verdict": "跡形なし",
+                          "bearing": "隠されていたから秘密がある、とは言えない"},
+                         {"claim": "聖書から消えた記述が残っている", "verdict": "半分当たり",
+                          "bearing": "違う記述はあるが、秘密ではなかった"},
+                         {"claim": "救世主の正体が書かれている", "verdict": "決まっていない", "bearing": ""}]}
 
 
 def test_verdict_board_marks_each_claim_as_its_chapter_closes():
-    subs = [{"startSec": 20, "durationSec": 3, "text": "語られている話を、順に3つ確かめる。"},
-            {"startSec": 95, "durationSec": 3, "text": "残る答えは『秘密は無い』だ。"},
-            {"startSec": 190, "durationSec": 3, "text": "残る答えは『秘密は無い』だ。"},
-            {"startSec": 290, "durationSec": 3, "text": "残る答えは『秘密は無い』だ。"},
+    """札は、章で「大きな問いにとっての意味」を語る所に出す。帯は動画の問い、最後だけ答え。"""
+    subs = [{"startSec": 20, "durationSec": 3, "text": "いま語られている話を3つ取り上げ、当たっていたものから順に確かめる。"},
+            {"startSec": 30, "durationSec": 3, "text": "まず、死海文書とは何なのか。"},
+            {"startSec": 95, "durationSec": 3, "text": "隠されていたから秘密がある、とは言えない。"},
+            {"startSec": 150, "durationSec": 3, "text": "では、聖書から消えた記述はあるのか。"},
+            {"startSec": 190, "durationSec": 3, "text": "違う記述はあるが、秘密ではなかった。"},
+            {"startSec": 240, "durationSec": 3, "text": "では、救世主の正体は書かれているのか。"},
             {"startSec": 300, "durationSec": 20, "text": "着地。"}]
-    outline = [{"startSec": 0}, {"startSec": 60}, {"startSec": 160}, {"startSec": 250}]
+    # 基本の章（kind: basics）は、主張の章に数えない
+    outline = [{"startSec": 0}, {"startSec": 30, "kind": "basics"}, {"startSec": 60}, {"startSec": 160},
+               {"startSec": 250}]
     b = F.verdict_boards(_plan_with_board(), subs, outline)
-    assert [x["startSec"] for x in b] == [20.0, 95.0, 190.0, 290.0]
+    assert [x["startSec"] for x in b] == [20.0, 95.0, 190.0, 313.0]
     assert all(c["dimmed"] and "mark" not in c for c in b[0]["cards"])          # 冒頭は印なし
     assert [c.get("mark") for c in b[1]["cards"]] == ["no", None, None]
     assert [c.get("mark") for c in b[3]["cards"]] == ["no", "partial", "unknown"]
-    assert b[1]["caption"] == "残る答え: 秘密は無い" and b[3]["caption"] == "答えは『秘密は無い』だ。"
+    assert b[1]["caption"] == "死海文書に世に出せない秘密はあるか"
+    assert b[3]["caption"] == "世に出せない秘密は書かれていない。"
 
 
 def test_hints_drop_sentences_negations_and_paper_titles():

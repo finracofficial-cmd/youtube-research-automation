@@ -75,8 +75,12 @@ class FakeFactory:
         def chat(messages):
             self.calls += 1
             user = messages[-1]["content"]
+            if json_mode and "名前しか知らない視聴者" in messages[0]["content"]:
+                return json.dumps({"problems": [], "score": 9, "summary": "ついていけた", "quiz": {"found": "1898年", "contents": "巨石", "why_care": "運べない", "question": "誰が運んだのか", "answer": "人間", "chapters": [{"block": "第1章", "topic": "a", "result": "b", "why_next": True}, {"block": "第2章", "topic": "c", "result": "d", "why_next": True}]}})
             if json_mode:
                 return json.dumps(good_plan(self.n))
+            if "## 基本の章" in messages[1]["content"]:
+                return "まず、巨石遺跡とは何なのか。調査団が石を測った。では、一つずつ確かめていく。"
             if "## 冒頭" in messages[1]["content"]:
                 return ("巨石遺跡。\n1000トンの石がある。\n継ぎ目に紙一枚入らない石壁。\n切り出し途中の巨石。\n"
                         "誰も入っていない地下室。\n運び方は決まっていない。\n"
@@ -105,7 +109,9 @@ def test_run_planned_returns_measures_and_a_gate(tmp_path):
                        candidates=2, chat_factory=fac, log=lambda *a, **k: None)
     assert r.plans_tried == 2
     assert "〔" not in r.text                     # 根拠番号は剥がしてある
-    assert 2 + 4 <= fac.calls <= 2 + 2 * 4        # 設計図2本 + 塊4つ（2本目は点が低いときだけ）
+    # 設計図2本 + 塊5つ（2本目は点が低いときだけ）+ 初見の読み1回（指摘が無ければ直しも2回目も無い）
+    assert 2 + 5 + 1 <= fac.calls <= 2 + 2 * 5 + 1
+    assert r.gate["初見で分かる"]
     m = PL.measures(r)
     assert set(m) >= {"chars", "private", "pivot", "unsourced_numbers", "gate_passed", "calls"}
     assert m["unsourced_numbers"] == 0
@@ -142,13 +148,13 @@ def test_plant_and_callback_are_guaranteed_even_if_the_writer_drops_them():
     """設計図には必ずあるのに、3本に1本は書き手が落とした（bench 実測）。機械的に置く。"""
     opening = "巨石遺跡。\n1000トンの石がある。\n\nそれでは私と共に、巨石遺跡へと迫っていこう。"
     got = C.ensure_plant(opening, "そもそも誰が運んだのか")
-    assert "そもそも誰が運んだのか。この問いは最後の章で扱う。" in got
-    assert got.index("最後の章で扱う") < got.index("私と共に")
+    assert "この問いの答えは、最後に出す。" in got
+    assert got.index("最後に出す") < got.index("私と共に")
     assert C.ensure_plant(got, "そもそも誰が運んだのか") == got        # 二重に入れない
-    last = "巨石は宇宙人が運んだ。\nそう語られている。\n出どころはある。"
-    got = C.ensure_callback(last, "そもそも誰が運んだのか", "運んだ人の名は記録に無い。")
-    assert got.startswith("1章で保留にした問いだ。そもそも誰が運んだのか。運んだ人の名は記録に無い。\n巨石は")
-    assert C.ensure_callback(got, "そもそも誰が運んだのか", "x") == got
+    closing = "誰が運んだかは分かっていない。\n\n条件。"
+    got = C.ensure_callback(closing, "そもそも誰が運んだのか")
+    assert got.startswith("冒頭の問いに戻る。そもそも誰が運んだのか。\n誰が運んだかは")
+    assert C.ensure_callback(got, "そもそも誰が運んだのか") == got
 
 
 def test_verdict_is_placed_after_the_claim_is_voiced_when_the_writer_skips_it():
@@ -193,8 +199,9 @@ def test_a_second_candidate_is_written_only_when_the_first_scores_low(tmp_path):
     fac = FakeFactory()
     r = PL.run_planned(MATERIAL, spec, duration_sec=120, model="fake", rounds=0, plans=1,
                        candidates=2, chat_factory=fac, log=lambda *a, **k: None)
-    # 設計図1 + 冒頭1 + 章2（偽の章は結論・引き・出どころ・振り子が揃い閾値を超える）+ 着地（点が低く2本）
-    assert fac.calls <= 1 + 1 + 2 + 2
+    # 設計図1 + 冒頭1 + 基本1 + 章2（偽の章は結論・引き・出どころ・振り子が揃い閾値を超える）
+    # + 着地（点が低く2本）+ 初見の読み1
+    assert fac.calls <= 1 + 1 + 1 + 2 + 2 + 1
     assert r.text
 
 
@@ -212,24 +219,27 @@ def test_rate_notes_do_not_trigger_rewrites():
     C.route(blocks, a, ["話速 200字/分 が 320.0〜410.0 の外", "平均文長 28.0字 が 17.0〜26.0 の外"])
     assert not any("留保" in n or "反転" in n or "話速" in n for b in blocks for n in b.notes)
     assert any("伏線" in n for n in blocks[0].notes)
-    assert all(any("平均文長" in n for n in b.notes) for b in blocks[1:-1])
+    assert all(any("平均文長" in n for n in b.notes) for b in blocks[2:-1])
 
 
 
-def test_claims_are_matched_back_to_the_video_titles_they_came_from():
+def test_opening_titles_are_picked_per_claim_and_long_ones_are_skipped():
+    """冒頭で「なぜ気になるのか」として見せる。長すぎる題名は読み上げると何の話か分からない。"""
     told = ["死海文書最大の謎！バチカンが隠したとされるキリストの秘密を徹底解説",
+            "最新AIで死海文書の隠蔽された真実が判明しました…テレビでは放送できない歴史の異常現象と本当の意味、DNAが明かした驚くべき真実とは",
             "死海文書に記された救世主の正体が判明しました…古代文書に隠された謎と禁断の真実"]
-    got = PL.match_told(["バチカンが死海文書を隠した", "死海文書に救世主の正体が書かれている", "月は石でできている"], told)
-    assert got["バチカンが死海文書を隠した"].startswith("死海文書最大の謎")
-    assert got["死海文書に救世主の正体が書かれている"].startswith("死海文書に記された救世主")
-    assert "月は石でできている" not in got
+    got = PL.pick_told(told, ["バチカンが死海文書を隠した", "月は石でできている", "死海文書に救世主の正体が書かれている"])
+    assert got == [told[0], told[2]]
 
 
-def test_spec_links_every_claim_to_a_candidate():
+def test_spec_catches_overlapping_claims_and_a_long_question():
+    """死海文書の仕様は AI の主張が2つあり、2つの章に同じ事実が出た。"""
     from research.spec_from_subject import spec_problems
-    ok = {"mystery": {"ja": "秘密はあるか", "candidates": ["ある", "無い"]},
-          "claims": [{"ja": "バチカンが死海文書を隠した", "supports": "ある"}]}
+    ok = {"subject": "死海文書", "mystery": "死海文書には、キリスト教を揺るがす秘密が書かれているのか",
+          "claims": [{"ja": "バチカンが死海文書を隠した"}, {"ja": "AIで死海文書の未解読部分が解明された"}]}
     assert spec_problems(ok) == []
-    bad = {"mystery": {"ja": "秘密はあるか", "candidates": ["ある", "無い"]},
-           "claims": [{"ja": "バチカンが死海文書を隠した", "supports": "DNA説"}]}
-    assert any("supports" in x for x in spec_problems(bad))
+    bad = {"subject": "死海文書", "mystery": "死海文書には、聖書にない秘密の記述や隠された情報や未知の知識が含まれているのか",
+           "claims": [{"ja": "AI解析で死海文書に不自然な痕跡が見つかった"},
+                      {"ja": "AIで死海文書の未解読部分が解明された"}]}
+    got = spec_problems(bad)
+    assert any("「AI」で重なっている" in x for x in got) and any("mystery が長い" in x for x in got)

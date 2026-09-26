@@ -62,10 +62,15 @@ def panel_of(fig: dict) -> dict | None:
     return None
 
 
+def _starts(outline: list[dict]) -> list[float]:
+    """主張の章の頭。「はじめに」（0秒）と基本の章（「〜とは何か」）は除く。"""
+    return [c["startSec"] for c in outline if c.get("startSec", 0) > 0 and c.get("kind") != "basics"]
+
+
 def panels_from_plan(plan: dict, outline: list[dict], duration: float) -> list[dict]:
     """章 i の図を、章 i の頭から OFFSET_SEC 後に置く。outline[0] は「はじめに」。"""
     chapters = plan.get("chapters") or []
-    starts = [c["startSec"] for c in outline if c.get("startSec", 0) > 0]
+    starts = _starts(outline)
     out = []
     for i, ch in enumerate(chapters):
         if i >= len(starts):
@@ -134,8 +139,7 @@ def hints(plan: dict) -> list[list[str]]:
 
 
 BOARD_SEC = 6.0
-_COUNT_LINE = re.compile(r"残る答え|残るのは|支える話")
-_LISTED = re.compile(r"つ確かめる|つに絞れる|順に[0-9０-９一二三四五六七八九]つ")
+_LISTED = re.compile(r"つ確かめる|つ取り上げ|つに絞れる|順に[0-9０-９一二三四五六七八九]つ")
 MARK_OF = {"当たり": "ok", "半分当たり": "partial", "決まっていない": "unknown", "跡形なし": "no"}
 
 
@@ -161,21 +165,28 @@ def _labels(plan: dict) -> list[str]:
     return out
 
 
+def _grams(t: str) -> set[str]:
+    t = re.sub(r"[\s、。「」『』]", "", t or "")
+    return {t[i:i + 2] for i in range(len(t) - 1)}
+
+
 def verdict_boards(plan: dict, subtitles: list[dict], outline: list[dict]) -> list[dict]:
     """語られている話を並べ、章が終わるたびに判定の印を付けていく。
 
     参考chは「当たっていたもの → 理由が違うもの → 跡形もなくなるもの」の順に並べ、
     研究者を並べた札で ✓ と ? を切り替えていた。判定は章ごとに設計図で決まっていて
-    本文にも機械的に入るので、画面と語りが食い違わない。下の帯に残る答えを出す。
-    （答えの候補を消していく札にしたら、モデルの消し方がちぐはぐで、最後に動画が
-    否定している俗説に ✓ が付いた。候補は計算で数え、帯の文字にだけ出す。）"""
+    本文にも機械的に入るので、画面と語りが食い違わない。帯には動画の問いを出し、
+    最後の札だけ答えを出す。札は、章で「大きな問いにとっての意味」を語る所に出す。
+    （答えの候補を数えて消していく札にしたら、候補の名前が抽象的で、何が残ったのか
+    分からないと言われた。死海文書。）"""
     chapters = plan.get("chapters") or []
     if not chapters or not subtitles:
         return []
     labels = _labels(plan)
     marks = [MARK_OF.get(str(c.get("verdict") or ""), "unknown") for c in chapters]
-    starts = [c["startSec"] for c in outline if c.get("startSec", 0) > 0]
+    starts = _starts(outline)
     end = max(s["startSec"] + s["durationSec"] for s in subtitles)
+    question = str(plan.get("mystery") or "")
 
     def board(upto: int, caption: str) -> dict:
         cards = []
@@ -191,26 +202,27 @@ def verdict_boards(plan: dict, subtitles: list[dict], outline: list[dict]) -> li
     for s in subtitles:
         if s["startSec"] < first and _LISTED.search(s.get("text") or ""):
             out.append({"startSec": round(s["startSec"], 3), "durationSec": BOARD_SEC,
-                        **board(-1, str(plan.get("mystery") or ""))})
+                        **board(-1, question)})
             break
     for k, c in enumerate(chapters):
         if k >= len(starts):
             break
         a, b = starts[k], (starts[k + 1] if k + 1 < len(starts) else end)
-        hit = [s for s in subtitles if a <= s["startSec"] < b and _COUNT_LINE.search(s.get("text") or "")]
-        at = hit[-1]["startSec"] if hit else max(a, b - BOARD_SEC - 1)
-        last = k == len(chapters) - 1
-        rem = [str(x) for x in (c.get("remaining") or [])]
-        if last:
-            cap = str((plan.get("closing") or {}).get("answer") or "")
+        span = [s for s in subtitles if a <= s["startSec"] < b]
+        want = _grams(str(c.get("bearing") or ""))
+        best = max(span, key=lambda s: len(want & _grams(s.get("text") or "")), default=None)
+        if best and want and len(want & _grams(best.get("text") or "")) >= 0.4 * min(len(want), 12):
+            at = best["startSec"]
         else:
-            cap = ("残る答え: " + "／".join(rem)) if rem else ""
+            at = max(a, b - BOARD_SEC - 1)
+        last = k == len(chapters) - 1
+        cap = str((plan.get("closing") or {}).get("answer") or "") if last else question
         out.append({"startSec": round(at, 3), "durationSec": BOARD_SEC, **board(k, cap)})
     return out
 
 
 def inject(props: dict, plan: dict) -> tuple[int, int, int]:
-    """props に図・候補ボード・考察の印を足す。戻り値は (図, ボード, テロップ) の数。"""
+    """props に図・判定表・考察の印を足す。戻り値は (図, ボード, テロップ) の数。"""
     import explainers as ex  # video/ にある
 
     outline = props.get("outline") or []

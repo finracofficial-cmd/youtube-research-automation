@@ -134,3 +134,20 @@ def test_distinct_subjects_are_kept_as_they_are():
                           "ギョベクリ・テペは文明より古い",
                           "インカの石組みは剃刀の刃も通らない"])
     assert got == ["モアイ", "ギョベクリ・テペ", "インカの石組み"]
+
+
+def test_the_basics_chapter_gets_its_own_card_before_the_claims():
+    """参考の旗艦回の第1幕「この本は何なのか」に当たる。題材の説明が章として見える。"""
+    import chapters as ch
+    script = ("死海文書。1947年に見つかった巻物だ。それでは私と共に、死海文書へと迫っていこう。"
+              "まず、死海文書とは何なのか。" + "羊飼いが洞窟で壺を見つけた。中には巻物が入っていた。" * 12
+              + "最初は、バチカンが死海文書を隠した、という話だ。バチカンが隠したという証拠は無い。"
+              "バチカンの委員会ではなかった。バチカンは隠していない。" * 3)
+    subs, t = [], 0.0
+    for s in [x + "。" for x in script.split("。") if x]:
+        subs.append({"startSec": t, "durationSec": 6.0, "text": s})
+        t += 6.0
+    out = ch.locate(script, subs, [{"ja": "バチカンが死海文書を隠した"}])
+    kinds = [(o.get("kind"), o["title"]) for o in out]
+    assert (("basics", "死海文書とは何か")) in kinds
+    assert [o["title"] for o in out].index("死海文書とは何か") < [o["title"] for o in out].index("バチカンが死海文書を隠した")

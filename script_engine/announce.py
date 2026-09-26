@@ -34,7 +34,7 @@ def verdict_lines(report: str) -> list[str]:
             if line.strip().startswith("→"):
                 grab = False
             continue
-        if re.match(r"^(尺:|資料に無い数字)", line):
+        if re.match(r"^(尺:|資料に無い数字|初見の読み)", line):
             out.append(line)
     return out
 

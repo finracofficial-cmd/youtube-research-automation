@@ -234,3 +234,80 @@ def test_title_like_claims_are_caught():
     assert claim_problems("AIが暴いた死海文書の真実！聖書に消えた記述はあったのか？")
     assert claim_problems("バチカンが死海文書を隠した") == []
     assert claim_problems("聖書から消えた記述が死海文書に残っている") == []
+
+
+ARTICLE = """死海文書は、1947年以降に死海の北西の洞窟で見つかった写本群の総称。
+主にヘブライ語聖書からなる。
+
+== 歴史 ==
+
+=== 最初の出版と委員会の「停滞」 ===
+1950年に最初の公刊が行われた。
+その後の作業は1960年代以降、遅々として進まなかった。
+
+=== 「カトリック教会の陰謀」論の虚偽 ===
+1991年に作家が本を出し、出版が進まないのはバチカンの陰謀だと主張した。
+研究者はこれを根も葉もないと退けた。
+
+== 意義 ==
+聖書の最古の写本が一気に1,000年さかのぼった。
+聖書テキストの一部は、現行の聖書と大きく違う。聖書の流動性が示された。
+
+== 洞窟と発見された写本の一覧 ==
+第1洞窟
+第2洞窟
+
+== 脚注 ==
+[1] 何か
+"""
+
+
+def test_wiki_sections_drop_lists_and_notes():
+    from research import wiki
+    heads = [h for h, _ in wiki.split_sections(ARTICLE)]
+    assert heads[0] == "冒頭"
+    assert "「カトリック教会の陰謀」論の虚偽" in heads and "意義" in heads
+    assert not any("一覧" in h or "脚注" in h for h in heads)
+
+
+def test_wiki_passage_is_the_section_where_the_rumor_comes_from():
+    """冒頭1,800字だけでは、死海文書の「バチカンが隠した」の元（1991年の本）が資料に無かった。"""
+    from research import wiki
+    secs = wiki.split_sections(ARTICLE)
+    got = wiki.passage_for(secs, "バチカンが死海文書を隠した", drop=("死海文書",))
+    assert got and got[0][0] == "「カトリック教会の陰謀」論の虚偽" and "1991年" in got[0][1]
+    # 長い節ほど語が多く出るので、密度で選ぶ
+    got = wiki.passage_for(secs, "死海文書の聖書テキストは現行と違う", drop=("死海文書",), used={"冒頭"})
+    assert got[0][0] == "意義"
+    # 主張の語の過半が出ない節は選ばない（「救世主の正体」に「正体」だけ当たる節）
+    assert wiki.passage_for(secs, "死海文書に救世主の正体が書かれている", drop=("死海文書",)) == []
+
+
+def test_wiki_english_terms_match_whole_words():
+    """「AI」を部分一致で数えると certain や again に当たった。"""
+    from research import wiki
+    assert wiki._hits("AI", "certain again") == 0
+    assert wiki._hits("AI", "an AI model dated the scroll") == 1
+    assert wiki._hits("forgery", "many forgeries appeared") == 1
+
+
+def test_wiki_english_sections_are_cut_into_sentences():
+    from research import wiki
+    body = "First sentence here. Second one follows. " * 40
+    assert len(wiki._trim(body, 100)) <= 140
+
+
+def test_wiki_basics_include_discovery_publication_and_significance():
+    from research import wiki
+    text = wiki.basics(wiki.split_sections(ARTICLE))
+    assert "1947年" in text and "遅々として" in text and "1,000年" in text
+
+
+def test_acronym_claims_only_pick_sections_that_mention_the_acronym():
+    """英語版は AI を artificial intelligence と書く。「text」「new」のような広い語で
+    関係の無い長い節が選ばれた（死海文書）。"""
+    from research import wiki
+    secs = [("Biblical significance", "The new text of the Bible. " * 20),
+            ("Proposed older dates (2025)", "A new artificial intelligence model called Enoch dated the scrolls.")]
+    got = wiki.passage_for(secs, "AI analysis new unrecovered text", drop=("Dead Sea Scrolls",))
+    assert got[0][0] == "Proposed older dates (2025)"

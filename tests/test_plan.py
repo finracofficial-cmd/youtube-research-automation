@@ -22,23 +22,25 @@ def good_plan(n=2):
         "scope": "運べないとは言えない、というところまでだ",
         "question": "巨石は本当に運べなかったのか",
         "method": "石切り場に切り出し途中の石が残っているかを見ればいい",
-        "tests": "「人間には運べない」という候補",
-        "so_far": "これで「人間ではない」を支える話が崩れた。残るのは2つ",
-        "remaining": ["人間が坂で運んだ", "運ばなかった（その場で切った）"],
+        "means": "つまり、当時の人間の力では動かせなかったということだ",
+        "basis": "石切り場に、切り出し途中で放置された巨石が今も残っている",
+        "bearing": "少なくとも、人間には運べなかったから別の誰かが運んだ、という線は消えた",
         "figure": {"kind": "scale", "heading": "石の重さ", "items": [{"label": "最大の石", "value": "1000トン"}, {"label": "普通の石", "value": "300トン"}]},
         "hook_out": "では、なぜ運ばなかったのか。",
     }
     return {
         "thesis": "分からないことは、分からない人が最初に書き残している",
         "mystery": "巨石は誰が、どうやって運んだのか",
-        "candidates": ["人間が坂で運んだ", "運ばなかった（その場で切った）", "人間ではない"],
-        "opening": {"paradox": "1000トンの石が、道の無い丘の上にある",
-                    "images": ["継ぎ目に紙一枚入らない石壁", "切り出し途中で放置された巨石", "誰も入っていない地下室"],
-                    "defeat": "運び方は決まっていない", "cheap_answers": ["技術が失われたから", "記録が燃えたから"],
+        "opening": {"what": "2000年前に造られた神殿の土台に、1000トンの石が使われている",
+                    "significance": "現代の最大級のクレーンでも持ち上げるのが難しい重さだ",
+                    "curious": "どれも、人間には運べなかったと言っている",
                     "map": "3つの説を順に確かめる"},
+        "basics": {"found": "1898年にドイツの調査団が測った", "contents": "土台に3つの巨石が並ぶ",
+                   "dating": "", "after": "", "seeds": ["石切り場に、もっと大きな石が残っている"],
+                   "terms": [{"term": "石切り場", "landing": "石を切り出した場所"}]},
         "planted_question": {"text": "そもそも誰が運んだのか", "opened_in": 1},
         "chapters": [dict(ch) for _ in range(n)],
-        "closing": {"generalization": ["a", "b", "c", "d", "e"], "callback": "回収",
+        "closing": {"generalization": ["a", "b", "c"], "callback": "回収",
                     "answer": "残るのは「運ばなかった」だけだ",
                     "found": ["x"], "not_found": "だが誰が運んだかは分かっていない",
                     "open_questions": ["q"], "condition": "石切り場の記録が出れば",
@@ -116,8 +118,8 @@ def test_abstract_mysteries_and_missing_speculation_are_rejected():
     with pytest.raises(P.PlanError, match="reasons"):
         P.validate(d)
     d = good_plan()
-    d["chapters"][0]["so_far"] = ""
-    with pytest.raises(P.PlanError, match="so_far"):
+    d["closing"]["answer"] = ""
+    with pytest.raises(P.PlanError, match="closing.answer"):
         P.validate(d)
 
 
@@ -131,55 +133,54 @@ def test_figures_with_unsourced_numbers_are_dropped():
 
 
 
-def test_remaining_must_be_candidates_and_never_grow():
-    """死海文書の設計図は2章目から主張の名前（AI発見説・DNA説…）で数えていた。"""
-    d = good_plan(2)
-    d["chapters"][1]["remaining"] = ["AI発見説", "DNA説"]
-    with pytest.raises(P.PlanError, match="候補でないもの"):
-        P.validate(d)
-    d = good_plan(2)
-    d["chapters"][0]["remaining"] = ["人間が坂で運んだ"]
-    d["chapters"][1]["remaining"] = ["人間が坂で運んだ", "人間ではない"]
-    with pytest.raises(P.PlanError, match="増えている"):
-        P.validate(d)
-
-
-def test_hooks_must_be_questions_and_candidates_short():
+def test_hooks_must_be_questions():
     d = good_plan(2)
     d["chapters"][0]["hook_out"] = "次は、なぜ運ばなかったのかを確かめる。"
     with pytest.raises(P.PlanError, match="問いになっていない"):
         P.validate(d)
-    d = good_plan(2)
-    d["candidates"] = ["死海文書に聖書にない秘密の記述が含まれている", "無い"]
-    with pytest.raises(P.PlanError, match="長い"):
+
+
+def test_a_plan_must_say_what_the_subject_is_and_why_people_care():
+    """死海文書の台本は、死海文書が何なのかも、なぜみんな気にしているのかも言わずに
+    噂の真偽に入った（「何を言っているのか分からない」）。設計図の段階で落とす。"""
+    d = good_plan()
+    d["opening"]["what"] = ""
+    d["opening"]["curious"] = ""
+    d["basics"]["found"] = ""
+    with pytest.raises(P.PlanError) as e:
         P.validate(d)
+    assert "opening.what" in str(e.value) and "opening.curious" in str(e.value) and "basics.found" in str(e.value)
 
 
+def test_each_chapter_says_the_claim_plainly_and_what_it_means_for_the_question():
+    d = good_plan()
+    d["chapters"][0]["means"] = ""
+    d["chapters"][1]["bearing"] = ""
+    with pytest.raises(P.PlanError) as e:
+        P.validate(d)
+    assert "第1章の means" in str(e.value) and "第2章の bearing" in str(e.value)
 
-def test_settle_counts_remaining_answers_from_verdicts_not_from_the_model():
-    """モデルに消させると、最後の答えが動画の否定した俗説になった（死海文書）。"""
-    d = good_plan(3)
-    d["candidates"] = ["隠された秘密がある", "中身は既知と同じ", "偽造されている"]
-    claims = ["バチカンが隠した", "AIが偽造の痕跡を見つけた", "聖書から消えた記述が残る"]
-    verdicts = ["跡形なし", "跡形なし", "半分当たり"]
-    for c, cl, v in zip(d["chapters"], claims, verdicts):
-        c["claim"], c["verdict"], c["remaining"] = cl, v, list(d["candidates"])
+
+def test_unknown_fields_are_dropped_not_written_as_unknown():
+    """「不明」と渡すと本文に「著者は不明」と書かれた。"""
+    d = good_plan(1)
+    d["chapters"][0]["origin"] = {"who": "不明", "year": "1980"}
+    d["chapters"][0]["basis"] = "不明"
     p = P.validate(d)
-    supports = {"バチカンが隠した": "隠された秘密がある", "AIが偽造の痕跡を見つけた": "偽造されている",
-                "聖書から消えた記述が残る": "隠された秘密がある"}
-    rows = P.settle(p, supports)
-    assert rows[0] == ["隠された秘密がある", "中身は既知と同じ", "偽造されている"]   # 支えが1本残っている
-    assert rows[1] == ["隠された秘密がある", "中身は既知と同じ"]                    # 偽造は支えが全て崩れた
-    assert p.chapters[1].so_far.startswith("これで『偽造されている』を支える話は、全て崩れた。")
-    # 最後: 「秘密」は支えが半分当たりで残る。支えの無い「既知と同じ」より、支えのある答えを採る
-    assert p.closing["answer"] == "答えは『隠された秘密がある』だ。"
+    assert p.chapters[0].origin == {"year": "1980"} and p.chapters[0].basis == ""
 
 
-def test_settle_falls_back_to_the_unsupported_answer_when_everything_falls():
-    d = good_plan(2)
-    d["candidates"] = ["秘密がある", "何も無い"]
-    for c, cl in zip(d["chapters"], ["A", "B"]):
-        c["claim"], c["verdict"], c["remaining"] = cl, "跡形なし", ["秘密がある", "何も無い"]
-    p = P.validate(d)
-    P.settle(p, {"A": "秘密がある", "B": "秘密がある"})
-    assert p.closing["answer"] == "答えは『何も無い』だ。"
+def test_prompt_carries_told_titles_and_no_candidates():
+    txt = P.prompt("## 資料", subject="巨石遺跡", claims=["a"], duration_sec=900,
+                   told=["巨石は宇宙人が運んだ！？"])
+    assert "巨石は宇宙人が運んだ" in txt and "candidates" not in txt
+
+
+def test_the_plan_sees_facts_not_the_old_beat_sheet():
+    """資料ファイルには一気書き用の構成（「異様さの具体3つ」）が入っている。設計図の型とぶつかる。"""
+    material = ("# 題材: 死海文書\n## 文体（すべて必須）\n- 短く切る\n## 構成（各ビート）\n### 異様さの具体3つ\n- 3つ並べる\n"
+                "## 使う一次資料\n- 2021 論文\n## 題材の記述（Wikipedia）\n### 基本\n1947年に見つかった。\n")
+    got = P.facts_only(material)
+    assert "異様さ" not in got and "短く切る" not in got
+    assert not any(line.startswith("# ") for line in got.splitlines())
+    assert "2021 論文" in got and "1947年に見つかった。" in got

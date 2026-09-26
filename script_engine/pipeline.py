@@ -68,7 +68,6 @@ def load_spec_full(spec_path: Path) -> tuple[str, str, list[str], list[float] | 
     genre = spec.get("genre", "未解決の謎")
     claims = [c["ja"] for c in spec.get("claims", [])]
     extra = {"mystery": str(spec.get("mystery") or "").strip(),
-             "candidates": [str(x) for x in (spec.get("candidates") or [])],
              "claims_meta": [c for c in spec.get("claims", []) if isinstance(c, dict)],
              "told": [str(x) for x in (spec.get("told") or [])]}
     weights = None
@@ -80,16 +79,22 @@ def load_spec_full(spec_path: Path) -> tuple[str, str, list[str], list[float] | 
     return subject, genre, claims, weights, extra
 
 
-def match_told(claims: list[str], told: list[str]) -> dict:
-    """主張ごとに、いちばん重なる動画タイトル。主張は told から起こしているので、
-    文字2連の重なりで元のタイトルに戻れる。重なりが薄ければ当てない。"""
-    from .compose import _grams
-    out = {}
+def pick_told(told: list[str], claims: list[str], *, k: int = 2, limit: int = 40) -> list[str]:
+    """冒頭で見せる動画タイトルを k 本選ぶ。主張の順に、その主張にいちばん重なるもの。
+
+    長すぎるもの（「〜テレビでは放送できない歴史の異常現象と本当の意味、DNAが〜」）は
+    読み上げると何の話か分からなくなるので外す。重なりが薄ければ当てない。"""
+    from .compose import _grams, spoken_title
+    pool = [t for t in told if 8 <= len(spoken_title(t)) <= limit + 4]
+    out: list[str] = []
     for c in claims:
         g = _grams(c)
-        best = max(told, key=lambda t: len(g & _grams(t)), default="")
+        rest = [t for t in pool if t not in out]
+        best = max(rest, key=lambda t: len(g & _grams(t)), default="")
         if best and len(g & _grams(best)) >= max(3, len(g) // 4):
-            out[c] = best
+            out.append(best)
+        if len(out) >= k:
+            break
     return out
 
 
@@ -104,8 +109,8 @@ def make_plan(material: str, *, subject: str, claims: list[str], duration_sec: f
     extra = extra or {}
     prompt = planmod.prompt(material, subject=subject, claims=claims,
                             duration_sec=duration_sec, kind=kind,
-                            mystery=extra.get("mystery", ""), candidates=extra.get("candidates"),
-                            claims_meta=extra.get("claims_meta"))
+                            mystery=extra.get("mystery", ""), claims_meta=extra.get("claims_meta"),
+                            told=extra.get("told"))
     best, best_score, made = None, None, 0
     for _ in range(max(1, tries)):
         msgs = [{"role": "user", "content": prompt}]
@@ -160,6 +165,9 @@ def gate(text: str, audit: Audit, style: Metrics, loose: list[str]) -> dict:
         "常体で書けている": style.plain_form_ratio >= 0.8,
         "考察が事実と分かれている": audit.speculation and not audit.speculation_loose,
         "資料に無い出どころが無い": not getattr(audit, "origin_invented", []),
+        # 初見の視聴者として読ませて、筋が追えたか（点7以上、意味不明・ずれ・未説明が残っていない）。
+        # 読ませていない（テストや --no-read）ときは門にしない
+        "初見で分かる": audit.reading.clear if getattr(audit, "reading", None) is not None else True,
     }
 
 
@@ -171,7 +179,7 @@ def enough_material(style: Metrics, duration_sec: float, chars_per_min: float = 
 
 def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: str,
                 rounds: int = 2, kind: str = "bundle", plans: int = 1, candidates: int = 1,
-                cite: bool = True, chat_factory=None, log=print) -> Result:
+                cite: bool = True, read: bool = True, chat_factory=None, log=print) -> Result:
     """一本道。chat_factory(model, json_mode, temperature) -> chat。テストは偽物を渡す。"""
     from .write import chat_fn
     factory = chat_factory or chat_fn
@@ -182,10 +190,7 @@ def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: s
     ask = factory(model, json_mode=True, temperature=0.5)
     plan, made = make_plan(material, subject=subject, claims=claims, duration_sec=duration_sec,
                            kind=kind, ask=ask, tries=plans, extra=extra)
-    plan.told = match_told(claims, extra.get("told") or [])
-    # 残る答えは判定から計算する（モデルに消させると本文とボードが食い違った）
-    supports = {m.get("ja"): m.get("supports", "") for m in extra.get("claims_meta") or []}
-    planmod.settle(plan, supports, extra.get("candidates"))
+    plan.told = pick_told(extra.get("told") or [], [c.claim for c in plan.chapters])
     log("設計図:")
     for line in planmod.describe(plan):
         log(f"  {line}")
@@ -195,7 +200,8 @@ def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: s
     text, audit, left = compose(plan, subject=subject, genre=genre, claims=claims,
                                 duration_sec=duration_sec, chat=factory(model),
                                 rounds=rounds, kind=kind, material=material,
-                                weights=weights, candidates=candidates, cite=cite)
+                                weights=weights, candidates=candidates, cite=cite,
+                                reader=factory(model, json_mode=True, temperature=0.2) if read else None)
     style = validate(text, duration_sec)
     loose = unsourced_numbers(text, material)
     audit.speculation_loose = devices_spec_numbers(text, material)
@@ -236,6 +242,8 @@ def measures(r: Result) -> dict:
         "speculation": int(bool(a.speculation)),
         "narrowing": a.narrowing,
         "invented_origins": len(getattr(a, "origin_invented", []) or []),
+        "reader_score": getattr(getattr(a, "reading", None), "score", -1),
+        "reader_problems": len(getattr(getattr(a, "reading", None), "problems", []) or []),
         "calls": r.calls,
         "tokens": r.tokens,
     }

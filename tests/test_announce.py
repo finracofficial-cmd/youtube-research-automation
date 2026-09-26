@@ -11,7 +11,8 @@ def _repo(tmp_path: Path) -> Path:
     (tmp_path / "drafts/dead-sea.txt").write_text("台本。", encoding="utf-8")
     (tmp_path / "reports/dead-sea_report.txt").write_text(
         "4104字 / 忠実度 58%\n\n品質の合格条件:\n  ○ 資料に無い数字が無い\n  → 合格\n"
-        "尺: 約11分（指定 15分）→ 資料不足\n\n装置 …\n資料に無い数字（人が確かめる）: 1921年\n", encoding="utf-8")
+        "尺: 約11分（指定 15分）→ 資料不足\n\n初見の読み: 8/10  ついていけた\n  [第2章] 飛躍: 「x」 — y\n\n"
+        "装置 …\n資料に無い数字（人が確かめる）: 1921年\n", encoding="utf-8")
     (tmp_path / "seeds/topics/dead-sea.yaml").write_text("subject: 死海文書\n", encoding="utf-8")
     return tmp_path
 
@@ -30,6 +31,7 @@ def test_verdict_block_carries_gate_length_and_loose_numbers(tmp_path):
     md = A.render("dead-sea", "死海文書", repo="o/r", branch="b", root=_repo(tmp_path))
     assert "品質の合格条件:" in md and "→ 合格" in md
     assert "尺: 約11分" in md and "資料に無い数字（人が確かめる）: 1921年" in md
+    assert "初見の読み: 8/10" in md and "[第2章] 飛躍" not in md      # 点だけ。指摘の一覧は判定ファイルで
     assert "不合格の台本は動画にしない" not in md
 
 

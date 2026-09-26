@@ -46,7 +46,7 @@ SPEC_END = re.compile(r"ここまでが考察")
 NARROW = re.compile(r"残る(のは|候補)|残った|消えた|潰れた|絞られ|絞れ|消える")
 
 # 伏線と回収
-PLANT = re.compile(r"後の章で|最後の章で|最後に扱う|後で扱う|あとで扱う|後ほど|保留にする|保留する|その話は後")
+PLANT = re.compile(r"後の章で|最後の章で|最後に扱う|最後に出す|後で扱う|あとで扱う|後ほど|保留にする|保留する|その話は後")
 CALLBACK = re.compile(r"章で保留|保留にした|冒頭で|冒頭に|最初に述べ|最初に言っ|先ほどの|さきほどの|冒頭の問い|1章で|序盤で")
 # 確かめた結果を先に言う（束ね型の章頭）
 VERDICT = re.compile(r"結論から|正しい|当たっている|当たりである|当たっていた|決まっていない|"
@@ -158,6 +158,7 @@ class Audit:
     speculation_loose: list[str] = field(default_factory=list)   # 考察の中の、資料に無い数字
     origin_invented: list[str] = field(default_factory=list)     # 資料に無い出どころ（年代・媒体の推測）
     narrowing: int = 0                 # 章末で残る候補を数えた章の数
+    reading: object = None             # 初見の視聴者として読んだ結果（readability.Reading）
 
     @property
     def global_notes(self) -> list[str]:
@@ -435,23 +436,24 @@ def audit(text: str, duration_sec: float, *, subject: str = "",
     if len(a.unlanded) >= 3:
         a.notes.append("言い換えの無い専門語: " + "、".join(a.unlanded[:6])
                        + "。5文以内に「つまり〜のようなものだ」で日常語に着地させる")
-    if opening_images < 3:
+    # 冒頭の体言止め3つと「皆敗れた」は参考の型だが、自作では「それは何か → なぜ気になるのか
+    # → 問い」を先に置く（体言止めを枠なしで並べたら、何の画か分からないと言われた。死海文書）。
+    # 参考を測るときだけ指摘する
+    if not ours and opening_images < 3:
         a.notes.append(f"冒頭の体言止めの具体が {opening_images} 文。画で見せられる具体を3つ並べる")
-    if not opening_defeat:
+    if not ours and not opening_defeat:
         a.notes.append("冒頭に「挑んだ者は皆敗れた」「決着していない」型の一文が無い")
     if not plant:
         a.notes.append("前半に伏線（「この問いは最後の章で扱う」）が無い")
     if not callback:
         a.notes.append("終盤に回収（「1章で保留にした問いだ」「冒頭で私はこう述べた」）が無い")
-    if best < 5:
+    need = 3 if ours else 5
+    if best < need:
         a.notes.append(f"終盤で題材を離れた一般化が短い（題材名の出ない連続文が {best}）。"
-                       "題材を知らない人にも効く結論を5文以上つづける")
+                       f"題材を知らない人にも効く結論を{need}文以上つづける")
     # 考察の印と「残る候補」は自作台本の型。参考2本には無いので、参考には掛けない
     if ours and not spec_span:
         a.notes.append("考察が無い、または印で囲まれていない（「ここからは資料に無い。私の考えだ。」〜「ここまでが考察だ。」）")
-    if ours and chapters and narrowing * 2 < len(chapters):
-        a.notes.append(f"章末で残る候補を数えている章が {narrowing}/{len(chapters)}。"
-                       "「これでAは消えた。残るのはBとC」で締める")
     if len(closing_pad) >= 2:
         a.notes.append("着地で同じ結論を言い直している: " + " / ".join(closing_pad[:3])
                        + "。回収は「〜と分かった」を1回ずつ、決着していないことは最後に1回")
@@ -475,8 +477,10 @@ def audit(text: str, duration_sec: float, *, subject: str = "",
             for c in lacking:
                 a.chapter_notes.setdefault(c.index, []).append(
                     "冒頭10文で結論を言っていない（「結論から言う。これは正しい／決まっていない」）")
+        # 出どころ（誰が・何年に）を求めると、資料に無い章で年代と媒体を作った（死海文書で4文）。
+        # 自作では話の元（basis）を設計図で持たせ、ここでは求めない
         lacking = [c for c in chapters if not c.origin]
-        if len(lacking) > n_ch / 2:
+        if not ours and len(lacking) > n_ch / 2:
             for c in lacking:
                 a.chapter_notes.setdefault(c.index, []).append(
                     "「誰が・何年に言い出したか」が無い（年と、それを残した人か媒体を同じ文に）")
