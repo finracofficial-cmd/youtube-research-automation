@@ -136,3 +136,15 @@ def test_the_intro_comes_first_in_the_description():
     out = __import__("publish").build(
         "", [], "", lead="定型文です。", intro="この動画の話です。")
     assert out.index("この動画の話です。") < out.index("定型文です。")
+
+
+def test_a_subject_that_has_been_read_is_not_called_unsolved():
+    """死海文書（読まれている写本）に「なぜ解けていないのか」と付けた。"""
+    import titles
+    script = ("死海文書。\n\n写本は全て公開され、読まれている。放射性炭素年代測定で分かった。筆跡も比べた。\n\n"
+              "答えは出た。未解読部分から今後どんな新事実が出るのかは分かっていない。")
+    got = titles.propose("死海文書", ["a", "b"], script)[-1]
+    assert "解けていない" not in got and got.startswith("死海文書の噂はどこまで本当か")
+
+    voynich = "ヴォイニッチ手稿。\n\n600年、誰も読めていない。\n\n答えは出ていない。"
+    assert "解けていない" in titles.propose("ヴォイニッチ手稿", ["a"], voynich)[-1]

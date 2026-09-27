@@ -74,7 +74,7 @@ def fields(script: str, limit: int = 3, least: int = 2) -> list[str]:
 # 題材の名前が「物」から「見るべきもの」になる。
 _EPITHET = (
     ("奇書", re.compile(r"奇書|謎の書物|書物")),
-    ("未解読の", re.compile(r"未解読")),
+    ("未解読の", re.compile(r"未解読(?!部分|の部分|の断片)")),   # 「未解読部分が残る」では付けない
     ("謎の", re.compile(r"謎|不可解|説明がつかない")),
 )
 
@@ -158,11 +158,20 @@ def propose(subject: str, claims: list, script: str) -> list[str]:
     else:
         out.append(f"【一次資料で確かめる】{name}はどこまで本当か")
 
-    # 3. このchの既存の型（〜のか【分野×分野】）
+    # 3. このchの既存の型（〜のか【分野×分野】）。「解けていない」は台本がそう言っている
+    #    題材だけ。死海文書（読まれている写本）に「なぜ解けていないのか」と付けた（実測）
     fs = fields(script)
     tail = f"【{'×'.join(fs)}】" if len(fs) >= 2 else "【論文と一次資料】"
-    out.append(f"{name}は{'なぜ' if not years else years + 'も'}解けていないのか{tail}")
+    if _UNSOLVED.search(script):
+        out.append(f"{name}は{'なぜ' if not years else years + 'も'}解けていないのか{tail}")
+    else:
+        out.append(f"{name}の噂はどこまで本当か{tail}")
     return out
+
+
+# 題材そのものが解けていないと言う形だけ。「未解読部分が残る」（断片の一部が読めていない）は
+# 題材が解けていないことにはならない（死海文書）
+_UNSOLVED = re.compile(r"未解読(?!部分|の部分|の断片)|解読されていない|誰も読めていない|誰も読めない|解けていない")
 
 
 def held_fact(script: str, limit: int = 30) -> str:
