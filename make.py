@@ -251,8 +251,10 @@ def main() -> int:
         import titles
         import yaml as _yaml
         spec = _yaml.safe_load(topic.read_text(encoding="utf-8")) or {}
+        market_path = ROOT / "reports" / f"{name}_market.json"
+        market = json.loads(market_path.read_text(encoding="utf-8")) if market_path.exists() else None
         body = titles.render(spec.get("subject") or name, spec.get("claims") or [],
-                             script.read_text(encoding="utf-8"))
+                             script.read_text(encoding="utf-8"), plan=plan_data or None, market=market)
         title_path = out.with_name(f"{name}_titles.txt")
         title_path.write_text(body + "\n", encoding="utf-8")
         print()

@@ -159,7 +159,9 @@ def _write_planned(args, material: str) -> int:
         r = run_planned(material, Path(args.spec), duration_sec=args.duration, model=args.model,
                         rounds=args.rounds, kind=args.kind, plans=args.plans,
                         candidates=args.candidates, cite=not args.no_cite,
-                        read=not getattr(args, "no_read", False))
+                        read=not getattr(args, "no_read", False),
+                        market=(json.loads(Path(args.market).read_text(encoding="utf-8"))
+                                if getattr(args, "market", None) and Path(args.market).exists() else None))
     except (WriteFailed, P.PlanError) as exc:
         print(f"生成できなかった: {exc}")
         return 1
@@ -249,6 +251,7 @@ def main(argv=None) -> int:
     w.add_argument("--candidates", type=int, default=2,
                    help="塊ごとの候補の上限。1本目の点が低いときだけ2本目を作る")
     w.add_argument("--no-cite", action="store_true", help="資料を番号付きで渡さない（比較用）")
+    w.add_argument("--market", help="topic_scout.market の出力。冒頭で見せる題名の例を、題で約束する話から選ぶ")
     w.add_argument("--no-read", action="store_true",
                    help="初見の視聴者として読ませる確認を飛ばす（呼び出し2回と直しを省く）")
     w.set_defaults(func=cmd_write)

@@ -164,11 +164,15 @@ def _chat_json(messages: list[dict], *, model: str, timeout: int) -> dict:
 
 
 def build(subject: str, n_claims: int, *, model: str = "gpt-4.1",
-          timeout: int = 180, told: list[str] | None = None) -> dict:
+          timeout: int = 180, told: list[str] | None = None, ranked: bool = False) -> dict:
+    """ranked なら told は市場で伸びた順（topic_scout.market.ranked_titles）。"""
     told = told if told is not None else told_titles(subject)
     user = f"題材: {subject}\n主張の数: {n_claims}"
     if told:
-        user += "\n\nいま語られている話（量産chの動画タイトル。多い順ではない）:\n" + "\n".join(f"- {t}" for t in told)
+        head = ("いま語られている話（動画タイトル。上ほどチャンネルのふだんの再生数より伸びた。"
+                "claims は上の話から優先して起こす）" if ranked else
+                "いま語られている話（量産chの動画タイトル。多い順ではない）")
+        user += f"\n\n{head}:\n" + "\n".join(f"- {t}" for t in told)
     messages = [{"role": "system", "content": _SYSTEM}, {"role": "user", "content": user}]
     spec = _chat_json(messages, model=model, timeout=timeout)
     # 主張がタイトルのまま、または謎・候補とつながっていなければ、1回だけ直させる
@@ -222,9 +226,16 @@ def main(argv=None) -> int:
     ap.add_argument("--out", help="書き出し先。省略すると seeds/topics/<名前>.yaml")
     ap.add_argument("--print-slug", action="store_true",
                     help="ファイル名に使う名前だけを出す")
+    ap.add_argument("--market", help="topic_scout.market の出力。あれば、伸びた順の題から主張を起こす")
     a = ap.parse_args(argv)
 
-    spec = build(a.subject, a.claims, model=a.model)
+    told, ranked = None, False
+    if a.market and Path(a.market).exists():
+        from topic_scout.market import ranked_titles
+        got = ranked_titles(json.loads(Path(a.market).read_text(encoding="utf-8")))
+        if got:
+            told, ranked = got, True
+    spec = build(a.subject, a.claims, model=a.model, told=told, ranked=ranked)
     name = slug(spec)
     if a.print_slug:
         print(name)

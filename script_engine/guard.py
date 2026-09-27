@@ -14,7 +14,7 @@ from pathlib import Path
 
 # 台本ではないファイルの印。判定・設計図・案内文・資料
 _NOT_SCRIPT = re.compile(r"合格条件|装置\s+実測|設計図:|Make video に入れる値|^## |^\[\d+\]|^- \d{4} ", re.M)
-_SUFFIXES = ("_report", "_plan", "_description", "_titles", "_prompt", "_sources")
+_SUFFIXES = ("_report", "_plan", "_description", "_titles", "_prompt", "_sources", "_market")
 MIN_CHARS = 1200
 
 

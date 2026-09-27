@@ -66,9 +66,15 @@ jobs:
             [ -n "$subject" ] || continue
             # 名前は英語の検索語から作る。ハッシュにすると、どの台本か
             # 中身を開くまで分からない（実測で tbfd74af4 になった）。
+            # 市場の集計（検索と各チャンネルのふだんの再生数）。題の語の効きを数え、
+            # 主張の選び方・冒頭で見せる題名・題名の案に使う。取れなくても台本は書く
+            rm -f /tmp/market.json
+            python3 -m topic_scout.market "$subject" --out /tmp/market.json || echo "市場の集計に失敗（続行）"
             python3 -m research.spec_from_subject "$subject" \
-              --claims "${{ inputs.claims }}" --print-slug > /tmp/slug.txt || continue
+              --claims "${{ inputs.claims }}" --market /tmp/market.json --print-slug > /tmp/slug.txt || continue
             name=$(head -1 /tmp/slug.txt)
+            mkdir -p reports
+            [ -f /tmp/market.json ] && cp /tmp/market.json "reports/${name}_market.json"
             echo "=== $subject -> drafts/${name}.txt ==="
             mv "seeds/topics/${name}.yaml" "seeds/topics/${name}.yaml" 2>/dev/null || true
             python3 -m research pipeline "seeds/topics/${name}.yaml" \
@@ -76,7 +82,7 @@ jobs:
               --out "out/prompt_${name}.txt" || continue
             python3 -m script_engine write "out/prompt_${name}.txt" \
               --spec "seeds/topics/${name}.yaml" \
-              --plans 1 --candidates 2 --rounds 1 \
+              --plans 1 --candidates 2 --rounds 1 --market "reports/${name}_market.json" \
               --out "drafts/${name}.txt" --duration "${{ inputs.duration }}" || true
             [ -f "drafts/${name}.txt" ] && echo "${name}|${subject}" >> /tmp/done.txt
           done < /tmp/subjects.txt

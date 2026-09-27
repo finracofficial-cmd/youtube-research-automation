@@ -231,7 +231,10 @@ def intro(subject: str, claims: list, script: str, duration_sec: float = 0.0) ->
     return "\n".join(lines)
 
 
-def render(subject: str, claims: list, script: str) -> str:
+def render(subject: str, claims: list, script: str, *, plan: dict | None = None,
+           market: dict | None = None) -> str:
+    if market and market.get("lifts"):
+        return render_market(subject, claims, script, plan, market)
     got = propose(subject, claims, script)
     lines = ["── 題名の候補 ──"]
     for i, t in enumerate(got, 1):
@@ -239,4 +242,260 @@ def render(subject: str, claims: list, script: str) -> str:
         lines.append(f"{i}. {t}{mark}")
         lines.append(f"   {len(t)}字（スマホは28字前後で切れる）")
     lines.append("※選ぶのは人。台本が結論していないことは書いていない。")
+    return "\n".join(lines)
+
+
+# ---- 市場の数字を使う題名 ------------------------------------------------------
+# 台本だけから作ると、市場で伸びている語を知らない（死海文書の自動案は
+# 「【どこまで分かっているのか】死海文書、6つの通説を確かめる」で、伸びる語が一つも無かった）。
+# topic_scout.market が数えた語の効き（平常比）を使い、台本が答えている語だけで組む。
+#
+#   どの案も「台本で言っていること」しか約束しない:
+#     ・効く語は、台本の本文に出てくるものだけ使う
+#     ・「判明しました」のような言い切りは使わない。問いの形にする（参考chの当たり
+#       「【AI解析でどこまで分かったのか】…」も知識の限界を問う形）
+#   点 = 入っている効く語の log(効き) の和 − 下がる語の分 + 型の点 − 長さの減点
+
+import math as _math
+from collections import Counter
+
+_ASSERTIVE = re.compile(r"判明し(?:た|ました)|解明され|発見され|証明され|遂に|ついに明か")
+_DOKOMADE = "どこまで分かったのか"
+# 「〜の正体」「〜の真実」のように、効く語の前後の名詞まで含めてかぎ括弧で囲む
+_NOUN = r"[一-龥ァ-ヶーA-Z]"
+
+
+def _mterms(market: dict) -> tuple[list[dict], list[dict]]:
+    from topic_scout.market import cold, hot
+    return hot(market), cold(market)
+
+
+def _hits(title: str, items: list[dict]) -> list[dict]:
+    return [x for x in items if re.search(x["pattern"], title)]
+
+
+def as_question(claim: str) -> str:
+    """主張の文を問いにする。「〜とされている」「〜という説がある」は外してから。"""
+    c = re.sub(r"[。．\s]+$", "", claim or "")
+    c = re.sub(r"(?:とされている|とされる|という説がある|と言われている|と語られている)$", "", c)
+    c = re.sub(r"である$", "", c)
+    return c + ("なのか" if re.search(r"[一-龥ァ-ヶー]$", c) else "のか")
+
+
+def _chapter_question(ch: dict) -> str:
+    q = re.sub(r"[？?。]+$", "", str(ch.get("question") or "").strip())
+    return q if q.endswith(("のか", "か")) else as_question(str(ch.get("claim") or ""))
+
+
+def _quote_hot(q: str, hot: list[dict], subject: str) -> str:
+    """問いの中のいちばん効く語を、前後の名詞ごと「」で囲む（「救世主の正体」）。"""
+    stems = [subject] + [subject[:k] for k in range(len(subject) - 1, 2, -1)]
+    for x in hot:
+        if not re.search(r"[一-龥ァ-ヶーA-Z]", x["term"]) or any(s in x["term"] for s in stems):
+            continue
+        # 前後に続く名詞ごと取る。「未解読」の「解読」だけ囲むと「未「解読…」」になった（実測）
+        m = re.search(rf"(?:{_NOUN}{{1,6}}の)?{_NOUN}*(?:{x['pattern']}){_NOUN}*(?:の{_NOUN}{{1,4}})?", q)
+        if not m:
+            continue
+        phrase = m.group(0)
+        for s in stems:
+            if phrase.startswith(s + "の"):
+                phrase = phrase[len(s) + 1:]
+        if 2 <= len(phrase) <= 10 and "「" not in q and not any(phrase == s for s in stems):
+            return q.replace(phrase, f"「{phrase}」", 1)
+    return q
+
+
+def _lead_subject(q: str, subject: str) -> str:
+    """問いの頭を題材名にする。「手稿は〜」のように題材名の後ろ半分で始まっていれば
+    題材名に置き換え、どこにも無ければ「題材名、」を前に付ける。"""
+    if q.startswith(subject):
+        return q
+    for k in range(1, len(subject) - 1):
+        tail = subject[k:]
+        if len(tail) >= 2 and q.startswith(tail):
+            return subject + q[len(tail):]
+    return q if subject in q else f"{subject}、{q}"
+
+
+def _methods(script: str, plan: dict, hot: list[dict]) -> str:
+    """題の括弧に入れる方法（AI・DNA）。章の主張に出てくる略語を、効く順に2つまで。"""
+    claims = " ".join(str(c.get("claim") or "") for c in (plan or {}).get("chapters") or [])
+    acr = []
+    for w in re.findall(r"[A-Z]{2,}", claims):
+        if w not in acr and w in script:
+            acr.append(w)
+    rank = {x["term"]: x.get("adj", x["lift"]) for x in hot}
+    acr.sort(key=lambda w: -rank.get(w, 1.0))
+    return "・".join(acr[:2])
+
+
+def _label(claim: str, subject: str, limit: int = 10) -> str | None:
+    """括弧に並べる短い名前（「救世主の正体」「バチカンが隠した」）。語の途中で切るくらいなら
+    None（「手稿は未解読の自然言」のような切れ端が出た）。"""
+    c = re.sub(r"[。．]+$", "", claim)
+    c = re.sub(r"(?:とされている|とされる|という説がある|と言われている)$", "", c)
+    for k in range(0, len(subject) - 1):
+        c = re.sub(re.escape(subject[k:]) + r"(?:には|に|の|を|は|が|で)?", "", c) if len(subject[k:]) >= 2 else c
+    c = c.strip("、 ")
+    if len(c) > limit and "のは" in c:
+        c = c.split("のは", 1)[1]
+    if len(c) > limit and "が" in c:
+        c = c.split("が", 1)[0]
+    c = re.sub(r"(?:である|だ)$", "", c)
+    return c if 2 <= len(c) <= limit else None
+
+
+def _hook_chapter(plan: dict, hot: list[dict]) -> int | None:
+    """市場でいちばん効く語を含む章。題で約束する話になる。"""
+    from topic_scout.market import hook_index
+    texts = [f"{c.get('claim', '')} {c.get('question', '')}" for c in (plan or {}).get("chapters") or []]
+    return hook_index(texts, {"lifts": hot})
+
+
+def _surprise(script: str, subject: str, limit: int = 34) -> str:
+    """台本の前半にある、数字の入った意外な一文（「〜より、1,000年も古い」）。"""
+    body = [p for p in re.split(r"\n\s*\n", script) if p.strip()]
+    for para in body[: max(3, len(body) // 2)]:
+        for s in re.split(r"(?<=。)", para.replace("\n", "")):
+            s = s.strip()
+            if re.search(r"\d", s) and re.search(r"だけ|しか|も古い|も前|倍|以上前", s) and len(s) <= limit:
+                return re.sub(r"[。、]+$", "", s).replace("、", "")
+    return ""
+
+
+def score_title(title: str, market: dict, subject: str) -> tuple[float, list[dict], list[dict]]:
+    hot, cold = _mterms(market)
+    h, c = _hits(title, hot), _hits(title, cold)
+    # 効く語を並べるほど足し算で点が上がるが、約束は1つのほうが強い。参考chで、括弧に問いを
+    # 3つ並べた題（ピラミッド 3.3万回）は、問いが1つの題（ヴォイニッチ 140万回）に負けた。
+    # 2つ目からは半分ずつしか数えない
+    gains = sorted((_math.log(x.get("adj", x["lift"])) for x in h), reverse=True)
+    pts = sum(g * 0.5 ** k for k, g in enumerate(gains))
+    pts -= sum(abs(_math.log(max(x.get("adj", x["lift"]), 0.05))) for x in c)
+    if any(inner.count("・") >= 2 or inner.count("？") >= 2 for inner in re.findall(r"【([^】]*)】", title)):
+        pts -= 0.3          # 括弧の中の列挙
+    if _DOKOMADE in title:
+        pts += 0.4          # 参考chの140万回の型（市場の外の根拠なので、控えめに足す）
+    if title.startswith(subject):
+        pts += 0.2          # 検索で題材名が先頭に出る
+    n = len(title)
+    if n < 24:
+        pts -= 0.3
+    elif n > 60:
+        pts -= 0.02 * (n - 60)
+    return round(pts, 2), h, c
+
+
+def market_propose(subject: str, claims: list, script: str, plan: dict | None,
+                   market: dict | None, *, k: int = 5) -> list[dict]:
+    """市場の効きで点を付けた題名の案。上ほど点が高い。
+
+    戻り値の各要素: title / score / hot（入っている効く語）/ cold / basis（どの章が約束か）。
+    台本に出てこない効く語を含む案と、言い切りの案は落とす。"""
+    hot, _ = _mterms(market or {})
+    plan = plan or {}
+    chapters = plan.get("chapters") or []
+    ideas: list[tuple[str, str]] = []
+    methods = _methods(script, plan, hot)
+    bracket = f"【{methods}解析で{_DOKOMADE}】" if methods else f"【論文と一次資料で{_DOKOMADE}】"
+    at = _hook_chapter(plan, hot)
+    hot_terms = {x["term"] for x in hot}
+    # 題材ごとに効く言い回しが違う（死海文書では「謎」「？」は効かず、ヴォイニッチ手稿では効く）。
+    # 効いている題材でだけ、問いの題に足した形も作り、点で選ばせる
+    recent = [int(y) for y in re.findall(r"(20\d\d)年", script)]
+    this_year = __import__("datetime").date.today().year
+    brackets = [bracket]
+    if "最新" in hot_terms and recent and max(recent) >= this_year - 3:
+        # 「最新のAI・DNA解析」だと、6年前のDNAの研究まで最新に見える。研究全体に掛ける
+        brackets.append(f"【最新研究で{_DOKOMADE}】")
+
+    def variants(q: str, basis: str) -> None:
+        heads = [q]
+        if "謎" in hot_terms and not q.startswith(f"{subject}の謎"):
+            heads.append(f"{subject}の謎、" + (q[len(subject):].lstrip("、はにのをが") if q.startswith(subject) else q))
+        for h in heads:
+            ends = [h] + ([h + "？"] if "？" in hot_terms else [])
+            for e in ends:
+                for b in brackets:
+                    ideas.append((e + b, basis))
+
+    if at is not None:
+        q = _lead_subject(_chapter_question(chapters[at]), subject)
+        variants(_quote_hot(q, hot, subject), f"第{at + 1}章「{chapters[at].get('claim', '')}」")
+    mystery = re.sub(r"[？?。]+$", "", str(plan.get("mystery") or ""))
+    if mystery:
+        variants(_quote_hot(_lead_subject(mystery, subject), hot, subject), "動画全体の問い")
+    if chapters:
+        order = sorted(range(len(chapters)), key=lambda i: -sum(
+            _math.log(x.get("adj", x["lift"])) for x in hot
+            if re.search(r"[一-龥ァ-ヶーA-Z]", x["term"]) and re.search(x["pattern"], str(chapters[i].get("claim", "")))))
+        labels = [lab for lab in (_label(str(chapters[i].get("claim", "")), subject) for i in order) if lab][:3]
+        word = "都市伝説" if "都市伝説" in hot_terms else "噂"
+        if len(labels) == 3:
+            ideas.append((f"{subject}の{len(chapters)}つの{word}を論文で確かめる【{'・'.join(labels)}】", "全章"))
+    fact = _surprise(script, subject)
+    hook_label = _label(str(chapters[at].get("claim", "")), subject) if at is not None else None
+    if fact and hook_label:
+        ideas.append((f"{subject}、{fact}【{hook_label}は？】", "冒頭の事実と第%d章" % (at + 1)))
+    ideas += [(t, "台本だけから作った型") for t in propose(subject, claims, script)]
+
+    out, seen = [], set()
+    for title, basis in ideas:
+        if title in seen or _ASSERTIVE.search(title):
+            continue
+        seen.add(title)
+        s, h, c = score_title(title, market or {}, subject)
+        # 効く語は、台本が話しているものだけ（題が本文にない約束をしない）
+        if any(not re.search(x["pattern"], script) for x in h if re.search(r"[一-龥ァ-ヶーA-Z]", x["term"])):
+            continue
+        out.append({"title": title, "score": s, "hot": [x["term"] for x in h],
+                    "cold": [x["term"] for x in c], "basis": basis})
+    out.sort(key=lambda x: -x["score"])
+    # 同じ問いの言い回し違い（？の有無・括弧の違い）ばかりが並ぶと選べない。約束する話ごとに2つまで
+    picked, per = [], Counter()
+    for x in out:
+        if per[x["basis"]] < 2:
+            picked.append(x)
+            per[x["basis"]] += 1
+    return picked[:k]
+
+
+def opening_gap(script: str, plan: dict | None, market: dict | None) -> str:
+    """題で約束した話が冒頭に出てこなければ、その注意。最初の30秒で約束が見えないと離れる。"""
+    hot, _ = _mterms(market or {})
+    at = _hook_chapter(plan or {}, hot)
+    if at is None or at == 0:
+        return ""
+    ch = (plan or {}).get("chapters")[at]
+    paras = [p for p in re.split(r"\n\s*\n", script) if p.strip()]
+    head = ""
+    for p in paras:
+        head += p
+        if "迫っていこう" in p or "とは何なのか" in p:
+            break
+    words = [x for x in hot if re.search(r"[一-龥ァ-ヶーA-Z]", x["term"])
+             and re.search(x["pattern"], f"{ch.get('claim', '')} {ch.get('question', '')}")]
+    if words and not any(re.search(x["pattern"], head) for x in words):
+        return (f"題で約束する「{'・'.join(x['term'] for x in words)}」が冒頭に出てこない（第{at + 1}章まで待たせる）。"
+                "冒頭で見せる題名の例にこの話を入れる")
+    return ""
+
+
+def render_market(subject: str, claims: list, script: str, plan: dict | None, market: dict) -> str:
+    """市場の数字つきの題名の案。どの語がどれだけ効くかと、どの章が約束かを添える。"""
+    from topic_scout.market import summary
+    rank = {x["term"]: x.get("adj", x["lift"]) for x in market.get("lifts") or []}
+    lines = ["── 題名の候補（市場の数字つき。上ほど点が高い）──"]
+    for i, x in enumerate(market_propose(subject, claims, script, plan, market), 1):
+        lines.append(f"{i}. {x['title']}")
+        why = [f"{t} {rank.get(t, 1.0)}倍" for t in x["hot"]]
+        lines.append(f"   {len(x['title'])}字 / 点 {x['score']} / 効く語: {'・'.join(why) or 'なし'}"
+                     + (f" / 下がる語: {'・'.join(x['cold'])}" if x["cold"] else "")
+                     + f" / 約束する話: {x['basis']}")
+    gap = opening_gap(script, plan, market)
+    if gap:
+        lines += ["", "注意: " + gap]
+    lines += ["", *summary(market),
+              "※選ぶのは人。台本が話していない語は使っていない。「判明しました」のような言い切りは作らない。"]
     return "\n".join(lines)

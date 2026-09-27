@@ -58,3 +58,16 @@ def test_guard_rejects_reports_and_plans_and_names_the_real_scripts(tmp_path):
     assert G.candidates(d) == [d / "dead-sea.txt"]
     assert G.main([str(d / "dead-sea_report.txt")]) == 1
     assert G.main([str(d / "dead-sea.txt")]) == 0
+
+
+def test_market_scored_titles_are_in_the_issue_comment(tmp_path):
+    """題名の案を Issue に出す。市場で伸びている語と、その効きを添える。"""
+    import json
+    from tests.test_market import PLAN, SCRIPT, _analyze
+    root = _repo(tmp_path)
+    (root / "drafts/dead-sea.txt").write_text(SCRIPT, encoding="utf-8")
+    (root / "reports/dead-sea_plan.json").write_text(json.dumps(PLAN, ensure_ascii=False), encoding="utf-8")
+    (root / "reports/dead-sea_market.json").write_text(json.dumps(_analyze(), ensure_ascii=False), encoding="utf-8")
+    md = A.render("dead-sea", "死海文書", repo="o/r", branch="b", root=root)
+    assert "**題名の案**" in md and "効く語:" in md and "どこまで分かったのか】" in md
+    assert "[reports/dead-sea_market.json](" in md and "注意:" in md

@@ -79,14 +79,20 @@ def load_spec_full(spec_path: Path) -> tuple[str, str, list[str], list[float] | 
     return subject, genre, claims, weights, extra
 
 
-def pick_told(told: list[str], claims: list[str], *, k: int = 2, limit: int = 40) -> list[str]:
+def pick_told(told: list[str], claims: list[str], *, k: int = 2, limit: int = 40,
+              first: int | None = None) -> list[str]:
     """冒頭で見せる動画タイトルを k 本選ぶ。主張の順に、その主張にいちばん重なるもの。
+    first（市場でいちばん効く語を含む章）があれば、その章の題を先に選ぶ。題名で約束する
+    話が冒頭に出てこないと、最初の30秒で離れる（死海文書: 救世主の話が4章まで出なかった）。
 
     長すぎるもの（「〜テレビでは放送できない歴史の異常現象と本当の意味、DNAが〜」）は
-    読み上げると何の話か分からなくなるので外す。重なりが薄ければ当てない。"""
+    読み上げると何の話か分からなくなるので外す。重なりが薄ければ当てない。
+    told が市場の平常比の順に並んでいれば、重なりが同じときは伸びた題が選ばれる。"""
     from .compose import _grams, spoken_title
     pool = [t for t in told if 8 <= len(spoken_title(t)) <= limit + 4]
     out: list[str] = []
+    if first is not None and 0 <= first < len(claims):
+        claims = [claims[first]] + [c for i, c in enumerate(claims) if i != first]
     for c in claims:
         g = _grams(c)
         rest = [t for t in pool if t not in out]
@@ -179,7 +185,8 @@ def enough_material(style: Metrics, duration_sec: float, chars_per_min: float = 
 
 def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: str,
                 rounds: int = 2, kind: str = "bundle", plans: int = 1, candidates: int = 1,
-                cite: bool = True, read: bool = True, chat_factory=None, log=print) -> Result:
+                cite: bool = True, read: bool = True, market: dict | None = None,
+                chat_factory=None, log=print) -> Result:
     """一本道。chat_factory(model, json_mode, temperature) -> chat。テストは偽物を渡す。"""
     from .write import chat_fn
     factory = chat_factory or chat_fn
@@ -190,7 +197,11 @@ def run_planned(material: str, spec_path: Path, *, duration_sec: float, model: s
     ask = factory(model, json_mode=True, temperature=0.5)
     plan, made = make_plan(material, subject=subject, claims=claims, duration_sec=duration_sec,
                            kind=kind, ask=ask, tries=plans, extra=extra)
-    plan.told = pick_told(extra.get("told") or [], [c.claim for c in plan.chapters])
+    first = None
+    if market:
+        from topic_scout.market import hook_index
+        first = hook_index([f"{c.claim} {c.question}" for c in plan.chapters], market)
+    plan.told = pick_told(extra.get("told") or [], [c.claim for c in plan.chapters], first=first)
     log("設計図:")
     for line in planmod.describe(plan):
         log(f"  {line}")

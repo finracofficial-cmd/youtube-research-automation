@@ -19,7 +19,37 @@ FILES = (
     ("設計図", "reports/{name}_plan.json"),
     ("題材の仕様", "seeds/topics/{name}.yaml"),
     ("出典の一覧", "seeds/topics/{name}_sources.json"),
+    ("市場の集計", "reports/{name}_market.json"),
 )
+
+
+def title_lines(name: str, root: Path) -> list[str]:
+    """市場の数字つきの題名の案（上位3つ）。市場の集計が無ければ空。"""
+    import json
+    import sys
+
+    import yaml
+    market_p, plan_p = root / f"reports/{name}_market.json", root / f"reports/{name}_plan.json"
+    script_p, spec_p = root / f"drafts/{name}.txt", root / f"seeds/topics/{name}.yaml"
+    if not (market_p.exists() and script_p.exists()):
+        return []
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    import titles
+    market = json.loads(market_p.read_text(encoding="utf-8"))
+    plan = json.loads(plan_p.read_text(encoding="utf-8")) if plan_p.exists() else {}
+    spec = yaml.safe_load(spec_p.read_text(encoding="utf-8")) if spec_p.exists() else {}
+    script = script_p.read_text(encoding="utf-8")
+    subject = (spec or {}).get("subject") or market.get("subject") or name
+    got = titles.market_propose(subject, (spec or {}).get("claims") or [], script, plan, market, k=3)
+    rank = {x["term"]: x.get("adj", x["lift"]) for x in market.get("lifts") or []}
+    out = ["**題名の案**（市場で伸びている語の効きで点を付けた。選ぶのは人）", ""]
+    for i, x in enumerate(got, 1):
+        why = "・".join(f"{t} {rank.get(t, 1.0)}倍" for t in x["hot"]) or "なし"
+        out.append(f"{i}. {x['title']}  \n   効く語: {why}")
+    gap = titles.opening_gap(script, plan, market)
+    if gap:
+        out += ["", f"注意: {gap}"]
+    return out
 
 
 def verdict_lines(report: str) -> list[str]:
@@ -55,6 +85,12 @@ def render(name: str, subject: str, *, repo: str, branch: str, root: Path | str 
         rel = tpl.format(name=name)
         if (root / rel).exists():
             lines.append(f"| {label} | [{rel}]({base}{rel}) |")
+    try:
+        tl = title_lines(name, root)
+    except Exception as exc:  # noqa: BLE001 - 題名の案が作れなくても案内は出す
+        tl = [f"（題名の案を作れなかった: {exc}）"]
+    if tl:
+        lines += [""] + tl
     report = root / f"reports/{name}_report.txt"
     if report.exists():
         got = verdict_lines(report.read_text(encoding="utf-8"))
