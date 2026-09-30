@@ -19,7 +19,10 @@ from pathlib import Path
 
 _lock = threading.Lock()
 _calls: dict[tuple[str, str], int] = defaultdict(int)
-_tokens: dict[tuple[str, str], int] = defaultdict(int)
+# 入力・出力・入力のうちキャッシュから読まれた分。単価は3つとも違う
+# （出力は入力の数倍、キャッシュは入力の数分の1）ので、合計だけでは費用の見当が付かない
+_FIELDS = ("tokens_in", "tokens_out", "cached")
+_tokens: dict[tuple[str, str], dict[str, int]] = defaultdict(lambda: dict.fromkeys(_FIELDS, 0))
 
 
 def _sink() -> Path | None:
@@ -35,14 +38,18 @@ def share(path: Path | str) -> None:
     os.environ["MAKE_METER"] = str(path)
 
 
-def record(kind: str, model: str, *, tokens_in: int = 0, tokens_out: int = 0) -> None:
-    """1回分を足す。kind は "chat" か "image"。"""
-    row = {"kind": kind, "model": model, "tokens": tokens_in + tokens_out}
+def record(kind: str, model: str, *, tokens_in: int = 0, tokens_out: int = 0,
+           cached: int = 0) -> None:
+    """1回分を足す。kind は "chat" か "image"。cached は tokens_in のうち
+    キャッシュから読まれた分（同じ頭の指示を続けて送ると付く）。"""
+    row = {"kind": kind, "model": model, "tokens": tokens_in + tokens_out,
+           "tokens_in": tokens_in, "tokens_out": tokens_out, "cached": cached}
     sink = _sink()
     if sink is None:
         with _lock:
             _calls[(kind, model)] += 1
-            _tokens[(kind, model)] += row["tokens"]
+            for f in _FIELDS:
+                _tokens[(kind, model)][f] += row[f]
         return
     # 控えがあるときは控えだけに足す。両方に入れると二重に数える。
     line = json.dumps(row, ensure_ascii=False) + "\n"
@@ -54,9 +61,11 @@ def record(kind: str, model: str, *, tokens_in: int = 0, tokens_out: int = 0) ->
 def note_usage(kind: str, model: str, payload: dict | None) -> None:
     """APIの応答に入っている usage をそのまま受けて足す。"""
     u = (payload or {}).get("usage") or {}
+    details = u.get("prompt_tokens_details") or u.get("input_tokens_details") or {}
     record(kind, model,
            tokens_in=int(u.get("prompt_tokens") or u.get("input_tokens") or 0),
-           tokens_out=int(u.get("completion_tokens") or u.get("output_tokens") or 0))
+           tokens_out=int(u.get("completion_tokens") or u.get("output_tokens") or 0),
+           cached=int(details.get("cached_tokens") or 0))
 
 
 def reset() -> None:
@@ -71,7 +80,7 @@ def reset() -> None:
 def tally() -> list[dict]:
     with _lock:
         calls = dict(_calls)
-        tokens = dict(_tokens)
+        tokens = {k: dict(v) for k, v in _tokens.items()}
     sink = _sink()
     if sink is not None and sink.exists():
         for line in sink.read_text(encoding="utf-8").splitlines():
@@ -83,9 +92,17 @@ def tally() -> list[dict]:
                 continue
             key = (row.get("kind", "?"), row.get("model", "?"))
             calls[key] = calls.get(key, 0) + 1
-            tokens[key] = tokens.get(key, 0) + int(row.get("tokens") or 0)
-    return [{"kind": k, "model": m, "calls": calls[(k, m)],
-             "tokens": tokens[(k, m)]} for (k, m) in sorted(calls)]
+            t = tokens.setdefault(key, dict.fromkeys(_FIELDS, 0))
+            if "tokens_in" not in row:       # 古い控え（合計しか無い）
+                row = dict(row, tokens_in=int(row.get("tokens") or 0))
+            for f in _FIELDS:
+                t[f] += int(row.get(f) or 0)
+    out = []
+    for (k, m) in sorted(calls):
+        t = tokens.get((k, m)) or dict.fromkeys(_FIELDS, 0)
+        out.append({"kind": k, "model": m, "calls": calls[(k, m)],
+                    "tokens": t["tokens_in"] + t["tokens_out"], **t})
+    return out
 
 
 def report() -> str:
@@ -94,10 +111,14 @@ def report() -> str:
         return "APIの呼び出しは無し"
     # 和文は表示幅が2倍で桁が揃わないので、並べる欄はすべて英数字にする。
     out = ["", "── この実行で呼んだAPI ──",
-           "  モデル            呼んだ回数      トークン"]
+           "  モデル            呼んだ回数      入力  (cache)      出力"]
     for r in rows:
-        tok = f"{r['tokens']:,}" if r["tokens"] else "-"
-        out.append(f"  {r['model']:<16}{r['calls']:>7}{tok:>14}")
+        if not r["tokens"]:
+            out.append(f"  {r['model']:<16}{r['calls']:>7}{'-':>10}{'':>9}{'-':>10}")
+            continue
+        out.append(f"  {r['model']:<16}{r['calls']:>7}{r['tokens_in']:>10,}"
+                   f"{'(' + format(r['cached'], ',') + ')':>9}{r['tokens_out']:>10,}")
     out.append("  ※単価は変わるので金額は出さない。"
                "platform.openai.com/usage のモデル別内訳と突き合わせること")
+    out.append("  ※(cache) は入力のうち前の呼び出しと同じ頭で、割り引かれた分")
     return "\n".join(out)

@@ -50,8 +50,7 @@ def _usage() -> tuple[int, int]:
     calls = tokens = 0
     for row in meter.tally():
         calls += int(row.get("calls") or 0)
-        tokens += int(row.get("tokens_in") or 0) + int(row.get("tokens_out") or 0) \
-            + int(row.get("tokens") or 0)
+        tokens += int(row.get("tokens") or 0)
     return calls, tokens
 
 

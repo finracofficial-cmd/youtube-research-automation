@@ -385,3 +385,84 @@ def test_stance_names_are_not_shown_to_the_writer():
     p = P.validate(good_plan(1))
     brief = C._chapter_brief(1, p.chapters[0], 1, p)
     assert "[肯定]" not in brief and "（そうだと言える事実）" in brief
+
+
+def test_closing_jargon_and_style_notes_reach_only_the_blocks_that_have_them():
+    """以前は「考察が無い」「着地で同じ結論を言い直している」「専門語」「常体率」を全章へ
+    配っていた。1つの指摘で章の書き直しが6回（1回 約5,000トークン）増える。"""
+    from script_engine.devices import Audit
+    p = P.validate(good_plan(2))
+    blocks = C.blocks_from_plan(p, subject="巨石遺跡", genre="古代の謎", claims=["a", "b"], duration_sec=900)
+    for b, t in zip(blocks, ["みなさんは知っているだろうか。", "写本学の話だ。", "放射性炭素で測った。",
+                             "石が残っています。", "答え。\n\nご視聴ありがとうございます。"]):
+        b.text = t
+    a = Audit(minutes=15, per_min={}, chapters=[], plant=True, callback=False, opening_images=3,
+              opening_defeat=True, subject_free_run=9, unlanded=[], padding=[],
+              notes=["考察が無い、または印で囲まれていない",
+                     "着地で同じ結論を言い直している: x / y",
+                     "終盤に回収（「1章で保留にした問いだ」「冒頭で私はこう述べた」）が無い",
+                     "言い換えの無い専門語: 放射性炭素、写本学。5文以内に「つまり〜のようなものだ」で日常語に着地させる"])
+    C.route(blocks, a, ["常体率 80% が下限 90% 未満", "視聴者への馴れ合い表現 3件 が上限 1 超"])
+    by = {b.key: " ".join(b.notes) for b in blocks}
+    assert "回収" not in by["opening"] and "馴れ合い" in by["opening"]
+    assert all(w in by["closing"] for w in ("考察", "着地で", "回収"))
+    assert "専門語" in by["basics"] and "専門語" in by["chapter1"] and "専門語" not in by["chapter2"]
+    assert "常体率" in by["chapter2"] and "常体率" not in by["closing"]      # 登録のお願いは敬体のまま
+    assert not any(w in by["chapter1"] + by["chapter2"] for w in ("考察", "着地で", "回収"))
+
+
+def _rewrites_by_block(log_keys):
+    def wrap(chat):
+        def f(messages):
+            if "直した全文" in messages[-1]["content"]:
+                import re
+                head = messages[1]["content"]
+                m = re.search(r"## (冒頭|基本の章|第\d+章|着地)", head)
+                log_keys.append(m.group(1) if m else "?")
+            return chat(messages)
+        return f
+    return wrap
+
+
+def test_the_audit_and_the_reader_share_one_rewrite_pass():
+    """監査の直しと初見の読みの直しを別々に回すと、同じ章を2回書き直す。1回にまとめる。"""
+    import json
+    from collections import Counter
+    from tests.test_readability import QUIZ
+    reads, keys, log = [], [], []
+
+    def reader(msgs):
+        reads.append(1)
+        if len(reads) == 1:
+            return json.dumps({"problems": [{"block": "第1章", "quote": "運ぶ理由", "kind": "宙づり",
+                                             "why": "何の理由か分からない", "fix": "何を運ぶ理由か言う"}],
+                               "score": 5, "quiz": QUIZ}, ensure_ascii=False)
+        return json.dumps({"problems": [], "score": 8, "quiz": QUIZ}, ensure_ascii=False)
+
+    p = P.validate(good_plan(2))
+    chat = _rewrites_by_block(keys)(_fake_chat(log))
+    text, audit, left = C.compose(p, subject="巨石遺跡", genre="古代の謎", claims=["a", "b"],
+                                  duration_sec=60, chat=chat, rounds=1, reader=reader)
+    assert len(reads) == 2 and audit.reading.clear
+    assert "第1章" in keys and max(Counter(keys).values()) == 1          # どの塊も直しは1回だけ
+    first = [u for u in log if "直した全文" in u and "何の理由か分からない" in u]
+    assert len(first) == 1
+
+
+def test_a_number_without_a_citation_mark_is_reported_but_not_rewritten():
+    """資料にある数字に〔n〕が付いていないだけで章を書き直していた（「4QMMT」の 4 まで）。
+    資料に無い数字は別の検査（loose）が捕まえる。"""
+    log = []
+    p = P.validate(good_plan(2))
+    material = "## 出典\n- 1980 旅行記\n- 最大の石は1000トン\n- 1898年に調査団が測った\n"
+    text, audit, left = C.compose(p, subject="巨石遺跡", genre="古代の謎", claims=["a", "b"],
+                                  duration_sec=60, chat=_fake_chat(log), rounds=1, material=material)
+    assert not any("根拠番号" in u for u in log if "直した全文" in u)
+    assert any("根拠番号の無い数字の文" in x for x in left)
+    assert C.uncited("4QMMTはクムランの文書だ。11Q19も同じだ。1947年に見つかった。") == ["1947年に見つかった。"]
+
+
+def test_urls_in_the_sources_are_not_sent_to_the_writer():
+    got = C.facts_from_material("## 出典\n- 1999 Eugene Ulrich The Dead Sea Scrolls https://doi.org/10.1163/978\n"
+                                "- 2011 Emanuel Tov Textual History doi: 10.13109/978\n")
+    assert got == ["1999 Eugene Ulrich The Dead Sea Scrolls", "2011 Emanuel Tov Textual History"]

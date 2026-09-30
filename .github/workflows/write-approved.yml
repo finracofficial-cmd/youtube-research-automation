@@ -111,7 +111,7 @@ jobs:
             # 門に落ちても台本は書き出される（終了コードは1）。台本があれば書けたとみなす
             python3 -m script_engine write "out/prompt_${name}.txt" \
               --spec "seeds/topics/${name}.yaml" \
-              --plans 1 --candidates 2 --rounds 1 --market "reports/${name}_market.json" \
+              --plans 1 --candidates 1 --rounds 1 --market "reports/${name}_market.json" \
               --out "drafts/${name}.txt" --duration "${{ inputs.duration }}" > /tmp/write.log 2>&1 || true
             cat /tmp/write.log
             if [ -f "drafts/${name}.txt" ]; then

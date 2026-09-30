@@ -232,6 +232,10 @@ def _s(x) -> str:
     return "" if x == "不明" else x
 
 
+# 設計図が結論の文に「結論から言う。」を付けてくることがある。書き手への指示でも本文でも
+# こちらが付けるので、二重になる（「結論から言う。結論から言う。〜」）
+_LEAD_VERDICT = re.compile(r"^結論から言(?:う|えば|うと)[。、]\s*")
+
 def validate(d: dict, *, n_claims: int | None = None) -> Plan:
     """形を確かめる。足りない章や振り子の無い章はここで落とす。
 
@@ -292,7 +296,7 @@ def validate(d: dict, *, n_claims: int | None = None) -> Plan:
         chapters.append(Chapter(
             claim=_s(c.get("claim")),
             verdict=_s(c.get("verdict")),
-            verdict_line=_s(c.get("verdict_line")),
+            verdict_line=_LEAD_VERDICT.sub("", _s(c.get("verdict_line"))),
             why=_s(c.get("why")),
             origin={k: v for k, v in (c.get("origin") or {}).items() if _s(v)},
             swings=swings,

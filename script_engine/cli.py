@@ -248,8 +248,9 @@ def main(argv=None) -> int:
     w.add_argument("--spec", help="題材の仕様（seeds/topics/*.yaml）。渡すと設計図モード")
     w.add_argument("--kind", choices=["flagship", "bundle"], default="bundle")
     w.add_argument("--plans", type=int, default=1, help="設計図を何本作って選ぶか")
-    w.add_argument("--candidates", type=int, default=2,
-                   help="塊ごとの候補の上限。1本目の点が低いときだけ2本目を作る")
+    w.add_argument("--candidates", type=int, default=1,
+                   help="塊ごとの候補の上限。2以上なら1本目の点が低いときだけ次を作る"
+                        "（呼び出しが増える。選ぶ効果は構造より小さかった）")
     w.add_argument("--no-cite", action="store_true", help="資料を番号付きで渡さない（比較用）")
     w.add_argument("--market", help="topic_scout.market の出力。冒頭で見せる題名の例を、題で約束する話から選ぶ")
     w.add_argument("--no-read", action="store_true",
@@ -265,7 +266,7 @@ def main(argv=None) -> int:
     b.add_argument("--rounds", type=int, default=1)
     b.add_argument("--kind", choices=["flagship", "bundle"], default="bundle")
     b.add_argument("--plans", type=int, default=1)
-    b.add_argument("--candidates", type=int, default=2)
+    b.add_argument("--candidates", type=int, default=1)
     b.add_argument("--no-cite", action="store_true", help="資料を番号付きで渡さない（比較用）")
     b.add_argument("--out", help="結果のJSON（隣に各本の本文も置く）")
     b.set_defaults(func=cmd_bench)

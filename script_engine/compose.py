@@ -120,6 +120,9 @@ def _basics_brief(p: planmod.Plan, subject: str, claims: list[str]) -> str:
 
 
 _CITE = re.compile(r"〔\s*\d+(?:\s*[,、]\s*\d+)*\s*〕")
+# 出典の行の URL・DOI。書き手は使わない（本文に書かせない）のに、1行 15〜20トークンあり、
+# 章ごと・直しごとに渡していた
+_URL = re.compile(r"\s*(?:https?://|doi:\s*)\S+")
 _DIGIT = re.compile(r"\d")
 
 
@@ -130,7 +133,7 @@ def facts_from_material(material: str) -> list[str]:
     out: list[str] = []
     in_wiki = False
     for line in material.splitlines():
-        t = line.strip()
+        t = _URL.sub("", line).strip()
         if t.startswith("## "):
             in_wiki = "題材の記述" in t
             continue
@@ -182,6 +185,8 @@ def facts_for(brief: str, facts: list[str], *, limit: int = 14, describe: int = 
 # 「15世紀初頭」「1章で保留にした問いだ」「ルドルフ2世」に番号を求めて、章を無駄に
 # 書き直していた（実測で1本 2回・約1万トークン）
 _NOT_A_FACT = re.compile(r"\d+(?:世紀|章|世|つ|段|回目|番目|人称|次|割)")
+# 英字と混ざった番号は文書の名前（4QMMT・11Q19）。数字の事実ではない
+_ID = re.compile(r"[A-Za-z]+\d+[A-Za-z0-9]*|\d+[A-Za-z][A-Za-z0-9]*")
 
 
 def uncited(text: str, claim: str = "") -> list[str]:
@@ -191,7 +196,7 @@ def uncited(text: str, claim: str = "") -> list[str]:
     for sent in re.split(r"(?<=[。？！])", text):
         if _CITE.search(sent):
             continue
-        body = _NOT_A_FACT.sub("", sent)
+        body = _ID.sub("", _NOT_A_FACT.sub("", sent))
         nums = [n for n in re.findall(r"\d+", body) if n not in known]
         if nums and sent.strip():
             out.append(sent.strip()[:30])
@@ -1150,42 +1155,50 @@ def compose(p: planmod.Plan, *, subject: str, genre: str, claims: list[str],
                 + [f"{k}: 英語の表記 " + "、".join(v[:4]) for k, v in latin.items()])
         return audit, style, loose, bare, made_up, repeats, latin, left
 
+    # 監査の指摘と初見の読みの指摘は、同じ回の直しにまとめる。別々に直すと同じ章を
+    # 2回書き直す（1回 約5,000トークン）。根拠番号の無い数字（bare）は報告だけにする。
+    # 資料に無い数字は loose が捕まえるので、番号を付けさせるためだけに章を書き直さない
+    # （「4QMMT」の 4 に番号を求めて1章まるごと直していた）
     left: list[str] = []
     audit = None
-    for r in range(rounds + 1):
-        audit, style, loose, bare, made_up, repeats, latin, left = check()
-        if not left or r == rounds:
-            break
-        route(blocks, audit, list(style.violations))
-        for b in blocks:
-            if loose.get(b.key):
-                b.notes.append("資料に無い数字を消すか、資料にある数字に置き換える: "
-                               + "、".join(loose[b.key]) + "。数字を作らない")
-            if bare.get(b.key):
-                b.notes.append("数字を含む文に根拠番号〔n〕が無い。番号を付けるか、その文を消す: "
-                               + " / ".join(bare[b.key][:3]))
-            if made_up.get(b.key):
-                b.notes.append("出どころ（年代・媒体）は資料に無い。その文を消す: " + " / ".join(made_up[b.key][:2]))
-            if repeats.get(b.key):
-                b.notes.append("前の章と同じ事実を言い直している。この章では言わない: "
-                               + " / ".join(f"「{x[:30]}」" for x in repeats[b.key][:3]))
-            if latin.get(b.key):
-                b.notes.append("英語の表記が残っている。読み上げるので片仮名にする（人名は片仮名、"
-                               "雑誌名は「科学誌」のように種別で）: " + "、".join(latin[b.key][:4]))
-        _rewrite_noted(blocks, p, chat, all_facts, planted, subject)
-
     reading = None
-    if reader is not None:
-        # 読む → 分からないと言われた塊を直す → もう一度読む、を read_rounds 回まで。
-        # 1回の直しでは 6/10 までしか上がらなかった（死海文書、構造を変えた初回）
-        reading = readability.read(blocks, reader, subject=subject)
-        for _ in range(max(0, read_rounds)):
-            notes = readability.notes_by_block(reading)
-            if reading.clear or not notes:
-                break
+    read_left = max(0, read_rounds) if reader is not None else 0
+    fixed_since_read = True
+    for r in range(max(rounds, read_left) + 1):
+        audit, style, loose, bare, made_up, repeats, latin, left = check()
+        for b in blocks:
+            b.notes = []
+        if left and r < rounds:
+            route(blocks, audit, list(style.violations))
             for b in blocks:
-                b.notes = notes.get(b.key, [])
-            _rewrite_noted(blocks, p, chat, all_facts, planted, subject)
+                if loose.get(b.key):
+                    b.notes.append("資料に無い数字を消すか、資料にある数字に置き換える: "
+                                   + "、".join(loose[b.key]) + "。数字を作らない")
+                if made_up.get(b.key):
+                    b.notes.append("出どころ（年代・媒体）は資料に無い。その文を消す: " + " / ".join(made_up[b.key][:2]))
+                if repeats.get(b.key):
+                    b.notes.append("前の章と同じ事実を言い直している。この章では言わない: "
+                                   + " / ".join(f"「{x[:30]}」" for x in repeats[b.key][:3]))
+                if latin.get(b.key):
+                    b.notes.append("英語の表記が残っている。読み上げるので片仮名にする（人名は片仮名、"
+                                   "雑誌名は「科学誌」のように種別で）: " + "、".join(latin[b.key][:4]))
+        if r < read_left:
+            # 1回の直しでは 6/10 までしか上がらなかった（死海文書、構造を変えた初回）ので、
+            # 直したあとにもう一度読ませる（ループの後）
+            reading = readability.read(blocks, reader, subject=subject)
+            fixed_since_read = False
+            if not reading.clear:
+                by_key = {b.key: b for b in blocks}
+                for k, ns in readability.notes_by_block(reading).items():
+                    if k in by_key:
+                        by_key[k].notes += ns
+        if not any(b.notes for b in blocks):
+            break
+        _rewrite_noted(blocks, p, chat, all_facts, planted, subject)
+        fixed_since_read = True
+
+    if reader is not None:
+        if reading is None or fixed_since_read:
             reading = readability.read(blocks, reader, subject=subject)
         audit, style, loose, bare, made_up, repeats, latin, left = check()
     audit.reading = reading
@@ -1206,9 +1219,44 @@ def _rewrite_noted(blocks: list[Block], p: planmod.Plan, chat: Chat, all_facts: 
     _tidy(blocks, subject)
 
 
-# 全体の指摘をどの塊に渡すか。装置は住んでいる場所が決まっている
-_TO_OPENING = re.compile(r"冒頭|伏線")
-_TO_CLOSING = re.compile(r"回収|一般化")
+# 全体の指摘をどの塊に渡すか。装置は住んでいる場所が決まっている。
+# 「考察が無い」「着地で同じ結論を言い直している」は着地の話なのに、以前は全章へ
+# 配られていた（1回で章の書き直しが6回増える）
+# 行頭で見る。「終盤に回収（〜「冒頭で私はこう述べた」）が無い」は「冒頭」を含み、
+# 専門語の指摘は「日常語に着地させる」を含む
+_TO_OPENING = re.compile(r"^(冒頭|前半に伏線)")
+_TO_CLOSING = re.compile(r"^(終盤|考察が無い|着地で)")
+_JARGON_NOTE = re.compile(r"^言い換えの無い専門語: ([^。]+)")
+
+
+def _where(blocks: list[Block], note: str) -> list[Block] | None:
+    """全体の指摘のうち、どの塊で起きているかが分かるもの。分からなければ None。
+    分かるのに該当する塊が無ければ空（機械で直した後に残っていない）。"""
+    from .style import CHATTY, POLITE_END
+    body = [b for b in blocks if b.key == "basics" or b.key.startswith("chapter")]
+    m = _JARGON_NOTE.match(note)
+    if m:
+        # 専門語は最初に出た塊で言い換えればよい
+        out: list[Block] = []
+        for term in (t.strip() for t in m.group(1).split("、")):
+            first = next((b for b in blocks if term and term in b.text), None)
+            if first is not None and first not in out:
+                out.append(first)
+        return out
+    if note.startswith("常体率"):
+        # 着地の最後の段落（登録のお願い）は敬体のまま置く
+        def polite(b: Block) -> bool:
+            text = b.text
+            if b.key == "closing":
+                text = "\n\n".join(re.split(r"\n\s*\n", text.strip())[:-1])
+            return any(POLITE_END.search(x) for x in _sents(text))
+        return [b for b in blocks if polite(b)]
+    if note.startswith("疑問文"):
+        ranked = sorted(body, key=lambda b: -sum("？" in x or "?" in x for x in _sents(b.text)))
+        return ranked[:2]
+    if note.startswith("視聴者への馴れ合い"):
+        return [b for b in blocks if CHATTY.search(b.text)]
+    return None
 # 書き直しの引き金にしない指摘。率（私は・ただし・つまり・短文・逆接）は書き直しても
 # 揃わない（bench 実測）。話速と文の密度と数字の密度は資料の厚みで決まる。
 # これらで全章を書き直すと、1回の直しで章の呼び出しが5回増える。報告だけにする
@@ -1246,5 +1294,7 @@ def route(blocks: list[Block], audit: devices.Audit, style_notes: list[str]) -> 
                 b.notes.append(n + ("。次の文を2つか3つに切る（中身は変えない）: "
                                     + " / ".join(f"「{x}」" for x in longs[:6]) if longs else ""))
         else:
-            for b in chapters:
+            # どの塊か分かる指摘はその塊だけへ。全章に配ると、1つの指摘で章の書き直しが6回増える
+            where = _where(blocks, n)
+            for b in (chapters if where is None else where):
                 b.notes.append(n)

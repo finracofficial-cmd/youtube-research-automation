@@ -19,7 +19,8 @@ def test_tallies_calls_and_tokens_per_model():
     meter.record("image", "gpt-image-1")
     rows = {(r["kind"], r["model"]): r for r in meter.tally()}
     assert rows[("chat", "gpt-4.1")] == {
-        "kind": "chat", "model": "gpt-4.1", "calls": 2, "tokens": 12500}
+        "kind": "chat", "model": "gpt-4.1", "calls": 2, "tokens": 12500,
+        "tokens_in": 10000, "tokens_out": 2500, "cached": 0}
     assert rows[("image", "gpt-image-1")]["calls"] == 1
 
 
@@ -40,7 +41,8 @@ def test_missing_usage_still_counts_the_call():
     meter.note_usage("image", "gpt-image-1", None)
     rows = {r["model"]: r for r in meter.tally()}
     assert rows["gpt-image-1"] == {
-        "kind": "image", "model": "gpt-image-1", "calls": 2, "tokens": 0}
+        "kind": "image", "model": "gpt-image-1", "calls": 2, "tokens": 0,
+        "tokens_in": 0, "tokens_out": 0, "cached": 0}
 
 
 def test_report_names_the_models_and_refuses_to_guess_money():
@@ -77,8 +79,8 @@ def test_children_add_into_the_same_tally(tmp_path, monkeypatch):
     meter.record("image", "gpt-image-1")
 
     rows = {r["model"]: r for r in meter.tally()}
-    assert rows["gpt-4.1"] == {"kind": "chat", "model": "gpt-4.1",
-                               "calls": 1, "tokens": 730}
+    assert rows["gpt-4.1"] == {"kind": "chat", "model": "gpt-4.1", "calls": 1, "tokens": 730,
+                               "tokens_in": 700, "tokens_out": 30, "cached": 0}
     assert rows["gpt-image-1"]["calls"] == 1
 
 
@@ -103,3 +105,26 @@ def test_image_usage_uses_the_image_token_spelling():
                      {"usage": {"input_tokens": 65, "output_tokens": 6208}})
     rows = {r["model"]: r for r in meter.tally()}
     assert rows["gpt-image-1"]["tokens"] == 6273
+
+
+def test_cached_input_is_shown_apart_from_the_rest():
+    """同じ頭の指示（文体と規則）を続けて送ると、入力の一部がキャッシュから読まれて割り引かれる。
+    入力・出力・キャッシュは単価が違うので、合計だけでなく分けて出す。"""
+    meter.note_usage("chat", "gpt-4.1", {"usage": {
+        "prompt_tokens": 5000, "completion_tokens": 400,
+        "prompt_tokens_details": {"cached_tokens": 1408}}})
+    meter.note_usage("chat", "gpt-4.1", {"usage": {"prompt_tokens": 3000, "completion_tokens": 300}})
+    row = meter.tally()[0]
+    assert (row["tokens_in"], row["tokens_out"], row["cached"], row["tokens"]) == (8000, 700, 1408, 8700)
+    text = meter.report()
+    assert "8,000" in text and "(1,408)" in text and "700" in text
+
+
+def test_an_old_sink_line_with_only_a_total_still_counts(tmp_path, monkeypatch):
+    monkeypatch.setattr(meter.os, "environ", dict(meter.os.environ))
+    sink = tmp_path / "run.jsonl"
+    meter.share(sink)
+    with open(sink, "a", encoding="utf-8") as fh:
+        fh.write('{"kind": "chat", "model": "gpt-4.1", "tokens": 900}\n')
+    row = meter.tally()[0]
+    assert row["tokens"] == 900 and row["calls"] == 1

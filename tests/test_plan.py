@@ -184,3 +184,12 @@ def test_the_plan_sees_facts_not_the_old_beat_sheet():
     assert "異様さ" not in got and "短く切る" not in got
     assert not any(line.startswith("# ") for line in got.splitlines())
     assert "2021 論文" in got and "1947年に見つかった。" in got
+
+
+def test_the_verdict_line_does_not_carry_its_own_lead_in():
+    """設計図が「結論から言う。」付きで返し、指示が「結論から言う。結論から言う。〜」になっていた。"""
+    p = P.validate(good_plan(2))
+    assert p.chapters[0].verdict_line == "運べないのではなく、運ぶ理由が無い。"
+    from script_engine import compose as C
+    blocks = C.blocks_from_plan(p, subject="巨石遺跡", genre="古代の謎", claims=["a", "b"], duration_sec=900)
+    assert "結論から言う。結論から言う" not in blocks[2].brief
