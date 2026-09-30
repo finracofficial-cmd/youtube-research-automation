@@ -114,6 +114,9 @@ def _chat(messages: list[dict], model: str, *, timeout: int = 300,
             return (d["choices"][0]["message"]["content"] or "").strip()
         except urllib.error.HTTPError as exc:
             text = exc.read()[:400]
+            # 残高切れも429で返るが、待っても通らない。8回待つと数分むだにする
+            if b"insufficient_quota" in text:
+                raise WriteFailed(f"OpenAI の残高が無い: {text[:160]!r}") from exc
             if exc.code in (429, 500, 502, 503) and a < 7:
                 time.sleep(_backoff(exc, text, a))
                 continue

@@ -162,6 +162,7 @@ export const DataChart: React.FC<{ chart: Chart }> = ({ chart }) => {
   const p = useProgress(chart.durationSec, Math.min(2.4, chart.durationSec * 0.55));
   const W = 470, H = 215, PAD = 26;
   const n = chart.series.length;
+  const points = chart.points ?? [];   // 既定値が埋まっていない props でも落ちない
   const xy = chart.series.map((v, i) => ({
     x: PAD + (i / Math.max(1, n - 1)) * (W - PAD * 2),
     y: PAD + (1 - v) * (H - PAD * 2),
@@ -194,7 +195,7 @@ export const DataChart: React.FC<{ chart: Chart }> = ({ chart }) => {
                     strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
           {xy.map((q, i) => {
             if (i > upto) return null;
-            const pt = chart.points[i];
+            const pt = points[i];
             return (
               <g key={i}>
                 {/* 地の色の輪。線と重なっても点が沈まない */}

@@ -37,15 +37,20 @@ export const RemotionRoot: React.FC = () => (
     width={1920}
     height={1080}
     defaultProps={defaultProps}
-    // 尺は props から決める。素材の最後尾＋余白を全体尺とする
+    // 尺は props から決める。素材の最後尾＋余白を全体尺とする。
+    // props はここで schema に通して既定値を埋めてから部品に渡す。--props で渡した JSON は
+    // 既定値が埋まらないまま部品に届き、points の無い折れ線が 26,558 フレーム目（描画を
+    // 70分回したあと）で落ちた（Make video #10）。形が schema と合わなければ、ここで
+    // 1フレーム目より前に止まる
     calculateMetadata={({ props }) => {
+      const parsed = documentarySchema.parse(props);
       const ends = [
-        ...props.shots.map((s) => s.startSec + s.durationSec),
-        ...props.subtitles.map((s) => s.startSec + s.durationSec),
-        ...props.telops.map((t) => t.startSec + t.durationSec),
+        ...parsed.shots.map((s) => s.startSec + s.durationSec),
+        ...parsed.subtitles.map((s) => s.startSec + s.durationSec),
+        ...parsed.telops.map((t) => t.startSec + t.durationSec),
       ];
       const last = ends.length ? Math.max(...ends) : 3;
-      return { durationInFrames: Math.max(1, Math.round((last + 1) * FPS)) };
+      return { durationInFrames: Math.max(1, Math.round((last + 1) * FPS)), props: parsed };
     }}
   />
 );

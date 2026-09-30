@@ -11,12 +11,11 @@ on:
   workflow_dispatch:
     inputs:
       script:
-        description: "台本のファイル。drafts/ を見て選ぶ"
+        description: "台本のファイル（例: drafts/dead-sea.txt）。Write approved の Issue コメントに書いてある値を貼る"
         required: true
-        # 既定は、題材の検討（Issue #1）で選ばれて書かせた台本にしておく。
-        # 別の題材が既定だと、欄をそのままにした実行が1時間半かけて
-        # 見たかったものと違う動画を作る。
-        default: drafts/oparts_approved.txt
+        # 既定は空にする。既定の台本（drafts/oparts_approved.txt）のまま回して、
+        # 見たかったものと違う台本を70分かけて描画した（#10）。空なら最初の確認で止まる
+        default: ""
       name:
         description: "出力名（空でよい。台本のファイル名から決まる）"
         required: false

@@ -80,7 +80,6 @@ _NEGATION = re.compile(r"(ではない|ではなかった|でもない|とは言
 # 拾ってしまった。直後がこれらなら組織なので人物ではない。
 _ORG_SUFFIX = re.compile(r"^(帝国|王国|王朝|共和国|大学|博物館|図書館|社|軍|教会|会|省|庁|州|島|山|川|海)")
 # 割合。チャートの読み値になる
-_RATIO = re.compile(r"([0-9０-９]+(?:\.[0-9０-９]+)?)\s*(パーセント|％)")
 # 年号。2つ以上あれば推移としてタイムラインにする
 _YEAR = re.compile(r"([0-9０-９]{3,4})年")
 # 人物。カタカナの氏名か、漢字姓＋敬称なし＋役割語
@@ -249,13 +248,9 @@ def classify(lines: list[Line]) -> list[Cue]:
             cues.append(Cue("caveat", start, dur, "right",
                             {"text": whole(lines, i).rstrip("。")}))
 
-        m = _RATIO.search(text)
-        if m:
-            pct = float(m.group(1).translate(str.maketrans("０１２３４５６７８９", "0123456789")))
-            cues.append(Cue("chart", start, dur, "right", {
-                "readout": f"{m.group(1)}{m.group(2)}",
-                "series": [1.0, 0.82, 0.55, 0.36, max(0.02, min(1.0, pct / 100))],
-                "caption": _clip(text, 28)}))
+        # 割合（〜パーセント）1つから折れ線を描いていたが、線の途中の4点は決め打ちの値
+        # （1.0, 0.82, 0.55, 0.36）で、資料に無い「下がっていく推移」を見せていた。
+        # 割合は数字の札（stat）が出す。折れ線は資料に点が並ぶときだけ（設計図の図）
 
         years = _YEAR.findall(text)
         if len(years) >= 2:
@@ -436,7 +431,7 @@ def to_props(cues: list[Cue], codes: list[str] | None = None,
             out["portraits"].append({**base, **z, "name": p["name"],
                                      "role": p["role"], "year": p["year"]})
         elif cue.kind == "chart":
-            out["charts"].append({**base, **z, "series": p["series"],
+            out["charts"].append({**base, **z, "series": p["series"], "points": [],
                                   "readout": p["readout"], "caption": p["caption"]})
         elif cue.kind == "timeline":
             out["timelines"].append({**base, **z, "marks": p["marks"]})

@@ -56,12 +56,38 @@ jobs:
           cat /tmp/subjects.txt
           [ "$n" -gt 0 ] || { echo "チェックが1つも無い。Issueで選んでから実行すること"; exit 1; }
 
+      # 書き始める前に OpenAI の残高と鍵を確かめる。残高切れのまま回すと、1本も書けないのに
+      # 実行は成功で終わり、Issue にも何も返らなかった（#5）
+      - name: OpenAI の残高を確かめる
+        id: preflight
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python3 -m script_engine.preflight | tee /tmp/preflight.txt
+
+      - name: 書けない理由を Issue に返す
+        if: failure() && steps.preflight.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "台本を書けませんでした（1本も書いていません）。"
+            echo
+            echo "理由: $(cat /tmp/preflight.txt)"
+            echo
+            echo "直したら、この Issue の番号で Write approved をもう一度実行してください。"
+          } > /tmp/comment.md
+          gh issue comment "${{ inputs.issue }}" --body-file /tmp/comment.md
+          cat /tmp/comment.md >> "$GITHUB_STEP_SUMMARY"
+
       - name: 台本を書く
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           mkdir -p out drafts seeds/topics
           : > /tmp/done.txt
+          : > /tmp/failed.txt
+          # 書けなかった題材は理由と一緒に控え、Issue に返す（黙って飛ばさない）
+          fail() { echo "$1|$2" >> /tmp/failed.txt; echo "書けなかった: $1: $2"; }
           while IFS= read -r subject; do
             [ -n "$subject" ] || continue
             # 名前は英語の検索語から作る。ハッシュにすると、どの台本か
@@ -71,7 +97,8 @@ jobs:
             rm -f /tmp/market.json
             python3 -m topic_scout.market "$subject" --out /tmp/market.json || echo "市場の集計に失敗（続行）"
             python3 -m research.spec_from_subject "$subject" \
-              --claims "${{ inputs.claims }}" --market /tmp/market.json --print-slug > /tmp/slug.txt || continue
+              --claims "${{ inputs.claims }}" --market /tmp/market.json --print-slug > /tmp/slug.txt 2> /tmp/err.txt \
+              || { cat /tmp/err.txt >&2; fail "$subject" "題材の仕様を作れなかった（$(tail -1 /tmp/err.txt | cut -c1-200)）"; continue; }
             name=$(head -1 /tmp/slug.txt)
             mkdir -p reports
             [ -f /tmp/market.json ] && cp /tmp/market.json "reports/${name}_market.json"
@@ -79,14 +106,23 @@ jobs:
             mv "seeds/topics/${name}.yaml" "seeds/topics/${name}.yaml" 2>/dev/null || true
             python3 -m research pipeline "seeds/topics/${name}.yaml" \
               --kind bundle --duration "${{ inputs.duration }}" \
-              --out "out/prompt_${name}.txt" || continue
+              --out "out/prompt_${name}.txt" 2> /tmp/err.txt \
+              || { cat /tmp/err.txt >&2; fail "$subject" "資料を集められなかった（$(tail -1 /tmp/err.txt | cut -c1-200)）"; continue; }
+            # 門に落ちても台本は書き出される（終了コードは1）。台本があれば書けたとみなす
             python3 -m script_engine write "out/prompt_${name}.txt" \
               --spec "seeds/topics/${name}.yaml" \
               --plans 1 --candidates 2 --rounds 1 --market "reports/${name}_market.json" \
-              --out "drafts/${name}.txt" --duration "${{ inputs.duration }}" || true
-            [ -f "drafts/${name}.txt" ] && echo "${name}|${subject}" >> /tmp/done.txt
+              --out "drafts/${name}.txt" --duration "${{ inputs.duration }}" > /tmp/write.log 2>&1 || true
+            cat /tmp/write.log
+            if [ -f "drafts/${name}.txt" ]; then
+              echo "${name}|${subject}" >> /tmp/done.txt
+            else
+              fail "$subject" "台本を書けなかった（$(grep -m1 -E '生成できなかった|Error|残高' /tmp/write.log | cut -c1-200)）"
+            fi
           done < /tmp/subjects.txt
           echo "書けた台本:"; cat /tmp/done.txt
+          # 1本も書けなければ失敗にする（成功の緑で終わると、書けたと思って次へ進んでしまう）
+          [ -s /tmp/done.txt ] || { echo "1本も書けなかった"; exit 1; }
 
       - name: 台本を書き戻す
         if: always()
@@ -104,15 +140,22 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          [ -s /tmp/done.txt ] || exit 0
+          [ -s /tmp/done.txt ] || [ -s /tmp/failed.txt ] || exit 0
           {
-            echo "台本ができました。各題材の **Make video に入れる値** と、できたファイルのパスは以下です。"
-            echo
-            while IFS='|' read -r name subject; do
-              python3 -m script_engine.announce --name "$name" --subject "$subject" \
-                --repo "${{ github.repository }}" --branch "${{ github.ref_name }}"
+            if [ -s /tmp/done.txt ]; then
+              echo "台本ができました。各題材の **Make video に入れる値** と、できたファイルのパスは以下です。"
               echo
-            done < /tmp/done.txt
+              while IFS='|' read -r name subject; do
+                python3 -m script_engine.announce --name "$name" --subject "$subject" \
+                  --repo "${{ github.repository }}" --branch "${{ github.ref_name }}"
+                echo
+              done < /tmp/done.txt
+            fi
+            if [ -s /tmp/failed.txt ]; then
+              echo "**書けなかった題材**（Make video には回さないでください）"
+              echo
+              while IFS='|' read -r subject why; do echo "- ${subject}: ${why}"; done < /tmp/failed.txt
+            fi
           } > /tmp/comment.md
           gh issue comment "${{ inputs.issue }}" --body-file /tmp/comment.md
           # 実行ページの Summary にも同じものを出す（Issue を開かなくても分かる）

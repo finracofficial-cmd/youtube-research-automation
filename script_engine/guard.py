@@ -46,6 +46,16 @@ def main(argv=None) -> int:
     if not args:
         print("使い方: python -m script_engine.guard <台本>")
         return 2
+    if not args[0].strip():
+        # Make video の script 欄は空が既定。既定の台本のまま回して、別の台本を70分かけて
+        # 描画した（#10）。何を描くかは毎回選ばせる
+        print("script が空。描画する台本を drafts/ から選んで入れる")
+        cands = candidates(Path("drafts"))
+        if cands:
+            print("台本として通るファイル（新しい順）:")
+            for c in sorted(cands, key=lambda c: -c.stat().st_mtime):
+                print(f"  {c}")
+        return 1
     path = Path(args[0])
     got = problems(path)
     if not got:
