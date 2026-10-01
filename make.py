@@ -54,6 +54,8 @@ def main() -> int:
                     help="繰り返している区間にCommonsのイメージ映像を入れる")
     ap.add_argument("--max-broll", type=int, default=24,
                     help="入れるイメージ映像の本数")
+    ap.add_argument("--max-images", type=int, default=None,
+                    help="生成する画像の上限（既定 10）。1枚ごとに課金される")
     ap.add_argument("--image-quality", default="medium",
                     choices=["low", "medium", "high"],
                     help="生成画像の画質。高いほど出力トークンが増え費用が上がる")
@@ -143,7 +145,9 @@ def main() -> int:
         entries = json.loads(man.read_text(encoding="utf-8"))
         segs = split_script(script.read_text(encoding="utf-8"),
                             max((e.get("n_segments") or 0) for e in entries) or a.segments)
-        entries = fill(entries, segs, shots_path, quality=a.image_quality)
+        from assets.imagegen import MAX_IMAGES
+        limit = MAX_IMAGES if a.max_images is None else a.max_images
+        entries = fill(entries, segs, shots_path, quality=a.image_quality, limit=limit)
         man.write_text(json.dumps(entries, ensure_ascii=False, indent=1),
                        encoding="utf-8")
         # 生成が入ったらクレジットを作り直す（概要欄の申告が要る）

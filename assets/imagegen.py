@@ -89,9 +89,15 @@ def _chat(text: str, look: str = "", *, timeout: int = 60) -> str | None:
     try:
         d = json.loads(urllib.request.urlopen(req, timeout=timeout).read())
     except urllib.error.HTTPError as exc:
+        body = exc.read()[:300]
+        # 残高切れも 429 で返る。混雑の 429 と同じに扱うと、区間ごとに黙って飛ばして
+        # 生成0枚のまま描画まで進む（dead-sea-9 は生成0枚だった）
+        if exc.code == 429 and b"insufficient_quota" in body:
+            raise GenerationUnavailable(
+                "OpenAI の残高が無い。https://platform.openai.com/settings/organization/billing/ で追加する")
         if exc.code in (429, 500, 502, 503):
             return None
-        raise GenerationUnavailable(f"HTTP {exc.code}: {exc.read()[:200]!r}") from exc
+        raise GenerationUnavailable(f"HTTP {exc.code}: {body[:200]!r}") from exc
     except Exception:  # noqa: BLE001
         return None
     note_usage("chat", PROMPT_MODEL, d)
@@ -180,19 +186,44 @@ def fill_broll(manifest: list[dict], out_dir: Path, *, limit: int = 24,
     return [by_segment[k] for k in sorted(by_segment)]
 
 
+# 1本で生成する枚数の上限。生成は1枚ずつ課金される（medium の 1536x1024 で
+# 出力 1,568 トークン）。上限が無いと繰り返す区間の数だけ作る（最大60枚）。
+# 実績は4枚・13枚。残りの繰り返しは、イメージ映像と資料の画の引き継ぎで埋まる
+MAX_IMAGES = 10
+
+
+def spread(items: list[int], k: int) -> list[int]:
+    """k 個を全体に散らして選ぶ。頭から k 個だと、前半だけ画が変わり後半は繰り返しのまま。"""
+    n = len(items)
+    if k <= 0:
+        return []
+    if n <= k:
+        return list(items)
+    if k == 1:
+        return [items[n // 2]]
+    idx = sorted({round(i * (n - 1) / (k - 1)) for i in range(k)})
+    return [items[i] for i in idx]
+
+
 def fill(manifest: list[dict], segments: list[str], out_dir: Path,
-         *, limit: int = 60, pause: float = 1.0,
+         *, limit: int = MAX_IMAGES, pause: float = 1.0,
          quality: str = DEFAULT_QUALITY) -> list[dict]:
-    """引き継ぎで埋めていた区間に、生成した情景を入れる。
+    """引き継ぎで埋めていた区間に、生成した情景を入れる。最大 limit 枚。
 
     manifest を書き換えて返す。生成に失敗した区間は引き継ぎのまま残す。
+    上限より区間が多ければ、全体に散らした区間から作る。作れなかった
+    区間（短すぎる・失敗）の分は、残りの区間で補う。
     """
-    want = segments_needing_art(manifest)[:limit]
-    if not want:
+    need = segments_needing_art(manifest)
+    if not need or limit <= 0:
         return manifest
+    first = spread(need, limit)
+    want = first + [s for s in need if s not in first]
     by_segment = {e["segment"]: e for e in manifest}
     made = 0
     for seg in want:
+        if made >= limit:
+            break
         text = segments[seg] if seg < len(segments) else ""
         if len(text) < 20:
             continue
@@ -218,5 +249,5 @@ def fill(manifest: list[dict], segments: list[str], out_dir: Path,
         made += 1
         print(f"  [{seg:03d}] 生成 {dst.name}  {prompt[:56]}")
         time.sleep(pause)
-    print(f"\n{made}枚を生成で補った（繰り返していた {len(want)}区間のうち）")
+    print(f"\n{made}枚を生成で補った（繰り返していた {len(need)}区間のうち。上限 {limit}枚）")
     return [by_segment[k] for k in sorted(by_segment)]

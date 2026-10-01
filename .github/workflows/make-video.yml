@@ -36,6 +36,10 @@ on:
         description: 残った繰り返しを生成画像で埋める
         type: boolean
         default: true
+      max_images:
+        description: 生成する画像の上限（1枚ごとに OpenAI の課金。0 なら作らない）
+        type: number
+        default: 10
       bgm:
         description: BGM（video/public/ 以下）。空なら無音
         required: false
@@ -133,7 +137,7 @@ jobs:
           [ -n "${{ inputs.voice }}" ] && args+=(--voice "${{ inputs.voice }}")
           [ -n "${{ inputs.bgm }}" ] && args+=(--bgm "${{ inputs.bgm }}")
           [ "${{ inputs.broll }}" = "true" ] && args+=(--broll)
-          [ "${{ inputs.generate_images }}" = "true" ] && args+=(--generate-images)
+          [ "${{ inputs.generate_images }}" = "true" ] && args+=(--generate-images --max-images "${{ inputs.max_images }}")
           python3 make.py "${{ inputs.script }}" "${args[@]}"
 
       # 落ちても控えは残す（成功したときだけ残す既定だと、途中まで払った分が消える）
@@ -175,7 +179,7 @@ jobs:
             台本 `${{ inputs.script }}` から自動生成。
 
             - 声: `${{ inputs.voice }}`
-            - 画像生成: `${{ inputs.generate_images }}`
+            - 画像生成: `${{ inputs.generate_images }}`（上限 ${{ inputs.max_images }}枚）
             - BGM: `${{ inputs.bgm }}`
 
             **`<名前>_description.txt` をそのままYouTubeの概要欄に貼ってください。**

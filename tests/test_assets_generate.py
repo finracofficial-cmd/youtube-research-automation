@@ -135,3 +135,63 @@ def test_broll_terms_do_not_repeat_immediately():
     from assets.imagegen import BROLL_TERMS
     assert len(BROLL_TERMS) >= 8
     assert len(set(BROLL_TERMS)) == len(BROLL_TERMS)
+
+
+def _repeating_manifest(n):
+    """区間0だけ固有の画で、残りは全部その繰り返し（＝生成の対象が n-1 区間）。"""
+    return [{"segment": i, "file": "a.jpg", "n_segments": n} for i in range(n)]
+
+
+def test_generation_stops_at_the_cap_and_spreads_over_the_whole_video(monkeypatch, tmp_path):
+    """上限が無いと繰り返す区間の数だけ（最大60枚）作り、1枚ごとに課金される。
+    頭から上限まで作ると後半だけ繰り返しが残るので、全体に散らす。"""
+    from assets import imagegen as ig
+    from assets.sources import Asset
+    calls = []
+    monkeypatch.setattr(ig, "_chat", lambda text, look="": "a quiet desert at noon")
+
+    def fake_generate(prompt, dst, quality="medium"):
+        calls.append(dst.name)
+        return Asset(source="generated", title=prompt[:80], url="", page_url="",
+                     license="AI生成", author="gpt-image-1")
+    monkeypatch.setattr(ig, "generate", fake_generate)
+    texts = ["これは区間のナレーションで、二十字を超える長さがある。"] * 41
+    out = ig.fill(_repeating_manifest(41), texts, tmp_path, limit=5, pause=0)
+    made = sorted(e["segment"] for e in out if e.get("generated"))
+    assert len(calls) == 5 and made == [1, 11, 21, 30, 40]
+    assert ig.fill(_repeating_manifest(5), texts, tmp_path, limit=0, pause=0) == _repeating_manifest(5)
+
+
+def test_a_segment_that_cannot_be_drawn_is_replaced_by_another(monkeypatch, tmp_path):
+    from assets import imagegen as ig
+    from assets.sources import Asset
+    monkeypatch.setattr(ig, "_chat", lambda text, look="": "storm over hills")
+    monkeypatch.setattr(ig, "generate", lambda prompt, dst, quality="medium": Asset(
+        source="generated", title="x", url="", page_url="", license="AI生成", author="m"))
+    texts = ["短い"] + ["これは区間のナレーションで、二十字を超える長さがある。"] * 9
+    texts[1] = "短い"                                      # 散らした最初の区間は短くて作れない
+    out = ig.fill(_repeating_manifest(10), texts, tmp_path, limit=3, pause=0)
+    assert sum(bool(e.get("generated")) for e in out) == 3
+
+
+def test_running_out_of_credit_stops_generation_instead_of_skipping_silently(monkeypatch, tmp_path):
+    """残高切れも 429 で返る。混雑と同じに扱うと区間ごとに黙って飛ばし、生成0枚で進む（dead-sea-9）。"""
+    import io
+    import urllib.error
+    from assets import imagegen as ig
+    from assets.generate import GenerationUnavailable
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+
+    def no_credit(req, timeout=60):
+        raise urllib.error.HTTPError(ig.CHAT_URL, 429, "Too Many Requests", {},
+                                     io.BytesIO(b'{"error": {"code": "insufficient_quota"}}'))
+    monkeypatch.setattr(ig.urllib.request, "urlopen", no_credit)
+    import pytest
+    with pytest.raises(GenerationUnavailable, match="残高"):
+        ig._chat("ナレーション", "noon")
+
+    def busy(req, timeout=60):
+        raise urllib.error.HTTPError(ig.CHAT_URL, 429, "Too Many Requests", {},
+                                     io.BytesIO(b'{"error": {"code": "rate_limit_exceeded"}}'))
+    monkeypatch.setattr(ig.urllib.request, "urlopen", busy)
+    assert ig._chat("ナレーション", "noon") is None          # 混雑はその区間だけ飛ばす
