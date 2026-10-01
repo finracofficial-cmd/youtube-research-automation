@@ -1,0 +1,66 @@
+{
+ "claims": [
+  {
+   "ja": "オーパーツは現代科学で再現できない技術である",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "オーパーツは超古代文明が残した証拠である",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "オーパーツは異星人によって作られた物である",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "有名なオーパーツの多くは偽物や誤認である",
+   "sources": [
+    {
+     "kind": "paper",
+     "title": "Podcast: 400-year-old sharks, busting a famous scientific hoax, and clinical trials in pets",
+     "year": 2021,
+     "venue": "AAAS Podcast DO Group",
+     "identifier": "10.1126/science.aah7187",
+     "url": "https://doi.org/10.1126/science.aah7187",
+     "open_access": false,
+     "authors": ""
+    },
+    {
+     "kind": "paper",
+     "title": "A new twist to whodunnit in science’s famous Piltdown Man hoax",
+     "year": 2016,
+     "venue": "",
+     "identifier": "10.64628/aaj.cn3arqn5u",
+     "url": "https://doi.org/10.64628/aaj.cn3arqn5u",
+     "open_access": false,
+     "authors": "Francis Thackeray"
+    },
+    {
+     "kind": "paper",
+     "title": "Top stories: A 400-year-old shark, smashing a famous science hoax, and more",
+     "year": 2016,
+     "venue": "Science",
+     "identifier": "10.1126/science.aah7191",
+     "url": "https://doi.org/10.1126/science.aah7191",
+     "open_access": false,
+     "authors": "Ben Panko"
+    }
+   ],
+   "evidence_level": "薄い（査読文献がわずか）→ 理由が違う側に置く候補"
+  },
+  {
+   "ja": "オーパーツは近代に作られた偽造品である",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "オーパーツは科学的に説明できる物である",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  }
+ ],
+ "background": []
+}
