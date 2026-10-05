@@ -1,0 +1,56 @@
+{
+ "claims": [
+  {
+   "ja": "最新AIが地上絵の新事実を発見した",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "地上絵はアトランティス文明由来である",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "地上絵の中に巨大なネコの絵がある",
+   "sources": [
+    {
+     "kind": "paper",
+     "title": "AI-accelerated Nazca survey nearly doubles the number of known figurative geoglyphs and sheds light on their purpose",
+     "year": 2024,
+     "venue": "Proceedings of the National Academy of Sciences",
+     "identifier": "10.1073/pnas.2407652121",
+     "url": "https://doi.org/10.1073/pnas.2407652121",
+     "open_access": true,
+     "authors": "Masato Sakaiら"
+    },
+    {
+     "kind": "paper",
+     "title": "The Archaeology and geoglyphs of Nazca, Peru or The extraterrestrial foundations of Andean civilization",
+     "year": 1985,
+     "venue": "Libraries and Cultural Resources (University of Calgary)",
+     "identifier": "10.11575/prism/11467",
+     "url": "https://doi.org/10.11575/prism/11467",
+     "open_access": true,
+     "authors": "Persis B. Clarkson"
+    }
+   ],
+   "evidence_level": "薄い（査読文献がわずか）→ 理由が違う側に置く候補"
+  },
+  {
+   "ja": "地上絵には龍の泪という形が描かれている",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "地上絵と縄文の渦巻紋は関係している",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "地上絵の教科書説明はすべて誤りである",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  }
+ ],
+ "background": []
+}
