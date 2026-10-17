@@ -1,0 +1,46 @@
+{
+ "claims": [
+  {
+   "ja": "アポロの月面着陸は地球上で再現された",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "月面着陸映像にはワイヤーが映っている",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "月面着陸は科学的に証明できない",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "宇宙飛行士は月面で立ったまま眠った",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  },
+  {
+   "ja": "物を落としたら月面では拾えなかった",
+   "sources": [
+    {
+     "kind": "paper",
+     "title": "The Apollo Medical Operations Project: Recommendations to improve crew health and performance for future exploration missions and lunar surface operations",
+     "year": 2008,
+     "venue": "Acta Astronautica",
+     "identifier": "10.1016/j.actaastro.2007.12.065",
+     "url": "https://doi.org/10.1016/j.actaastro.2007.12.065",
+     "open_access": true,
+     "authors": "Richard A. Scheuringら"
+    }
+   ],
+   "evidence_level": "薄い（査読文献がわずか）→ 理由が違う側に置く候補"
+  },
+  {
+   "ja": "月面には今もアポロの痕跡が残っている",
+   "sources": [],
+   "evidence_level": "文献なし → 跡形もなくなる側に置く候補。近代の創作を疑う"
+  }
+ ],
+ "background": []
+}
